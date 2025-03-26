@@ -23,7 +23,7 @@ import WritingPractice from "./pages/practice/WritingPractice";
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
 
-// Define App as a proper React functional component
+// Define App as a proper React functional component with React.FC type
 const App: React.FC = () => {
   return (
     <React.StrictMode>
