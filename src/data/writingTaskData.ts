@@ -362,7 +362,7 @@ export const writingTaskData: WritingTaskData = {
     {
       id: 'essay-15',
       title: 'Genetic Engineering',
-      description: 'Genetic engineering is an important issue in modern society. Some people think that it will improve people's lives in many ways. Others feel that it may be a threat to life on earth.',
+      description: "Genetic engineering is an important issue in modern society. Some people think that it will improve people's lives in many ways. Others feel that it may be a threat to life on earth.",
       instructions: 'Discuss both views and give your own opinion. Give reasons for your answer and include any relevant examples from your own knowledge or experience. Write at least 250 words.',
       imageUrl: 'https://images.unsplash.com/photo-1530210124550-912dc1381cb8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
