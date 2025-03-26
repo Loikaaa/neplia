@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -137,7 +138,7 @@ const SignUp = () => {
         <Card className="shadow-lg border-2 border-primary/10">
           <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white rounded-t-lg">
             <CardTitle className="text-3xl font-heading">Create Your Account</CardTitle>
-            <CardDescription className="text-white/90">Join our community of IELTS learners and begin your success journey</CardDescription>
+            <CardDescription className="text-white/90">Join our community of learners and begin your success journey</CardDescription>
           </CardHeader>
           
           <CardContent className="pt-6">
