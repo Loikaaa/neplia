@@ -372,7 +372,7 @@ export const writingTaskData: WritingTaskData = {
     {
       id: 'essay-16',
       title: 'Media Influence',
-      description: 'News media has a significant influence on people's ideas and opinions. To what extent do you agree or disagree with this statement?',
+      description: "News media has a significant influence on people's ideas and opinions. To what extent do you agree or disagree with this statement?",
       instructions: 'Give reasons for your answer and include any relevant examples from your own knowledge or experience. Write at least 250 words.',
       imageUrl: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
