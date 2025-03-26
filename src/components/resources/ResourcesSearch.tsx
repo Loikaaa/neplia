@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Search, FileText, Video, Audio, Image } from 'lucide-react';
+import { Search, FileText, Video, Music, Image } from 'lucide-react';
 
 const ResourcesSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -37,7 +37,7 @@ const ResourcesSearch = () => {
               <Video size={16} /> Videos
             </TabsTrigger>
             <TabsTrigger value="audio" className="flex items-center gap-2">
-              <Audio size={16} /> Audio
+              <Music size={16} /> Audio
             </TabsTrigger>
             <TabsTrigger value="images" className="flex items-center gap-2">
               <Image size={16} /> Images
