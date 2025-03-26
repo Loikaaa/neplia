@@ -11,6 +11,8 @@ import ReadingPractice from "./pages/practice/ReadingPractice";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import Resources from "./pages/Resources";
+import ResourceDetail from "./pages/ResourceDetail";
+import CategoryDetail from "./pages/CategoryDetail";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +29,8 @@ const App = () => (
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/resources/:resourceId" element={<ResourceDetail />} />
+          <Route path="/resources/category/:categoryId" element={<CategoryDetail />} />
           {/* Future routes will be added here */}
           <Route path="*" element={<NotFound />} />
         </Routes>

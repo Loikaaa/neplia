@@ -7,6 +7,12 @@ import { Search, FileText, Video, Music, Image } from 'lucide-react';
 
 const ResourcesSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+
+  const handleSearch = () => {
+    console.log("Searching for:", searchTerm);
+    // In a real app, this would call an API endpoint
+  };
 
   return (
     <div className="mb-12 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
@@ -22,7 +28,11 @@ const ResourcesSearch = () => {
             className="pl-12 pr-4 py-6 text-lg rounded-lg"
           />
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-          <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-md" size="sm">
+          <Button 
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-md" 
+            size="sm"
+            onClick={handleSearch}
+          >
             Search
           </Button>
         </div>
@@ -43,6 +53,22 @@ const ResourcesSearch = () => {
               <Image size={16} /> Images
             </TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="all" className="mt-4">
+            <p className="text-center text-gray-600">All resources will appear here based on your search.</p>
+          </TabsContent>
+          <TabsContent value="documents" className="mt-4">
+            <p className="text-center text-gray-600">Document resources will appear here based on your search.</p>
+          </TabsContent>
+          <TabsContent value="videos" className="mt-4">
+            <p className="text-center text-gray-600">Video resources will appear here based on your search.</p>
+          </TabsContent>
+          <TabsContent value="audio" className="mt-4">
+            <p className="text-center text-gray-600">Audio resources will appear here based on your search.</p>
+          </TabsContent>
+          <TabsContent value="images" className="mt-4">
+            <p className="text-center text-gray-600">Image resources will appear here based on your search.</p>
+          </TabsContent>
         </Tabs>
       </div>
     </div>
