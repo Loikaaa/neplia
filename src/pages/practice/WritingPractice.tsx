@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -37,12 +36,9 @@ const WritingPractice: React.FC = () => {
     setSubmitted(false);
     setFeedback(null);
     
-    // Find the task and set the timer
     const task = writingTaskData[category].find(task => task.id === taskId);
     if (task) {
-      setTimeRemaining(task.timeLimit * 60); // Convert minutes to seconds
-      
-      // Start the timer
+      setTimeRemaining(task.timeLimit * 60);
       const timer = setInterval(() => {
         setTimeRemaining(prev => {
           if (prev === null || prev <= 0) {
@@ -64,26 +60,24 @@ const WritingPractice: React.FC = () => {
     const text = e.target.value;
     setEssayText(text);
     
-    // Count words (split by whitespace and filter out empty strings)
-    const words = text.split(/\s+/).filter(word => word.length > 0);
-    setWordCount(words.length);
+    if (text.trim() === '') {
+      setWordCount(0);
+    } else {
+      const words = text.trim().split(/\s+/);
+      setWordCount(words.length);
+    }
   };
 
   const evaluateEssay = (text: string, taskType: 'academic' | 'essay') => {
-    // This would ideally be replaced with a real API call to evaluate the essay
-    // For now, we'll simulate feedback based on basic criteria
-    
     const minWordCount = taskType === 'academic' ? 150 : 250;
     const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
     const paragraphs = text.split(/\n\n+/).filter(para => para.trim().length > 0);
     
-    // Basic metrics
     const hasIntroduction = paragraphs.length > 0;
     const hasConclusion = paragraphs.length > 2;
     const averageSentenceLength = wordCount / Math.max(sentences.length, 1);
     const averageParagraphLength = wordCount / Math.max(paragraphs.length, 1);
     
-    // Calculate scores (simulated)
     let taskAchievement = wordCount >= minWordCount ? 6 : 5;
     taskAchievement += hasIntroduction && hasConclusion ? 1 : 0;
     
@@ -92,30 +86,24 @@ const WritingPractice: React.FC = () => {
     coherenceAndCohesion += averageParagraphLength > 40 && averageParagraphLength < 100 ? 1 : 0;
     
     let lexicalResource = 5.5;
-    // Simulate vocabulary assessment (would be more sophisticated in a real system)
     lexicalResource += text.includes('furthermore') || text.includes('moreover') || text.includes('consequently') ? 0.5 : 0;
     lexicalResource += text.includes('therefore') || text.includes('thus') || text.includes('hence') ? 0.5 : 0;
     
     let grammaticalRangeAndAccuracy = 5.5;
-    // Simulate grammar assessment
     grammaticalRangeAndAccuracy += averageSentenceLength > 10 && averageSentenceLength < 20 ? 0.5 : 0;
     grammaticalRangeAndAccuracy += sentences.length > 15 ? 0.5 : 0;
     
-    // Cap scores at 9
     taskAchievement = Math.min(taskAchievement, 9);
     coherenceAndCohesion = Math.min(coherenceAndCohesion, 9);
     lexicalResource = Math.min(lexicalResource, 9);
     grammaticalRangeAndAccuracy = Math.min(grammaticalRangeAndAccuracy, 9);
     
-    // Calculate overall band score (average of the four criteria)
     const overallBand = Math.round((taskAchievement + coherenceAndCohesion + lexicalResource + grammaticalRangeAndAccuracy) / 4 * 2) / 2;
     
-    // Generate feedback
     const strengths = [];
     const weaknesses = [];
     const suggestions = [];
     
-    // Add strengths
     if (wordCount >= minWordCount) {
       strengths.push("You've written a sufficient number of words.");
     }
@@ -126,7 +114,6 @@ const WritingPractice: React.FC = () => {
       strengths.push("Good paragraph organization.");
     }
     
-    // Add weaknesses
     if (wordCount < minWordCount) {
       weaknesses.push(`Your essay is below the minimum word count of ${minWordCount} words.`);
     }
@@ -140,19 +127,10 @@ const WritingPractice: React.FC = () => {
       weaknesses.push("Your sentences are too long on average.");
     }
     
-    // Add suggestions
-    if (wordCount < minWordCount) {
-      suggestions.push(`Aim for at least ${minWordCount} words to fully address the task.`);
-    }
-    if (!hasIntroduction || !hasConclusion) {
-      suggestions.push("Include a clear introduction that presents the main idea and a conclusion that summarizes your points.");
-    }
-    if (paragraphs.length < 3) {
-      suggestions.push("Organize your ideas into more paragraphs. Each paragraph should contain a single main idea.");
-    }
-    if (averageSentenceLength > 25) {
-      suggestions.push("Try to vary your sentence length. Mix shorter sentences with longer ones for better readability.");
-    }
+    suggestions.push(`Aim for at least ${minWordCount} words to fully address the task.`);
+    suggestions.push("Include a clear introduction that presents the main idea and a conclusion that summarizes your points.");
+    suggestions.push("Organize your ideas into more paragraphs. Each paragraph should contain a single main idea.");
+    suggestions.push("Try to vary your sentence length. Mix shorter sentences with longer ones for better readability.");
     suggestions.push("Use more linking phrases (e.g., 'furthermore', 'consequently', 'in addition') to improve cohesion.");
     suggestions.push("Incorporate a wider range of vocabulary related to the topic.");
     
@@ -169,7 +147,6 @@ const WritingPractice: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    // Determine which task category is active
     let taskCategory: 'academic' | 'essay' = 'academic';
     const academicTask = writingTaskData.academic.find(task => task.id === activeTask);
     const essayTask = writingTaskData.essay.find(task => task.id === activeTask);
@@ -178,7 +155,6 @@ const WritingPractice: React.FC = () => {
       taskCategory = 'essay';
     }
     
-    // Evaluate the essay and get feedback
     const essayFeedback = evaluateEssay(essayText, taskCategory);
     setFeedback(essayFeedback);
     setSubmitted(true);
@@ -199,7 +175,6 @@ const WritingPractice: React.FC = () => {
   const getActiveTask = () => {
     if (!activeTask) return null;
     
-    // Check both categories
     let task = writingTaskData.academic.find(task => task.id === activeTask);
     if (!task) {
       task = writingTaskData.essay.find(task => task.id === activeTask);
@@ -209,6 +184,15 @@ const WritingPractice: React.FC = () => {
   };
 
   const currentTask = getActiveTask();
+
+  useEffect(() => {
+    if (essayText.trim() === '') {
+      setWordCount(0);
+    } else {
+      const words = essayText.trim().split(/\s+/);
+      setWordCount(words.length);
+    }
+  }, [essayText]);
 
   const renderTaskCards = (tasks: any[], category: 'academic' | 'essay') => {
     return (
@@ -278,7 +262,6 @@ const WritingPractice: React.FC = () => {
       suggestions
     } = feedback;
     
-    // Band descriptor explanation
     const getBandDescription = (score: number) => {
       if (score >= 8) return "Very Good to Expert";
       if (score >= 7) return "Good";
