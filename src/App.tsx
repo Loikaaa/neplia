@@ -15,6 +15,8 @@ import ResourceDetail from "./pages/ResourceDetail";
 import CategoryDetail from "./pages/CategoryDetail";
 import AllResources from "./pages/AllResources";
 import About from "./pages/About";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,8 @@ const App = () => (
           <Route path="/resources/:resourceId" element={<ResourceDetail />} />
           <Route path="/resources/category/:categoryId" element={<CategoryDetail />} />
           <Route path="/about" element={<About />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           {/* Future routes will be added here */}
           <Route path="*" element={<NotFound />} />
         </Routes>

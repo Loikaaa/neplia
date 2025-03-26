@@ -12,6 +12,7 @@ const navLinks = [
     { name: 'Speaking', path: '/practice/speaking' },
   ]},
   { name: 'Resources', path: '/resources' },
+  { name: 'Blog', path: '/blog' },
   { name: 'About', path: '/about' },
 ];
 
