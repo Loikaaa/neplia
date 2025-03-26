@@ -7,6 +7,10 @@ import { Progress } from "@/components/ui/progress";
 import { Clock, CheckCircle, Edit, HelpCircle, BookOpen, BarChart2, Download, Send } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import Layout from '@/components/Layout';
+import { writingTaskData } from "@/data/writingTaskData";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 
 const WritingPractice: React.FC = () => {
   const { toast } = useToast();
@@ -15,62 +19,26 @@ const WritingPractice: React.FC = () => {
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
   const [wordCount, setWordCount] = useState(0);
   const [submitted, setSubmitted] = useState(false);
-
-  const writingTasks = {
-    academic: [
-      {
-        id: 'academic-1',
-        title: 'Bar Chart Analysis',
-        description: 'The chart below shows the percentage of households with internet access in the UK from 1999 to 2022.',
-        instructions: 'Summarize the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.',
-        imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        timeLimit: 20, // minutes
-        minWords: 150,
-        category: 'Bar Chart'
-      },
-      {
-        id: 'academic-2',
-        title: 'Process Diagram',
-        description: 'The diagram below shows the process of manufacturing cement and how cement is used to produce concrete for building purposes.',
-        instructions: 'Summarize the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.',
-        imageUrl: 'https://images.unsplash.com/photo-1558442074-3c19857bc1dc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        timeLimit: 20,
-        minWords: 150,
-        category: 'Process'
-      }
-    ],
-    essay: [
-      {
-        id: 'essay-1',
-        title: 'Technology and Society',
-        description: 'Some people believe that the widespread use of the internet is damaging social interaction between people.',
-        instructions: 'To what extent do you agree or disagree with this statement? Give reasons for your answer and include any relevant examples from your own knowledge or experience. Write at least 250 words.',
-        imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        timeLimit: 40,
-        minWords: 250,
-        category: 'Technology'
-      },
-      {
-        id: 'essay-2',
-        title: 'Education Systems',
-        description: 'Some people think that schools should teach children academic subjects that will help them in their future careers, while others believe that schools should teach a wide range of subjects and knowledge.',
-        instructions: 'Discuss both views and give your own opinion. Give reasons for your answer and include any relevant examples from your own knowledge or experience. Write at least 250 words.',
-        imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        timeLimit: 40,
-        minWords: 250,
-        category: 'Education'
-      }
-    ]
-  };
+  const [feedback, setFeedback] = useState<{
+    taskAchievement: number;
+    coherenceAndCohesion: number;
+    lexicalResource: number;
+    grammaticalRangeAndAccuracy: number;
+    overallBand: number;
+    strengths: string[];
+    weaknesses: string[];
+    suggestions: string[];
+  } | null>(null);
 
   const handleStartTask = (taskId: string, category: 'academic' | 'essay') => {
     setActiveTask(taskId);
     setEssayText('');
     setWordCount(0);
     setSubmitted(false);
+    setFeedback(null);
     
     // Find the task and set the timer
-    const task = writingTasks[category].find(task => task.id === taskId);
+    const task = writingTaskData[category].find(task => task.id === taskId);
     if (task) {
       setTimeRemaining(task.timeLimit * 60); // Convert minutes to seconds
       
@@ -101,12 +69,123 @@ const WritingPractice: React.FC = () => {
     setWordCount(words.length);
   };
 
+  const evaluateEssay = (text: string, taskType: 'academic' | 'essay') => {
+    // This would ideally be replaced with a real API call to evaluate the essay
+    // For now, we'll simulate feedback based on basic criteria
+    
+    const minWordCount = taskType === 'academic' ? 150 : 250;
+    const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
+    const paragraphs = text.split(/\n\n+/).filter(para => para.trim().length > 0);
+    
+    // Basic metrics
+    const hasIntroduction = paragraphs.length > 0;
+    const hasConclusion = paragraphs.length > 2;
+    const averageSentenceLength = wordCount / Math.max(sentences.length, 1);
+    const averageParagraphLength = wordCount / Math.max(paragraphs.length, 1);
+    
+    // Calculate scores (simulated)
+    let taskAchievement = wordCount >= minWordCount ? 6 : 5;
+    taskAchievement += hasIntroduction && hasConclusion ? 1 : 0;
+    
+    let coherenceAndCohesion = 5;
+    coherenceAndCohesion += paragraphs.length >= 4 ? 1 : 0;
+    coherenceAndCohesion += averageParagraphLength > 40 && averageParagraphLength < 100 ? 1 : 0;
+    
+    let lexicalResource = 5.5;
+    // Simulate vocabulary assessment (would be more sophisticated in a real system)
+    lexicalResource += text.includes('furthermore') || text.includes('moreover') || text.includes('consequently') ? 0.5 : 0;
+    lexicalResource += text.includes('therefore') || text.includes('thus') || text.includes('hence') ? 0.5 : 0;
+    
+    let grammaticalRangeAndAccuracy = 5.5;
+    // Simulate grammar assessment
+    grammaticalRangeAndAccuracy += averageSentenceLength > 10 && averageSentenceLength < 20 ? 0.5 : 0;
+    grammaticalRangeAndAccuracy += sentences.length > 15 ? 0.5 : 0;
+    
+    // Cap scores at 9
+    taskAchievement = Math.min(taskAchievement, 9);
+    coherenceAndCohesion = Math.min(coherenceAndCohesion, 9);
+    lexicalResource = Math.min(lexicalResource, 9);
+    grammaticalRangeAndAccuracy = Math.min(grammaticalRangeAndAccuracy, 9);
+    
+    // Calculate overall band score (average of the four criteria)
+    const overallBand = Math.round((taskAchievement + coherenceAndCohesion + lexicalResource + grammaticalRangeAndAccuracy) / 4 * 2) / 2;
+    
+    // Generate feedback
+    const strengths = [];
+    const weaknesses = [];
+    const suggestions = [];
+    
+    // Add strengths
+    if (wordCount >= minWordCount) {
+      strengths.push("You've written a sufficient number of words.");
+    }
+    if (hasIntroduction && hasConclusion) {
+      strengths.push("Your essay has a clear structure with introduction and conclusion.");
+    }
+    if (paragraphs.length >= 4) {
+      strengths.push("Good paragraph organization.");
+    }
+    
+    // Add weaknesses
+    if (wordCount < minWordCount) {
+      weaknesses.push(`Your essay is below the minimum word count of ${minWordCount} words.`);
+    }
+    if (!hasIntroduction || !hasConclusion) {
+      weaknesses.push("Your essay lacks a clear introduction or conclusion.");
+    }
+    if (paragraphs.length < 3) {
+      weaknesses.push("Your essay needs more paragraphs for better organization.");
+    }
+    if (averageSentenceLength > 25) {
+      weaknesses.push("Your sentences are too long on average.");
+    }
+    
+    // Add suggestions
+    if (wordCount < minWordCount) {
+      suggestions.push(`Aim for at least ${minWordCount} words to fully address the task.`);
+    }
+    if (!hasIntroduction || !hasConclusion) {
+      suggestions.push("Include a clear introduction that presents the main idea and a conclusion that summarizes your points.");
+    }
+    if (paragraphs.length < 3) {
+      suggestions.push("Organize your ideas into more paragraphs. Each paragraph should contain a single main idea.");
+    }
+    if (averageSentenceLength > 25) {
+      suggestions.push("Try to vary your sentence length. Mix shorter sentences with longer ones for better readability.");
+    }
+    suggestions.push("Use more linking phrases (e.g., 'furthermore', 'consequently', 'in addition') to improve cohesion.");
+    suggestions.push("Incorporate a wider range of vocabulary related to the topic.");
+    
+    return {
+      taskAchievement,
+      coherenceAndCohesion,
+      lexicalResource,
+      grammaticalRangeAndAccuracy,
+      overallBand,
+      strengths,
+      weaknesses,
+      suggestions
+    };
+  };
+
   const handleSubmit = () => {
-    // Here you would normally send the essay to a backend for evaluation
+    // Determine which task category is active
+    let taskCategory: 'academic' | 'essay' = 'academic';
+    const academicTask = writingTaskData.academic.find(task => task.id === activeTask);
+    const essayTask = writingTaskData.essay.find(task => task.id === activeTask);
+    
+    if (essayTask) {
+      taskCategory = 'essay';
+    }
+    
+    // Evaluate the essay and get feedback
+    const essayFeedback = evaluateEssay(essayText, taskCategory);
+    setFeedback(essayFeedback);
     setSubmitted(true);
+    
     toast({
       title: "Essay submitted successfully!",
-      description: "Your essay has been submitted for evaluation.",
+      description: `Your overall band score: ${essayFeedback.overallBand.toFixed(1)}`,
       variant: "default",
     });
   };
@@ -121,9 +200,9 @@ const WritingPractice: React.FC = () => {
     if (!activeTask) return null;
     
     // Check both categories
-    let task = writingTasks.academic.find(task => task.id === activeTask);
+    let task = writingTaskData.academic.find(task => task.id === activeTask);
     if (!task) {
-      task = writingTasks.essay.find(task => task.id === activeTask);
+      task = writingTaskData.essay.find(task => task.id === activeTask);
     }
     
     return task;
@@ -133,7 +212,7 @@ const WritingPractice: React.FC = () => {
 
   const renderTaskCards = (tasks: any[], category: 'academic' | 'essay') => {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         {tasks.map((task) => (
           <div 
             key={task.id}
@@ -181,6 +260,138 @@ const WritingPractice: React.FC = () => {
             </Button>
           </div>
         ))}
+      </div>
+    );
+  };
+
+  const renderFeedback = () => {
+    if (!feedback) return null;
+    
+    const { 
+      taskAchievement, 
+      coherenceAndCohesion, 
+      lexicalResource, 
+      grammaticalRangeAndAccuracy, 
+      overallBand,
+      strengths,
+      weaknesses,
+      suggestions
+    } = feedback;
+    
+    // Band descriptor explanation
+    const getBandDescription = (score: number) => {
+      if (score >= 8) return "Very Good to Expert";
+      if (score >= 7) return "Good";
+      if (score >= 6) return "Competent";
+      if (score >= 5) return "Modest";
+      if (score >= 4) return "Limited";
+      return "Basic to Very Limited";
+    };
+    
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-semibold">IELTS Writing Assessment</h3>
+          <Badge variant="outline" className="text-lg px-3 py-1">
+            Overall: {overallBand.toFixed(1)}
+          </Badge>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between mb-1">
+                <span className="text-sm font-medium">Task Achievement</span>
+                <span className="text-sm font-medium">{taskAchievement.toFixed(1)} - {getBandDescription(taskAchievement)}</span>
+              </div>
+              <Progress value={(taskAchievement / 9) * 100} className="h-2" />
+            </div>
+            
+            <div>
+              <div className="flex justify-between mb-1">
+                <span className="text-sm font-medium">Coherence & Cohesion</span>
+                <span className="text-sm font-medium">{coherenceAndCohesion.toFixed(1)} - {getBandDescription(coherenceAndCohesion)}</span>
+              </div>
+              <Progress value={(coherenceAndCohesion / 9) * 100} className="h-2" />
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between mb-1">
+                <span className="text-sm font-medium">Lexical Resource</span>
+                <span className="text-sm font-medium">{lexicalResource.toFixed(1)} - {getBandDescription(lexicalResource)}</span>
+              </div>
+              <Progress value={(lexicalResource / 9) * 100} className="h-2" />
+            </div>
+            
+            <div>
+              <div className="flex justify-between mb-1">
+                <span className="text-sm font-medium">Grammatical Range & Accuracy</span>
+                <span className="text-sm font-medium">{grammaticalRangeAndAccuracy.toFixed(1)} - {getBandDescription(grammaticalRangeAndAccuracy)}</span>
+              </div>
+              <Progress value={(grammaticalRangeAndAccuracy / 9) * 100} className="h-2" />
+            </div>
+          </div>
+        </div>
+        
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="strengths">
+            <AccordionTrigger className="text-green-600 dark:text-green-400 font-medium">
+              Strengths
+            </AccordionTrigger>
+            <AccordionContent>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 pl-2">
+                {strengths.map((strength, index) => (
+                  <li key={index}>{strength}</li>
+                ))}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+          
+          <AccordionItem value="weaknesses">
+            <AccordionTrigger className="text-amber-600 dark:text-amber-400 font-medium">
+              Areas for Improvement
+            </AccordionTrigger>
+            <AccordionContent>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 pl-2">
+                {weaknesses.map((weakness, index) => (
+                  <li key={index}>{weakness}</li>
+                ))}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+          
+          <AccordionItem value="suggestions">
+            <AccordionTrigger className="text-blue-600 dark:text-blue-400 font-medium">
+              Suggestions for Improvement
+            </AccordionTrigger>
+            <AccordionContent>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 pl-2">
+                {suggestions.map((suggestion, index) => (
+                  <li key={index}>{suggestion}</li>
+                ))}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+          
+          <AccordionItem value="tips">
+            <AccordionTrigger className="text-purple-600 dark:text-purple-400 font-medium">
+              IELTS Band Score Criteria
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-4 text-gray-700 dark:text-gray-300">
+                <p>IELTS writing is assessed on these four criteria:</p>
+                <ol className="list-decimal list-inside space-y-2 pl-2">
+                  <li><strong>Task Achievement/Response</strong>: How well you address all parts of the task and develop a position or argument.</li>
+                  <li><strong>Coherence and Cohesion</strong>: How well your writing flows, is organized, and uses linking words/phrases.</li>
+                  <li><strong>Lexical Resource</strong>: The range and accuracy of your vocabulary.</li>
+                  <li><strong>Grammatical Range and Accuracy</strong>: The variety and correctness of your sentence structures.</li>
+                </ol>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     );
   };
@@ -280,7 +491,7 @@ const WritingPractice: React.FC = () => {
               </div>
             </div>
             
-            {submitted && (
+            {submitted && !feedback && (
               <div className="bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-200 rounded-lg p-6 flex items-start">
                 <CheckCircle className="w-6 h-6 mr-3 flex-shrink-0" />
                 <div>
@@ -298,6 +509,8 @@ const WritingPractice: React.FC = () => {
                 </div>
               </div>
             )}
+            
+            {submitted && feedback && renderFeedback()}
           </div>
         ) : (
           <>
@@ -338,7 +551,7 @@ const WritingPractice: React.FC = () => {
                     </p>
                   </div>
                   
-                  {renderTaskCards(writingTasks.academic, 'academic')}
+                  {renderTaskCards(writingTaskData.academic, 'academic')}
                 </TabsContent>
                 
                 <TabsContent value="essay" className="px-1">
@@ -359,7 +572,7 @@ const WritingPractice: React.FC = () => {
                     </p>
                   </div>
                   
-                  {renderTaskCards(writingTasks.essay, 'essay')}
+                  {renderTaskCards(writingTaskData.essay, 'essay')}
                 </TabsContent>
               </Tabs>
             </div>
