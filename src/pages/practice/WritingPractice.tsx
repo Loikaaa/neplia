@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -61,20 +60,11 @@ const WritingPractice: React.FC = () => {
     const text = e.target.value;
     setEssayText(text);
     
-    // Calculate word count immediately on text change
-    calculateWordCount(text);
-  };
-
-  // Function to calculate word count
-  const calculateWordCount = (text: string) => {
-    if (!text || text.trim() === '') {
-      setWordCount(0);
-      return;
-    }
-    
-    // Count words by splitting on whitespace
     const words = text.trim().split(/\s+/);
-    setWordCount(words.length);
+    setWordCount(text.trim() === '' ? 0 : words.length);
+    
+    console.log("Text changed:", text);
+    console.log("Words counted:", text.trim() === '' ? 0 : words.length);
   };
 
   const evaluateEssay = (text: string, taskType: 'academic' | 'essay') => {
@@ -194,9 +184,10 @@ const WritingPractice: React.FC = () => {
 
   const currentTask = getActiveTask();
 
-  // Update word count whenever essay text changes
   useEffect(() => {
-    calculateWordCount(essayText);
+    const words = essayText.trim().split(/\s+/);
+    setWordCount(essayText.trim() === '' ? 0 : words.length);
+    console.log("Effect triggered. Word count:", essayText.trim() === '' ? 0 : words.length);
   }, [essayText]);
 
   const renderTaskCards = (tasks: any[], category: 'academic' | 'essay') => {
