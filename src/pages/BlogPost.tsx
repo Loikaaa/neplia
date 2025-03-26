@@ -9,6 +9,7 @@ import { Calendar, Clock, Tag, ArrowLeft, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -78,13 +79,15 @@ const BlogPost = () => {
             </div>
             
             <div className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg mb-8">
-              <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+              <Avatar className="h-12 w-12">
                 {post.author.avatar ? (
-                  <img src={post.author.avatar} alt={post.author.name} className="w-full h-full object-cover" />
+                  <AvatarImage src={post.author.avatar} alt={post.author.name} className="object-cover" />
                 ) : (
-                  <User className="w-6 h-6 text-gray-500" />
+                  <AvatarFallback>
+                    <User className="h-6 w-6 text-gray-500" />
+                  </AvatarFallback>
                 )}
-              </div>
+              </Avatar>
               <div>
                 <div className="font-medium">{post.author.name}</div>
                 <div className="text-sm text-muted-foreground">{post.author.title}</div>

@@ -59,7 +59,7 @@ const Blog = () => {
     <Layout>
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-5xl mx-auto">
-          {/* Categories and filters positioned at the top */}
+          {/* Categories and filters now positioned at the top */}
           <div className="flex flex-wrap gap-2 mb-8">
             <button
               key="all"
@@ -75,7 +75,7 @@ const Blog = () => {
             >
               All
             </button>
-            {blogCategories.map((category) => (
+            {blogCategories.filter(cat => cat.slug !== "all").map((category) => (
               <button
                 key={category.slug}
                 onClick={() => {
@@ -123,7 +123,7 @@ const Blog = () => {
             </div>
           )}
 
-          {/* Blog title and description */}
+          {/* Blog title and description moved below filters */}
           <div className="text-center mb-12 bg-gradient-to-r from-indigo-50 to-teal-50 dark:from-indigo-950/30 dark:to-teal-950/30 p-8 rounded-xl shadow-sm">
             <div className="inline-flex items-center justify-center p-3 bg-indigo-100 dark:bg-indigo-900/40 rounded-full mb-4">
               <BookOpen className="h-7 w-7 text-indigo" />

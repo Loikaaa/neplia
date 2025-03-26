@@ -5,6 +5,7 @@ import { BlogPost } from '@/types/blog';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Calendar, Clock, Tag, User } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 interface BlogCardProps {
   post: BlogPost;
@@ -55,13 +56,15 @@ const BlogCard = ({ post, variant = 'default' }: BlogCardProps) => {
             
             <div className="flex items-center mt-4">
               <div className="flex items-center">
-                <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center mr-2">
+                <Avatar className="h-8 w-8 mr-2">
                   {post.author.avatar ? (
-                    <img src={post.author.avatar} alt={post.author.name} className="w-full h-full object-cover" />
+                    <AvatarImage src={post.author.avatar} alt={post.author.name} />
                   ) : (
-                    <User className="w-4 h-4 text-gray-500" />
+                    <AvatarFallback>
+                      <User className="h-4 w-4 text-gray-500" />
+                    </AvatarFallback>
                   )}
-                </div>
+                </Avatar>
                 <span className="text-sm font-medium">{post.author.name}</span>
               </div>
             </div>
