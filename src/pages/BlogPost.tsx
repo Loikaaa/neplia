@@ -5,16 +5,20 @@ import Layout from '@/components/Layout';
 import { blogPosts, getRelatedPosts } from '@/data/blogData';
 import BlogCard from '@/components/blog/BlogCard';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, Tag, ArrowLeft, User } from 'lucide-react';
+import { Calendar, Clock, Tag, ArrowLeft, User, Share2, Heart, Bookmark, ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState(blogPosts.find(p => p.slug === slug));
   const [relatedPosts, setRelatedPosts] = useState<typeof blogPosts>([]);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -46,102 +50,212 @@ const BlogPost = () => {
     );
   }
 
+  // Ensure we have a valid image URL, fallback to a free source image if needed
+  const coverImage = post.coverImage && post.coverImage.startsWith('http') 
+    ? post.coverImage 
+    : `https://images.unsplash.com/photo-1523633589114-88eaf4b4f1a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80`;
+
+  // Ensure author avatar, fallback to a placeholder
+  const authorAvatar = post.author.avatar && post.author.avatar.startsWith('http')
+    ? post.author.avatar
+    : `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80`;
+
+  const toggleLike = () => setIsLiked(!isLiked);
+  const toggleBookmark = () => setIsBookmarked(!isBookmarked);
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <Link to="/blog" className="inline-flex items-center text-indigo hover:text-indigo-600 transition-colors">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Blog
-            </Link>
+          {/* Breadcrumb Navigation */}
+          <div className="flex items-center text-sm text-muted-foreground mb-8">
+            <Link to="/" className="hover:text-indigo transition-colors">Home</Link>
+            <ChevronRight className="h-4 w-4 mx-2" />
+            <Link to="/blog" className="hover:text-indigo transition-colors">Blog</Link>
+            <ChevronRight className="h-4 w-4 mx-2" />
+            <span className="text-foreground font-medium truncate">{post.title}</span>
           </div>
           
-          <div className="mb-8">
-            <div className="inline-block bg-indigo text-white text-sm font-medium px-4 py-1.5 rounded-full shadow-sm mb-4">
-              {post.category}
-            </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo to-teal">{post.title}</h1>
-            
-            <div className="flex flex-wrap items-center text-sm text-muted-foreground space-x-4 mb-6">
-              <div className="flex items-center">
-                <Calendar className="w-4 h-4 mr-1" />
-                <span>{new Date(post.publishedAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}</span>
-              </div>
-              <div className="flex items-center">
-                <Clock className="w-4 h-4 mr-1" />
-                <span>{post.readingTime}</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-3 p-6 bg-gradient-to-r from-indigo-50 to-teal-50 dark:from-indigo-950/30 dark:to-teal-950/30 rounded-xl mb-8 shadow-sm">
-              <Avatar className="h-16 w-16 ring-4 ring-white dark:ring-gray-800">
-                {post.author.avatar ? (
-                  <AvatarImage src={post.author.avatar} alt={post.author.name} className="object-cover" />
-                ) : (
-                  <AvatarFallback>
-                    <User className="h-6 w-6 text-gray-500" />
-                  </AvatarFallback>
-                )}
-              </Avatar>
-              <div>
-                <div className="font-medium text-lg">{post.author.name}</div>
-                <div className="text-sm text-muted-foreground">{post.author.title}</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="relative rounded-xl overflow-hidden mb-10 shadow-xl">
-            <AspectRatio ratio={16 / 9}>
+          {/* Cover Image with Gradient Overlay */}
+          <div className="relative rounded-2xl overflow-hidden mb-8 shadow-xl">
+            <AspectRatio ratio={21 / 9}>
               <img 
-                src={post.coverImage} 
+                src={coverImage}
                 alt={post.title} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
               />
             </AspectRatio>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
-          </div>
-          
-          <div className="prose prose-lg dark:prose-invert max-w-none mb-12 prose-headings:text-indigo prose-a:text-indigo">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
-          </div>
-          
-          <div className="border-t border-b py-6 mb-12 bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 px-8 rounded-xl shadow-sm">
-            <div className="flex items-center flex-wrap gap-2">
-              <Tag className="w-5 h-5 mr-2 text-indigo" />
-              {post.tags.map(tag => (
-                <Link key={tag} to={`/blog?tag=${tag}`}>
-                  <Badge variant="outline" className="bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer border-indigo/30 text-indigo">
-                    {tag}
-                  </Badge>
-                </Link>
-              ))}
-            </div>
-          </div>
-          
-          {relatedPosts.length > 0 && (
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6 border-l-4 border-indigo pl-4 bg-gradient-to-r from-indigo to-teal bg-clip-text text-transparent">Related Articles</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {relatedPosts.map(post => (
-                  <BlogCard key={post.id} post={post} />
-                ))}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+            
+            <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
+              <div className="inline-block bg-indigo text-white text-sm font-medium px-4 py-1.5 rounded-full shadow-lg mb-4 transform hover:translate-y-1 transition-transform">
+                {post.category}
+              </div>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white drop-shadow-md">{post.title}</h1>
+              
+              <div className="flex flex-wrap items-center gap-6 text-white/90">
+                <div className="flex items-center">
+                  <Calendar className="w-4 h-4 mr-1" />
+                  <span>{new Date(post.publishedAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock className="w-4 h-4 mr-1" />
+                  <span>{post.readingTime}</span>
+                </div>
               </div>
             </div>
-          )}
+          </div>
           
-          <div className="text-center bg-gradient-to-r from-indigo-50 to-teal-50 dark:from-indigo-950/30 dark:to-teal-950/30 p-10 rounded-2xl shadow-sm">
-            <div className="inline-flex items-center justify-center p-4 bg-indigo-100 dark:bg-indigo-900/40 rounded-full mb-6">
+          {/* Social Sharing and Stats - Fixed Position Sidebar on larger screens */}
+          <div className="hidden lg:flex flex-col fixed left-8 top-1/2 transform -translate-y-1/2 gap-4 z-10">
+            <button 
+              onClick={toggleLike}
+              className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
+                isLiked ? "bg-coral text-white" : "bg-white dark:bg-gray-800 hover:bg-coral/10"
+              )}
+            >
+              <Heart className={cn("h-5 w-5", isLiked && "fill-current")} />
+            </button>
+            <button 
+              onClick={toggleBookmark}
+              className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
+                isBookmarked ? "bg-indigo text-white" : "bg-white dark:bg-gray-800 hover:bg-indigo/10"
+              )}
+            >
+              <Bookmark className={cn("h-5 w-5", isBookmarked && "fill-current")} />
+            </button>
+            <button className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 shadow-md">
+              <Share2 className="h-5 w-5" />
+            </button>
+          </div>
+          
+          <div className="flex flex-col lg:flex-row gap-8">
+            <div className="lg:w-2/3">
+              {/* Author Information */}
+              <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-indigo-50/80 to-teal-50/80 dark:from-indigo-950/30 dark:to-teal-950/30 rounded-xl mb-8 shadow-sm hover:shadow-md transition-shadow duration-300">
+                <Avatar className="h-16 w-16 ring-4 ring-white dark:ring-gray-800 shadow-md">
+                  {authorAvatar ? (
+                    <AvatarImage src={authorAvatar} alt={post.author.name} className="object-cover" />
+                  ) : (
+                    <AvatarFallback>
+                      <User className="h-6 w-6 text-gray-500" />
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+                <div>
+                  <div className="font-medium text-lg">{post.author.name}</div>
+                  <div className="text-sm text-muted-foreground">{post.author.title}</div>
+                </div>
+              </div>
+              
+              {/* Social Sharing for Mobile */}
+              <div className="flex lg:hidden items-center justify-center gap-3 mb-8">
+                <button 
+                  onClick={toggleLike}
+                  className={cn(
+                    "flex items-center gap-1 px-4 py-2 rounded-full text-sm transition-all duration-300",
+                    isLiked ? "bg-coral/10 text-coral" : "bg-gray-100 dark:bg-gray-800"
+                  )}
+                >
+                  <Heart className={cn("h-4 w-4", isLiked && "fill-current")} />
+                  <span>Like</span>
+                </button>
+                <button 
+                  onClick={toggleBookmark}
+                  className={cn(
+                    "flex items-center gap-1 px-4 py-2 rounded-full text-sm transition-all duration-300",
+                    isBookmarked ? "bg-indigo/10 text-indigo" : "bg-gray-100 dark:bg-gray-800"
+                  )}
+                >
+                  <Bookmark className={cn("h-4 w-4", isBookmarked && "fill-current")} />
+                  <span>Save</span>
+                </button>
+                <button className="flex items-center gap-1 px-4 py-2 rounded-full text-sm bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300">
+                  <Share2 className="h-4 w-4" />
+                  <span>Share</span>
+                </button>
+              </div>
+              
+              {/* Article Content */}
+              <div className="prose prose-lg dark:prose-invert max-w-none mb-12 prose-img:rounded-xl prose-img:shadow-lg prose-headings:text-indigo prose-headings:font-bold prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-indigo prose-a:font-semibold prose-a:no-underline hover:prose-a:underline">
+                <ReactMarkdown>{post.content}</ReactMarkdown>
+              </div>
+            </div>
+            
+            <div className="lg:w-1/3 space-y-8">
+              {/* Tags Section */}
+              <div className="bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm">
+                <h3 className="text-lg font-semibold mb-4 flex items-center">
+                  <Tag className="w-5 h-5 mr-2 text-indigo" />
+                  Tags
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {post.tags.map(tag => (
+                    <Link key={tag} to={`/blog?tag=${tag}`}>
+                      <Badge variant="outline" className="bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer border-indigo/30 text-indigo">
+                        {tag}
+                      </Badge>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Related Posts */}
+              {relatedPosts.length > 0 && (
+                <div className="bg-gradient-to-r from-gray-50 to-teal-50 dark:from-gray-900 dark:to-teal-950/30 p-6 rounded-xl shadow-sm">
+                  <h3 className="text-lg font-semibold mb-4 border-l-4 border-indigo pl-3">
+                    Related Articles
+                  </h3>
+                  <div className="space-y-4">
+                    {relatedPosts.map(post => (
+                      <Link key={post.id} to={`/blog/${post.slug}`} className="block group">
+                        <div className="flex gap-3 p-3 rounded-lg hover:bg-white/60 dark:hover:bg-gray-800/60 transition-colors">
+                          <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded-md">
+                            <img 
+                              src={post.coverImage || "https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"} 
+                              alt={post.title} 
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            />
+                          </div>
+                          <div className="flex-grow">
+                            <h4 className="font-medium line-clamp-2 group-hover:text-indigo transition-colors">{post.title}</h4>
+                            <div className="flex items-center text-xs text-muted-foreground mt-1">
+                              <Calendar className="w-3 h-3 mr-1" />
+                              <span>{new Date(post.publishedAt).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                              })}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <Separator className="my-12" />
+          
+          {/* Call to Action */}
+          <div className="text-center bg-gradient-to-r from-indigo-50/70 to-teal-50/70 dark:from-indigo-950/40 dark:to-teal-950/40 p-10 rounded-2xl shadow-lg transform hover:scale-[1.01] transition-transform duration-300">
+            <div className="inline-flex items-center justify-center p-4 bg-indigo/10 dark:bg-indigo/20 rounded-full mb-6">
               <Calendar className="h-8 w-8 text-indigo" />
             </div>
-            <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-indigo to-teal bg-clip-text text-transparent">Discover More Content</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">Explore our full collection of expert guides and resources to help you succeed in your exams.</p>
-            <Button asChild size="lg" className="bg-gradient-to-r from-indigo to-teal hover:from-indigo-600 hover:to-teal-600">
-              <Link to="/blog">View All Articles</Link>
+            <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-indigo to-teal bg-clip-text text-transparent">Ready to Explore More?</h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">
+              Dive deeper into our extensive collection of expert guides and resources to accelerate your exam preparation journey.
+            </p>
+            <Button asChild size="lg" className="bg-gradient-to-r from-indigo to-teal hover:from-indigo-600 hover:to-teal-600 shadow-md hover:shadow-lg">
+              <Link to="/blog">Discover More Articles</Link>
             </Button>
           </div>
         </div>
