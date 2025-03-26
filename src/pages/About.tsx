@@ -35,7 +35,7 @@ const About = () => {
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div className="space-y-4">
               <p className="text-lg text-gray-700 dark:text-gray-300">
-                Neplia was born from a simple yet powerful observation: IELTS preparation should be accessible, effective, and engaging. Founded in 2021 by a group of language education enthusiasts who later formed Team Tuit, we set out to revolutionize how students prepare for one of the world's most recognized English proficiency tests.
+                Neplia was born from a simple yet powerful observation: IELTS preparation should be accessible, effective, and engaging. Founded in 2021 by Govinda Bohara who later formed Team Tuit, we set out to revolutionize how students prepare for one of the world's most recognized English proficiency tests.
               </p>
               <p className="text-lg text-gray-700 dark:text-gray-300">
                 What began as a small collection of practice materials has evolved into a comprehensive platform used by thousands of students worldwide. Our journey has been guided by one core principle: to empower every learner with the tools they need to achieve their target IELTS score.
@@ -66,18 +66,18 @@ const About = () => {
           
           <div className="mb-8">
             <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-              Behind Neplia is a diverse team of educators, language experts, and technologists united by a shared passion for transforming IELTS preparation. Team Tuit brings together decades of combined experience in language teaching, test preparation, and educational technology.
+              Behind Neplia is a diverse team of educators, language experts, and technologists united by a shared passion for transforming exam preparation. Team Tuit brings together decades of combined experience in language teaching, test preparation, and educational technology.
             </p>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-              {/* Team Member 1 */}
+              {/* Team Member 1 - Govinda Bohara */}
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div className="h-48 bg-gradient-to-r from-indigo/10 to-coral/10"></div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">Sarah Johnson</h3>
+                  <h3 className="text-xl font-bold mb-2">Govinda Bohara</h3>
                   <p className="text-indigo font-medium mb-3">Founder & CEO</p>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Former IELTS examiner with 15+ years of experience in language education. Sarah leads our vision and strategy.
+                    Visionary leader with extensive experience in educational technology and language training. Govinda founded Neplia with a mission to democratize exam preparation.
                   </p>
                 </div>
               </div>
@@ -157,7 +157,7 @@ const About = () => {
             <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md">
               <h3 className="text-xl font-bold mb-4">Research-Based</h3>
               <p className="text-gray-700 dark:text-gray-300">
-                Every resource, practice test, and strategy we offer is grounded in research and proven methodologies. We continuously analyze IELTS trends and update our materials accordingly.
+                Every resource, practice test, and strategy we offer is grounded in research and proven methodologies. We continuously analyze test trends and update our materials accordingly.
               </p>
             </div>
             
@@ -171,7 +171,7 @@ const About = () => {
             <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md">
               <h3 className="text-xl font-bold mb-4">Comprehensive</h3>
               <p className="text-gray-700 dark:text-gray-300">
-                From listening and reading to writing and speaking, we cover all IELTS modules with the depth and breadth needed for success. No stone is left unturned.
+                From IELTS and TOEFL to government exams and banking tests, we cover all major examinations with the depth and breadth needed for success. No stone is left unturned.
               </p>
             </div>
           </div>
@@ -237,7 +237,7 @@ const About = () => {
           <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md mb-8">
             <h3 className="text-2xl font-bold mb-4">Mission</h3>
             <p className="text-lg text-gray-700 dark:text-gray-300">
-              To democratize IELTS preparation by providing accessible, high-quality resources that empower learners worldwide to achieve their language proficiency goals and unlock new academic and professional opportunities.
+              To democratize exam preparation by providing accessible, high-quality resources that empower learners worldwide to achieve their goals. We focus on a wide range of tests including IELTS, PTE, TOEFL, SAT, as well as government, non-government, and banking exams, ensuring comprehensive coverage for all educational needs.
             </p>
           </div>
           
@@ -300,7 +300,7 @@ const About = () => {
               <div>
                 <h3 className="text-xl font-bold mb-4">Connect With Us</h3>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  Follow us on social media for the latest updates, IELTS tips, and success stories.
+                  Follow us on social media for the latest updates, exam tips, and success stories.
                 </p>
                 <div className="flex space-x-4">
                   <a href="#" className="w-10 h-10 rounded-full bg-indigo/10 flex items-center justify-center text-indigo hover:bg-indigo hover:text-white transition-colors">
