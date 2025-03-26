@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -20,6 +19,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,7 +75,10 @@ const Navbar = () => {
                 ) : (
                   <Link 
                     to={link.path}
-                    className="text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300 font-medium transition-colors link-underline"
+                    className={cn(
+                      "text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300 font-medium transition-colors link-underline",
+                      location.pathname === link.path && "text-indigo dark:text-indigo-300"
+                    )}
                   >
                     {link.name}
                   </Link>
@@ -92,7 +95,10 @@ const Navbar = () => {
                         <Link
                           key={sublink.name}
                           to={sublink.path}
-                          className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo dark:hover:text-indigo-300"
+                          className={cn(
+                            "block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo dark:hover:text-indigo-300",
+                            location.pathname === sublink.path && "bg-indigo-50 dark:bg-indigo-900/30 text-indigo dark:text-indigo-300"
+                          )}
                           onClick={() => setOpenSubmenu(null)}
                         >
                           {sublink.name}
@@ -179,7 +185,10 @@ const Navbar = () => {
                         <Link
                           key={sublink.name}
                           to={sublink.path}
-                          className="block py-2 text-gray-600 dark:text-gray-400 hover:text-indigo dark:hover:text-indigo-300"
+                          className={cn(
+                            "block py-2 text-gray-600 dark:text-gray-400 hover:text-indigo dark:hover:text-indigo-300",
+                            location.pathname === sublink.path && "text-indigo dark:text-indigo-300"
+                          )}
                           onClick={() => setMobileMenuOpen(false)}
                         >
                           {sublink.name}
@@ -190,7 +199,10 @@ const Navbar = () => {
                 ) : (
                   <Link
                     to={link.path}
-                    className="block text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300"
+                    className={cn(
+                      "block text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300",
+                      location.pathname === link.path && "text-indigo dark:text-indigo-300"
+                    )}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {link.name}
