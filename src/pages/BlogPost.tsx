@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar, Clock, Tag, ArrowLeft, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -55,13 +56,13 @@ const BlogPost = () => {
             </Link>
           </div>
           
-          <div className="mb-6">
+          <div className="mb-8">
             <div className="inline-block bg-indigo text-white text-sm font-medium px-3 py-1 rounded mb-4">
               {post.category}
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-4">{post.title}</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">{post.title}</h1>
             
-            <div className="flex flex-wrap items-center text-sm text-muted-foreground space-x-4 mb-4">
+            <div className="flex flex-wrap items-center text-sm text-muted-foreground space-x-4 mb-6">
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-1" />
                 <span>{new Date(post.publishedAt).toLocaleDateString('en-US', {
@@ -76,12 +77,12 @@ const BlogPost = () => {
               </div>
             </div>
             
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+            <div className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg mb-8">
+              <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                 {post.author.avatar ? (
                   <img src={post.author.avatar} alt={post.author.name} className="w-full h-full object-cover" />
                 ) : (
-                  <User className="w-5 h-5 text-gray-500" />
+                  <User className="w-6 h-6 text-gray-500" />
                 )}
               </div>
               <div>
@@ -91,19 +92,21 @@ const BlogPost = () => {
             </div>
           </div>
           
-          <div className="aspect-video w-full rounded-lg overflow-hidden mb-8">
-            <img 
-              src={post.coverImage} 
-              alt={post.title} 
-              className="w-full h-full object-cover"
-            />
+          <div className="relative rounded-xl overflow-hidden mb-10 shadow-md">
+            <AspectRatio ratio={16 / 9}>
+              <img 
+                src={post.coverImage} 
+                alt={post.title} 
+                className="w-full h-full object-cover"
+              />
+            </AspectRatio>
           </div>
           
-          <div className="prose prose-lg dark:prose-invert max-w-none mb-10">
+          <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
             <ReactMarkdown>{post.content}</ReactMarkdown>
           </div>
           
-          <div className="border-t border-b py-6 mb-10">
+          <div className="border-t border-b py-6 mb-12 bg-gray-50 dark:bg-gray-800/30 px-6 rounded-lg">
             <div className="flex items-center flex-wrap gap-2">
               <Tag className="w-5 h-5 mr-2 text-muted-foreground" />
               {post.tags.map(tag => (
@@ -118,7 +121,7 @@ const BlogPost = () => {
           
           {relatedPosts.length > 0 && (
             <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
+              <h2 className="text-2xl font-bold mb-6 border-l-4 border-indigo pl-4">Related Articles</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {relatedPosts.map(post => (
                   <BlogCard key={post.id} post={post} />
@@ -127,8 +130,10 @@ const BlogPost = () => {
             </div>
           )}
           
-          <div className="text-center">
-            <Button asChild>
+          <div className="text-center bg-gradient-to-r from-indigo-50 to-teal-50 dark:from-indigo-950/30 dark:to-teal-950/30 p-8 rounded-xl">
+            <h3 className="text-xl font-semibold mb-4">Discover More Content</h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">Explore our full collection of expert guides and resources.</p>
+            <Button asChild size="lg">
               <Link to="/blog">View All Articles</Link>
             </Button>
           </div>

@@ -58,28 +58,23 @@ const Blog = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 md:py-12">
-        <div className="max-w-5xl mx-auto mb-12">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center p-2 bg-indigo-100 dark:bg-indigo-900/40 rounded-full mb-4">
-              <BookOpen className="h-6 w-6 text-indigo" />
-            </div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Neplia Blog</h1>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Expert guides, tips and resources to help you succeed in your exams and educational journey.
-            </p>
-          </div>
-
-          <div className="relative mb-8">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <Input
-              placeholder="Search for articles, topics or keywords..."
-              className="pl-10"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
+        <div className="max-w-5xl mx-auto">
+          {/* Categories and filters positioned at the top */}
           <div className="flex flex-wrap gap-2 mb-8">
+            <button
+              key="all"
+              onClick={() => {
+                setSelectedCategory("all");
+                setSelectedTag(null);
+              }}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedCategory === "all"
+                  ? "bg-indigo text-white"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+              }`}
+            >
+              All
+            </button>
             {blogCategories.map((category) => (
               <button
                 key={category.slug}
@@ -96,6 +91,16 @@ const Blog = () => {
                 {category.name} ({category.count})
               </button>
             ))}
+          </div>
+
+          <div className="relative mb-8">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Input
+              placeholder="Search for articles, topics or keywords..."
+              className="pl-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
 
           {selectedTag && (
@@ -118,8 +123,19 @@ const Blog = () => {
             </div>
           )}
 
+          {/* Blog title and description */}
+          <div className="text-center mb-12 bg-gradient-to-r from-indigo-50 to-teal-50 dark:from-indigo-950/30 dark:to-teal-950/30 p-8 rounded-xl shadow-sm">
+            <div className="inline-flex items-center justify-center p-3 bg-indigo-100 dark:bg-indigo-900/40 rounded-full mb-4">
+              <BookOpen className="h-7 w-7 text-indigo" />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Neplia Blog</h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Expert guides, tips and resources to help you succeed in your exams and educational journey.
+            </p>
+          </div>
+
           {displayedPosts.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="text-center py-12 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
               <h3 className="text-xl font-medium mb-2">No articles found</h3>
               <p className="text-gray-600 dark:text-gray-400">
                 Try adjusting your search or filter to find what you're looking for.
@@ -133,7 +149,7 @@ const Blog = () => {
             </div>
           )}
 
-          <div className="mt-12">
+          <div className="mt-12 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
             <h3 className="text-lg font-semibold mb-4">Popular Topics</h3>
             <div className="flex flex-wrap gap-2">
               {allTags.map(tag => (
