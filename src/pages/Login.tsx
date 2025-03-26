@@ -46,7 +46,14 @@ const Login = () => {
   const onSubmit = (data: LoginFormValues) => {
     console.log("Form submitted:", data);
     
-    // Simulate successful login
+    // This would typically check against a backend/database
+    // For now, we'll simulate successful login and store email in localStorage
+    localStorage.setItem('userEmail', data.email);
+    
+    if (data.rememberMe) {
+      localStorage.setItem('rememberUser', 'true');
+    }
+    
     toast({
       title: "Success!",
       description: "You have successfully logged in.",
@@ -63,6 +70,17 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  // Pre-fill email if returning user had "remember me" checked
+  React.useEffect(() => {
+    const rememberedUser = localStorage.getItem('rememberUser');
+    const savedEmail = localStorage.getItem('userEmail');
+    
+    if (rememberedUser === 'true' && savedEmail) {
+      form.setValue('email', savedEmail);
+      form.setValue('rememberMe', true);
+    }
+  }, [form]);
+
   return (
     <Layout>
       <div className="container max-w-screen-xl mx-auto px-4 py-12 md:py-20">
@@ -71,7 +89,7 @@ const Login = () => {
             <CardHeader className="space-y-1 text-center">
               <CardTitle className="text-3xl font-bold tracking-tight text-indigo">Welcome Back</CardTitle>
               <CardDescription className="text-muted-foreground">
-                Log in to your account to continue your learning journey
+                Log in with your email to continue your learning journey
               </CardDescription>
             </CardHeader>
             
