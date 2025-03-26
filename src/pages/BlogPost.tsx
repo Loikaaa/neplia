@@ -63,6 +63,28 @@ const BlogPost = () => {
   const toggleLike = () => setIsLiked(!isLiked);
   const toggleBookmark = () => setIsBookmarked(!isBookmarked);
 
+  // Custom renderer for markdown elements to apply styling
+  const customRenderers = {
+    h1: (props: any) => <h1 className="text-3xl font-bold text-indigo-600 mt-8 mb-4" {...props} />,
+    h2: (props: any) => <h2 className="text-2xl font-bold text-indigo mt-6 mb-3" {...props} />,
+    h3: (props: any) => <h3 className="text-xl font-bold text-indigo-500 mt-5 mb-2" {...props} />,
+    h4: (props: any) => <h4 className="text-lg font-bold text-gray-800 dark:text-gray-200 mt-4 mb-2" {...props} />,
+    p: (props: any) => <p className="my-4 text-gray-700 dark:text-gray-300 leading-relaxed" {...props} />,
+    ul: (props: any) => <ul className="list-disc pl-6 my-4 space-y-2" {...props} />,
+    ol: (props: any) => <ol className="list-decimal pl-6 my-4 space-y-2" {...props} />,
+    li: (props: any) => <li className="text-gray-700 dark:text-gray-300 pl-2" {...props} />,
+    a: (props: any) => <a className="text-indigo underline hover:text-indigo-600 transition-colors" {...props} />,
+    blockquote: (props: any) => (
+      <blockquote className="border-l-4 border-indigo pl-4 italic my-6 text-gray-700 dark:text-gray-300" {...props} />
+    ),
+    code: (props: any) => (
+      <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm" {...props} />
+    ),
+    pre: (props: any) => (
+      <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto my-6" {...props} />
+    ),
+  };
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 md:py-12">
@@ -77,15 +99,15 @@ const BlogPost = () => {
           </div>
           
           {/* Cover Image with Gradient Overlay */}
-          <div className="relative rounded-2xl overflow-hidden mb-8 shadow-xl">
+          <div className="relative rounded-2xl overflow-hidden mb-8 shadow-xl group">
             <AspectRatio ratio={21 / 9}>
               <img 
                 src={coverImage}
                 alt={post.title} 
-                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               />
             </AspectRatio>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
             
             <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
               <div className="inline-block bg-indigo text-white text-sm font-medium px-4 py-1.5 rounded-full shadow-lg mb-4 transform hover:translate-y-1 transition-transform">
@@ -183,14 +205,31 @@ const BlogPost = () => {
               </div>
               
               {/* Article Content */}
-              <div className="prose prose-lg dark:prose-invert max-w-none mb-12 prose-img:rounded-xl prose-img:shadow-lg prose-headings:text-indigo prose-headings:font-bold prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-indigo prose-a:font-semibold prose-a:no-underline hover:prose-a:underline">
-                <ReactMarkdown>{post.content}</ReactMarkdown>
+              <div className="prose prose-lg dark:prose-invert max-w-none mb-12 prose-headings:font-heading prose-img:rounded-xl prose-img:shadow-lg">
+                <ReactMarkdown components={customRenderers}>{post.content}</ReactMarkdown>
+                
+                {/* Tags Section - Mobile (inside article content) */}
+                <div className="lg:hidden mt-12 bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center">
+                    <Tag className="w-5 h-5 mr-2 text-indigo" />
+                    Tags
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map(tag => (
+                      <Link key={tag} to={`/blog?tag=${tag}`}>
+                        <Badge variant="outline" className="bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer border-indigo/30 text-indigo">
+                          {tag}
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
             
             <div className="lg:w-1/3 space-y-8">
-              {/* Tags Section */}
-              <div className="bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm">
+              {/* Tags Section - Desktop */}
+              <div className="hidden lg:block bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm">
                 <h3 className="text-lg font-semibold mb-4 flex items-center">
                   <Tag className="w-5 h-5 mr-2 text-indigo" />
                   Tags
@@ -240,6 +279,33 @@ const BlogPost = () => {
                   </div>
                 </div>
               )}
+              
+              {/* Table of Contents - New Feature */}
+              <div className="bg-gradient-to-r from-teal-50 to-indigo-50 dark:from-teal-950/30 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm">
+                <h3 className="text-lg font-semibold mb-4 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-indigo" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                  </svg>
+                  Quick Navigation
+                </h3>
+                <nav className="space-y-3 text-sm">
+                  <a href="#" className="block py-1.5 px-3 rounded-md hover:bg-white dark:hover:bg-gray-800 transition-colors">
+                    Introduction
+                  </a>
+                  <a href="#" className="block py-1.5 px-3 rounded-md hover:bg-white dark:hover:bg-gray-800 transition-colors">
+                    Quantitative Aptitude: Strategic Approach
+                  </a>
+                  <a href="#" className="block py-1.5 px-3 rounded-md hover:bg-white dark:hover:bg-gray-800 transition-colors">
+                    Reasoning: Systematic Problem-Solving
+                  </a>
+                  <a href="#" className="block py-1.5 px-3 rounded-md hover:bg-white dark:hover:bg-gray-800 transition-colors">
+                    Exam Day Execution Strategy
+                  </a>
+                  <a href="#" className="block py-1.5 px-3 rounded-md hover:bg-white dark:hover:bg-gray-800 transition-colors">
+                    Preparation Timeline
+                  </a>
+                </nav>
+              </div>
             </div>
           </div>
           
