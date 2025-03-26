@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Download, FileText, Book, Video, Bookmark, Star, ExternalLink } from 'lucide-react';
+import { Download, FileText, Book, Video, Bookmark, Star, ExternalLink, Music } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface ResourceProps {
