@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useCallback } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -28,6 +29,16 @@ const WritingPractice: React.FC = () => {
     weaknesses: string[];
     suggestions: string[];
   } | null>(null);
+
+  const countWords = useCallback((text: string): number => {
+    if (!text || text.trim() === '') {
+      return 0;
+    }
+    
+    // Split by whitespace and filter out empty strings
+    const wordsArray = text.trim().split(/\s+/).filter(word => word.length > 0);
+    return wordsArray.length;
+  }, []);
 
   const handleStartTask = (taskId: string, category: 'academic' | 'essay') => {
     setActiveTask(taskId);
@@ -60,11 +71,13 @@ const WritingPractice: React.FC = () => {
     const text = e.target.value;
     setEssayText(text);
     
-    const words = text.trim().split(/\s+/);
-    setWordCount(text.trim() === '' ? 0 : words.length);
+    // Calculate and set word count
+    const count = countWords(text);
+    setWordCount(count);
     
     console.log("Text changed:", text);
-    console.log("Words counted:", text.trim() === '' ? 0 : words.length);
+    console.log("Words array:", text.trim().split(/\s+/).filter(word => word.length > 0));
+    console.log("Words counted:", count);
   };
 
   const evaluateEssay = (text: string, taskType: 'academic' | 'essay') => {
@@ -184,12 +197,8 @@ const WritingPractice: React.FC = () => {
 
   const currentTask = getActiveTask();
 
-  useEffect(() => {
-    const words = essayText.trim().split(/\s+/);
-    setWordCount(essayText.trim() === '' ? 0 : words.length);
-    console.log("Effect triggered. Word count:", essayText.trim() === '' ? 0 : words.length);
-  }, [essayText]);
-
+  // Remove the useEffect for word counting since we're doing it directly in handleTextChange
+  
   const renderTaskCards = (tasks: any[], category: 'academic' | 'essay') => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
@@ -439,7 +448,7 @@ const WritingPractice: React.FC = () => {
                     Min. {currentTask.minWords} words recommended
                   </div>
                 </div>
-                <Progress value={(wordCount / currentTask.minWords) * 100} className="h-2" />
+                <Progress value={(wordCount / (currentTask.minWords || 1)) * 100} className="h-2" />
               </div>
               
               <Textarea 
@@ -461,7 +470,7 @@ const WritingPractice: React.FC = () => {
                   </Button>
                   <Button 
                     onClick={handleSubmit}
-                    disabled={wordCount < currentTask.minWords || submitted}
+                    disabled={wordCount < (currentTask.minWords || 1) || submitted}
                     className="gap-2"
                   >
                     <Send className="w-4 h-4" /> Submit
