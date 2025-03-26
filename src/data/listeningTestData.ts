@@ -22,7 +22,7 @@ export const listeningTestData: ListeningTest = {
           options: [
             { value: 'A', label: 'student opinions of university accommodation.' },
             { value: 'B', label: 'the social opportunities available to students.' },
-            { value: 'C', label: 'students' ability to manage their time efficiently.' }
+            { value: 'C', label: "students' ability to manage their time efficiently." }
           ],
           correctAnswer: 'B'
         },
@@ -41,7 +41,7 @@ export const listeningTestData: ListeningTest = {
         {
           id: 'q3',
           number: 3,
-          text: 'What is the student's nationality?',
+          text: "What is the student's nationality?",
           type: 'fill-in-blank',
           instruction: 'Write NO MORE THAN ONE WORD.',
           maxWords: 1,
@@ -58,7 +58,7 @@ export const listeningTestData: ListeningTest = {
         {
           id: 'q5',
           number: 5,
-          text: 'Match the student's responses to the following activities:',
+          text: "Match the student's responses to the following activities:",
           type: 'matching',
           options: [
             { value: 'A', label: 'Often participates' },
@@ -91,7 +91,7 @@ export const listeningTestData: ListeningTest = {
         {
           id: 'q7',
           number: 7,
-          text: 'The library's special collection focuses on',
+          text: "The library's special collection focuses on",
           type: 'fill-in-blank',
           maxWords: 2,
           correctAnswer: 'local history'
@@ -138,7 +138,7 @@ export const listeningTestData: ListeningTest = {
         {
           id: 'q11',
           number: 11,
-          text: 'The student's main problem with the project is',
+          text: "The student's main problem with the project is",
           type: 'multiple-choice',
           options: [
             { value: 'A', label: 'finding relevant source material.' },
@@ -222,7 +222,7 @@ export const listeningTestData: ListeningTest = {
         {
           id: 'q19',
           number: 19,
-          text: 'In the lecturer's opinion, the most sustainable transport option is',
+          text: "In the lecturer's opinion, the most sustainable transport option is",
           type: 'multiple-choice',
           options: [
             { value: 'A', label: 'electric vehicles.' },
