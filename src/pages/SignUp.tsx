@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -83,8 +82,8 @@ const formSchema = z.object({
     required_error: "Please select your target exam.",
   }),
   studyGoals: z.string().min(10, { message: "Study goals must be at least 10 characters." }),
-  termsAccepted: z.literal(true, {
-    errorMap: () => ({ message: "You must accept the terms and conditions to continue." }),
+  termsAccepted: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions to continue.",
   }),
   marketingAccepted: z.boolean().optional(),
 }).refine((data) => data.password === data.confirmPassword, {
