@@ -32,7 +32,6 @@ const ExamSectionPage = () => {
   const { toast } = useToast();
   const audioFileRef = useRef<HTMLInputElement>(null);
   
-  // New Reading Task Form State
   const [newTask, setNewTask] = useState({
     title: '',
     passageTitle: '',
@@ -40,13 +39,11 @@ const ExamSectionPage = () => {
     description: ''
   });
 
-  // State for audio upload (for listening section)
   const [selectedAudioFile, setSelectedAudioFile] = useState<File | null>(null);
   const [audioUploadProgress, setAudioUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedAudios, setUploadedAudios] = useState<Array<{name: string, size: number, url: string}>>([]);
 
-  // For managing questions in the new task
   const [questions, setQuestions] = useState<Partial<ReadingQuestion>[]>([
     {
       text: '',
@@ -60,16 +57,15 @@ const ExamSectionPage = () => {
       correctAnswer: ''
     }
   ]);
-  
-  // Convert section and exam types to readable format
+
   const formatText = (text: string | undefined) => {
     if (!text) return '';
     return text.charAt(0).toUpperCase() + text.slice(1);
   };
-  
+
   const sectionTitle = formatText(sectionType);
   const examTitle = formatText(examType)?.toUpperCase();
-  
+
   const getIconForSection = () => {
     switch(sectionType) {
       case 'reading': return '📚';
@@ -125,7 +121,6 @@ const ExamSectionPage = () => {
     setQuestions(updatedQuestions);
   };
 
-  // Handle audio file selection
   const handleAudioFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -145,12 +140,10 @@ const ExamSectionPage = () => {
     }
   };
 
-  // Trigger file input click
   const triggerAudioFileInput = () => {
     audioFileRef.current?.click();
   };
 
-  // Simulate audio upload with progress
   const uploadAudioFile = () => {
     if (!selectedAudioFile) {
       toast({
@@ -164,14 +157,12 @@ const ExamSectionPage = () => {
     setIsUploading(true);
     setAudioUploadProgress(0);
 
-    // Simulate upload progress
     const interval = setInterval(() => {
       setAudioUploadProgress(prev => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsUploading(false);
           
-          // Add to uploaded audios list (in a real app, this would have a server URL)
           const mockUrl = URL.createObjectURL(selectedAudioFile);
           setUploadedAudios(prev => [...prev, {
             name: selectedAudioFile.name,
@@ -193,7 +184,6 @@ const ExamSectionPage = () => {
     }, 300);
   };
 
-  // Remove an uploaded audio
   const removeUploadedAudio = (index: number) => {
     setUploadedAudios(prev => prev.filter((_, i) => i !== index));
     toast({
@@ -203,8 +193,6 @@ const ExamSectionPage = () => {
   };
 
   const saveListeningTask = () => {
-    // In a real app, this would save to a database
-    // Validate the form
     if (!newTask.title || !newTask.description || questions.some(q => !q.text) || uploadedAudios.length === 0) {
       toast({
         title: "Validation Error",
@@ -214,13 +202,11 @@ const ExamSectionPage = () => {
       return;
     }
 
-    // Create a mock saving process
     toast({
       title: "Success!",
       description: `${newTask.title} has been created successfully.`,
     });
 
-    // Close the dialog and reset form
     setIsDialogOpen(false);
     setNewTask({
       title: '',
@@ -241,9 +227,52 @@ const ExamSectionPage = () => {
     }]);
     setUploadedAudios([]);
   };
-  
+
+  const saveReadingTask = () => {
+    if (!newTask.title || !newTask.description || !newTask.passageTitle || !newTask.passageText || questions.some(q => !q.text)) {
+      toast({
+        title: "Validation Error",
+        description: "Please provide all required information for the reading task",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (questions.some(q => !q.correctAnswer)) {
+      toast({
+        title: "Validation Error",
+        description: "Please provide a correct answer for all questions",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "Success!",
+      description: `${newTask.title} has been created successfully.`,
+    });
+
+    setIsDialogOpen(false);
+    setNewTask({
+      title: '',
+      passageTitle: '',
+      passageText: '',
+      description: ''
+    });
+    setQuestions([{
+      text: '',
+      type: 'multiple-choice',
+      options: [
+        { value: 'A', label: '' },
+        { value: 'B', label: '' },
+        { value: 'C', label: '' },
+        { value: 'D', label: '' }
+      ],
+      correctAnswer: ''
+    }]);
+  };
+
   const renderFormContent = () => {
-    // Special rendering for listening section
     if (sectionType === 'listening') {
       return (
         <>
@@ -270,7 +299,6 @@ const ExamSectionPage = () => {
             </div>
           </div>
           
-          {/* Audio Upload Section */}
           <Card className="mt-4">
             <CardHeader>
               <CardTitle className="text-lg">Audio Files</CardTitle>
@@ -326,7 +354,6 @@ const ExamSectionPage = () => {
                 </div>
               )}
               
-              {/* List of uploaded audio files */}
               {uploadedAudios.length > 0 && (
                 <div className="bg-muted rounded-lg p-4">
                   <h4 className="font-medium mb-2">Uploaded Audio Files</h4>
@@ -366,7 +393,6 @@ const ExamSectionPage = () => {
             </CardContent>
           </Card>
           
-          {/* Questions Section */}
           <div className="space-y-4 mt-6">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-medium">Questions</h3>
@@ -380,7 +406,6 @@ const ExamSectionPage = () => {
               </Button>
             </div>
             
-            {/* Keep existing questions rendering code */}
             {questions.map((question, qIndex) => (
               <Card key={qIndex}>
                 <CardHeader>
@@ -536,7 +561,6 @@ const ExamSectionPage = () => {
       );
     }
     
-    // For reading section, keep existing form
     return (
       <>
         <div className="grid grid-cols-2 gap-4">
@@ -598,14 +622,153 @@ const ExamSectionPage = () => {
             </Button>
           </div>
           
-          {/* ... keep existing questions rendering code */}
           {questions.map((question, qIndex) => (
             <Card key={qIndex}>
               <CardHeader>
                 <CardTitle className="text-md">Question {qIndex + 1}</CardTitle>
               </CardHeader>
               <CardContent>
-                {/* ... keep existing question form content */}
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor={`question-${qIndex}`}>Question Text</Label>
+                    <Input 
+                      id={`question-${qIndex}`}
+                      placeholder="Enter the question"
+                      value={question.text}
+                      onChange={(e) => handleQuestionChange(qIndex, 'text', e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label>Question Type</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button
+                        type="button"
+                        variant={question.type === 'multiple-choice' ? 'default' : 'outline'}
+                        onClick={() => handleQuestionChange(qIndex, 'type', 'multiple-choice')}
+                        className="justify-start"
+                      >
+                        Multiple Choice
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={question.type === 'fill-in-blank' ? 'default' : 'outline'}
+                        onClick={() => handleQuestionChange(qIndex, 'type', 'fill-in-blank')}
+                        className="justify-start"
+                      >
+                        Fill in the Blank
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={question.type === 'true-false' ? 'default' : 'outline'}
+                        onClick={() => handleQuestionChange(qIndex, 'type', 'true-false')}
+                        className="justify-start"
+                      >
+                        True/False
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={question.type === 'matching' ? 'default' : 'outline'}
+                        onClick={() => handleQuestionChange(qIndex, 'type', 'matching')}
+                        className="justify-start"
+                      >
+                        Matching
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  {question.type === 'multiple-choice' && (
+                    <div className="space-y-3">
+                      <Label>Answer Options</Label>
+                      {question.options?.map((option, oIndex) => (
+                        <div key={oIndex} className="flex items-center gap-2">
+                          <div className="w-8 text-center font-medium">{option.value}</div>
+                          <Input 
+                            placeholder={`Option ${option.value}`}
+                            value={option.label}
+                            onChange={(e) => handleOptionChange(qIndex, oIndex, e.target.value)}
+                          />
+                        </div>
+                      ))}
+                      
+                      <div className="space-y-2 pt-2">
+                        <Label htmlFor={`correct-answer-${qIndex}`}>Correct Answer</Label>
+                        <div className="flex gap-4">
+                          {question.options?.map((option) => (
+                            <div key={option.value} className="flex items-center">
+                              <input
+                                type="radio"
+                                id={`answer-${qIndex}-${option.value}`}
+                                name={`correct-answer-${qIndex}`}
+                                value={option.value}
+                                checked={question.correctAnswer === option.value}
+                                onChange={() => handleCorrectAnswerChange(qIndex, option.value)}
+                                className="mr-2"
+                              />
+                              <Label htmlFor={`answer-${qIndex}-${option.value}`}>{option.value}</Label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {question.type === 'fill-in-blank' && (
+                    <div className="space-y-2">
+                      <Label htmlFor={`answer-${qIndex}`}>Correct Answer</Label>
+                      <Input 
+                        id={`answer-${qIndex}`}
+                        placeholder="Enter the correct answer"
+                        value={question.correctAnswer || ''}
+                        onChange={(e) => handleCorrectAnswerChange(qIndex, e.target.value)}
+                      />
+                    </div>
+                  )}
+                  
+                  {question.type === 'true-false' && (
+                    <div className="space-y-2">
+                      <Label>Correct Answer</Label>
+                      <div className="flex gap-4">
+                        <div className="flex items-center">
+                          <input
+                            type="radio"
+                            id={`true-${qIndex}`}
+                            name={`correct-answer-${qIndex}`}
+                            value="true"
+                            checked={question.correctAnswer === 'true'}
+                            onChange={() => handleCorrectAnswerChange(qIndex, 'true')}
+                            className="mr-2"
+                          />
+                          <Label htmlFor={`true-${qIndex}`}>True</Label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            type="radio"
+                            id={`false-${qIndex}`}
+                            name={`correct-answer-${qIndex}`}
+                            value="false"
+                            checked={question.correctAnswer === 'false'}
+                            onChange={() => handleCorrectAnswerChange(qIndex, 'false')}
+                            className="mr-2"
+                          />
+                          <Label htmlFor={`false-${qIndex}`}>False</Label>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {question.type === 'matching' && (
+                    <div className="space-y-2">
+                      <Label htmlFor={`answer-${qIndex}`}>Correct Match</Label>
+                      <Input 
+                        id={`answer-${qIndex}`}
+                        placeholder="Enter the correct match"
+                        value={question.correctAnswer || ''}
+                        onChange={(e) => handleCorrectAnswerChange(qIndex, e.target.value)}
+                      />
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -613,7 +776,7 @@ const ExamSectionPage = () => {
       </>
     );
   };
-  
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -694,7 +857,6 @@ const ExamSectionPage = () => {
             </Card>
           </TabsContent>
           
-          {/* Other tab contents will be similar */}
           <TabsContent value="academic" className="mt-4">
             <Card>
               <CardHeader>
