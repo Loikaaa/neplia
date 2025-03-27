@@ -19,8 +19,15 @@ import About from "./pages/About";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import WritingPractice from "./pages/practice/WritingPractice";
-import WritingTaskCMS from "./pages/admin/WritingTaskCMS";
 import AdminLink from "./components/AdminLink";
+
+// Admin pages
+import WritingTaskCMS from "./pages/admin/WritingTaskCMS";
+import ReadingTaskCMS from "./pages/admin/ReadingTaskCMS";
+import BlogPostCMS from "./pages/admin/BlogPostCMS";
+import UsersCMS from "./pages/admin/UsersCMS";
+import Settings from "./pages/admin/Settings";
+import Dashboard from "./pages/admin/Dashboard";
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -50,7 +57,12 @@ const App: React.FC = () => {
               <Route path="/blog/:slug" element={<><BlogPost /><AdminLink /></>} />
               
               {/* Admin routes */}
+              <Route path="/admin" element={<Dashboard />} />
               <Route path="/admin/writing-tasks" element={<WritingTaskCMS />} />
+              <Route path="/admin/reading-tasks" element={<ReadingTaskCMS />} />
+              <Route path="/admin/blog-posts" element={<BlogPostCMS />} />
+              <Route path="/admin/users" element={<UsersCMS />} />
+              <Route path="/admin/settings" element={<Settings />} />
               
               {/* 404 route */}
               <Route path="*" element={<NotFound />} />

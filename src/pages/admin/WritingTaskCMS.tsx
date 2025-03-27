@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Layout from '@/components/Layout';
+import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -110,9 +110,9 @@ const WritingTaskCMS = () => {
   };
 
   return (
-    <Layout>
-      <div className="container mx-auto py-8">
-        <h1 className="text-3xl font-bold mb-8">Writing Tasks Management</h1>
+    <AdminLayout>
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold mb-6">Writing Tasks Management</h1>
         
         <Tabs value={tab} onValueChange={setTab}>
           <div className="flex justify-between items-center mb-6">
@@ -299,7 +299,7 @@ const WritingTaskCMS = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 };
 
