@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -28,6 +27,7 @@ import BlogPostCMS from "./pages/admin/BlogPostCMS";
 import UsersCMS from "./pages/admin/UsersCMS";
 import Settings from "./pages/admin/Settings";
 import Dashboard from "./pages/admin/Dashboard";
+import ExamSectionPage from "./pages/admin/ExamSectionPage";
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -63,6 +63,9 @@ const App: React.FC = () => {
               <Route path="/admin/blog-posts" element={<BlogPostCMS />} />
               <Route path="/admin/users" element={<UsersCMS />} />
               <Route path="/admin/settings" element={<Settings />} />
+              
+              {/* New exam section routes */}
+              <Route path="/admin/exams/:examType/:sectionType" element={<ExamSectionPage />} />
               
               {/* 404 route */}
               <Route path="*" element={<NotFound />} />
