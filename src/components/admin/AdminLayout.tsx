@@ -14,7 +14,8 @@ import {
   ChevronDown,
   ChevronRight,
   Menu,
-  X
+  X,
+  Calculator
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -28,6 +29,19 @@ import { useToast } from "@/hooks/use-toast";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
+}
+
+// Define exam types and their sections
+interface ExamSection {
+  id: string;
+  name: string;
+  icon: React.ReactNode;
+}
+
+interface ExamType {
+  id: string;
+  name: string;
+  sections: ExamSection[];
 }
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
@@ -50,20 +64,59 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     }));
   };
   
-  const examTypes = [
-    { id: 'ielts', name: 'IELTS' },
-    { id: 'toefl', name: 'TOEFL' },
-    { id: 'pte', name: 'PTE' },
-    { id: 'sat', name: 'SAT' },
-    { id: 'gre', name: 'GRE' },
-    { id: 'gmat', name: 'GMAT' },
-  ];
-  
-  const skillSections = [
+  // Standard skills for language exams
+  const standardLanguageSkills: ExamSection[] = [
     { id: 'reading', name: 'Reading', icon: <BookOpen className="h-5 w-5" /> },
     { id: 'writing', name: 'Writing', icon: <FileText className="h-5 w-5" /> },
     { id: 'listening', name: 'Listening', icon: <Headphones className="h-5 w-5" /> },
     { id: 'speaking', name: 'Speaking', icon: <MicIcon className="h-5 w-5" /> },
+  ];
+  
+  // Define exam types with their specific sections
+  const examTypes: ExamType[] = [
+    { 
+      id: 'ielts', 
+      name: 'IELTS', 
+      sections: standardLanguageSkills
+    },
+    { 
+      id: 'toefl', 
+      name: 'TOEFL', 
+      sections: standardLanguageSkills
+    },
+    { 
+      id: 'pte', 
+      name: 'PTE', 
+      sections: standardLanguageSkills
+    },
+    { 
+      id: 'sat', 
+      name: 'SAT', 
+      sections: [
+        { id: 'reading', name: 'Reading', icon: <BookOpen className="h-5 w-5" /> },
+        { id: 'writing', name: 'Writing', icon: <FileText className="h-5 w-5" /> },
+        { id: 'math', name: 'Math', icon: <Calculator className="h-5 w-5" /> }
+      ] 
+    },
+    { 
+      id: 'gre', 
+      name: 'GRE', 
+      sections: [
+        { id: 'verbal', name: 'Verbal', icon: <BookOpen className="h-5 w-5" /> },
+        { id: 'quantitative', name: 'Quantitative', icon: <Calculator className="h-5 w-5" /> },
+        { id: 'analytical', name: 'Analytical Writing', icon: <FileText className="h-5 w-5" /> }
+      ] 
+    },
+    { 
+      id: 'gmat', 
+      name: 'GMAT', 
+      sections: [
+        { id: 'verbal', name: 'Verbal', icon: <BookOpen className="h-5 w-5" /> },
+        { id: 'quantitative', name: 'Quantitative', icon: <Calculator className="h-5 w-5" /> },
+        { id: 'integrated-reasoning', name: 'Integrated Reasoning', icon: <FileText className="h-5 w-5" /> },
+        { id: 'analytical', name: 'Analytical Writing', icon: <FileText className="h-5 w-5" /> }
+      ] 
+    },
   ];
   
   const mainNavItems = [
@@ -159,24 +212,20 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 <CollapsibleContent className="pl-4 pt-2">
                   {examTypes.map((exam) => (
                     <Collapsible key={exam.id} 
-                      open={isActiveExamType(exam.id)} 
-                      onOpenChange={() => {}}
+                      open={openSections[`exam-${exam.id}`] || isActiveExamType(exam.id)} 
+                      onOpenChange={() => {
+                        const examId = `exam-${exam.id}`;
+                        setOpenSections(prev => ({
+                          ...prev,
+                          [examId]: !prev[examId]
+                        }));
+                      }}
                       className="w-full"
                     >
                       <CollapsibleTrigger className={cn(
                         "flex w-full items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700 my-1",
                         isActiveExamType(exam.id) && "bg-gray-100 dark:bg-gray-700 font-medium"
-                      )}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // Toggle the exam type section
-                          const examId = `exam-${exam.id}`;
-                          setOpenSections(prev => ({
-                            ...prev,
-                            [examId]: !prev[examId]
-                          }));
-                        }}
-                      >
+                      )}>
                         <div className="flex items-center gap-3">
                           <span>{exam.name}</span>
                         </div>
@@ -187,7 +236,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                         )}
                       </CollapsibleTrigger>
                       <CollapsibleContent className="pl-4 pt-1">
-                        {skillSections.map((section) => (
+                        {exam.sections.map((section) => (
                           <Link
                             key={section.id}
                             to={`/admin/exams/${exam.id}/${section.id}`}
