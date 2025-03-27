@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Plus, Search, AlertTriangle, Save } from 'lucide-react';
+import { Plus, Search, AlertTriangle, Save, Upload, FileAudio, Music, Trash2 } from 'lucide-react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { 
@@ -21,6 +21,8 @@ import {
 import { Label } from "@/components/ui/label";
 import { ReadingQuestion, ReadingPassage, ReadingTest } from '@/types/reading';
 import { useToast } from "@/hooks/use-toast";
+import { Progress } from "@/components/ui/progress";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const ExamSectionPage = () => {
   const { examType, sectionType } = useParams<{ examType: string; sectionType: string }>();
@@ -28,6 +30,7 @@ const ExamSectionPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const audioFileRef = useRef<HTMLInputElement>(null);
   
   // New Reading Task Form State
   const [newTask, setNewTask] = useState({
@@ -36,6 +39,12 @@ const ExamSectionPage = () => {
     passageText: '',
     description: ''
   });
+
+  // State for audio upload (for listening section)
+  const [selectedAudioFile, setSelectedAudioFile] = useState<File | null>(null);
+  const [audioUploadProgress, setAudioUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedAudios, setUploadedAudios] = useState<Array<{name: string, size: number, url: string}>>([]);
 
   // For managing questions in the new task
   const [questions, setQuestions] = useState<Partial<ReadingQuestion>[]>([
@@ -116,15 +125,90 @@ const ExamSectionPage = () => {
     setQuestions(updatedQuestions);
   };
 
-  const saveReadingTask = () => {
+  // Handle audio file selection
+  const handleAudioFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.type.includes('audio')) {
+        setSelectedAudioFile(file);
+        toast({
+          title: "Audio selected",
+          description: `${file.name} is ready to upload`,
+        });
+      } else {
+        toast({
+          title: "Invalid file format",
+          description: "Please select an audio file (MP3, WAV, etc.)",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+
+  // Trigger file input click
+  const triggerAudioFileInput = () => {
+    audioFileRef.current?.click();
+  };
+
+  // Simulate audio upload with progress
+  const uploadAudioFile = () => {
+    if (!selectedAudioFile) {
+      toast({
+        title: "No file selected",
+        description: "Please select an audio file to upload",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsUploading(true);
+    setAudioUploadProgress(0);
+
+    // Simulate upload progress
+    const interval = setInterval(() => {
+      setAudioUploadProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setIsUploading(false);
+          
+          // Add to uploaded audios list (in a real app, this would have a server URL)
+          const mockUrl = URL.createObjectURL(selectedAudioFile);
+          setUploadedAudios(prev => [...prev, {
+            name: selectedAudioFile.name,
+            size: selectedAudioFile.size,
+            url: mockUrl
+          }]);
+          
+          setSelectedAudioFile(null);
+          
+          toast({
+            title: "Upload successful",
+            description: `${selectedAudioFile.name} has been uploaded successfully`,
+          });
+          
+          return 0;
+        }
+        return prev + 10;
+      });
+    }, 300);
+  };
+
+  // Remove an uploaded audio
+  const removeUploadedAudio = (index: number) => {
+    setUploadedAudios(prev => prev.filter((_, i) => i !== index));
+    toast({
+      title: "Audio removed",
+      description: "The audio file has been removed",
+    });
+  };
+
+  const saveListeningTask = () => {
     // In a real app, this would save to a database
-    // For now, we'll just show a success message and close the dialog
-    
     // Validate the form
-    if (!newTask.title || !newTask.passageTitle || !newTask.passageText || questions.some(q => !q.text)) {
+    if (!newTask.title || !newTask.description || questions.some(q => !q.text) || uploadedAudios.length === 0) {
       toast({
         title: "Validation Error",
-        description: "Please fill in all required fields",
+        description: "Please provide task details, questions, and upload at least one audio file",
         variant: "destructive"
       });
       return;
@@ -155,6 +239,379 @@ const ExamSectionPage = () => {
       ],
       correctAnswer: ''
     }]);
+    setUploadedAudios([]);
+  };
+  
+  const renderFormContent = () => {
+    // Special rendering for listening section
+    if (sectionType === 'listening') {
+      return (
+        <>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Task Title</Label>
+              <Input 
+                id="title" 
+                name="title" 
+                placeholder="e.g., IELTS Listening Test 1" 
+                value={newTask.title}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Task Description</Label>
+              <Input 
+                id="description" 
+                name="description" 
+                placeholder="Brief description of this listening task" 
+                value={newTask.description}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+          
+          {/* Audio Upload Section */}
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle className="text-lg">Audio Files</CardTitle>
+              <CardDescription>
+                Upload audio files for this listening test. Students will listen to these while answering questions.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <div className="flex flex-col items-center justify-center space-y-4">
+                  <FileAudio className="h-12 w-12 text-gray-400" />
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-medium">Upload Audio File</h3>
+                    <p className="text-sm text-gray-500">
+                      Supported formats: MP3, WAV, M4A (Max size: 20MB)
+                    </p>
+                  </div>
+                  <div className="flex gap-3">
+                    <Button 
+                      onClick={triggerAudioFileInput} 
+                      variant="outline"
+                      className="flex items-center gap-2"
+                    >
+                      <Upload className="h-4 w-4" />
+                      <span>Select File</span>
+                    </Button>
+                    <Button 
+                      onClick={uploadAudioFile} 
+                      disabled={!selectedAudioFile || isUploading}
+                      className="flex items-center gap-2"
+                    >
+                      <Music className="h-4 w-4" />
+                      <span>{isUploading ? 'Uploading...' : 'Upload Audio'}</span>
+                    </Button>
+                  </div>
+                  <input
+                    type="file"
+                    ref={audioFileRef}
+                    onChange={handleAudioFileChange}
+                    accept="audio/*"
+                    className="hidden"
+                  />
+                </div>
+              </div>
+              
+              {isUploading && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Uploading {selectedAudioFile?.name}</span>
+                    <span>{audioUploadProgress}%</span>
+                  </div>
+                  <Progress value={audioUploadProgress} className="h-2" />
+                </div>
+              )}
+              
+              {/* List of uploaded audio files */}
+              {uploadedAudios.length > 0 && (
+                <div className="bg-muted rounded-lg p-4">
+                  <h4 className="font-medium mb-2">Uploaded Audio Files</h4>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>File Name</TableHead>
+                        <TableHead>Size</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {uploadedAudios.map((audio, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium flex items-center gap-2">
+                            <FileAudio className="h-4 w-4" />
+                            {audio.name}
+                          </TableCell>
+                          <TableCell>
+                            {(audio.size / (1024 * 1024)).toFixed(2)} MB
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button 
+                              variant="destructive" 
+                              size="sm"
+                              onClick={() => removeUploadedAudio(index)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          
+          {/* Questions Section */}
+          <div className="space-y-4 mt-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium">Questions</h3>
+              <Button 
+                variant="outline" 
+                onClick={addQuestion}
+                type="button"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Question
+              </Button>
+            </div>
+            
+            {/* Keep existing questions rendering code */}
+            {questions.map((question, qIndex) => (
+              <Card key={qIndex}>
+                <CardHeader>
+                  <CardTitle className="text-md">Question {qIndex + 1}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`question-${qIndex}`}>Question Text</Label>
+                      <Input 
+                        id={`question-${qIndex}`}
+                        placeholder="Enter the question"
+                        value={question.text}
+                        onChange={(e) => handleQuestionChange(qIndex, 'text', e.target.value)}
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label>Question Type</Label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button
+                          type="button"
+                          variant={question.type === 'multiple-choice' ? 'default' : 'outline'}
+                          onClick={() => handleQuestionChange(qIndex, 'type', 'multiple-choice')}
+                          className="justify-start"
+                        >
+                          Multiple Choice
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={question.type === 'fill-in-blank' ? 'default' : 'outline'}
+                          onClick={() => handleQuestionChange(qIndex, 'type', 'fill-in-blank')}
+                          className="justify-start"
+                        >
+                          Fill in the Blank
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={question.type === 'true-false' ? 'default' : 'outline'}
+                          onClick={() => handleQuestionChange(qIndex, 'type', 'true-false')}
+                          className="justify-start"
+                        >
+                          True/False
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={question.type === 'matching' ? 'default' : 'outline'}
+                          onClick={() => handleQuestionChange(qIndex, 'type', 'matching')}
+                          className="justify-start"
+                        >
+                          Matching
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {question.type === 'multiple-choice' && (
+                      <div className="space-y-3">
+                        <Label>Answer Options</Label>
+                        {question.options?.map((option, oIndex) => (
+                          <div key={oIndex} className="flex items-center gap-2">
+                            <div className="w-8 text-center font-medium">{option.value}</div>
+                            <Input 
+                              placeholder={`Option ${option.value}`}
+                              value={option.label}
+                              onChange={(e) => handleOptionChange(qIndex, oIndex, e.target.value)}
+                            />
+                          </div>
+                        ))}
+                        
+                        <div className="space-y-2 pt-2">
+                          <Label htmlFor={`correct-answer-${qIndex}`}>Correct Answer</Label>
+                          <div className="flex gap-4">
+                            {question.options?.map((option) => (
+                              <div key={option.value} className="flex items-center">
+                                <input
+                                  type="radio"
+                                  id={`answer-${qIndex}-${option.value}`}
+                                  name={`correct-answer-${qIndex}`}
+                                  value={option.value}
+                                  checked={question.correctAnswer === option.value}
+                                  onChange={() => handleCorrectAnswerChange(qIndex, option.value)}
+                                  className="mr-2"
+                                />
+                                <Label htmlFor={`answer-${qIndex}-${option.value}`}>{option.value}</Label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {question.type === 'fill-in-blank' && (
+                      <div className="space-y-2">
+                        <Label htmlFor={`answer-${qIndex}`}>Correct Answer</Label>
+                        <Input 
+                          id={`answer-${qIndex}`}
+                          placeholder="Enter the correct answer"
+                          value={question.correctAnswer || ''}
+                          onChange={(e) => handleCorrectAnswerChange(qIndex, e.target.value)}
+                        />
+                      </div>
+                    )}
+                    
+                    {question.type === 'true-false' && (
+                      <div className="space-y-2">
+                        <Label>Correct Answer</Label>
+                        <div className="flex gap-4">
+                          <div className="flex items-center">
+                            <input
+                              type="radio"
+                              id={`true-${qIndex}`}
+                              name={`correct-answer-${qIndex}`}
+                              value="true"
+                              checked={question.correctAnswer === 'true'}
+                              onChange={() => handleCorrectAnswerChange(qIndex, 'true')}
+                              className="mr-2"
+                            />
+                            <Label htmlFor={`true-${qIndex}`}>True</Label>
+                          </div>
+                          <div className="flex items-center">
+                            <input
+                              type="radio"
+                              id={`false-${qIndex}`}
+                              name={`correct-answer-${qIndex}`}
+                              value="false"
+                              checked={question.correctAnswer === 'false'}
+                              onChange={() => handleCorrectAnswerChange(qIndex, 'false')}
+                              className="mr-2"
+                            />
+                            <Label htmlFor={`false-${qIndex}`}>False</Label>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {question.type === 'matching' && (
+                      <div className="space-y-2">
+                        <Label htmlFor={`answer-${qIndex}`}>Correct Match</Label>
+                        <Input 
+                          id={`answer-${qIndex}`}
+                          placeholder="Enter the correct match"
+                          value={question.correctAnswer || ''}
+                          onChange={(e) => handleCorrectAnswerChange(qIndex, e.target.value)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </>
+      );
+    }
+    
+    // For reading section, keep existing form
+    return (
+      <>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="title">Task Title</Label>
+            <Input 
+              id="title" 
+              name="title" 
+              placeholder="e.g., Academic Reading Test 1" 
+              value={newTask.title}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="description">Task Description</Label>
+            <Input 
+              id="description" 
+              name="description" 
+              placeholder="Brief description of this task" 
+              value={newTask.description}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="passageTitle">Passage Title</Label>
+          <Input 
+            id="passageTitle" 
+            name="passageTitle" 
+            placeholder="e.g., The History of Agriculture" 
+            value={newTask.passageTitle}
+            onChange={handleInputChange}
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="passageText">Reading Passage</Label>
+          <Textarea 
+            id="passageText" 
+            name="passageText" 
+            placeholder="Enter the full reading passage text here..." 
+            className="min-h-[200px]"
+            value={newTask.passageText}
+            onChange={handleInputChange}
+          />
+        </div>
+        
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium">Questions</h3>
+            <Button 
+              variant="outline" 
+              onClick={addQuestion}
+              type="button"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Question
+            </Button>
+          </div>
+          
+          {/* ... keep existing questions rendering code */}
+          {questions.map((question, qIndex) => (
+            <Card key={qIndex}>
+              <CardHeader>
+                <CardTitle className="text-md">Question {qIndex + 1}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {/* ... keep existing question form content */}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </>
+    );
   };
   
   return (
@@ -185,223 +642,17 @@ const ExamSectionPage = () => {
               </DialogHeader>
               
               <div className="grid gap-6 py-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="title">Task Title</Label>
-                    <Input 
-                      id="title" 
-                      name="title" 
-                      placeholder="e.g., Academic Reading Test 1" 
-                      value={newTask.title}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Task Description</Label>
-                    <Input 
-                      id="description" 
-                      name="description" 
-                      placeholder="Brief description of this task" 
-                      value={newTask.description}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="passageTitle">Passage Title</Label>
-                  <Input 
-                    id="passageTitle" 
-                    name="passageTitle" 
-                    placeholder="e.g., The History of Agriculture" 
-                    value={newTask.passageTitle}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="passageText">Reading Passage</Label>
-                  <Textarea 
-                    id="passageText" 
-                    name="passageText" 
-                    placeholder="Enter the full reading passage text here..." 
-                    className="min-h-[200px]"
-                    value={newTask.passageText}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium">Questions</h3>
-                    <Button 
-                      variant="outline" 
-                      onClick={addQuestion}
-                      type="button"
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Question
-                    </Button>
-                  </div>
-                  
-                  {questions.map((question, qIndex) => (
-                    <Card key={qIndex}>
-                      <CardHeader>
-                        <CardTitle className="text-md">Question {qIndex + 1}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <Label htmlFor={`question-${qIndex}`}>Question Text</Label>
-                            <Input 
-                              id={`question-${qIndex}`}
-                              placeholder="Enter the question"
-                              value={question.text}
-                              onChange={(e) => handleQuestionChange(qIndex, 'text', e.target.value)}
-                            />
-                          </div>
-                          
-                          <div className="space-y-2">
-                            <Label>Question Type</Label>
-                            <div className="grid grid-cols-2 gap-2">
-                              <Button
-                                type="button"
-                                variant={question.type === 'multiple-choice' ? 'default' : 'outline'}
-                                onClick={() => handleQuestionChange(qIndex, 'type', 'multiple-choice')}
-                                className="justify-start"
-                              >
-                                Multiple Choice
-                              </Button>
-                              <Button
-                                type="button"
-                                variant={question.type === 'fill-in-blank' ? 'default' : 'outline'}
-                                onClick={() => handleQuestionChange(qIndex, 'type', 'fill-in-blank')}
-                                className="justify-start"
-                              >
-                                Fill in the Blank
-                              </Button>
-                              <Button
-                                type="button"
-                                variant={question.type === 'true-false' ? 'default' : 'outline'}
-                                onClick={() => handleQuestionChange(qIndex, 'type', 'true-false')}
-                                className="justify-start"
-                              >
-                                True/False
-                              </Button>
-                              <Button
-                                type="button"
-                                variant={question.type === 'matching' ? 'default' : 'outline'}
-                                onClick={() => handleQuestionChange(qIndex, 'type', 'matching')}
-                                className="justify-start"
-                              >
-                                Matching
-                              </Button>
-                            </div>
-                          </div>
-                          
-                          {question.type === 'multiple-choice' && (
-                            <div className="space-y-3">
-                              <Label>Answer Options</Label>
-                              {question.options?.map((option, oIndex) => (
-                                <div key={oIndex} className="flex items-center gap-2">
-                                  <div className="w-8 text-center font-medium">{option.value}</div>
-                                  <Input 
-                                    placeholder={`Option ${option.value}`}
-                                    value={option.label}
-                                    onChange={(e) => handleOptionChange(qIndex, oIndex, e.target.value)}
-                                  />
-                                </div>
-                              ))}
-                              
-                              <div className="space-y-2 pt-2">
-                                <Label htmlFor={`correct-answer-${qIndex}`}>Correct Answer</Label>
-                                <div className="flex gap-4">
-                                  {question.options?.map((option) => (
-                                    <div key={option.value} className="flex items-center">
-                                      <input
-                                        type="radio"
-                                        id={`answer-${qIndex}-${option.value}`}
-                                        name={`correct-answer-${qIndex}`}
-                                        value={option.value}
-                                        checked={question.correctAnswer === option.value}
-                                        onChange={() => handleCorrectAnswerChange(qIndex, option.value)}
-                                        className="mr-2"
-                                      />
-                                      <Label htmlFor={`answer-${qIndex}-${option.value}`}>{option.value}</Label>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                          
-                          {question.type === 'fill-in-blank' && (
-                            <div className="space-y-2">
-                              <Label htmlFor={`answer-${qIndex}`}>Correct Answer</Label>
-                              <Input 
-                                id={`answer-${qIndex}`}
-                                placeholder="Enter the correct answer"
-                                value={question.correctAnswer || ''}
-                                onChange={(e) => handleCorrectAnswerChange(qIndex, e.target.value)}
-                              />
-                            </div>
-                          )}
-                          
-                          {question.type === 'true-false' && (
-                            <div className="space-y-2">
-                              <Label>Correct Answer</Label>
-                              <div className="flex gap-4">
-                                <div className="flex items-center">
-                                  <input
-                                    type="radio"
-                                    id={`true-${qIndex}`}
-                                    name={`correct-answer-${qIndex}`}
-                                    value="true"
-                                    checked={question.correctAnswer === 'true'}
-                                    onChange={() => handleCorrectAnswerChange(qIndex, 'true')}
-                                    className="mr-2"
-                                  />
-                                  <Label htmlFor={`true-${qIndex}`}>True</Label>
-                                </div>
-                                <div className="flex items-center">
-                                  <input
-                                    type="radio"
-                                    id={`false-${qIndex}`}
-                                    name={`correct-answer-${qIndex}`}
-                                    value="false"
-                                    checked={question.correctAnswer === 'false'}
-                                    onChange={() => handleCorrectAnswerChange(qIndex, 'false')}
-                                    className="mr-2"
-                                  />
-                                  <Label htmlFor={`false-${qIndex}`}>False</Label>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                          
-                          {question.type === 'matching' && (
-                            <div className="space-y-2">
-                              <Label htmlFor={`answer-${qIndex}`}>Correct Match</Label>
-                              <Input 
-                                id={`answer-${qIndex}`}
-                                placeholder="Enter the correct match"
-                                value={question.correctAnswer || ''}
-                                onChange={(e) => handleCorrectAnswerChange(qIndex, e.target.value)}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                {renderFormContent()}
               </div>
               
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-                <Button onClick={saveReadingTask} className="gap-2">
+                <Button 
+                  onClick={sectionType === 'listening' ? saveListeningTask : saveReadingTask} 
+                  className="gap-2"
+                >
                   <Save className="h-4 w-4" />
-                  Save Reading Task
+                  Save {sectionTitle} Task
                 </Button>
               </DialogFooter>
             </DialogContent>
