@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Headphones, BookOpen, Edit, MessageSquare, Quote, ArrowRight } from 'lucide-react';
+import { Headphones, BookOpen, Edit, MessageSquare, Quote, ArrowRight, Trophy } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Button } from '@/components/ui/button';
@@ -38,6 +38,14 @@ const practiceOptions = [
     path: "/practice/speaking",
     fact: "The IELTS Speaking test is a face-to-face interview that lasts between 11-14 minutes.",
     color: "bg-indigo text-white"
+  },
+  {
+    icon: Trophy,
+    title: "Full Mock Test",
+    description: "Complete a full IELTS test under timed conditions to simulate the real exam.",
+    path: "/practice/mock-test",
+    fact: "Taking full mock tests is one of the most effective ways to prepare for the real IELTS exam.",
+    color: "bg-yellow-500 text-white"
   }
 ];
 
@@ -80,7 +88,7 @@ const PracticeSection = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16">
           {practiceOptions.map((option, index) => (
             <Card 
               key={index} 

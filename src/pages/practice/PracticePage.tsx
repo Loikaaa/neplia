@@ -238,14 +238,16 @@ const PracticePage = () => {
                     <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-md">
                       <div className="flex items-center space-x-2 mb-2">
                         <Calendar className="h-5 w-5 text-indigo" />
-                        <h4 className="font-medium">Schedule Your Mock Test</h4>
+                        <h4 className="font-medium">Take Your Mock Test</h4>
                       </div>
                       <p className="text-sm text-gray-500 mb-4">
                         Set aside approximately 3 hours to complete all sections of the test. You can take breaks between sections.
                       </p>
-                      <Button onClick={startFullMockExam} className="w-full sm:w-auto">
-                        Schedule Mock Exam
-                      </Button>
+                      <Link to="/practice/mock-test">
+                        <Button className="w-full sm:w-auto">
+                          Start Full Mock Test
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                   
@@ -260,7 +262,9 @@ const PracticePage = () => {
                         </p>
                       </CardContent>
                       <CardFooter>
-                        <Button variant="outline" className="w-full">Start Academic Mock</Button>
+                        <Link to="/practice/mock-test">
+                          <Button variant="outline" className="w-full">Start Academic Mock</Button>
+                        </Link>
                       </CardFooter>
                     </Card>
                     
@@ -274,7 +278,9 @@ const PracticePage = () => {
                         </p>
                       </CardContent>
                       <CardFooter>
-                        <Button variant="outline" className="w-full">Start General Mock</Button>
+                        <Link to="/practice/mock-test?type=general">
+                          <Button variant="outline" className="w-full">Start General Mock</Button>
+                        </Link>
                       </CardFooter>
                     </Card>
                   </div>

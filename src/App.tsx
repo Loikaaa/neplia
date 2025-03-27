@@ -21,6 +21,7 @@ import BlogPost from "./pages/BlogPost";
 import WritingPractice from "./pages/practice/WritingPractice";
 import SpeakingPractice from "./pages/practice/SpeakingPractice";
 import PracticePage from "./pages/practice/PracticePage";
+import MockTestPage from "./pages/practice/MockTestPage";
 import AdminLink from "./components/AdminLink";
 
 // Admin pages
@@ -49,6 +50,7 @@ const App: React.FC = () => {
               <Route path="/practice/reading" element={<><ReadingPractice /><AdminLink /></>} />
               <Route path="/practice/writing" element={<><WritingPractice /><AdminLink /></>} />
               <Route path="/practice/speaking" element={<><SpeakingPractice /><AdminLink /></>} />
+              <Route path="/practice/mock-test" element={<><MockTestPage /><AdminLink /></>} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/resources" element={<><Resources /><AdminLink /></>} />
