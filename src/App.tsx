@@ -20,6 +20,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import WritingPractice from "./pages/practice/WritingPractice";
 import SpeakingPractice from "./pages/practice/SpeakingPractice";
+import PracticePage from "./pages/practice/PracticePage";
 import AdminLink from "./components/AdminLink";
 
 // Admin pages
@@ -43,6 +44,7 @@ const App: React.FC = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<><Index /><AdminLink /></>} />
+              <Route path="/practice" element={<><PracticePage /><AdminLink /></>} />
               <Route path="/practice/listening" element={<><ListeningPractice /><AdminLink /></>} />
               <Route path="/practice/reading" element={<><ReadingPractice /><AdminLink /></>} />
               <Route path="/practice/writing" element={<><WritingPractice /><AdminLink /></>} />

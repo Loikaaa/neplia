@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Headphones, BookOpen, Edit, MessageSquare, Quote } from 'lucide-react';
+import { Headphones, BookOpen, Edit, MessageSquare, Quote, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Button } from '@/components/ui/button';
 
 const practiceOptions = [
   {
@@ -69,9 +70,14 @@ const PracticeSection = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Practice IELTS Skills
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
             Our comprehensive practice modules help you prepare for all sections of the IELTS exam
           </p>
+          <Link to="/practice">
+            <Button className="bg-indigo hover:bg-indigo-600">
+              View All Practice Options <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
