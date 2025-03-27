@@ -19,6 +19,7 @@ import About from "./pages/About";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import WritingPractice from "./pages/practice/WritingPractice";
+import WritingTaskCMS from "./pages/admin/WritingTaskCMS";
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -46,7 +47,11 @@ const App: React.FC = () => {
               <Route path="/about" element={<About />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
-              {/* Future routes will be added here */}
+              
+              {/* Admin routes */}
+              <Route path="/admin/writing-tasks" element={<WritingTaskCMS />} />
+              
+              {/* 404 route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
