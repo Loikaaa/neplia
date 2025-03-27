@@ -12,7 +12,11 @@ import {
   Mic,
   FileBox,
   Sparkles,
-  Plus
+  Plus,
+  Globe,
+  Activity,
+  ChartBar,
+  ChartLine
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -73,6 +77,50 @@ const AdminDashboard = () => {
     },
   ];
 
+  // New performance metrics data
+  const performanceMetrics = [
+    { 
+      title: 'Visitors', 
+      value: '12,458', 
+      change: '+14%', 
+      trend: 'up',
+      description: 'Total visitors this month',
+      icon: <Users className="h-8 w-8 text-blue-500" />,
+    },
+    { 
+      title: 'Countries', 
+      value: '42', 
+      change: '+3', 
+      trend: 'up',
+      description: 'Countries visitors are from',
+      icon: <Globe className="h-8 w-8 text-green-500" />,
+    },
+    { 
+      title: 'Session Duration', 
+      value: '4:32', 
+      change: '+0:48', 
+      trend: 'up',
+      description: 'Avg. time spent on platform',
+      icon: <Activity className="h-8 w-8 text-purple-500" />,
+    },
+    { 
+      title: 'Completion Rate', 
+      value: '68%', 
+      change: '+5%', 
+      trend: 'up',
+      description: 'Practice test completion',
+      icon: <ChartBar className="h-8 w-8 text-amber-500" />,
+    },
+    { 
+      title: 'User Growth', 
+      value: '8.2%', 
+      change: '+1.4%', 
+      trend: 'up',
+      description: 'Month-over-month growth',
+      icon: <ChartLine className="h-8 w-8 text-indigo-500" />,
+    }
+  ];
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -89,6 +137,31 @@ const AdminDashboard = () => {
           </TabsList>
           
           <TabsContent value="overview" className="space-y-6">
+            {/* Performance Metrics Section */}
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Performance Metrics</h2>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                {performanceMetrics.map((metric, index) => (
+                  <Card key={index} className="overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                      <CardTitle className="text-lg font-medium">{metric.title}</CardTitle>
+                      {metric.icon}
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-baseline space-x-2">
+                        <div className="text-3xl font-bold">{metric.value}</div>
+                        <div className={`text-xs font-medium ${metric.trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+                          {metric.change}
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">{metric.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            <h2 className="text-xl font-semibold mb-4">Content Summary</h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {stats.map((stat, index) => (
                 <Link to={stat.link} key={index}>
