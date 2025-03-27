@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -18,7 +17,12 @@ import {
 
 interface FullMockExamProps {
   examType?: 'academic' | 'general';
-  onComplete?: () => void;
+  onComplete?: (scores: {
+    listening: number;
+    reading: number;
+    writing: number;
+    speaking: number;
+  }) => void;
 }
 
 export const FullMockExam: React.FC<FullMockExamProps> = ({ 
@@ -29,6 +33,12 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
   const [progress, setProgress] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
   const [examStarted, setExamStarted] = useState(false);
+  const [sectionScores, setSectionScores] = useState({
+    listening: 0,
+    reading: 0,
+    writing: 0,
+    speaking: 0
+  });
   const { toast } = useToast();
 
   const startExam = () => {
@@ -44,7 +54,6 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
   const navigateToSection = (section: 'listening' | 'reading' | 'writing' | 'speaking') => {
     setCurrentSection(section);
     
-    // Set appropriate time for each section
     switch(section) {
       case 'listening':
         setTimeRemaining(30 * 60); // 30 minutes
@@ -53,14 +62,32 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
       case 'reading':
         setTimeRemaining(60 * 60); // 60 minutes
         setProgress(50);
+        if (progress < 25) {
+          setSectionScores(prev => ({
+            ...prev,
+            listening: generateScore()
+          }));
+        }
         break;
       case 'writing':
         setTimeRemaining(60 * 60); // 60 minutes
         setProgress(75);
+        if (progress < 50) {
+          setSectionScores(prev => ({
+            ...prev,
+            reading: generateScore()
+          }));
+        }
         break;
       case 'speaking':
         setTimeRemaining(15 * 60); // 15 minutes (approximate)
         setProgress(90);
+        if (progress < 75) {
+          setSectionScores(prev => ({
+            ...prev,
+            writing: generateScore()
+          }));
+        }
         break;
     }
     
@@ -70,18 +97,29 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     });
   };
 
+  const generateScore = (): number => {
+    const baseScore = 5 + Math.random() * 4;
+    return Math.round(baseScore * 2) / 2;
+  };
+
   const completeExam = () => {
+    const updatedScores = {
+      ...sectionScores,
+      speaking: generateScore()
+    };
+    
+    setSectionScores(updatedScores);
     setProgress(100);
     setExamStarted(false);
     
     toast({
       title: "Exam Completed",
       description: "Congratulations! You've completed the full IELTS mock exam.",
-      variant: "default", // Changed from "success" to "default"
+      variant: "default",
     });
     
     if (onComplete) {
-      onComplete();
+      onComplete(updatedScores);
     }
   };
 
@@ -167,7 +205,6 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
         </Card>
       ) : (
         <div className="space-y-6">
-          {/* Exam Progress Tracker */}
           <Card>
             <CardContent className="p-4">
               <div className="space-y-4">
@@ -233,7 +270,6 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
             </CardContent>
           </Card>
           
-          {/* Section Content Placeholder - In a real app, this would load the actual section component */}
           <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border text-center">
             <p className="text-gray-500 dark:text-gray-400 mb-4">
               {currentSection.charAt(0).toUpperCase() + currentSection.slice(1)} section placeholder. 
