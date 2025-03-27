@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -12,8 +13,10 @@ import {
   MessageSquare,
   CheckCircle2,
   Clock,
-  AlertTriangle
+  AlertTriangle,
+  ChevronRight
 } from 'lucide-react';
+import { mockTestData } from '@/data/mockTestData';
 
 interface FullMockExamProps {
   examType?: 'academic' | 'general';
@@ -33,6 +36,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
   const [progress, setProgress] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
   const [examStarted, setExamStarted] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [sectionScores, setSectionScores] = useState({
     listening: 0,
     reading: 0,
@@ -43,7 +47,8 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
 
   const startExam = () => {
     setExamStarted(true);
-    setTimeRemaining(30 * 60); // 30 minutes for listening section
+    const listeningSection = mockTestData.sections.find(section => section.type === 'listening');
+    setTimeRemaining(listeningSection ? listeningSection.duration * 60 : 30 * 60);
     
     toast({
       title: "Exam Started",
@@ -51,16 +56,39 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     });
   };
 
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    
+    if (examStarted && timeRemaining !== null && timeRemaining > 0) {
+      timer = setInterval(() => {
+        setTimeRemaining(prev => {
+          if (prev === null || prev <= 0) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [examStarted, timeRemaining]);
+
   const navigateToSection = (section: 'listening' | 'reading' | 'writing' | 'speaking') => {
     setCurrentSection(section);
+    setCurrentQuestionIndex(0);
+    
+    const selectedSection = mockTestData.sections.find(s => s.type === section);
     
     switch(section) {
       case 'listening':
-        setTimeRemaining(30 * 60); // 30 minutes
+        setTimeRemaining(selectedSection ? selectedSection.duration * 60 : 30 * 60);
         setProgress(25);
         break;
       case 'reading':
-        setTimeRemaining(60 * 60); // 60 minutes
+        setTimeRemaining(selectedSection ? selectedSection.duration * 60 : 60 * 60);
         setProgress(50);
         if (progress < 25) {
           setSectionScores(prev => ({
@@ -70,7 +98,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
         }
         break;
       case 'writing':
-        setTimeRemaining(60 * 60); // 60 minutes
+        setTimeRemaining(selectedSection ? selectedSection.duration * 60 : 60 * 60);
         setProgress(75);
         if (progress < 50) {
           setSectionScores(prev => ({
@@ -80,7 +108,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
         }
         break;
       case 'speaking':
-        setTimeRemaining(15 * 60); // 15 minutes (approximate)
+        setTimeRemaining(selectedSection ? selectedSection.duration * 60 : 15 * 60);
         setProgress(90);
         if (progress < 75) {
           setSectionScores(prev => ({
@@ -98,8 +126,9 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
   };
 
   const generateScore = (): number => {
+    // Generate a realistic IELTS band score
     const baseScore = 5 + Math.random() * 4;
-    return Math.round(baseScore * 2) / 2;
+    return Math.round(baseScore * 2) / 2; // Round to nearest 0.5
   };
 
   const completeExam = () => {
@@ -129,6 +158,115 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
+  const handleNextQuestion = () => {
+    const currentSectionData = mockTestData.sections.find(section => section.type === currentSection);
+    
+    if (!currentSectionData) return;
+    
+    if (currentQuestionIndex < currentSectionData.questions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      // End of section questions
+      if (currentSection === 'speaking') {
+        completeExam();
+      } else {
+        const nextSection = 
+          currentSection === 'listening' ? 'reading' : 
+          currentSection === 'reading' ? 'writing' : 'speaking';
+        navigateToSection(nextSection as 'listening' | 'reading' | 'writing' | 'speaking');
+      }
+    }
+  };
+
+  const getCurrentSectionContent = () => {
+    const sectionData = mockTestData.sections.find(section => section.type === currentSection);
+    if (!sectionData || sectionData.questions.length === 0) {
+      return (
+        <div className="text-center p-8">
+          <p>No questions available for this section.</p>
+        </div>
+      );
+    }
+    
+    const question = sectionData.questions[currentQuestionIndex];
+    
+    return (
+      <div className="space-y-6">
+        <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border">
+          <h3 className="text-lg font-medium mb-4">
+            Question {currentQuestionIndex + 1} of {sectionData.questions.length}
+          </h3>
+          
+          <div className="mb-6">
+            <p className="text-gray-800 dark:text-gray-200 mb-4">{question.text}</p>
+            
+            {question.type === 'multiple-choice' && question.options && (
+              <div className="space-y-3">
+                {question.options.map(option => (
+                  <div 
+                    key={option.id} 
+                    className="flex items-center space-x-2 p-3 rounded-md border hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                  >
+                    <input 
+                      type="radio" 
+                      id={option.id} 
+                      name={question.id} 
+                      className="h-4 w-4 text-indigo"
+                    />
+                    <label htmlFor={option.id} className="flex-grow cursor-pointer">
+                      {option.text}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {question.type === 'fill-in-blank' && (
+              <div className="mb-4">
+                <input 
+                  type="text" 
+                  className="w-full p-2 border rounded-md dark:bg-gray-700"
+                  placeholder="Type your answer here"
+                />
+              </div>
+            )}
+            
+            {question.type === 'essay' && (
+              <div className="mb-4">
+                <textarea 
+                  className="w-full p-3 border rounded-md min-h-[200px] dark:bg-gray-700"
+                  placeholder="Write your response here"
+                ></textarea>
+                {question.maxWords && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    Maximum word count: {question.maxWords} words
+                  </p>
+                )}
+              </div>
+            )}
+            
+            {question.type === 'speaking-prompt' && (
+              <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-md">
+                <p className="text-sm mb-2">Preparation time: 1 minute</p>
+                <p className="text-sm">Speaking time: 2 minutes</p>
+              </div>
+            )}
+          </div>
+          
+          <Button 
+            onClick={handleNextQuestion}
+            className="w-full sm:w-auto"
+          >
+            {currentQuestionIndex === sectionData.questions.length - 1 ? 
+              (currentSection === 'speaking' ? 'Complete Exam' : 'Next Section') : 
+              'Next Question'}
+            <ChevronRight className="ml-1 h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6">
       {!examStarted ? (
@@ -144,46 +282,20 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
               <h3 className="font-medium text-lg mb-4">Exam Structure</h3>
               
               <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <Headphones className="h-5 w-5 text-indigo mt-0.5" />
-                  <div>
-                    <h4 className="font-medium">Listening (30 minutes)</h4>
-                    <p className="text-sm text-gray-500">
-                      4 sections, 40 questions. You will hear each recording ONCE only.
-                    </p>
+                {mockTestData.sections.map(section => (
+                  <div key={section.id} className="flex items-start space-x-3">
+                    {section.type === 'listening' && <Headphones className="h-5 w-5 text-indigo mt-0.5" />}
+                    {section.type === 'reading' && <BookOpen className="h-5 w-5 text-indigo mt-0.5" />}
+                    {section.type === 'writing' && <Edit className="h-5 w-5 text-indigo mt-0.5" />}
+                    {section.type === 'speaking' && <MessageSquare className="h-5 w-5 text-indigo mt-0.5" />}
+                    <div>
+                      <h4 className="font-medium">{section.title} ({section.duration} minutes)</h4>
+                      <p className="text-sm text-gray-500">
+                        {section.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <BookOpen className="h-5 w-5 text-indigo mt-0.5" />
-                  <div>
-                    <h4 className="font-medium">Reading (60 minutes)</h4>
-                    <p className="text-sm text-gray-500">
-                      3 sections with 40 questions based on reading passages.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <Edit className="h-5 w-5 text-indigo mt-0.5" />
-                  <div>
-                    <h4 className="font-medium">Writing (60 minutes)</h4>
-                    <p className="text-sm text-gray-500">
-                      Task 1: Write a report (150 words)<br />
-                      Task 2: Write an essay (250 words)
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <MessageSquare className="h-5 w-5 text-indigo mt-0.5" />
-                  <div>
-                    <h4 className="font-medium">Speaking (11-14 minutes)</h4>
-                    <p className="text-sm text-gray-500">
-                      Face-to-face interview with 3 parts.
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
             
@@ -192,7 +304,8 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
               <div>
                 <h4 className="font-medium">Important</h4>
                 <p className="text-sm text-gray-500">
-                  Make sure you have approximately 3 hours available to complete the exam. Once started, the exam timer will run continuously for each section.
+                  Make sure you have approximately {mockTestData.totalDuration} minutes available to complete the exam. 
+                  Once started, the exam timer will run continuously for each section.
                 </p>
               </div>
             </div>
@@ -270,27 +383,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
             </CardContent>
           </Card>
           
-          <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border text-center">
-            <p className="text-gray-500 dark:text-gray-400 mb-4">
-              {currentSection.charAt(0).toUpperCase() + currentSection.slice(1)} section placeholder. 
-              In a complete implementation, this would load the actual test content.
-            </p>
-            
-            <Button 
-              onClick={() => {
-                if (currentSection === 'speaking') {
-                  completeExam();
-                } else {
-                  const nextSection = 
-                    currentSection === 'listening' ? 'reading' : 
-                    currentSection === 'reading' ? 'writing' : 'speaking';
-                  navigateToSection(nextSection as any);
-                }
-              }}
-            >
-              {currentSection === 'speaking' ? 'Complete Exam' : 'Next Section'}
-            </Button>
-          </div>
+          {getCurrentSectionContent()}
         </div>
       )}
     </div>
