@@ -77,7 +77,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     toast({
       title: "Exam Completed",
       description: "Congratulations! You've completed the full IELTS mock exam.",
-      variant: "success",
+      variant: "default", // Changed from "success" to "default"
     });
     
     if (onComplete) {
