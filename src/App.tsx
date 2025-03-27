@@ -20,6 +20,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import WritingPractice from "./pages/practice/WritingPractice";
 import WritingTaskCMS from "./pages/admin/WritingTaskCMS";
+import AdminLink from "./components/AdminLink";
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -34,19 +35,19 @@ const App: React.FC = () => {
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/practice/listening" element={<ListeningPractice />} />
-              <Route path="/practice/reading" element={<ReadingPractice />} />
-              <Route path="/practice/writing" element={<WritingPractice />} />
+              <Route path="/" element={<><Index /><AdminLink /></>} />
+              <Route path="/practice/listening" element={<><ListeningPractice /><AdminLink /></>} />
+              <Route path="/practice/reading" element={<><ReadingPractice /><AdminLink /></>} />
+              <Route path="/practice/writing" element={<><WritingPractice /><AdminLink /></>} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/resources/all" element={<AllResources />} />
-              <Route path="/resources/:resourceId" element={<ResourceDetail />} />
-              <Route path="/resources/category/:categoryId" element={<CategoryDetail />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/resources" element={<><Resources /><AdminLink /></>} />
+              <Route path="/resources/all" element={<><AllResources /><AdminLink /></>} />
+              <Route path="/resources/:resourceId" element={<><ResourceDetail /><AdminLink /></>} />
+              <Route path="/resources/category/:categoryId" element={<><CategoryDetail /><AdminLink /></>} />
+              <Route path="/about" element={<><About /><AdminLink /></>} />
+              <Route path="/blog" element={<><Blog /><AdminLink /></>} />
+              <Route path="/blog/:slug" element={<><BlogPost /><AdminLink /></>} />
               
               {/* Admin routes */}
               <Route path="/admin/writing-tasks" element={<WritingTaskCMS />} />
