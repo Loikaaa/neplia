@@ -6,8 +6,17 @@ import { cn } from '@/lib/utils';
 import { listeningTestData } from '@/data/listeningTestData';
 import { ListeningQuestions } from './ListeningQuestions';
 import AudioPlayer from './AudioPlayer';
+import { Badge } from '@/components/ui/badge';
 
-export const ListeningTest = () => {
+interface ListeningTestProps {
+  testType?: 'general' | 'academic' | 'practice';
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+}
+
+export const ListeningTest: React.FC<ListeningTestProps> = ({ 
+  testType = 'academic', 
+  difficulty = 'intermediate' 
+}) => {
   const [currentSection, setCurrentSection] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
@@ -34,6 +43,20 @@ export const ListeningTest = () => {
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center justify-between mb-4">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-bold tracking-tight">
+            {testType.charAt(0).toUpperCase() + testType.slice(1)} Listening Test
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} level • {testData.duration} minutes
+          </p>
+        </div>
+        <Badge variant="outline" className="px-3 py-1">
+          Section {currentSection + 1} of {testData.sections.length}
+        </Badge>
+      </div>
+      
       {/* Audio Player */}
       <AudioPlayer 
         audioUrl={testData.sections[currentSection].audioUrl}

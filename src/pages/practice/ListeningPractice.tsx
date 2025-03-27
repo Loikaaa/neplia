@@ -1,43 +1,61 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { ListeningTest } from '@/components/practice/listening/ListeningTest';
 import { ListeningInstructions } from '@/components/practice/listening/ListeningInstructions';
 import ListeningHeader from '@/components/practice/listening/ListeningHeader';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Headphones, FileAudio, Upload } from 'lucide-react';
+import { Headphones, BookOpen } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Progress } from '@/components/ui/progress';
+
+const testTypes = [
+  {
+    id: 'general',
+    title: 'General Training',
+    description: 'For those taking IELTS for migration or work purposes',
+    progress: 70
+  },
+  {
+    id: 'academic',
+    title: 'Academic',
+    description: 'For those taking IELTS for higher education or professional registration',
+    progress: 85
+  },
+  {
+    id: 'practice',
+    title: 'Mini Practice',
+    description: 'A shorter practice session with immediate feedback',
+    progress: 100
+  }
+];
+
+const difficultyLevels = [
+  { value: 'beginner', label: 'Beginner (Band 4-5)' },
+  { value: 'intermediate', label: 'Intermediate (Band 5.5-6.5)' },
+  { value: 'advanced', label: 'Advanced (Band 7+)' }
+];
 
 const ListeningPractice = () => {
   const [testStarted, setTestStarted] = useState(false);
-  const [activeTab, setActiveTab] = useState("practice");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedTestType, setSelectedTestType] = useState('academic');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('intermediate');
   const { toast } = useToast();
   
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.type.includes('audio')) {
-        setSelectedFile(file);
-        toast({
-          title: "File uploaded successfully",
-          description: `${file.name} is ready for use`,
-        });
-      } else {
-        toast({
-          title: "Invalid file format",
-          description: "Please upload an audio file (MP3, WAV, etc.)",
-          variant: "destructive"
-        });
-      }
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
+  const handleStartTest = () => {
+    setTestStarted(true);
+    toast({
+      title: "Test Started",
+      description: `Starting ${selectedTestType} test at ${selectedDifficulty} difficulty`,
+    });
   };
   
   return (
@@ -45,87 +63,101 @@ const ListeningPractice = () => {
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <ListeningHeader />
         
-        <Tabs defaultValue="practice" className="mb-8" onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="practice">
-              <div className="flex items-center space-x-2">
-                <Headphones className="h-4 w-4" />
-                <span>Practice Test</span>
-              </div>
-            </TabsTrigger>
-            <TabsTrigger value="upload">
-              <div className="flex items-center space-x-2">
-                <FileAudio className="h-4 w-4" />
-                <span>Upload Audio</span>
-              </div>
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="practice">
-            {!testStarted ? (
-              <ListeningInstructions onStart={() => setTestStarted(true)} />
-            ) : (
-              <ListeningTest />
-            )}
-          </TabsContent>
-          
-          <TabsContent value="upload">
+        {!testStarted ? (
+          <div className="space-y-8">
             <Card>
               <CardHeader>
-                <CardTitle>Upload Your Own Audio</CardTitle>
+                <CardTitle>Select Your Listening Test</CardTitle>
                 <CardDescription>
-                  Practice with your own IELTS listening materials. Upload an audio file to start practicing.
+                  Choose the test type and difficulty level that matches your goals
                 </CardDescription>
               </CardHeader>
+              
               <CardContent className="space-y-6">
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                  <div className="flex flex-col items-center justify-center space-y-4">
-                    <FileAudio className="h-12 w-12 text-gray-400" />
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-medium">Upload Audio File</h3>
-                      <p className="text-sm text-gray-500">
-                        Supported formats: MP3, WAV, M4A (Max size: 20MB)
-                      </p>
-                    </div>
-                    <Button 
-                      onClick={triggerFileInput} 
-                      className="flex items-center space-x-2"
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {testTypes.map((test) => (
+                    <Card 
+                      key={test.id} 
+                      className={`cursor-pointer transition-all border-2 hover:shadow-md ${
+                        selectedTestType === test.id 
+                          ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20" 
+                          : "border-gray-200"
+                      }`}
+                      onClick={() => setSelectedTestType(test.id)}
                     >
-                      <Upload className="h-4 w-4" />
-                      <span>Select File</span>
-                    </Button>
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileChange}
-                      accept="audio/*"
-                      className="hidden"
-                    />
-                  </div>
+                      <CardHeader className="pb-2">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-lg">{test.title}</CardTitle>
+                          <Headphones className={`h-5 w-5 ${
+                            selectedTestType === test.id ? "text-indigo-500" : "text-gray-400"
+                          }`} />
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-gray-500 mb-2">{test.description}</p>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between text-xs text-gray-500">
+                            <span>Success Rate</span>
+                            <span>{test.progress}%</span>
+                          </div>
+                          <Progress value={test.progress} className="h-2" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
                 
-                {selectedFile && (
-                  <div className="bg-muted rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <FileAudio className="h-5 w-5 text-indigo-500" />
-                        <div>
-                          <p className="font-medium">{selectedFile.name}</p>
-                          <p className="text-xs text-gray-500">
-                            {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
-                          </p>
-                        </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Select Difficulty Level
+                    </label>
+                    <Select 
+                      value={selectedDifficulty} 
+                      onValueChange={setSelectedDifficulty}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select difficulty" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {difficultyLevels.map((level) => (
+                          <SelectItem key={level.value} value={level.value}>
+                            {level.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="bg-muted p-4 rounded-lg border border-muted-foreground/20">
+                    <div className="flex gap-3">
+                      <BookOpen className="h-5 w-5 text-indigo-500 mt-0.5" />
+                      <div>
+                        <h4 className="font-medium mb-1">What to expect</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          The IELTS Listening test takes approximately 30 minutes. You will hear four recordings and answer questions for each. The test format is the same for both Academic and General Training versions.
+                        </p>
                       </div>
-                      <Button onClick={() => setTestStarted(true)}>
-                        Practice with this audio
-                      </Button>
                     </div>
                   </div>
-                )}
+                </div>
               </CardContent>
+              
+              <CardFooter>
+                <Button 
+                  onClick={handleStartTest} 
+                  className="w-full"
+                >
+                  Start Listening Test
+                </Button>
+              </CardFooter>
             </Card>
-          </TabsContent>
-        </Tabs>
+            
+            <ListeningInstructions onStart={handleStartTest} />
+          </div>
+        ) : (
+          <ListeningTest testType={selectedTestType} difficulty={selectedDifficulty} />
+        )}
       </div>
     </Layout>
   );
