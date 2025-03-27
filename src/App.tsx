@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -18,11 +19,10 @@ import About from "./pages/About";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import WritingPractice from "./pages/practice/WritingPractice";
+import SpeakingPractice from "./pages/practice/SpeakingPractice";
 import AdminLink from "./components/AdminLink";
 
 // Admin pages
-import WritingTaskCMS from "./pages/admin/WritingTaskCMS";
-import ReadingTaskCMS from "./pages/admin/ReadingTaskCMS";
 import BlogPostCMS from "./pages/admin/BlogPostCMS";
 import UsersCMS from "./pages/admin/UsersCMS";
 import Settings from "./pages/admin/Settings";
@@ -46,6 +46,7 @@ const App: React.FC = () => {
               <Route path="/practice/listening" element={<><ListeningPractice /><AdminLink /></>} />
               <Route path="/practice/reading" element={<><ReadingPractice /><AdminLink /></>} />
               <Route path="/practice/writing" element={<><WritingPractice /><AdminLink /></>} />
+              <Route path="/practice/speaking" element={<><SpeakingPractice /><AdminLink /></>} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/resources" element={<><Resources /><AdminLink /></>} />
@@ -58,13 +59,11 @@ const App: React.FC = () => {
               
               {/* Admin routes */}
               <Route path="/admin" element={<Dashboard />} />
-              <Route path="/admin/writing-tasks" element={<WritingTaskCMS />} />
-              <Route path="/admin/reading-tasks" element={<ReadingTaskCMS />} />
               <Route path="/admin/blog-posts" element={<BlogPostCMS />} />
               <Route path="/admin/users" element={<UsersCMS />} />
               <Route path="/admin/settings" element={<Settings />} />
               
-              {/* New exam section routes */}
+              {/* Exam section routes */}
               <Route path="/admin/exams/:examType/:sectionType" element={<ExamSectionPage />} />
               
               {/* 404 route */}

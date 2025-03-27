@@ -1,4 +1,3 @@
-
 import { ListeningTest } from '@/types/listening';
 
 export const listeningTestData: ListeningTest = {
@@ -12,7 +11,7 @@ export const listeningTestData: ListeningTest = {
       id: 'lt-001-s1',
       title: 'Social Needs Survey',
       description: 'A conversation between a student and a university administrator about a social needs survey.',
-      audioUrl: '/audio/listening-section1.mp3', // This would be a real audio file path in production
+      audioUrl: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3',
       questions: [
         {
           id: 'q1',
@@ -74,7 +73,7 @@ export const listeningTestData: ListeningTest = {
       id: 'lt-001-s2',
       title: 'Library Tour',
       description: 'A guided tour of a university library.',
-      audioUrl: '/audio/listening-section2.mp3',
+      audioUrl: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Kai_Engel/Satin/Kai_Engel_-_04_-_Sentinel.mp3',
       questions: [
         {
           id: 'q6',
@@ -133,7 +132,7 @@ export const listeningTestData: ListeningTest = {
       id: 'lt-001-s3',
       title: 'Research Project Discussion',
       description: 'A discussion between a tutor and a student about a research project.',
-      audioUrl: '/audio/listening-section3.mp3',
+      audioUrl: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3',
       questions: [
         {
           id: 'q11',
@@ -189,7 +188,7 @@ export const listeningTestData: ListeningTest = {
       id: 'lt-001-s4',
       title: 'Lecture on Urban Planning',
       description: 'A university lecture about urban planning and city development.',
-      audioUrl: '/audio/listening-section4.mp3',
+      audioUrl: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/WFMU/Broke_For_Free/Directionless_EP/Broke_For_Free_-_01_-_Night_Owl.mp3',
       questions: [
         {
           id: 'q16',
