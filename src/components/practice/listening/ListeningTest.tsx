@@ -8,9 +8,13 @@ import { ListeningQuestions } from './ListeningQuestions';
 import AudioPlayer from './AudioPlayer';
 import { Badge } from '@/components/ui/badge';
 
+// Define the test types and difficulty levels
+export type TestType = 'general' | 'academic' | 'practice';
+export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced';
+
 interface ListeningTestProps {
-  testType?: 'general' | 'academic' | 'practice';
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  testType: TestType;
+  difficulty: DifficultyLevel;
 }
 
 export const ListeningTest: React.FC<ListeningTestProps> = ({ 

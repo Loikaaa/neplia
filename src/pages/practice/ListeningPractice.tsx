@@ -17,21 +17,25 @@ import {
 } from "@/components/ui/select";
 import { Progress } from '@/components/ui/progress';
 
+// Define the test types and difficulty levels as proper TypeScript types
+type TestType = 'general' | 'academic' | 'practice';
+type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced';
+
 const testTypes = [
   {
-    id: 'general',
+    id: 'general' as TestType,
     title: 'General Training',
     description: 'For those taking IELTS for migration or work purposes',
     progress: 70
   },
   {
-    id: 'academic',
+    id: 'academic' as TestType,
     title: 'Academic',
     description: 'For those taking IELTS for higher education or professional registration',
     progress: 85
   },
   {
-    id: 'practice',
+    id: 'practice' as TestType,
     title: 'Mini Practice',
     description: 'A shorter practice session with immediate feedback',
     progress: 100
@@ -39,15 +43,15 @@ const testTypes = [
 ];
 
 const difficultyLevels = [
-  { value: 'beginner', label: 'Beginner (Band 4-5)' },
-  { value: 'intermediate', label: 'Intermediate (Band 5.5-6.5)' },
-  { value: 'advanced', label: 'Advanced (Band 7+)' }
+  { value: 'beginner' as DifficultyLevel, label: 'Beginner (Band 4-5)' },
+  { value: 'intermediate' as DifficultyLevel, label: 'Intermediate (Band 5.5-6.5)' },
+  { value: 'advanced' as DifficultyLevel, label: 'Advanced (Band 7+)' }
 ];
 
 const ListeningPractice = () => {
   const [testStarted, setTestStarted] = useState(false);
-  const [selectedTestType, setSelectedTestType] = useState('academic');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('intermediate');
+  const [selectedTestType, setSelectedTestType] = useState<TestType>('academic');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('intermediate');
   const { toast } = useToast();
   
   const handleStartTest = () => {
