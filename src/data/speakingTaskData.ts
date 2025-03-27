@@ -55,10 +55,10 @@ export const speakingTaskData: SpeakingTask = {
     {
       id: 'q6',
       part: 2,
-      text: 'I'd like you to describe a book you have read that you found particularly interesting. You should say:\n\n• What the book was\n• When you read it\n• What it was about\n• And explain why you found it particularly interesting.',
+      text: "I'd like you to describe a book you have read that you found particularly interesting. You should say:\n\n• What the book was\n• When you read it\n• What it was about\n• And explain why you found it particularly interesting.",
       preparation: 60,
       duration: 120,
-      notes: 'You have one minute to prepare. Then you'll need to talk about the topic for one to two minutes. You can make notes if you wish.'
+      notes: "You have one minute to prepare. Then you'll need to talk about the topic for one to two minutes. You can make notes if you wish."
     },
     
     // Part 3: Two-way Discussion
