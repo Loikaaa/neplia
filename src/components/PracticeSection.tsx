@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Headphones, BookOpen, Edit, MessageSquare, Quote, ArrowRight, Trophy } from 'lucide-react';
@@ -67,7 +66,6 @@ const quotes = [
 const PracticeSection = () => {
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
-      {/* Background decorative elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-[10%] -right-[20%] h-[400px] w-[400px] rounded-full bg-indigo/5 blur-3xl"></div>
         <div className="absolute bottom-[10%] -left-[10%] h-[300px] w-[300px] rounded-full bg-teal/5 blur-3xl"></div>

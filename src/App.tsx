@@ -51,6 +51,8 @@ const App: React.FC = () => {
               <Route path="/practice/writing" element={<><WritingPractice /><AdminLink /></>} />
               <Route path="/practice/speaking" element={<><SpeakingPractice /><AdminLink /></>} />
               <Route path="/practice/mock-test" element={<><MockTestPage /><AdminLink /></>} />
+              {/* Adding additional route for mock-tests (plural) that points to the same component */}
+              <Route path="/practice/mock-tests" element={<><MockTestPage /><AdminLink /></>} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/resources" element={<><Resources /><AdminLink /></>} />
