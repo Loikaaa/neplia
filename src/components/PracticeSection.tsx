@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Headphones, BookOpen, Edit, MessageSquare, Quote, ArrowRight, Trophy } from 'lucide-react';
@@ -88,33 +89,35 @@ const PracticeSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16">
           {practiceOptions.map((option, index) => (
-            <Card 
+            <Link 
               key={index} 
-              className="overflow-hidden hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-800 border-none shadow-lg"
+              to={option.path}
+              className="block transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              <CardHeader className={`${option.color} p-6`}>
-                <div className="rounded-full bg-white/20 w-12 h-12 flex items-center justify-center mb-3">
-                  <option.icon className="h-6 w-6" />
-                </div>
-                <CardTitle className="text-xl font-bold">{option.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <CardDescription className="text-gray-600 dark:text-gray-300 mb-4 text-base">
-                  {option.description}
-                </CardDescription>
-                <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg text-sm italic text-gray-700 dark:text-gray-300">
-                  <p>✨ {option.fact}</p>
-                </div>
-              </CardContent>
-              <CardFooter className="p-6 pt-0">
-                <Link 
-                  to={option.path}
-                  className="w-full py-2.5 px-4 text-center rounded-lg border-2 border-indigo text-indigo dark:text-indigo-300 dark:border-indigo-300 font-medium hover:bg-indigo hover:text-white dark:hover:bg-indigo-800 transition-colors"
-                >
-                  Start Practice
-                </Link>
-              </CardFooter>
-            </Card>
+              <Card className="overflow-hidden bg-white dark:bg-gray-800 border-none shadow-lg h-full">
+                <CardHeader className={`${option.color} p-6`}>
+                  <div className="rounded-full bg-white/20 w-12 h-12 flex items-center justify-center mb-3">
+                    <option.icon className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl font-bold">{option.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <CardDescription className="text-gray-600 dark:text-gray-300 mb-4 text-base">
+                    {option.description}
+                  </CardDescription>
+                  <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg text-sm italic text-gray-700 dark:text-gray-300">
+                    <p>✨ {option.fact}</p>
+                  </div>
+                </CardContent>
+                <CardFooter className="p-6 pt-0">
+                  <div 
+                    className="w-full py-2.5 px-4 text-center rounded-lg border-2 border-indigo text-indigo dark:text-indigo-300 dark:border-indigo-300 font-medium hover:bg-indigo hover:text-white dark:hover:bg-indigo-800 transition-colors"
+                  >
+                    Start Practice
+                  </div>
+                </CardFooter>
+              </Card>
+            </Link>
           ))}
         </div>
 
