@@ -8,6 +8,9 @@ import { Plus, Search, Edit, Trash2 } from 'lucide-react';
 import { readingTestData } from '@/data/readingTestData';
 
 const ReadingTaskCMS = () => {
+  // Extract passages to create a list of reading tests
+  const readingTests = [readingTestData];
+  
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -36,12 +39,12 @@ const ReadingTaskCMS = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {readingTestData.map((test, index) => (
+              {readingTests.map((test, index) => (
                 <TableRow key={index}>
                   <TableCell className="font-medium">{test.title}</TableCell>
-                  <TableCell>{test.category}</TableCell>
+                  <TableCell>{test.id.startsWith('rt') ? 'IELTS' : 'General'}</TableCell>
                   <TableCell>{test.passages.length}</TableCell>
-                  <TableCell>{test.questions.length}</TableCell>
+                  <TableCell>{test.totalQuestions}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="sm">
                       <Edit className="h-4 w-4" />

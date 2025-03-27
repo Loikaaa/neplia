@@ -6,9 +6,11 @@ import {
   FileText, 
   BookOpen, 
   MessageSquare, 
-  Users 
+  Users,
+  Settings as SettingsIcon
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const AdminDashboard = () => {
   const stats = [
@@ -114,7 +116,7 @@ const AdminDashboard = () => {
               </Link>
               <Link to="/admin/settings">
                 <Button variant="outline" className="w-full justify-start">
-                  <Settings className="mr-2 h-4 w-4" />
+                  <SettingsIcon className="mr-2 h-4 w-4" />
                   Update Site Settings
                 </Button>
               </Link>

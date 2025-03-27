@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, Search, Edit, Trash2, Eye } from 'lucide-react';
-import { blogData } from '@/data/blogData';
+import { blogPosts } from '@/data/blogData';
 import { Link } from 'react-router-dom';
 
 const BlogPostCMS = () => {
@@ -37,11 +37,11 @@ const BlogPostCMS = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {blogData.map((post) => (
+              {blogPosts.map((post) => (
                 <TableRow key={post.id}>
                   <TableCell className="font-medium">{post.title}</TableCell>
-                  <TableCell>{post.author}</TableCell>
-                  <TableCell>{post.date}</TableCell>
+                  <TableCell>{post.author.name}</TableCell>
+                  <TableCell>{post.publishedAt}</TableCell>
                   <TableCell>
                     <div className="flex items-center">
                       <div className="h-2 w-2 rounded-full bg-green-500 mr-2"></div>
