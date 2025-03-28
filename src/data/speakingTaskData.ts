@@ -5,6 +5,7 @@ export const speakingTaskData: SpeakingTask = {
   id: 'speaking-task-1',
   title: 'IELTS Speaking Practice Test 1',
   description: 'A complete IELTS speaking test with all three parts.',
+  category: 'general', // Adding the missing category property
   questions: [
     // Part 1: Introduction and Interview
     {
