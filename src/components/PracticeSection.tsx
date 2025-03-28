@@ -188,11 +188,12 @@ const PracticeSection = () => {
             Our comprehensive practice modules help you prepare for all sections of the IELTS exam
           </p>
           
-          <div className="mb-8">
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Proficiency Exams</NavigationMenuTrigger>
+          <div className="mb-8 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+            <h3 className="text-xl font-bold mb-4">Choose Your Exam Type</h3>
+            <NavigationMenu className="mb-6 max-w-full w-full flex justify-center">
+              <NavigationMenuList className="flex-wrap justify-center">
+                <NavigationMenuItem className="mb-2">
+                  <NavigationMenuTrigger className="bg-indigo text-white hover:bg-indigo/90 hover:text-white">Proficiency Exams</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       {proficiencyExams.map((exam) => (
@@ -231,8 +232,8 @@ const PracticeSection = () => {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Academic Exams</NavigationMenuTrigger>
+                <NavigationMenuItem className="mb-2">
+                  <NavigationMenuTrigger className="bg-teal-600 text-white hover:bg-teal-700 hover:text-white">Academic Exams</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       {academicExams.map((exam) => (
@@ -272,30 +273,30 @@ const PracticeSection = () => {
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
-          </div>
           
-          <Tabs defaultValue="skills" value={selectedTab} onValueChange={setSelectedTab} className="mb-8">
-            <TabsList className="mb-4">
-              <TabsTrigger value="skills">By Skills</TabsTrigger>
-              <TabsTrigger value="exams">By Exam Type</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="skills">
-              <Link to="/practice">
-                <Button className="bg-indigo hover:bg-indigo-600">
-                  View All Skills <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </TabsContent>
-            
-            <TabsContent value="exams">
-              <Link to="/selection">
-                <Button className="bg-indigo hover:bg-indigo-600">
-                  Choose Your Exam <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </TabsContent>
-          </Tabs>
+            <Tabs defaultValue="skills" value={selectedTab} onValueChange={setSelectedTab} className="mb-4">
+              <TabsList className="mb-4">
+                <TabsTrigger value="skills">By Skills</TabsTrigger>
+                <TabsTrigger value="exams">By Exam Type</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="skills">
+                <Link to="/practice">
+                  <Button className="bg-indigo hover:bg-indigo-600">
+                    View All Skills <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </TabsContent>
+              
+              <TabsContent value="exams">
+                <Link to="/selection">
+                  <Button className="bg-indigo hover:bg-indigo-600">
+                    Choose Your Exam <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16">
