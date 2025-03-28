@@ -60,10 +60,6 @@ const queryClient = new QueryClient();
 
 // Define App as a proper React functional component with React.FC type
 const App: React.FC = () => {
-  // Check if user is logged in
-  const isDemoUserLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
-  const rememberedUser = localStorage.getItem('rememberUser') === 'true';
-  
   return (
     <QueryClientProvider client={queryClient}>
       <React.StrictMode>

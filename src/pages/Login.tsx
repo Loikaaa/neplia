@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -87,16 +86,20 @@ const Login = () => {
           description: "Welcome to your IELTS preparation dashboard",
         });
         
+        // Set proper demo user login flags in localStorage
         localStorage.setItem('demoUserLoggedIn', 'true');
         localStorage.setItem('userEmail', 'demo@user.com');
         localStorage.setItem('userName', 'Demo User');
         
         if (data.rememberMe) {
           localStorage.setItem('rememberUser', 'true');
+        } else {
+          // Ensure rememberUser is removed if not checked
+          localStorage.removeItem('rememberUser');
         }
         
         setIsLoading(false);
-        navigate(from);
+        navigate('/');
       }, 1000);
       return;
     }
@@ -107,6 +110,8 @@ const Login = () => {
       
       if (data.rememberMe) {
         localStorage.setItem('rememberUser', 'true');
+      } else {
+        localStorage.removeItem('rememberUser');
       }
       
       toast({
