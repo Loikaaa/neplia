@@ -154,7 +154,11 @@ const UserDashboard = () => {
                         className="w-full justify-start text-left"
                         onClick={() => {
                           startExamTimer(section.id);
-                          document.querySelector('[data-radix-alert-dialog-close-button]')?.click();
+                          // Fix: Use type assertion to access the click method
+                          const closeButton = document.querySelector('[data-radix-alert-dialog-close-button]');
+                          if (closeButton) {
+                            (closeButton as HTMLElement).click();
+                          }
                         }}
                       >
                         <div className="flex flex-col items-start">
