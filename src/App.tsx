@@ -1,10 +1,10 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import ListeningPractice from "./pages/practice/ListeningPractice";
@@ -31,6 +31,19 @@ import Settings from "./pages/admin/Settings";
 import Dashboard from "./pages/admin/Dashboard";
 import ExamSectionPage from "./pages/admin/ExamSectionPage";
 import SpeakingReviewPage from "./pages/admin/SpeakingReviewPage";
+import { DemoAdminLogin } from "./components/admin/DemoAdminLogin";
+
+// Protected route component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isLoggedIn = sessionStorage.getItem('demoAdminLoggedIn') === 'true';
+  const location = useLocation();
+  
+  if (!isLoggedIn) {
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  }
+  
+  return <>{children}</>;
+};
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -64,15 +77,18 @@ const App: React.FC = () => {
               <Route path="/blog" element={<><Blog /><AdminLink /></>} />
               <Route path="/blog/:slug" element={<><BlogPost /><AdminLink /></>} />
               
-              {/* Admin routes */}
-              <Route path="/admin" element={<Dashboard />} />
-              <Route path="/admin/blog-posts" element={<BlogPostCMS />} />
-              <Route path="/admin/users" element={<UsersCMS />} />
-              <Route path="/admin/settings" element={<Settings />} />
+              {/* Admin login route */}
+              <Route path="/admin/login" element={<DemoAdminLogin />} />
+              
+              {/* Protected admin routes */}
+              <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/admin/blog-posts" element={<ProtectedRoute><BlogPostCMS /></ProtectedRoute>} />
+              <Route path="/admin/users" element={<ProtectedRoute><UsersCMS /></ProtectedRoute>} />
+              <Route path="/admin/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
               
               {/* Exam section routes */}
-              <Route path="/admin/exams/:examType/:sectionType" element={<ExamSectionPage />} />
-              <Route path="/admin/speaking-reviews" element={<SpeakingReviewPage />} />
+              <Route path="/admin/exams/:examType/:sectionType" element={<ProtectedRoute><ExamSectionPage /></ProtectedRoute>} />
+              <Route path="/admin/speaking-reviews" element={<ProtectedRoute><SpeakingReviewPage /></ProtectedRoute>} />
               
               {/* 404 route */}
               <Route path="*" element={<NotFound />} />
