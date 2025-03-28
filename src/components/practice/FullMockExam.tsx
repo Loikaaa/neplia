@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -18,6 +19,7 @@ import {
   BookText
 } from 'lucide-react';
 import { mockTestData } from '@/data/mockTestData';
+import AudioPlayer from './listening/AudioPlayer';
 
 interface FullMockExamProps {
   examType?: string;
@@ -226,6 +228,14 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     
     return (
       <div className="space-y-6">
+        {currentSection === 'listening' && (
+          <AudioPlayer 
+            audioUrl="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3"
+            title={`Listening Section: Question ${currentQuestionIndex + 1}`}
+            showTranscript={true}
+          />
+        )}
+        
         <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border">
           <h3 className="text-lg font-medium mb-4">
             Question {currentQuestionIndex + 1} of {sectionData.questions.length}
