@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search } from 'lucide-react';
+import { Menu, X, ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import UserProfileMenu from './UserProfileMenu';
 import { 
@@ -22,13 +22,19 @@ import {
 
 const navLinks = [
   { name: 'Home', path: '/' },
-  { name: 'Practice', path: '/practice', submenu: [
-    { name: 'Listening', path: '/practice/listening', icon: Headphones, description: 'Improve your listening skills with our practice tests' },
-    { name: 'Reading', path: '/practice/reading', icon: BookOpen, description: 'Enhance your reading comprehension with timed exercises' },
-    { name: 'Writing', path: '/practice/writing', icon: Edit, description: 'Get AI-powered feedback on your writing tasks' },
-    { name: 'Speaking', path: '/practice/speaking', icon: MessageSquare, description: 'Practice your speaking skills with voice analysis tools' },
-    { name: 'Mock Tests', path: '/practice/mock-test', icon: BarChart3, description: 'Take full-length IELTS mock tests under exam conditions' },
-  ]},
+  { 
+    name: 'Practice', 
+    path: '/practice', 
+    highlight: true,
+    submenu: [
+      { name: 'By Skills', path: '/practice', icon: BarChart3, description: 'Practice by individual skills - Listening, Reading, Writing, and Speaking' },
+      { name: 'Listening', path: '/practice/listening', icon: Headphones, description: 'Improve your listening skills with our practice tests' },
+      { name: 'Reading', path: '/practice/reading', icon: BookOpen, description: 'Enhance your reading comprehension with timed exercises' },
+      { name: 'Writing', path: '/practice/writing', icon: Edit, description: 'Get AI-powered feedback on your writing tasks' },
+      { name: 'Speaking', path: '/practice/speaking', icon: MessageSquare, description: 'Practice your speaking skills with voice analysis tools' },
+      { name: 'Mock Tests', path: '/practice/mock-test', icon: Trophy, description: 'Take full-length IELTS mock tests under exam conditions' },
+    ]
+  },
   { name: 'Resources', path: '/resources' },
   { name: 'Blog', path: '/blog' },
   { name: 'About', path: '/about' },
@@ -84,7 +90,9 @@ const Navbar = () => {
                         <NavigationMenuTrigger 
                           className={cn(
                             "text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300 font-medium",
-                            location.pathname.startsWith(link.path) && "text-indigo dark:text-indigo-300"
+                            link.highlight && "bg-indigo text-white hover:bg-indigo-600 hover:text-white dark:bg-indigo-600 dark:hover:bg-indigo-700",
+                            location.pathname.startsWith(link.path) && !link.highlight && "text-indigo dark:text-indigo-300",
+                            location.pathname.startsWith(link.path) && link.highlight && "bg-indigo-600 text-white dark:bg-indigo-700"
                           )}
                         >
                           {link.name}
@@ -201,7 +209,12 @@ const Navbar = () => {
                   <DropdownMenu open={openSubmenu === link.name} onOpenChange={() => setOpenSubmenu(openSubmenu === link.name ? null : link.name)}>
                     <DropdownMenuTrigger asChild>
                       <button
-                        className="flex items-center justify-between w-full text-lg font-medium text-gray-700 dark:text-gray-200"
+                        className={cn(
+                          "flex items-center justify-between w-full text-lg font-medium",
+                          link.highlight 
+                            ? "text-indigo-600 dark:text-indigo-300 font-semibold" 
+                            : "text-gray-700 dark:text-gray-200"
+                        )}
                       >
                         {link.name}
                         <ChevronDown className={cn(
