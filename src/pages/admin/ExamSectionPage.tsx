@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -120,8 +119,6 @@ const ExamSectionPage = () => {
 
   // Handle regenerate question
   const handleRegenerateQuestion = (id: string) => {
-    // In a real application, this would call an API to regenerate a question
-    // For now, we'll simulate it by modifying the existing question
     const updatedQuestions = mathQuestions.map(q => {
       if (q.id === id) {
         if (q.category === 'algebra') {
@@ -187,6 +184,19 @@ const ExamSectionPage = () => {
       option4: '',
       correctAnswer: '',
       explanation: ''
+    }
+  });
+
+  // Setup form for settings tab
+  const settingsForm = useForm({
+    defaultValues: {
+      timeLimit: '65',
+      passingScore: '70',
+      calculatorPolicy: 'partial',
+      instructions: 'This section tests your mathematical reasoning and problem-solving skills. Answer all questions to the best of your ability.',
+      randomize: false,
+      immediateFeedback: true,
+      allowReview: true
     }
   });
 
@@ -257,7 +267,6 @@ const ExamSectionPage = () => {
 
   // Handle bulk import
   const handleBulkImport = () => {
-    // In a real app, this would process a file upload
     const newQuestions = [
       {
         id: `${mathQuestions.length + 1}`,
@@ -532,79 +541,157 @@ const ExamSectionPage = () => {
                   </div>
                   
                   <div className="md:col-span-2">
-                    <Form>
+                    <Form {...settingsForm}>
                       <div className="space-y-4">
-                        <FormItem>
-                          <FormLabel>Time Limit (minutes)</FormLabel>
-                          <FormControl>
-                            <Input type="number" defaultValue="65" />
-                          </FormControl>
-                          <FormDescription>
-                            Set the maximum time allowed for this section
-                          </FormDescription>
-                        </FormItem>
+                        <FormField
+                          control={settingsForm.control}
+                          name="timeLimit"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Time Limit (minutes)</FormLabel>
+                              <FormControl>
+                                <Input type="number" {...field} />
+                              </FormControl>
+                              <FormDescription>
+                                Set the maximum time allowed for this section
+                              </FormDescription>
+                            </FormItem>
+                          )}
+                        />
                         
-                        <FormItem>
-                          <FormLabel>Passing Score (%)</FormLabel>
-                          <FormControl>
-                            <Input type="number" defaultValue="70" />
-                          </FormControl>
-                        </FormItem>
+                        <FormField
+                          control={settingsForm.control}
+                          name="passingScore"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Passing Score (%)</FormLabel>
+                              <FormControl>
+                                <Input type="number" {...field} />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
                         
-                        <FormItem>
-                          <FormLabel>Calculator Policy</FormLabel>
-                          <div className="space-y-2 pt-1">
-                            <div className="flex items-center space-x-2">
-                              <RadioGroup defaultValue="partial">
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="allowed" id="calculator-allowed" />
-                                  <label htmlFor="calculator-allowed">Allowed for all questions</label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="partial" id="calculator-partial" />
-                                  <label htmlFor="calculator-partial">Allowed for some questions</label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                  <RadioGroupItem value="none" id="calculator-none" />
-                                  <label htmlFor="calculator-none">Not allowed</label>
-                                </div>
-                              </RadioGroup>
-                            </div>
-                          </div>
-                        </FormItem>
+                        <FormField
+                          control={settingsForm.control}
+                          name="calculatorPolicy"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Calculator Policy</FormLabel>
+                              <div className="space-y-2 pt-1">
+                                <RadioGroup 
+                                  value={field.value}
+                                  onValueChange={field.onChange}
+                                >
+                                  <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="allowed" id="calculator-allowed" />
+                                    <label htmlFor="calculator-allowed">Allowed for all questions</label>
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="partial" id="calculator-partial" />
+                                    <label htmlFor="calculator-partial">Allowed for some questions</label>
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="none" id="calculator-none" />
+                                    <label htmlFor="calculator-none">Not allowed</label>
+                                  </div>
+                                </RadioGroup>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
                         
-                        <FormItem>
-                          <FormLabel>Instructions</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              defaultValue="This section tests your mathematical reasoning and problem-solving skills. Answer all questions to the best of your ability."
-                              className="min-h-[100px]"
-                            />
-                          </FormControl>
-                        </FormItem>
+                        <FormField
+                          control={settingsForm.control}
+                          name="instructions"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Instructions</FormLabel>
+                              <FormControl>
+                                <Textarea 
+                                  {...field}
+                                  className="min-h-[100px]"
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
                         
-                        <FormItem>
-                          <FormLabel>Additional Options</FormLabel>
-                          <div className="space-y-2 pt-1">
-                            <div className="flex items-center space-x-2">
-                              <Checkbox id="randomize" />
-                              <label htmlFor="randomize">Randomize question order</label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Checkbox id="immediate-feedback" defaultChecked />
-                              <label htmlFor="immediate-feedback">Show immediate feedback</label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Checkbox id="allow-review" defaultChecked />
-                              <label htmlFor="allow-review">Allow students to review answers</label>
-                            </div>
-                          </div>
-                        </FormItem>
+                        <FormField
+                          control={settingsForm.control}
+                          name="randomize"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-2 space-y-0 pt-2">
+                              <FormControl>
+                                <Checkbox 
+                                  checked={field.value} 
+                                  onCheckedChange={field.onChange}
+                                  id="randomize"
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel htmlFor="randomize">
+                                  Randomize question order
+                                </FormLabel>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={settingsForm.control}
+                          name="immediateFeedback"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-2 space-y-0">
+                              <FormControl>
+                                <Checkbox 
+                                  checked={field.value} 
+                                  onCheckedChange={field.onChange}
+                                  id="immediate-feedback"
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel htmlFor="immediate-feedback">
+                                  Show immediate feedback
+                                </FormLabel>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={settingsForm.control}
+                          name="allowReview"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-2 space-y-0">
+                              <FormControl>
+                                <Checkbox 
+                                  checked={field.value} 
+                                  onCheckedChange={field.onChange}
+                                  id="allow-review"
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel htmlFor="allow-review">
+                                  Allow students to review answers
+                                </FormLabel>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
                       </div>
                     </Form>
                     
                     <div className="mt-6 flex justify-end">
-                      <Button>
+                      <Button onClick={() => settingsForm.handleSubmit(
+                        (data) => {
+                          console.log(data);
+                          toast({
+                            title: "Settings saved",
+                            description: "Your changes have been saved successfully.",
+                          });
+                        }
+                      )()}>
                         <Save className="h-4 w-4 mr-2" />
                         Save Settings
                       </Button>
@@ -848,9 +935,7 @@ const ExamSectionPage = () => {
   };
   
   const renderContent = () => {
-    // Handle different exam types with their specific sections
     if (examType === 'ielts' || examType === 'toefl' || examType === 'pte') {
-      // English proficiency exams (reading, writing, listening, speaking)
       if (sectionType === 'reading') {
         return <ReadingTaskCMS />;
       } else if (sectionType === 'writing') {
@@ -868,7 +953,6 @@ const ExamSectionPage = () => {
         );
       }
     } else if (examType === 'sat') {
-      // SAT sections (math, reading, writing)
       if (sectionType === 'math') {
         return getSatMathContent();
       } else if (sectionType === 'reading' || sectionType === 'writing') {
@@ -882,7 +966,6 @@ const ExamSectionPage = () => {
         );
       }
     } else if (examType === 'gre') {
-      // GRE sections
       if (sectionType === 'verbal') {
         return (
           <div className="text-center py-12">
@@ -912,7 +995,6 @@ const ExamSectionPage = () => {
         );
       }
     } else if (examType === 'gmat') {
-      // GMAT sections
       if (sectionType === 'verbal') {
         return (
           <div className="text-center py-12">
@@ -952,7 +1034,6 @@ const ExamSectionPage = () => {
       }
     }
     
-    // Default coming soon message for sections under development
     return (
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold mb-2">Coming Soon</h2>
