@@ -10,11 +10,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Calculator, BarChart3, Sigma, Brain, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Calculator, BarChart3, Sigma, Brain, Plus, Pencil, Trash2, RefreshCw } from 'lucide-react';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogFooter, 
+  DialogHeader, 
+  DialogTitle,
+  DialogTrigger 
+} from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { useToast } from '@/hooks/use-toast';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
 
 const ExamSectionPage = () => {
   const { examType, sectionType } = useParams<{ examType: string; sectionType: string }>();
   const [activeTab, setActiveTab] = useState('questions');
+  const { toast } = useToast();
+  
+  // State for edit dialog
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState<any>(null);
   
   // Mock data for SAT Math questions
   const [mathQuestions, setMathQuestions] = useState([
@@ -37,6 +55,126 @@ const ExamSectionPage = () => {
       explanation: 'Using the Pythagorean theorem: a² + b² = c². We know a = 5 and c = 13, so 5² + b² = 13². Solving for b: b² = 13² - 5² = 169 - 25 = 144, so b = 12.'
     }
   ]);
+
+  // Handle delete question
+  const handleDeleteQuestion = (id: string) => {
+    setMathQuestions(mathQuestions.filter(q => q.id !== id));
+    toast({
+      title: "Question deleted",
+      description: "The question has been successfully removed.",
+    });
+  };
+
+  // Handle regenerate question
+  const handleRegenerateQuestion = (id: string) => {
+    // In a real application, this would call an API to regenerate a question
+    // For now, we'll simulate it by modifying the existing question
+    const updatedQuestions = mathQuestions.map(q => {
+      if (q.id === id) {
+        if (q.category === 'algebra') {
+          return {
+            ...q,
+            question: 'If 2x - 3 = 7, what is the value of x?',
+            options: ['3', '5', '7', '10'],
+            correctAnswer: '5',
+            explanation: 'To solve for x, add 3 to both sides to get 2x = 10, then divide by 2 to get x = 5.'
+          };
+        } else {
+          return {
+            ...q,
+            question: 'In a right triangle, if one leg is 6 and the hypotenuse is 10, what is the length of the other leg?',
+            options: ['6', '8', '10', '12'],
+            correctAnswer: '8',
+            explanation: 'Using the Pythagorean theorem: a² + b² = c². We know a = 6 and c = 10, so 6² + b² = 10². Solving for b: b² = 10² - 6² = 100 - 36 = 64, so b = 8.'
+          };
+        }
+      }
+      return q;
+    });
+    
+    setMathQuestions(updatedQuestions);
+    toast({
+      title: "Question regenerated",
+      description: "The question has been successfully regenerated.",
+    });
+  };
+
+  // Setup form for editing question
+  const form = useForm({
+    defaultValues: {
+      question: '',
+      category: '',
+      difficulty: '',
+      option1: '',
+      option2: '',
+      option3: '',
+      option4: '',
+      correctAnswer: '',
+      explanation: ''
+    }
+  });
+
+  // Open edit dialog and set current question
+  const openEditDialog = (question: any) => {
+    setCurrentQuestion(question);
+    form.reset({
+      question: question.question,
+      category: question.category,
+      difficulty: question.difficulty,
+      option1: question.options[0],
+      option2: question.options[1],
+      option3: question.options[2],
+      option4: question.options[3],
+      correctAnswer: question.correctAnswer,
+      explanation: question.explanation
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  // Handle edit form submission
+  const handleEditSubmit = (data: any) => {
+    if (!currentQuestion) return;
+    
+    const updatedQuestion = {
+      ...currentQuestion,
+      question: data.question,
+      category: data.category,
+      difficulty: data.difficulty,
+      options: [data.option1, data.option2, data.option3, data.option4],
+      correctAnswer: data.correctAnswer,
+      explanation: data.explanation
+    };
+    
+    const updatedQuestions = mathQuestions.map(q => 
+      q.id === currentQuestion.id ? updatedQuestion : q
+    );
+    
+    setMathQuestions(updatedQuestions);
+    setIsEditDialogOpen(false);
+    toast({
+      title: "Question updated",
+      description: "The question has been successfully updated.",
+    });
+  };
+
+  // Add new question
+  const handleAddQuestion = () => {
+    const newQuestion = {
+      id: `${mathQuestions.length + 1}`,
+      category: 'algebra',
+      difficulty: 'medium',
+      question: 'What is the value of x in the equation 4x - 7 = 9?',
+      options: ['2', '4', '6', '8'],
+      correctAnswer: '4',
+      explanation: 'To solve for x, add 7 to both sides to get 4x = 16, then divide by 4 to get x = 4.'
+    };
+    
+    setMathQuestions([...mathQuestions, newQuestion]);
+    toast({
+      title: "Question added",
+      description: "A new question has been added to the list.",
+    });
+  };
   
   const getSatMathContent = () => {
     return (
@@ -54,7 +192,7 @@ const ExamSectionPage = () => {
                 <h3 className="text-xl font-semibold">SAT Math Questions</h3>
                 <p className="text-muted-foreground">Manage questions for the Math section of the SAT exam.</p>
               </div>
-              <Button className="bg-indigo hover:bg-indigo/90">
+              <Button className="bg-indigo hover:bg-indigo/90" onClick={handleAddQuestion}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add Question
               </Button>
@@ -73,12 +211,33 @@ const ExamSectionPage = () => {
                         </CardDescription>
                       </div>
                       <div className="flex space-x-1">
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" onClick={() => openEditDialog(question)}>
                           <Pencil className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon">
-                          <Trash2 className="h-4 w-4" />
+                        <Button variant="ghost" size="icon" onClick={() => handleRegenerateQuestion(question.id)}>
+                          <RefreshCw className="h-4 w-4" />
                         </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Question</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete this question? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDeleteQuestion(question.id)}>
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                     </div>
                   </CardHeader>
@@ -164,6 +323,85 @@ const ExamSectionPage = () => {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* Edit Question Dialog */}
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent className="sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Edit Question</DialogTitle>
+              <DialogDescription>
+                Modify the details of this question. Click save when you're done.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={form.handleSubmit(handleEditSubmit)}>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="col-span-2">
+                    <label className="text-sm font-medium">Category</label>
+                    <Input 
+                      {...form.register('category')}
+                      placeholder="e.g., algebra, geometry"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="text-sm font-medium">Difficulty</label>
+                    <Input 
+                      {...form.register('difficulty')}
+                      placeholder="e.g., easy, medium, hard"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Question</label>
+                  <Textarea 
+                    {...form.register('question')}
+                    placeholder="Enter the question text"
+                    className="min-h-[80px]"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium">Option A</label>
+                    <Input {...form.register('option1')} />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Option B</label>
+                    <Input {...form.register('option2')} />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Option C</label>
+                    <Input {...form.register('option3')} />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Option D</label>
+                    <Input {...form.register('option4')} />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Correct Answer</label>
+                  <Input 
+                    {...form.register('correctAnswer')}
+                    placeholder="Enter the correct answer"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Explanation</label>
+                  <Textarea 
+                    {...form.register('explanation')}
+                    placeholder="Explain why this is the correct answer"
+                    className="min-h-[80px]"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit">Save Changes</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   };
