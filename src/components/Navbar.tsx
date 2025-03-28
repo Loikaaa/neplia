@@ -20,20 +20,73 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const examTypes = [
+  {
+    name: "IELTS",
+    path: "/exams/ielts",
+    sections: [
+      { name: "Listening", path: "/practice/listening", icon: Headphones, description: "Improve your listening skills with our practice tests" },
+      { name: "Reading", path: "/practice/reading", icon: BookOpen, description: "Enhance your reading comprehension with timed exercises" },
+      { name: "Writing", path: "/practice/writing", icon: Edit, description: "Get AI-powered feedback on your writing tasks" },
+      { name: "Speaking", path: "/practice/speaking", icon: MessageSquare, description: "Practice your speaking skills with voice analysis tools" },
+      { name: "Mock Tests", path: "/practice/mock-test", icon: Trophy, description: "Take full-length IELTS mock tests under exam conditions" },
+    ]
+  },
+  {
+    name: "TOEFL",
+    path: "/exams/toefl",
+    sections: [
+      { name: "Listening", path: "/practice/listening?exam=toefl", icon: Headphones },
+      { name: "Reading", path: "/practice/reading?exam=toefl", icon: BookOpen },
+      { name: "Writing", path: "/practice/writing?exam=toefl", icon: Edit },
+      { name: "Speaking", path: "/practice/speaking?exam=toefl", icon: MessageSquare },
+    ]
+  },
+  {
+    name: "SAT",
+    path: "/exams/sat",
+    sections: [
+      { name: "Math", path: "/practice/sat/math", icon: BarChart3 },
+      { name: "English", path: "/practice/sat/english", icon: BookOpen },
+    ]
+  },
+  {
+    name: "GRE",
+    path: "/exams/gre",
+    sections: [
+      { name: "Verbal", path: "/practice/gre/verbal", icon: BookOpen },
+      { name: "Quantitative", path: "/practice/gre/quantitative", icon: BarChart3 },
+      { name: "Analytical Writing", path: "/practice/gre/analytical", icon: Edit },
+    ]
+  },
+  {
+    name: "GMAT",
+    path: "/exams/gmat",
+    sections: [
+      { name: "Verbal", path: "/practice/gmat/verbal", icon: BookOpen },
+      { name: "Quantitative", path: "/practice/gmat/quantitative", icon: BarChart3 },
+      { name: "Integrated Reasoning", path: "/practice/gmat/integrated", icon: BarChart3 },
+      { name: "Analytical Writing", path: "/practice/gmat/analytical", icon: Edit },
+    ]
+  },
+  {
+    name: "PTE",
+    path: "/exams/pte",
+    sections: [
+      { name: "Speaking & Writing", path: "/practice/speaking?exam=pte", icon: MessageSquare },
+      { name: "Reading", path: "/practice/reading?exam=pte", icon: BookOpen },
+      { name: "Listening", path: "/practice/listening?exam=pte", icon: Headphones },
+    ]
+  }
+];
+
 const navLinks = [
   { name: 'Home', path: '/' },
   { 
     name: 'Practice', 
     path: '/practice', 
     highlight: true,
-    submenu: [
-      { name: 'By Skills', path: '/practice', icon: BarChart3, description: 'Practice by individual skills - Listening, Reading, Writing, and Speaking' },
-      { name: 'Listening', path: '/practice/listening', icon: Headphones, description: 'Improve your listening skills with our practice tests' },
-      { name: 'Reading', path: '/practice/reading', icon: BookOpen, description: 'Enhance your reading comprehension with timed exercises' },
-      { name: 'Writing', path: '/practice/writing', icon: Edit, description: 'Get AI-powered feedback on your writing tasks' },
-      { name: 'Speaking', path: '/practice/speaking', icon: MessageSquare, description: 'Practice your speaking skills with voice analysis tools' },
-      { name: 'Mock Tests', path: '/practice/mock-test', icon: Trophy, description: 'Take full-length IELTS mock tests under exam conditions' },
-    ]
+    submenu: examTypes
   },
   { name: 'Resources', path: '/resources' },
   { name: 'Blog', path: '/blog' },
@@ -98,26 +151,40 @@ const Navbar = () => {
                           {link.name}
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                          <div className="w-[550px] p-4 md:grid md:grid-cols-2 gap-3">
-                            {link.submenu.map((sublink) => (
-                              <Link
-                                key={sublink.name}
-                                to={sublink.path}
-                                className={cn(
-                                  "block select-none space-y-1 rounded-md p-3 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors",
-                                  location.pathname === sublink.path && "bg-indigo-50 dark:bg-indigo-900/30"
-                                )}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <div className="w-8 h-8 flex items-center justify-center rounded-md bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300">
-                                    <sublink.icon className="h-4 w-4" />
-                                  </div>
-                                  <div className="text-sm font-medium">{sublink.name}</div>
-                                </div>
-                                <p className="line-clamp-2 text-xs text-muted-foreground">
-                                  {sublink.description}
-                                </p>
-                              </Link>
+                          <div className="grid w-[800px] grid-cols-3 gap-3 p-4">
+                            {link.submenu.map((examType) => (
+                              <div key={examType.name} className="space-y-3">
+                                <Link
+                                  to={examType.path}
+                                  className="block font-medium text-lg text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 mb-2"
+                                >
+                                  {examType.name}
+                                </Link>
+                                <ul className="space-y-2">
+                                  {examType.sections.map((section) => (
+                                    <li key={section.name}>
+                                      <Link
+                                        to={section.path}
+                                        className="block select-none space-y-1 rounded-md p-2 text-sm hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                                      >
+                                        <div className="flex items-center gap-2">
+                                          {section.icon && (
+                                            <div className="w-7 h-7 flex items-center justify-center rounded-md bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300">
+                                              <section.icon className="h-4 w-4" />
+                                            </div>
+                                          )}
+                                          <span>{section.name}</span>
+                                        </div>
+                                        {section.description && (
+                                          <p className="line-clamp-2 text-xs text-muted-foreground pl-9">
+                                            {section.description}
+                                          </p>
+                                        )}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
                             ))}
                           </div>
                         </NavigationMenuContent>
@@ -225,20 +292,30 @@ const Navbar = () => {
                     </DropdownMenuTrigger>
                     
                     <DropdownMenuContent className="w-full p-2 bg-gray-50 dark:bg-gray-800 rounded-md my-1">
-                      {link.submenu.map((sublink) => (
-                        <DropdownMenuItem key={sublink.name} asChild>
+                      {link.submenu.map((examType) => (
+                        <div key={examType.name} className="mb-4">
                           <Link
-                            to={sublink.path}
-                            className={cn(
-                              "flex items-center gap-2 py-3 px-2 text-gray-600 dark:text-gray-400 hover:text-indigo dark:hover:text-indigo-300 rounded-md transition-colors",
-                              location.pathname === sublink.path && "text-indigo dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30"
-                            )}
+                            to={examType.path}
+                            className="block font-medium text-indigo-600 dark:text-indigo-400 mb-2 px-2"
                             onClick={() => setMobileMenuOpen(false)}
                           >
-                            <sublink.icon className="h-4 w-4" />
-                            {sublink.name}
+                            {examType.name}
                           </Link>
-                        </DropdownMenuItem>
+                          <div className="pl-2 space-y-1">
+                            {examType.sections.map((section) => (
+                              <DropdownMenuItem key={section.name} asChild>
+                                <Link
+                                  to={section.path}
+                                  className="flex items-center gap-2 py-2 px-2 text-gray-600 dark:text-gray-400 hover:text-indigo dark:hover:text-indigo-300 rounded-md transition-colors"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  {section.icon && <section.icon className="h-4 w-4" />}
+                                  {section.name}
+                                </Link>
+                              </DropdownMenuItem>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
