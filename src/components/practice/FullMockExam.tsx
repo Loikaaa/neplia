@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -14,12 +13,14 @@ import {
   CheckCircle2,
   Clock,
   AlertTriangle,
-  ChevronRight
+  ChevronRight,
+  Calculator,
+  BookText
 } from 'lucide-react';
 import { mockTestData } from '@/data/mockTestData';
 
 interface FullMockExamProps {
-  examType?: 'academic' | 'general';
+  examType?: string;
   onComplete?: (scores: {
     listening: number;
     reading: number;
@@ -45,6 +46,17 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
   });
   const { toast } = useToast();
 
+  const isSatTest = examType?.includes('sat');
+  const isSpecializedTest = isSatTest || examType?.includes('gre') || examType?.includes('gmat');
+
+  useEffect(() => {
+    if (examType === 'sat-math') {
+      setCurrentSection('reading');
+    } else if (examType === 'sat-english') {
+      setCurrentSection('writing');
+    }
+  }, [examType]);
+
   const startExam = () => {
     setExamStarted(true);
     const listeningSection = mockTestData.sections.find(section => section.type === 'listening');
@@ -52,7 +64,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     
     toast({
       title: "Exam Started",
-      description: "Your IELTS mock exam has begun. Good luck!",
+      description: `Your ${examType ? examType.toUpperCase() : 'IELTS'} mock exam has begun. Good luck!`,
     });
   };
 
@@ -126,9 +138,8 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
   };
 
   const generateScore = (): number => {
-    // Generate a realistic IELTS band score
     const baseScore = 5 + Math.random() * 4;
-    return Math.round(baseScore * 2) / 2; // Round to nearest 0.5
+    return Math.round(baseScore * 2) / 2;
   };
 
   const completeExam = () => {
@@ -166,7 +177,6 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     if (currentQuestionIndex < currentSectionData.questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      // End of section questions
       if (currentSection === 'speaking') {
         completeExam();
       } else {
@@ -176,6 +186,30 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
         navigateToSection(nextSection as 'listening' | 'reading' | 'writing' | 'speaking');
       }
     }
+  };
+
+  const getSectionIcon = (sectionType: string) => {
+    if (isSatTest) {
+      if (sectionType === 'reading') return <Calculator className="h-5 w-5 text-indigo mt-0.5" />;
+      if (sectionType === 'writing') return <BookText className="h-5 w-5 text-indigo mt-0.5" />;
+    }
+
+    if (sectionType === 'listening') return <Headphones className="h-5 w-5 text-indigo mt-0.5" />;
+    if (sectionType === 'reading') return <BookOpen className="h-5 w-5 text-indigo mt-0.5" />;
+    if (sectionType === 'writing') return <Edit className="h-5 w-5 text-indigo mt-0.5" />;
+    if (sectionType === 'speaking') return <MessageSquare className="h-5 w-5 text-indigo mt-0.5" />;
+    
+    return <BookOpen className="h-5 w-5 text-indigo mt-0.5" />;
+  };
+
+  const getSectionTitle = (sectionType: string) => {
+    if (examType === 'sat-math' && sectionType === 'reading') return 'Math';
+    if (examType === 'sat-english' && sectionType === 'writing') return 'English';
+    if (isSatTest) {
+      if (sectionType === 'reading') return 'Math';
+      if (sectionType === 'writing') return 'English';
+    }
+    return sectionType.charAt(0).toUpperCase() + sectionType.slice(1);
   };
 
   const getCurrentSectionContent = () => {
@@ -272,9 +306,15 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
       {!examStarted ? (
         <Card>
           <CardHeader>
-            <CardTitle>IELTS {examType === 'academic' ? 'Academic' : 'General Training'} Mock Exam</CardTitle>
+            <CardTitle>
+              {examType ? 
+                examType.includes('sat') ? 
+                  `SAT ${examType.includes('math') ? 'Math' : 'English'} Mock Exam` : 
+                  `${examType.toUpperCase()} Mock Exam` 
+                : 'IELTS Academic Mock Exam'}
+            </CardTitle>
             <CardDescription>
-              This full mock exam simulates the real IELTS test environment with timed sections
+              This full mock exam simulates the real test environment with timed sections
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -282,20 +322,28 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
               <h3 className="font-medium text-lg mb-4">Exam Structure</h3>
               
               <div className="space-y-4">
-                {mockTestData.sections.map(section => (
-                  <div key={section.id} className="flex items-start space-x-3">
-                    {section.type === 'listening' && <Headphones className="h-5 w-5 text-indigo mt-0.5" />}
-                    {section.type === 'reading' && <BookOpen className="h-5 w-5 text-indigo mt-0.5" />}
-                    {section.type === 'writing' && <Edit className="h-5 w-5 text-indigo mt-0.5" />}
-                    {section.type === 'speaking' && <MessageSquare className="h-5 w-5 text-indigo mt-0.5" />}
-                    <div>
-                      <h4 className="font-medium">{section.title} ({section.duration} minutes)</h4>
-                      <p className="text-sm text-gray-500">
-                        {section.description}
-                      </p>
+                {mockTestData.sections.map(section => {
+                  if (examType === 'sat-math' && section.type !== 'reading') return null;
+                  if (examType === 'sat-english' && section.type !== 'writing') return null;
+                  
+                  return (
+                    <div key={section.id} className="flex items-start space-x-3">
+                      {getSectionIcon(section.type)}
+                      <div>
+                        <h4 className="font-medium">
+                          {getSectionTitle(section.type)} ({section.duration} minutes)
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          {examType && examType.includes('sat') 
+                            ? (section.type === 'reading' 
+                                ? 'Test your mathematical skills with problem-solving and advanced math.' 
+                                : 'Assess your reading, writing and language proficiency.')
+                            : section.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
             
@@ -324,10 +372,14 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                 <div className="flex justify-between items-center">
                   <div>
                     <h3 className="font-medium">
-                      IELTS {examType === 'academic' ? 'Academic' : 'General Training'} Mock Exam
+                      {examType ? 
+                        examType.includes('sat') ? 
+                          `SAT ${examType.includes('math') ? 'Math' : 'English'} Mock Exam` : 
+                          `${examType.toUpperCase()} Mock Exam` 
+                        : 'IELTS Academic Mock Exam'}
                     </h3>
                     <p className="text-sm text-gray-500">
-                      Current section: {currentSection.charAt(0).toUpperCase() + currentSection.slice(1)}
+                      Current section: {getSectionTitle(currentSection)}
                     </p>
                   </div>
                   <Badge variant="outline" className="flex items-center">
@@ -339,23 +391,25 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                 <Progress value={progress} className="h-2" />
                 
                 <div className="flex flex-wrap gap-2">
-                  <Badge 
-                    variant={currentSection === 'listening' ? 'default' : 'outline'}
-                    className="cursor-pointer"
-                    onClick={() => navigateToSection('listening')}
-                  >
-                    <Headphones className="h-3 w-3 mr-1" />
-                    Listening
-                    {progress >= 25 && <CheckCircle2 className="h-3 w-3 ml-1 text-green-500" />}
-                  </Badge>
+                  {!isSatTest && (
+                    <Badge 
+                      variant={currentSection === 'listening' ? 'default' : 'outline'}
+                      className="cursor-pointer"
+                      onClick={() => navigateToSection('listening')}
+                    >
+                      <Headphones className="h-3 w-3 mr-1" />
+                      Listening
+                      {progress >= 25 && <CheckCircle2 className="h-3 w-3 ml-1 text-green-500" />}
+                    </Badge>
+                  )}
                   
                   <Badge 
                     variant={currentSection === 'reading' ? 'default' : 'outline'}
                     className="cursor-pointer"
                     onClick={() => navigateToSection('reading')}
                   >
-                    <BookOpen className="h-3 w-3 mr-1" />
-                    Reading
+                    {isSatTest ? <Calculator className="h-3 w-3 mr-1" /> : <BookOpen className="h-3 w-3 mr-1" />}
+                    {isSatTest ? 'Math' : 'Reading'}
                     {progress >= 50 && <CheckCircle2 className="h-3 w-3 ml-1 text-green-500" />}
                   </Badge>
                   
@@ -364,20 +418,22 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                     className="cursor-pointer"
                     onClick={() => navigateToSection('writing')}
                   >
-                    <Edit className="h-3 w-3 mr-1" />
-                    Writing
+                    {isSatTest ? <BookText className="h-3 w-3 mr-1" /> : <Edit className="h-3 w-3 mr-1" />}
+                    {isSatTest ? 'English' : 'Writing'}
                     {progress >= 75 && <CheckCircle2 className="h-3 w-3 ml-1 text-green-500" />}
                   </Badge>
                   
-                  <Badge 
-                    variant={currentSection === 'speaking' ? 'default' : 'outline'}
-                    className="cursor-pointer"
-                    onClick={() => navigateToSection('speaking')}
-                  >
-                    <MessageSquare className="h-3 w-3 mr-1" />
-                    Speaking
-                    {progress >= 90 && <CheckCircle2 className="h-3 w-3 ml-1 text-green-500" />}
-                  </Badge>
+                  {!isSatTest && (
+                    <Badge 
+                      variant={currentSection === 'speaking' ? 'default' : 'outline'}
+                      className="cursor-pointer"
+                      onClick={() => navigateToSection('speaking')}
+                    >
+                      <MessageSquare className="h-3 w-3 mr-1" />
+                      Speaking
+                      {progress >= 90 && <CheckCircle2 className="h-3 w-3 ml-1 text-green-500" />}
+                    </Badge>
+                  )}
                 </div>
               </div>
             </CardContent>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import FullMockExam from '@/components/practice/FullMockExam';
@@ -25,7 +24,11 @@ interface TestHistory {
   sectionScores: SectionScore;
 }
 
-const MockTestPage: React.FC = () => {
+interface MockTestPageProps {
+  examType?: string;
+}
+
+const MockTestPage: React.FC<MockTestPageProps> = ({ examType }) => {
   const navigate = useNavigate();
   const [isCompleted, setIsCompleted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,12 +41,9 @@ const MockTestPage: React.FC = () => {
   const [testHistory, setTestHistory] = useState<TestHistory[]>([]);
   const { toast } = useToast();
   
-  // Simulate fetching test history from backend
   useEffect(() => {
     const fetchTestHistory = async () => {
       try {
-        // This would be a real API call in a production app
-        // For now, we'll simulate the API response
         await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
         
         const mockHistory: TestHistory[] = [
@@ -96,13 +96,11 @@ const MockTestPage: React.FC = () => {
   const handleMockTestComplete = (sectionScores: SectionScore) => {
     setIsLoading(true);
     
-    // Simulate sending data to backend
     setTimeout(() => {
       setScores(sectionScores);
       setIsCompleted(true);
       setIsLoading(false);
       
-      // Add the new test to history with the current date
       const newTest: TestHistory = {
         id: Date.now().toString(),
         date: new Date().toISOString().split('T')[0],
@@ -163,6 +161,15 @@ const MockTestPage: React.FC = () => {
     };
   };
   
+  const getPageTitle = (): string => {
+    if (examType) {
+      if (examType === 'sat-math') return 'SAT Math Practice Test';
+      if (examType === 'sat-english') return 'SAT English Practice Test';
+      return `${examType.toUpperCase()} Mock Test`;
+    }
+    return 'IELTS Mock Test';
+  };
+  
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
@@ -170,9 +177,9 @@ const MockTestPage: React.FC = () => {
           {!isCompleted ? (
             <>
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight">IELTS Mock Test</h1>
+                <h1 className="text-3xl font-bold tracking-tight">{getPageTitle()}</h1>
                 <p className="text-gray-500 dark:text-gray-400">
-                  Complete a full IELTS test under timed conditions to simulate the real exam experience.
+                  Complete a full {examType ? examType.toUpperCase() : 'IELTS'} test under timed conditions to simulate the real exam experience.
                 </p>
               </div>
               
@@ -182,7 +189,7 @@ const MockTestPage: React.FC = () => {
                   <p className="text-gray-600 dark:text-gray-400">Scoring your test...</p>
                 </div>
               ) : (
-                <FullMockExam onComplete={handleMockTestComplete} />
+                <FullMockExam onComplete={handleMockTestComplete} examType={examType} />
               )}
             </>
           ) : (
