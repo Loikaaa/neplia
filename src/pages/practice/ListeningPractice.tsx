@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
-import { ListeningTest } from '@/components/practice/listening/ListeningTest';
+import { ListeningTest, TestType, DifficultyLevel } from '@/components/practice/listening/ListeningTest';
 import { ListeningInstructions } from '@/components/practice/listening/ListeningInstructions';
 import ListeningHeader from '@/components/practice/listening/ListeningHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -16,10 +16,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Progress } from '@/components/ui/progress';
-
-// Define the test types and difficulty levels as proper TypeScript types
-type TestType = 'general' | 'academic' | 'practice';
-type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced';
 
 const testTypes = [
   {
@@ -118,7 +114,7 @@ const ListeningPractice = () => {
                     </label>
                     <Select 
                       value={selectedDifficulty} 
-                      onValueChange={setSelectedDifficulty}
+                      onValueChange={(value: DifficultyLevel) => setSelectedDifficulty(value)}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select difficulty" />
