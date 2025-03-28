@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Layout from '@/components/Layout';
 import CountrySelector from '@/components/selection/CountrySelector';
@@ -46,6 +46,12 @@ const examTypes = [
     name: 'Cambridge English',
     description: 'C1 Advanced & C2 Proficiency exams',
     icon: '🏛️'
+  },
+  {
+    id: 'oet',
+    name: 'OET',
+    description: 'Occupational English Test for healthcare professionals',
+    icon: '⚕️'
   }
 ];
 
@@ -54,7 +60,23 @@ const SelectionHome: React.FC = () => {
   const [selectedExam, setSelectedExam] = useState('');
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+
+  // Check for exam parameter in URL
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const examParam = queryParams.get('exam');
+    
+    if (examParam) {
+      const validExam = examTypes.find(exam => exam.id === examParam);
+      if (validExam) {
+        setSelectedExam(examParam);
+        // If we have an exam from URL, start at step 1 (country selection)
+        setStep(1);
+      }
+    }
+  }, [location]);
 
   // Check if we have saved preferences
   useEffect(() => {
@@ -65,10 +87,10 @@ const SelectionHome: React.FC = () => {
       setSelectedCountry(savedCountry);
     }
     
-    if (savedExam) {
+    if (savedExam && !selectedExam) {
       setSelectedExam(savedExam);
     }
-  }, []);
+  }, [selectedExam]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -112,6 +134,13 @@ const SelectionHome: React.FC = () => {
     navigate('/');
   };
 
+  // Get the current exam name for the page title
+  const getCurrentExamName = () => {
+    if (!selectedExam) return '';
+    const exam = examTypes.find(e => e.id === selectedExam);
+    return exam ? exam.name : '';
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800 pt-16 pb-12">
@@ -123,7 +152,7 @@ const SelectionHome: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              Personalize Your Learning Journey
+              {selectedExam ? `Prepare for ${getCurrentExamName()}` : 'Personalize Your Learning Journey'}
             </motion.h1>
             <motion.p 
               className="text-muted-foreground max-w-2xl mx-auto"
@@ -131,8 +160,9 @@ const SelectionHome: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Let's customize your experience to match your specific needs.
-              We'll tailor our resources and practice tests to your target exam.
+              {selectedExam 
+                ? `Let's customize your ${getCurrentExamName()} preparation based on your target country.`
+                : "Let's customize your experience to match your specific needs. We'll tailor our resources and practice tests to your target exam."}
             </motion.p>
           </div>
 

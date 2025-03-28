@@ -77,6 +77,7 @@ const UserDashboard = () => {
 
   // Get selected preferences
   const selectedExam = localStorage.getItem('selectedExam') || '';
+  const selectedCountry = localStorage.getItem('selectedCountry') || '';
   
   // Get exam-specific services based on selected exam
   const getExamSpecificServices = () => {
@@ -137,6 +138,30 @@ const UserDashboard = () => {
         color: "bg-teal text-white",
         link: "#progress"
       });
+    } else if (selectedExam === 'duolingo') {
+      baseServices.push({
+        icon: BarChart3,
+        title: "Duolingo Score Estimator",
+        description: "Get an estimate of your potential Duolingo English Test score",
+        color: "bg-teal text-white",
+        link: "#progress"
+      });
+    } else if (selectedExam === 'cambridge') {
+      baseServices.push({
+        icon: BarChart3,
+        title: "Cambridge Level Assessment",
+        description: "Assess your current CEFR level and track your progress",
+        color: "bg-teal text-white",
+        link: "#progress"
+      });
+    } else if (selectedExam === 'oet') {
+      baseServices.push({
+        icon: BarChart3,
+        title: "OET Grade Predictor",
+        description: "Predict your OET grade based on practice performance",
+        color: "bg-teal text-white",
+        link: "#progress"
+      });
     }
     
     // Add mock test for all exam types
@@ -160,9 +185,28 @@ const UserDashboard = () => {
       'pte': 'PTE Academic',
       'duolingo': 'Duolingo',
       'cambridge': 'Cambridge English',
+      'oet': 'OET',
     };
     
     return exams[id] || 'Mock';
+  };
+  
+  // Get country name
+  const getCountryName = (code: string): string => {
+    const countries: Record<string, string> = {
+      'us': 'United States',
+      'uk': 'United Kingdom',
+      'ca': 'Canada',
+      'au': 'Australia',
+      'nz': 'New Zealand',
+      'in': 'India',
+      'sg': 'Singapore',
+      'my': 'Malaysia',
+      'ph': 'Philippines',
+      'hk': 'Hong Kong',
+    };
+    
+    return countries[code] || 'Global';
   };
   
   // Get services based on selected exam
@@ -175,7 +219,11 @@ const UserDashboard = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome, {userName}</h1>
-              <p className="text-muted-foreground">Your personal IELTS preparation dashboard</p>
+              <p className="text-muted-foreground">
+                {selectedExam 
+                  ? `Your ${getExamName(selectedExam)} preparation dashboard ${selectedCountry ? `for ${getCountryName(selectedCountry)}` : ''}`
+                  : "Your personal exam preparation dashboard"}
+              </p>
             </div>
             
             {timerActive && (
@@ -312,7 +360,8 @@ const UserDashboard = () => {
                   <Crown className="mr-2 h-5 w-5 text-indigo" /> Premium Features
                 </h3>
                 <p className="text-muted-foreground max-w-md">
-                  Unlock advanced features with our premium plan for even better IELTS preparation
+                  Unlock advanced features with our premium plan for even better 
+                  {selectedExam ? ` ${getExamName(selectedExam)}` : ' exam'} preparation
                 </p>
               </div>
               <Button className="bg-indigo hover:bg-indigo/90" onClick={handleUpgradeClick}>
