@@ -22,11 +22,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import PaymentSection from '../payment/PaymentSection';
 
 const PremiumPlans = () => {
   const { toast } = useToast();
   const [showDialog, setShowDialog] = React.useState(false);
   const [selectedPlan, setSelectedPlan] = React.useState<string | null>(null);
+  const [showPayment, setShowPayment] = React.useState(false);
 
   const plans = [
     {
@@ -85,12 +87,17 @@ const PremiumPlans = () => {
 
   const handleConfirmUpgrade = () => {
     setShowDialog(false);
-    toast({
-      title: "Upgrade Initiated",
-      description: `Your upgrade to the ${selectedPlan} plan is being processed.`,
-      duration: 5000,
-    });
+    setShowPayment(true);
   };
+  
+  const handleBackToPlans = () => {
+    setShowPayment(false);
+    setSelectedPlan(null);
+  };
+
+  if (showPayment && selectedPlan) {
+    return <PaymentSection planId={selectedPlan} onBack={handleBackToPlans} />;
+  }
 
   return (
     <>
@@ -210,7 +217,7 @@ const PremiumPlans = () => {
               Cancel
             </Button>
             <Button className="bg-indigo hover:bg-indigo/90" onClick={handleConfirmUpgrade}>
-              Confirm Upgrade
+              Proceed to Payment
             </Button>
           </div>
         </DialogContent>

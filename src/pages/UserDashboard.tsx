@@ -1,19 +1,62 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Headphones, BookOpen, Edit, MessageSquare, BarChart3, Calendar, Crown, Clock, Award, PlusCircle } from 'lucide-react';
+import { Headphones, BookOpen, Edit, MessageSquare, BarChart3, Calendar, Crown, Clock, Award, PlusCircle, Timer } from 'lucide-react';
 import UserStats from '@/components/user/UserStats';
 import UserCourseProgress from '@/components/user/UserCourseProgress';
 import RecentActivity from '@/components/user/RecentActivity';
 import UpcomingTests from '@/components/user/UpcomingTests';
 import PremiumPlans from '@/components/user/PremiumPlans';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { mockTestData } from '@/data/mockTestData';
 
 const UserDashboard = () => {
   // Get user name from localStorage
   const userName = localStorage.getItem('userName') || 'User';
+  
+  // State for exam timer
+  const [timerActive, setTimerActive] = useState(false);
+  const [examTime, setExamTime] = useState(0);
+  const [examStartTime, setExamStartTime] = useState<Date | null>(null);
+  
+  // Calculate remaining time
+  const getRemainingTime = () => {
+    if (!examStartTime || !examTime) return '00:00:00';
+    
+    const now = new Date();
+    const elapsed = Math.floor((now.getTime() - examStartTime.getTime()) / 1000);
+    const remaining = Math.max(0, examTime * 60 - elapsed);
+    
+    const hours = Math.floor(remaining / 3600);
+    const minutes = Math.floor((remaining % 3600) / 60);
+    const seconds = remaining % 60;
+    
+    return [
+      hours.toString().padStart(2, '0'),
+      minutes.toString().padStart(2, '0'),
+      seconds.toString().padStart(2, '0')
+    ].join(':');
+  };
+  
+  // Start timer for selected exam
+  const startExamTimer = (sectionId: string) => {
+    const section = mockTestData.sections.find(s => s.id === sectionId);
+    if (section) {
+      setExamTime(section.duration);
+      setExamStartTime(new Date());
+      setTimerActive(true);
+    }
+  };
+  
+  // Reset timer
+  const resetTimer = () => {
+    setTimerActive(false);
+    setExamStartTime(null);
+  };
 
   const services = [
     {
@@ -64,8 +107,72 @@ const UserDashboard = () => {
     <Layout>
       <div className="bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800 pt-12 pb-6">
         <div className="container px-4 md:px-6">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome, {userName}</h1>
-          <p className="text-muted-foreground mb-8">Your personal IELTS preparation dashboard</p>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome, {userName}</h1>
+              <p className="text-muted-foreground">Your personal IELTS preparation dashboard</p>
+            </div>
+            
+            {timerActive && (
+              <div className="mt-4 md:mt-0 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg px-4 py-2 flex items-center">
+                <Timer className="h-5 w-5 text-indigo mr-2" />
+                <div>
+                  <div className="text-sm text-muted-foreground">Exam Timer</div>
+                  <div className="text-xl font-mono font-semibold">{getRemainingTime()}</div>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="ml-3 text-red-500 hover:text-red-700 hover:bg-red-100"
+                  onClick={resetTimer}
+                >
+                  Reset
+                </Button>
+              </div>
+            )}
+            
+            {!timerActive && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button className="mt-4 md:mt-0 bg-indigo hover:bg-indigo/90">
+                    <Timer className="mr-2 h-4 w-4" />
+                    Start Exam Timer
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Select Exam Section</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Choose which exam section you want to practice with a timer.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div className="grid gap-4 py-4">
+                    {mockTestData.sections.map((section) => (
+                      <Button
+                        key={section.id}
+                        variant="outline"
+                        className="w-full justify-start text-left"
+                        onClick={() => {
+                          startExamTimer(section.id);
+                          document.querySelector('[data-radix-alert-dialog-close-button]')?.click();
+                        }}
+                      >
+                        <div className="flex flex-col items-start">
+                          <span className="font-medium">{section.title}</span>
+                          <span className="text-xs text-muted-foreground flex items-center mt-1">
+                            <Clock className="h-3 w-3 mr-1" /> {section.duration} minutes
+                          </span>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+          </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
             <div className="lg:col-span-2">
