@@ -3,13 +3,17 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Mic, MicOff, Play, Pause, SkipForward, Save, CheckCircle } from 'lucide-react';
+import { Mic, MicOff, Play, Pause, SkipForward, Save, CheckCircle, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { speakingTaskData } from '@/data/speakingTaskData';
 import { useToast } from "@/hooks/use-toast";
-import { SpeakingResponse } from '@/types/speaking';
+import { SpeakingResponse, SpeakingTask } from '@/types/speaking';
 
-export const SpeakingTest = () => {
+interface SpeakingTestProps {
+  task: SpeakingTask;
+  onFinish: () => void;
+}
+
+export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [isPreparing, setIsPreparing] = useState(false);
@@ -27,7 +31,7 @@ export const SpeakingTest = () => {
   const timerIntervalRef = useRef<number | null>(null);
   const { toast } = useToast();
   
-  const currentQuestion = speakingTaskData.questions[currentQuestionIndex];
+  const currentQuestion = task.questions[currentQuestionIndex];
   
   // Set up timer when question changes
   useEffect(() => {
@@ -190,7 +194,7 @@ export const SpeakingTest = () => {
     }
     
     // Move to next question or finish test
-    if (currentQuestionIndex < speakingTaskData.questions.length - 1) {
+    if (currentQuestionIndex < task.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setTestCompleted(true);
@@ -269,7 +273,7 @@ export const SpeakingTest = () => {
                 </div>
                 <div className="text-right">
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Question {currentQuestionIndex + 1} of {speakingTaskData.questions.length}
+                    Question {currentQuestionIndex + 1} of {task.questions.length}
                   </span>
                 </div>
               </div>
@@ -367,7 +371,7 @@ export const SpeakingTest = () => {
                   onClick={nextQuestion}
                   disabled={isPreparing && !currentQuestion.followUp}
                 >
-                  {currentQuestionIndex < speakingTaskData.questions.length - 1 ? (
+                  {currentQuestionIndex < task.questions.length - 1 ? (
                     <><SkipForward className="h-4 w-4 mr-2" /> Next Question</>
                   ) : (
                     "Finish Test"
@@ -410,7 +414,7 @@ export const SpeakingTest = () => {
               <h4 className="font-medium">Your Recordings</h4>
               {Object.keys(recordedAudios).length > 0 ? (
                 <div className="space-y-4">
-                  {speakingTaskData.questions.map((question, index) => (
+                  {task.questions.map((question, index) => (
                     recordedAudios[question.id] && (
                       <div key={index} className="bg-white dark:bg-gray-800 p-3 rounded-md">
                         <div className="mb-2 font-medium">Question {index + 1}</div>
@@ -461,12 +465,22 @@ export const SpeakingTest = () => {
                   </Button>
                 </>
               ) : (
-                <div className="w-full bg-green-100 dark:bg-green-900/30 p-4 rounded-md text-center">
-                  <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400 mx-auto mb-2" />
-                  <h4 className="text-lg font-medium text-green-700 dark:text-green-300">Test Submitted Successfully</h4>
-                  <p className="text-green-600 dark:text-green-400 mt-1">
-                    Your recordings have been submitted for review. You will be notified when feedback is available.
-                  </p>
+                <div className="w-full">
+                  <div className="bg-green-100 dark:bg-green-900/30 p-4 rounded-md text-center mb-4">
+                    <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400 mx-auto mb-2" />
+                    <h4 className="text-lg font-medium text-green-700 dark:text-green-300">Test Submitted Successfully</h4>
+                    <p className="text-green-600 dark:text-green-400 mt-1">
+                      Your recordings have been submitted for review. You will be notified when feedback is available.
+                    </p>
+                  </div>
+                  
+                  <Button 
+                    onClick={onFinish}
+                    className="w-full"
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Categories
+                  </Button>
                 </div>
               )}
             </div>

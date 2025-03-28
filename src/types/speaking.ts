@@ -7,6 +7,7 @@ export interface SpeakingQuestion {
   preparation?: number; // in seconds for Part 2
   notes?: string;
   followUp?: string[];
+  category?: string; // Added category field
 }
 
 export interface SpeakingTask {
@@ -14,6 +15,7 @@ export interface SpeakingTask {
   title: string;
   description: string;
   questions: SpeakingQuestion[];
+  category: string; // Added category field
 }
 
 export interface SpeakingResponse {
@@ -41,3 +43,16 @@ export interface SpeakingSubmission {
   reviewedAt?: Date;
   reviewedBy?: string;
 }
+
+// Categories for speaking practice
+export type SpeakingCategory = 
+  | 'family' 
+  | 'work' 
+  | 'education' 
+  | 'hobbies' 
+  | 'hometown' 
+  | 'travel' 
+  | 'technology' 
+  | 'environment'
+  | 'health'
+  | 'food';

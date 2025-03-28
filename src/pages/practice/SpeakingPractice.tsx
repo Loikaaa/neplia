@@ -4,9 +4,12 @@ import Layout from '@/components/Layout';
 import SpeakingHeader from '@/components/practice/speaking/SpeakingHeader';
 import { SpeakingInstructions } from '@/components/practice/speaking/SpeakingInstructions';
 import { SpeakingTest } from '@/components/practice/speaking/SpeakingTest';
+import { SpeakingCategorySelector } from '@/components/practice/speaking/SpeakingCategorySelector';
+import { SpeakingTask } from '@/types/speaking';
 
 const SpeakingPractice = () => {
   const [testStarted, setTestStarted] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<SpeakingTask | null>(null);
   
   return (
     <Layout>
@@ -14,9 +17,22 @@ const SpeakingPractice = () => {
         <SpeakingHeader />
         
         {!testStarted ? (
-          <SpeakingInstructions onStart={() => setTestStarted(true)} />
+          <>
+            {!selectedTask ? (
+              <SpeakingCategorySelector onSelectTask={(task) => setSelectedTask(task)} />
+            ) : (
+              <SpeakingInstructions 
+                task={selectedTask}
+                onStart={() => setTestStarted(true)} 
+                onBack={() => setSelectedTask(null)}
+              />
+            )}
+          </>
         ) : (
-          <SpeakingTest />
+          <SpeakingTest task={selectedTask!} onFinish={() => {
+            setTestStarted(false);
+            setSelectedTask(null);
+          }} />
         )}
       </div>
     </Layout>
