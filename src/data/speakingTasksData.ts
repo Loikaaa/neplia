@@ -90,7 +90,7 @@ export const speakingTasksData: SpeakingTask[] = [
       {
         id: 'work-q4',
         part: 3,
-        text: 'Do you think it's better to have a job that pays well or one that you enjoy?',
+        text: "Do you think it's better to have a job that pays well or one that you enjoy?",
         duration: 60,
         category: 'work'
       },
@@ -227,7 +227,7 @@ export const speakingTasksData: SpeakingTask[] = [
       {
         id: 'travel-q2',
         part: 1,
-        text: 'What's the most interesting place you've visited?',
+        text: "What's the most interesting place you've visited?",
         duration: 60,
         category: 'travel'
       },
