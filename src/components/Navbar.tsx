@@ -19,6 +19,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
 
 const examTypes = [
   {
@@ -86,7 +88,7 @@ const navLinks = [
     name: 'Practice', 
     path: '/practice', 
     highlight: true,
-    submenu: examTypes
+    submenu: true
   },
   { name: 'Resources', path: '/resources' },
   { name: 'Blog', path: '/blog' },
@@ -97,6 +99,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [openExamType, setOpenExamType] = useState<string | null>(null);
   const location = useLocation();
   
   const isLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
@@ -138,7 +141,7 @@ const Navbar = () => {
               <NavigationMenuList className="gap-1">
                 {navLinks.map((link) => (
                   <NavigationMenuItem key={link.name}>
-                    {link.submenu ? (
+                    {link.name === 'Practice' ? (
                       <>
                         <NavigationMenuTrigger 
                           className={cn(
@@ -151,41 +154,37 @@ const Navbar = () => {
                           {link.name}
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                          <div className="grid w-[800px] grid-cols-3 gap-3 p-4">
-                            {link.submenu.map((examType) => (
-                              <div key={examType.name} className="space-y-3">
-                                <Link
-                                  to={examType.path}
-                                  className="block font-medium text-lg text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 mb-2"
-                                >
-                                  {examType.name}
-                                </Link>
-                                <ul className="space-y-2">
-                                  {examType.sections.map((section) => (
-                                    <li key={section.name}>
-                                      <Link
-                                        to={section.path}
-                                        className="block select-none space-y-1 rounded-md p-2 text-sm hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
-                                      >
-                                        <div className="flex items-center gap-2">
-                                          {section.icon && (
-                                            <div className="w-7 h-7 flex items-center justify-center rounded-md bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300">
-                                              <section.icon className="h-4 w-4" />
-                                            </div>
-                                          )}
-                                          <span>{section.name}</span>
-                                        </div>
-                                        {section.description && (
-                                          <p className="line-clamp-2 text-xs text-muted-foreground pl-9">
-                                            {section.description}
-                                          </p>
-                                        )}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            ))}
+                          <div className="w-[220px] p-4">
+                            <ul className="space-y-2">
+                              {examTypes.map((examType) => (
+                                <li key={examType.name} className="rounded-md transition-colors hover:bg-indigo-50 dark:hover:bg-indigo-900/30">
+                                  <NavigationMenuLink asChild>
+                                    <Link
+                                      to={examType.path}
+                                      className="flex items-center justify-between p-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300"
+                                    >
+                                      {examType.name}
+                                      <ChevronDown className="h-4 w-4" />
+                                    </Link>
+                                  </NavigationMenuLink>
+                                  <div className="absolute left-full top-0 z-10 mt-0 w-[280px] rounded-md border border-gray-200 bg-white p-2 shadow-md dark:border-gray-800 dark:bg-gray-900 hidden group-hover:block">
+                                    <ul className="space-y-1">
+                                      {examType.sections.map((section) => (
+                                        <li key={section.name}>
+                                          <Link
+                                            to={section.path}
+                                            className="flex items-center gap-2 rounded-md p-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo dark:text-gray-200 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-300"
+                                          >
+                                            {section.icon && <section.icon className="h-4 w-4" />}
+                                            <span>{section.name}</span>
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
                           </div>
                         </NavigationMenuContent>
                       </>
@@ -272,12 +271,14 @@ const Navbar = () => {
           <nav className="flex-1 space-y-6">
             {navLinks.map((link) => (
               <div key={link.name} className="py-2">
-                {link.submenu ? (
-                  <DropdownMenu open={openSubmenu === link.name} onOpenChange={() => setOpenSubmenu(openSubmenu === link.name ? null : link.name)}>
-                    <DropdownMenuTrigger asChild>
-                      <button
+                {link.name === 'Practice' ? (
+                  <Collapsible open={openSubmenu === link.name}>
+                    <CollapsibleTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setOpenSubmenu(openSubmenu === link.name ? null : link.name)}
                         className={cn(
-                          "flex items-center justify-between w-full text-lg font-medium",
+                          "flex w-full items-center justify-between p-2 text-lg font-medium",
                           link.highlight 
                             ? "text-indigo-600 dark:text-indigo-300 font-semibold" 
                             : "text-gray-700 dark:text-gray-200"
@@ -288,37 +289,45 @@ const Navbar = () => {
                           "h-5 w-5 transition-transform duration-200",
                           openSubmenu === link.name ? "rotate-180" : ""
                         )} />
-                      </button>
-                    </DropdownMenuTrigger>
-                    
-                    <DropdownMenuContent className="w-full p-2 bg-gray-50 dark:bg-gray-800 rounded-md my-1">
-                      {link.submenu.map((examType) => (
-                        <div key={examType.name} className="mb-4">
-                          <Link
-                            to={examType.path}
-                            className="block font-medium text-indigo-600 dark:text-indigo-400 mb-2 px-2"
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            {examType.name}
-                          </Link>
-                          <div className="pl-2 space-y-1">
+                      </Button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pl-2 space-y-2 mt-2">
+                      {examTypes.map((examType) => (
+                        <Collapsible key={examType.name} open={openExamType === examType.name}>
+                          <CollapsibleTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              onClick={() => setOpenExamType(openExamType === examType.name ? null : examType.name)}
+                              className="flex w-full items-center justify-between p-2 text-md font-medium text-indigo-600 dark:text-indigo-400"
+                            >
+                              {examType.name}
+                              <ChevronDown className={cn(
+                                "h-4 w-4 transition-transform duration-200",
+                                openExamType === examType.name ? "rotate-180" : ""
+                              )} />
+                            </Button>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="pl-4 space-y-1 mt-1">
                             {examType.sections.map((section) => (
-                              <DropdownMenuItem key={section.name} asChild>
-                                <Link
-                                  to={section.path}
-                                  className="flex items-center gap-2 py-2 px-2 text-gray-600 dark:text-gray-400 hover:text-indigo dark:hover:text-indigo-300 rounded-md transition-colors"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                >
-                                  {section.icon && <section.icon className="h-4 w-4" />}
-                                  {section.name}
-                                </Link>
-                              </DropdownMenuItem>
+                              <Link
+                                key={section.name}
+                                to={section.path}
+                                className="flex items-center gap-2 py-2 px-2 text-gray-600 dark:text-gray-400 hover:text-indigo dark:hover:text-indigo-300 rounded-md transition-colors"
+                                onClick={() => {
+                                  setMobileMenuOpen(false);
+                                  setOpenSubmenu(null);
+                                  setOpenExamType(null);
+                                }}
+                              >
+                                {section.icon && <section.icon className="h-4 w-4" />}
+                                {section.name}
+                              </Link>
                             ))}
-                          </div>
-                        </div>
+                          </CollapsibleContent>
+                        </Collapsible>
                       ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    </CollapsibleContent>
+                  </Collapsible>
                 ) : (
                   <Link
                     to={link.path}
