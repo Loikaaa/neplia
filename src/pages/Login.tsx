@@ -87,9 +87,9 @@ const Login = () => {
           description: "Welcome to your IELTS preparation dashboard",
         });
         
+        localStorage.setItem('demoUserLoggedIn', 'true');
         localStorage.setItem('userEmail', 'demo@user.com');
         localStorage.setItem('userName', 'Demo User');
-        localStorage.setItem('demoUserLoggedIn', 'true');
         
         if (data.rememberMe) {
           localStorage.setItem('rememberUser', 'true');
@@ -166,11 +166,17 @@ const Login = () => {
     
     // Check for remembered user
     const rememberedUser = localStorage.getItem('rememberUser');
+    const demoUserLoggedIn = localStorage.getItem('demoUserLoggedIn');
     const savedEmail = localStorage.getItem('userEmail');
     
     if (rememberedUser === 'true' && savedEmail) {
       form.setValue('email', savedEmail);
       form.setValue('rememberMe', true);
+      
+      // If demo user is remembered and we're on login page, redirect to home
+      if (demoUserLoggedIn === 'true' && location.pathname === '/login') {
+        navigate('/');
+      }
     }
   }, [form, navigate, location.pathname]);
 

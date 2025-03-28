@@ -33,8 +33,8 @@ import ExamSectionPage from "./pages/admin/ExamSectionPage";
 import SpeakingReviewPage from "./pages/admin/SpeakingReviewPage";
 import { DemoAdminLogin } from "./components/admin/DemoAdminLogin";
 
-// Protected route component
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+// Protected route component for Admin
+const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   const isLoggedIn = sessionStorage.getItem('demoAdminLoggedIn') === 'true';
   const rememberedAdmin = localStorage.getItem('rememberAdminLogin') === 'true';
   const adminUsername = localStorage.getItem('adminUsername') === 'admin';
@@ -60,6 +60,10 @@ const queryClient = new QueryClient();
 
 // Define App as a proper React functional component with React.FC type
 const App: React.FC = () => {
+  // Check if user is logged in
+  const isDemoUserLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
+  const rememberedUser = localStorage.getItem('rememberUser') === 'true';
+  
   return (
     <QueryClientProvider client={queryClient}>
       <React.StrictMode>
@@ -91,14 +95,14 @@ const App: React.FC = () => {
               <Route path="/admin/login" element={<DemoAdminLogin />} />
               
               {/* Protected admin routes */}
-              <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/admin/blog-posts" element={<ProtectedRoute><BlogPostCMS /></ProtectedRoute>} />
-              <Route path="/admin/users" element={<ProtectedRoute><UsersCMS /></ProtectedRoute>} />
-              <Route path="/admin/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+              <Route path="/admin" element={<ProtectedAdminRoute><Dashboard /></ProtectedAdminRoute>} />
+              <Route path="/admin/blog-posts" element={<ProtectedAdminRoute><BlogPostCMS /></ProtectedAdminRoute>} />
+              <Route path="/admin/users" element={<ProtectedAdminRoute><UsersCMS /></ProtectedAdminRoute>} />
+              <Route path="/admin/settings" element={<ProtectedAdminRoute><Settings /></ProtectedAdminRoute>} />
               
               {/* Exam section routes */}
-              <Route path="/admin/exams/:examType/:sectionType" element={<ProtectedRoute><ExamSectionPage /></ProtectedRoute>} />
-              <Route path="/admin/speaking-reviews" element={<ProtectedRoute><SpeakingReviewPage /></ProtectedRoute>} />
+              <Route path="/admin/exams/:examType/:sectionType" element={<ProtectedAdminRoute><ExamSectionPage /></ProtectedAdminRoute>} />
+              <Route path="/admin/speaking-reviews" element={<ProtectedAdminRoute><SpeakingReviewPage /></ProtectedAdminRoute>} />
               
               {/* 404 route */}
               <Route path="*" element={<NotFound />} />
