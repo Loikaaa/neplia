@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -39,11 +40,40 @@ import {
 } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+// Schema for settings form
+const settingsFormSchema = z.object({
+  timeLimit: z.string(),
+  passingScore: z.string(),
+  calculatorPolicy: z.enum(['allowed', 'partial', 'none']),
+  instructions: z.string(),
+  randomize: z.boolean(),
+  immediateFeedback: z.boolean(),
+  allowReview: z.boolean()
+});
+
+// Schema for edit question form
+const questionFormSchema = z.object({
+  question: z.string().min(1, "Question is required"),
+  category: z.string().min(1, "Category is required"),
+  difficulty: z.enum(["easy", "medium", "hard"]),
+  option1: z.string().min(1, "Option A is required"),
+  option2: z.string().min(1, "Option B is required"),
+  option3: z.string().min(1, "Option C is required"),
+  option4: z.string().min(1, "Option D is required"),
+  correctAnswer: z.string().min(1, "Correct answer is required"),
+  explanation: z.string().min(1, "Explanation is required")
+});
+
+type SettingsFormValues = z.infer<typeof settingsFormSchema>;
+type QuestionFormValues = z.infer<typeof questionFormSchema>;
 
 const ExamSectionPage = () => {
   const { examType, sectionType } = useParams<{ examType: string; sectionType: string }>();
@@ -158,11 +188,12 @@ const ExamSectionPage = () => {
   };
 
   // Setup form for editing question
-  const form = useForm({
+  const form = useForm<QuestionFormValues>({
+    resolver: zodResolver(questionFormSchema),
     defaultValues: {
       question: '',
       category: '',
-      difficulty: '',
+      difficulty: 'medium',
       option1: '',
       option2: '',
       option3: '',
@@ -173,7 +204,8 @@ const ExamSectionPage = () => {
   });
 
   // Add form for new questions
-  const addForm = useForm({
+  const addForm = useForm<QuestionFormValues>({
+    resolver: zodResolver(questionFormSchema),
     defaultValues: {
       question: '',
       category: 'algebra',
@@ -188,7 +220,8 @@ const ExamSectionPage = () => {
   });
 
   // Setup form for settings tab
-  const settingsForm = useForm({
+  const settingsForm = useForm<SettingsFormValues>({
+    resolver: zodResolver(settingsFormSchema),
     defaultValues: {
       timeLimit: '65',
       passingScore: '70',
@@ -218,7 +251,7 @@ const ExamSectionPage = () => {
   };
 
   // Handle edit form submission
-  const handleEditSubmit = (data: any) => {
+  const handleEditSubmit = (data: QuestionFormValues) => {
     if (!currentQuestion) return;
     
     const updatedQuestion = {
@@ -244,7 +277,7 @@ const ExamSectionPage = () => {
   };
 
   // Add new question
-  const handleAddQuestion = (data: any) => {
+  const handleAddQuestion = (data: QuestionFormValues) => {
     const newQuestion = {
       id: `${mathQuestions.length + 1}`,
       category: data.category,
@@ -542,7 +575,13 @@ const ExamSectionPage = () => {
                   
                   <div className="md:col-span-2">
                     <Form {...settingsForm}>
-                      <div className="space-y-4">
+                      <form onSubmit={settingsForm.handleSubmit((data) => {
+                        console.log(data);
+                        toast({
+                          title: "Settings saved",
+                          description: "Your changes have been saved successfully.",
+                        });
+                      })} className="space-y-4">
                         <FormField
                           control={settingsForm.control}
                           name="timeLimit"
@@ -578,10 +617,11 @@ const ExamSectionPage = () => {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Calculator Policy</FormLabel>
-                              <div className="space-y-2 pt-1">
+                              <FormControl>
                                 <RadioGroup 
                                   value={field.value}
                                   onValueChange={field.onChange}
+                                  className="space-y-2 pt-1"
                                 >
                                   <div className="flex items-center space-x-2">
                                     <RadioGroupItem value="allowed" id="calculator-allowed" />
@@ -596,7 +636,7 @@ const ExamSectionPage = () => {
                                     <label htmlFor="calculator-none">Not allowed</label>
                                   </div>
                                 </RadioGroup>
-                              </div>
+                              </FormControl>
                             </FormItem>
                           )}
                         />
@@ -679,23 +719,15 @@ const ExamSectionPage = () => {
                             </FormItem>
                           )}
                         />
-                      </div>
+                        
+                        <div className="mt-6 flex justify-end">
+                          <Button type="submit">
+                            <Save className="h-4 w-4 mr-2" />
+                            Save Settings
+                          </Button>
+                        </div>
+                      </form>
                     </Form>
-                    
-                    <div className="mt-6 flex justify-end">
-                      <Button onClick={() => settingsForm.handleSubmit(
-                        (data) => {
-                          console.log(data);
-                          toast({
-                            title: "Settings saved",
-                            description: "Your changes have been saved successfully.",
-                          });
-                        }
-                      )()}>
-                        <Save className="h-4 w-4 mr-2" />
-                        Save Settings
-                      </Button>
-                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -712,92 +744,166 @@ const ExamSectionPage = () => {
                 Modify the details of this question. Click save when you're done.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={form.handleSubmit(handleEditSubmit)}>
-              <div className="grid gap-4 py-4">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleEditSubmit)} className="space-y-4">
                 <div className="grid grid-cols-4 gap-4">
                   <div className="col-span-2">
-                    <label className="text-sm font-medium">Category</label>
-                    <Input 
-                      {...form.register('category')}
-                      placeholder="e.g., algebra, geometry"
+                    <FormField
+                      control={form.control}
+                      name="category"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Category</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="e.g., algebra, geometry" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
                   </div>
                   <div className="col-span-2">
-                    <label className="text-sm font-medium">Difficulty</label>
-                    <Select 
-                      defaultValue={form.getValues("difficulty")}
-                      onValueChange={(value) => form.setValue("difficulty", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select difficulty" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="easy">Easy</SelectItem>
-                        <SelectItem value="medium">Medium</SelectItem>
-                        <SelectItem value="hard">Hard</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <FormField
+                      control={form.control}
+                      name="difficulty"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Difficulty</FormLabel>
+                          <Select 
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select difficulty" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="easy">Easy</SelectItem>
+                              <SelectItem value="medium">Medium</SelectItem>
+                              <SelectItem value="hard">Hard</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium">Question</label>
-                  <Textarea 
-                    {...form.register('question')}
-                    placeholder="Enter the question text"
-                    className="min-h-[80px]"
-                  />
-                </div>
+                
+                <FormField
+                  control={form.control}
+                  name="question"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Question</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          {...field}
+                          placeholder="Enter the question text"
+                          className="min-h-[80px]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium">Option A</label>
-                    <Input {...form.register('option1')} />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Option B</label>
-                    <Input {...form.register('option2')} />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Option C</label>
-                    <Input {...form.register('option3')} />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Option D</label>
-                    <Input {...form.register('option4')} />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Correct Answer</label>
-                  <Select 
-                    defaultValue={form.getValues("correctAnswer")}
-                    onValueChange={(value) => form.setValue("correctAnswer", value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select correct answer" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={form.getValues("option1")}>{form.getValues("option1")}</SelectItem>
-                      <SelectItem value={form.getValues("option2")}>{form.getValues("option2")}</SelectItem>
-                      <SelectItem value={form.getValues("option3")}>{form.getValues("option3")}</SelectItem>
-                      <SelectItem value={form.getValues("option4")}>{form.getValues("option4")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Explanation</label>
-                  <Textarea 
-                    {...form.register('explanation')}
-                    placeholder="Explain why this is the correct answer"
-                    className="min-h-[80px]"
+                  <FormField
+                    control={form.control}
+                    name="option1"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Option A</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="option2"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Option B</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="option3"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Option C</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="option4"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Option D</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
-              </div>
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit">Save Changes</Button>
-              </DialogFooter>
-            </form>
+                
+                <FormField
+                  control={form.control}
+                  name="correctAnswer"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Correct Answer</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="Enter the correct answer (must match one of the options exactly)" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="explanation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Explanation</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          {...field}
+                          placeholder="Explain why this is the correct answer"
+                          className="min-h-[80px]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">Save Changes</Button>
+                </DialogFooter>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
 
@@ -810,93 +916,183 @@ const ExamSectionPage = () => {
                 Create a new SAT Math question. Fill in all the fields below.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={addForm.handleSubmit(handleAddQuestion)}>
-              <div className="grid gap-4 py-4">
+            <Form {...addForm}>
+              <form onSubmit={addForm.handleSubmit(handleAddQuestion)} className="space-y-4">
                 <div className="grid grid-cols-4 gap-4">
                   <div className="col-span-2">
-                    <label className="text-sm font-medium">Category</label>
-                    <Select 
-                      defaultValue={addForm.getValues("category")}
-                      onValueChange={(value) => addForm.setValue("category", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="algebra">Algebra</SelectItem>
-                        <SelectItem value="geometry">Geometry</SelectItem>
-                        <SelectItem value="statistics">Statistics</SelectItem>
-                        <SelectItem value="calculus">Calculus</SelectItem>
-                        <SelectItem value="probability">Probability</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <FormField
+                      control={addForm.control}
+                      name="category"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Category</FormLabel>
+                          <Select 
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select category" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="algebra">Algebra</SelectItem>
+                              <SelectItem value="geometry">Geometry</SelectItem>
+                              <SelectItem value="statistics">Statistics</SelectItem>
+                              <SelectItem value="calculus">Calculus</SelectItem>
+                              <SelectItem value="probability">Probability</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                   <div className="col-span-2">
-                    <label className="text-sm font-medium">Difficulty</label>
-                    <Select 
-                      defaultValue={addForm.getValues("difficulty")}
-                      onValueChange={(value) => addForm.setValue("difficulty", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select difficulty" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="easy">Easy</SelectItem>
-                        <SelectItem value="medium">Medium</SelectItem>
-                        <SelectItem value="hard">Hard</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <FormField
+                      control={addForm.control}
+                      name="difficulty"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Difficulty</FormLabel>
+                          <Select 
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select difficulty" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="easy">Easy</SelectItem>
+                              <SelectItem value="medium">Medium</SelectItem>
+                              <SelectItem value="hard">Hard</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium">Question</label>
-                  <Textarea 
-                    {...addForm.register('question')}
-                    placeholder="Enter the question text"
-                    className="min-h-[80px]"
-                  />
-                </div>
+                
+                <FormField
+                  control={addForm.control}
+                  name="question"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Question</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          {...field}
+                          placeholder="Enter the question text"
+                          className="min-h-[80px]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium">Option A</label>
-                    <Input {...addForm.register('option1')} placeholder="First option" />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Option B</label>
-                    <Input {...addForm.register('option2')} placeholder="Second option" />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Option C</label>
-                    <Input {...addForm.register('option3')} placeholder="Third option" />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Option D</label>
-                    <Input {...addForm.register('option4')} placeholder="Fourth option" />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Correct Answer</label>
-                  <Input 
-                    {...addForm.register('correctAnswer')}
-                    placeholder="Enter the correct answer (must match one of the options exactly)"
+                  <FormField
+                    control={addForm.control}
+                    name="option1"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Option A</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="First option" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={addForm.control}
+                    name="option2"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Option B</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Second option" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={addForm.control}
+                    name="option3"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Option C</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Third option" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={addForm.control}
+                    name="option4"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Option D</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Fourth option" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
-                <div>
-                  <label className="text-sm font-medium">Explanation</label>
-                  <Textarea 
-                    {...addForm.register('explanation')}
-                    placeholder="Explain why this is the correct answer"
-                    className="min-h-[80px]"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit">Add Question</Button>
-              </DialogFooter>
-            </form>
+                
+                <FormField
+                  control={addForm.control}
+                  name="correctAnswer"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Correct Answer</FormLabel>
+                      <FormControl>
+                        <Input 
+                          {...field}
+                          placeholder="Enter the correct answer (must match one of the options exactly)"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={addForm.control}
+                  name="explanation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Explanation</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          {...field}
+                          placeholder="Explain why this is the correct answer"
+                          className="min-h-[80px]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit">Add Question</Button>
+                </DialogFooter>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
 
