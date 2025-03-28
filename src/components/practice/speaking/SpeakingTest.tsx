@@ -3,10 +3,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Mic, MicOff, Play, Pause, SkipForward } from 'lucide-react';
+import { Mic, MicOff, Play, Pause, SkipForward, Save, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { speakingTaskData } from '@/data/speakingTaskData';
 import { useToast } from "@/hooks/use-toast";
+import { SpeakingResponse } from '@/types/speaking';
 
 export const SpeakingTest = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -17,6 +18,8 @@ export const SpeakingTest = () => {
   const [maxTime, setMaxTime] = useState(0);
   const [isPlayingBack, setIsPlayingBack] = useState(false);
   const [testCompleted, setTestCompleted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<BlobPart[]>([]);
@@ -194,6 +197,41 @@ export const SpeakingTest = () => {
     }
   };
   
+  const submitTest = async () => {
+    setIsSubmitting(true);
+    
+    try {
+      // Prepare responses data
+      const responses: SpeakingResponse[] = Object.keys(recordedAudios).map(questionId => ({
+        questionId,
+        audioUrl: recordedAudios[questionId],
+        duration: currentQuestion.duration || 0,
+        submittedAt: new Date()
+      }));
+      
+      // This would normally be an API call to submit the recordings
+      // For now, we'll just simulate a successful submission with setTimeout
+      setTimeout(() => {
+        setIsSubmitted(true);
+        setIsSubmitting(false);
+        
+        toast({
+          title: "Test Submitted Successfully",
+          description: "Your speaking test has been submitted for review.",
+        });
+      }, 1500);
+    } catch (error) {
+      console.error('Error submitting test', error);
+      setIsSubmitting(false);
+      
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your test. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+  
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -365,7 +403,7 @@ export const SpeakingTest = () => {
               Speaking Test Completed!
             </h3>
             <p className="text-green-700 dark:text-green-400 mb-4">
-              You have completed all speaking questions. You can now review your recordings below.
+              You have completed all speaking questions. You can now review your recordings and submit your test.
             </p>
             
             <div className="space-y-4 mt-6">
@@ -390,10 +428,47 @@ export const SpeakingTest = () => {
               )}
             </div>
             
-            <div className="mt-6">
-              <Button className="bg-green-600 hover:bg-green-700">
-                Download Recordings
-              </Button>
+            <div className="mt-6 flex flex-col sm:flex-row sm:justify-between gap-3">
+              {!isSubmitted ? (
+                <>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      setTestCompleted(false);
+                      setCurrentQuestionIndex(0);
+                    }}
+                    disabled={isSubmitting}
+                  >
+                    Retake Test
+                  </Button>
+                  
+                  <Button 
+                    onClick={submitTest}
+                    disabled={isSubmitting || Object.keys(recordedAudios).length === 0}
+                    className="bg-green-600 hover:bg-green-700 gap-2"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="animate-spin">↻</span>
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-4 w-4" />
+                        Submit Recordings
+                      </>
+                    )}
+                  </Button>
+                </>
+              ) : (
+                <div className="w-full bg-green-100 dark:bg-green-900/30 p-4 rounded-md text-center">
+                  <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400 mx-auto mb-2" />
+                  <h4 className="text-lg font-medium text-green-700 dark:text-green-300">Test Submitted Successfully</h4>
+                  <p className="text-green-600 dark:text-green-400 mt-1">
+                    Your recordings have been submitted for review. You will be notified when feedback is available.
+                  </p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

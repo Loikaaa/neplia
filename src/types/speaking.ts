@@ -15,3 +15,29 @@ export interface SpeakingTask {
   description: string;
   questions: SpeakingQuestion[];
 }
+
+export interface SpeakingResponse {
+  questionId: string;
+  audioUrl: string;
+  duration: number;
+  submittedAt: Date;
+}
+
+export interface SpeakingSubmission {
+  id: string;
+  userId: string;
+  taskId: string;
+  responses: SpeakingResponse[];
+  status: 'pending' | 'reviewed';
+  submittedAt: Date;
+  score?: {
+    fluency: number;
+    vocabulary: number;
+    grammar: number;
+    pronunciation: number;
+    overall: number;
+    feedback?: string;
+  };
+  reviewedAt?: Date;
+  reviewedBy?: string;
+}

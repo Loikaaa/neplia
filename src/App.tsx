@@ -30,6 +30,7 @@ import UsersCMS from "./pages/admin/UsersCMS";
 import Settings from "./pages/admin/Settings";
 import Dashboard from "./pages/admin/Dashboard";
 import ExamSectionPage from "./pages/admin/ExamSectionPage";
+import SpeakingReviewPage from "./pages/admin/SpeakingReviewPage";
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -71,6 +72,7 @@ const App: React.FC = () => {
               
               {/* Exam section routes */}
               <Route path="/admin/exams/:examType/:sectionType" element={<ExamSectionPage />} />
+              <Route path="/admin/speaking-reviews" element={<SpeakingReviewPage />} />
               
               {/* 404 route */}
               <Route path="*" element={<NotFound />} />
