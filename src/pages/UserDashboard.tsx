@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -73,51 +74,6 @@ const UserDashboard = () => {
     setTimerActive(false);
     setExamStartTime(null);
   };
-
-  const services = [
-    {
-      icon: Headphones,
-      title: "Listening Practice",
-      description: "Improve your IELTS listening skills with our curated practice tests",
-      color: "bg-indigo text-white",
-      link: "/practice/listening"
-    },
-    {
-      icon: BookOpen,
-      title: "Reading Tests",
-      description: "Enhance your reading comprehension with timed exercises",
-      color: "bg-teal text-white",
-      link: "/practice/reading"
-    },
-    {
-      icon: Edit,
-      title: "Writing Evaluation",
-      description: "Get AI-powered feedback on your writing tasks",
-      color: "bg-coral text-white",
-      link: "/practice/writing"
-    },
-    {
-      icon: MessageSquare,
-      title: "Speaking Assessment",
-      description: "Practice your speaking skills with our voice analysis tools",
-      color: "bg-indigo text-white",
-      link: "/practice/speaking"
-    },
-    {
-      icon: BarChart3,
-      title: "Progress Tracking",
-      description: "Monitor your improvement with detailed performance analytics",
-      color: "bg-teal text-white",
-      link: "#progress"
-    },
-    {
-      icon: Calendar,
-      title: "Mock Tests",
-      description: "Take full-length IELTS mock tests under exam conditions",
-      color: "bg-coral text-white",
-      link: "/practice/mock-test"
-    }
-  ];
 
   // Get selected preferences
   const selectedExam = localStorage.getItem('selectedExam') || '';
