@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -22,6 +23,8 @@ import { useToast } from "@/hooks/use-toast";
 
 const DEMO_ADMIN_USERNAME = "admin";
 const DEMO_ADMIN_PASSWORD = "demo123";
+const DEMO_USER_USERNAME = "user";
+const DEMO_USER_PASSWORD = "demo123";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }).or(z.string().min(1, { message: "Username is required" })),
@@ -53,6 +56,7 @@ const Login = () => {
     console.log("Form submitted:", data);
     setIsLoading(true);
     
+    // Check for admin login
     if (data.email === DEMO_ADMIN_USERNAME && data.password === DEMO_ADMIN_PASSWORD) {
       setTimeout(() => {
         toast({
@@ -68,6 +72,29 @@ const Login = () => {
       return;
     }
     
+    // Check for demo user login
+    if (data.email === DEMO_USER_USERNAME && data.password === DEMO_USER_PASSWORD) {
+      setTimeout(() => {
+        toast({
+          title: "User Login Successful",
+          description: "Welcome to your IELTS preparation dashboard",
+        });
+        
+        localStorage.setItem('userEmail', 'demo@user.com');
+        localStorage.setItem('userName', 'Demo User');
+        localStorage.setItem('demoUserLoggedIn', 'true');
+        
+        if (data.rememberMe) {
+          localStorage.setItem('rememberUser', 'true');
+        }
+        
+        setIsLoading(false);
+        navigate(from);
+      }, 1000);
+      return;
+    }
+    
+    // Regular user login (simulate)
     setTimeout(() => {
       localStorage.setItem('userEmail', data.email);
       
@@ -262,6 +289,9 @@ const Login = () => {
                 </p>
                 <p className="text-sm text-yellow-800">
                   Admin Login: <code className="bg-yellow-100 px-1 py-0.5 rounded">admin</code> / <code className="bg-yellow-100 px-1 py-0.5 rounded">demo123</code>
+                </p>
+                <p className="text-sm text-yellow-800">
+                  User Login: <code className="bg-yellow-100 px-1 py-0.5 rounded">user</code> / <code className="bg-yellow-100 px-1 py-0.5 rounded">demo123</code>
                 </p>
               </div>
             </CardContent>
