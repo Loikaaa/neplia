@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, LogIn, User, Facebook, Github } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Eye, EyeOff, LogIn, User } from 'lucide-react';
 
 import Layout from '@/components/Layout';
 import { Button } from "@/components/ui/button";
@@ -21,9 +20,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 
+const DEMO_ADMIN_USERNAME = "admin";
+const DEMO_ADMIN_PASSWORD = "demo123";
+
 const loginSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  password: z.string().min(8, { message: "Password must be at least 8 characters." }),
+  email: z.string().email({ message: "Please enter a valid email address." }).or(z.string().min(1, { message: "Username is required" })),
+  password: z.string().min(1, { message: "Password is required." }),
   rememberMe: z.boolean().optional(),
 });
 
@@ -34,6 +36,9 @@ const Login = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/';
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -48,31 +53,42 @@ const Login = () => {
     console.log("Form submitted:", data);
     setIsLoading(true);
     
-    // This would typically check against a backend/database
-    // For now, we'll simulate successful login and store email in localStorage
-    localStorage.setItem('userEmail', data.email);
-    
-    if (data.rememberMe) {
-      localStorage.setItem('rememberUser', 'true');
+    if (data.email === DEMO_ADMIN_USERNAME && data.password === DEMO_ADMIN_PASSWORD) {
+      setTimeout(() => {
+        toast({
+          title: "Admin Login Successful",
+          description: "Welcome to the admin panel",
+        });
+        
+        sessionStorage.setItem('demoAdminLoggedIn', 'true');
+        
+        setIsLoading(false);
+        navigate('/admin');
+      }, 1000);
+      return;
     }
     
-    toast({
-      title: "Success!",
-      description: "You have successfully logged in.",
-      duration: 3000,
-    });
-    
-    // Navigate to home after successful login
     setTimeout(() => {
+      localStorage.setItem('userEmail', data.email);
+      
+      if (data.rememberMe) {
+        localStorage.setItem('rememberUser', 'true');
+      }
+      
+      toast({
+        title: "Success!",
+        description: "You have successfully logged in.",
+        duration: 3000,
+      });
+      
       setIsLoading(false);
-      navigate('/');
+      navigate(from);
     }, 1500);
   };
 
   const handleSocialLogin = (provider: string) => {
     setIsLoading(true);
     
-    // Simulate social login
     console.log(`Logging in with ${provider}`);
     
     toast({
@@ -81,8 +97,6 @@ const Login = () => {
       duration: 3000,
     });
     
-    // In a real implementation, we would redirect to the provider's OAuth flow
-    // For this demo, we'll simulate a successful login after a delay
     setTimeout(() => {
       localStorage.setItem('userEmail', `user@${provider.toLowerCase()}.com`);
       localStorage.setItem('socialProvider', provider);
@@ -94,7 +108,7 @@ const Login = () => {
       });
       
       setIsLoading(false);
-      navigate('/');
+      navigate(from);
     }, 2000);
   };
 
@@ -102,7 +116,6 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  // Pre-fill email if returning user had "remember me" checked
   React.useEffect(() => {
     const rememberedUser = localStorage.getItem('rememberUser');
     const savedEmail = localStorage.getItem('userEmail');
@@ -145,12 +158,12 @@ const Login = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>Email or Username</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                             <Input 
-                              placeholder="your.email@example.com" 
+                              placeholder="your.email@example.com or username" 
                               className="pl-10" 
                               {...field} 
                             />
@@ -242,6 +255,15 @@ const Login = () => {
                   </Button>
                 </form>
               </Form>
+              
+              <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-md">
+                <p className="text-sm text-yellow-800">
+                  <strong>Demo Credentials:</strong>
+                </p>
+                <p className="text-sm text-yellow-800">
+                  Admin Login: <code className="bg-yellow-100 px-1 py-0.5 rounded">admin</code> / <code className="bg-yellow-100 px-1 py-0.5 rounded">demo123</code>
+                </p>
+              </div>
             </CardContent>
             
             <CardFooter className="flex flex-col space-y-4">
