@@ -38,8 +38,8 @@ const queryClient = new QueryClient();
 // Define App as a proper React functional component with React.FC type
 const App: React.FC = () => {
   return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <React.StrictMode>
         <TooltipProvider>
           <Toaster />
           <Sonner />
@@ -79,8 +79,8 @@ const App: React.FC = () => {
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
-      </QueryClientProvider>
-    </React.StrictMode>
+      </React.StrictMode>
+    </QueryClientProvider>
   );
 };
 
