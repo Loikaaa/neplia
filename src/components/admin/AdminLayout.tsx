@@ -191,86 +191,88 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           )}
         >
           <ScrollArea className="h-[calc(100vh-4rem)]">
-            <nav className="flex flex-col gap-1 p-4">
-              {mainNavItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700",
-                    isActivePath(item.path) && "bg-gray-100 dark:bg-gray-700 font-medium"
-                  )}
+            <div className="p-4">
+              <nav className="flex flex-col gap-1">
+                {mainNavItems.map((item) => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={cn(
+                      "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700",
+                      isActivePath(item.path) && "bg-gray-100 dark:bg-gray-700 font-medium"
+                    )}
+                  >
+                    {item.icon}
+                    <span>{item.name}</span>
+                  </Link>
+                ))}
+                
+                <Collapsible
+                  open={openSections['exams']}
+                  onOpenChange={() => toggleSection('exams')}
+                  className="w-full"
                 >
-                  {item.icon}
-                  <span>{item.name}</span>
-                </Link>
-              ))}
-              
-              <Collapsible
-                open={openSections['exams']}
-                onOpenChange={() => toggleSection('exams')}
-                className="w-full"
-              >
-                <CollapsibleTrigger className={cn(
-                  "flex w-full items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700",
-                  location.pathname.includes('/admin/exams') && "bg-gray-100 dark:bg-gray-700 font-medium"
-                )}>
-                  <div className="flex items-center gap-3">
-                    <FileBox className="h-5 w-5" />
-                    <span>Exam Types</span>
-                  </div>
-                  {openSections['exams'] ? (
-                    <ChevronDown className="h-4 w-4" />
-                  ) : (
-                    <ChevronRight className="h-4 w-4" />
-                  )}
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pl-4 pt-2">
-                  {examTypes.map((exam) => (
-                    <Collapsible key={exam.id} 
-                      open={openSections[`exam-${exam.id}`] || isActiveExamType(exam.id)} 
-                      onOpenChange={() => {
-                        const examId = `exam-${exam.id}`;
-                        setOpenSections(prev => ({
-                          ...prev,
-                          [examId]: !prev[examId]
-                        }));
-                      }}
-                      className="w-full"
-                    >
-                      <CollapsibleTrigger className={cn(
-                        "flex w-full items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700 my-1",
-                        isActiveExamType(exam.id) && "bg-gray-100 dark:bg-gray-700 font-medium"
-                      )}>
-                        <div className="flex items-center gap-3">
-                          <span>{exam.name}</span>
-                        </div>
-                        {openSections[`exam-${exam.id}`] || isActiveExamType(exam.id) ? (
-                          <ChevronDown className="h-4 w-4" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4" />
-                        )}
-                      </CollapsibleTrigger>
-                      <CollapsibleContent className="pl-4 pt-1">
-                        {exam.sections.map((section) => (
-                          <Link
-                            key={section.id}
-                            to={`/admin/exams/${exam.id}/${section.id}`}
-                            className={cn(
-                              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-gray-100 dark:hover:bg-gray-700 my-1",
-                              isActiveExamSection(exam.id, section.id) && "bg-gray-100 dark:bg-gray-700 font-medium"
-                            )}
-                          >
-                            {section.icon}
-                            <span>{section.name}</span>
-                          </Link>
-                        ))}
-                      </CollapsibleContent>
-                    </Collapsible>
-                  ))}
-                </CollapsibleContent>
-              </Collapsible>
-            </nav>
+                  <CollapsibleTrigger className={cn(
+                    "flex w-full items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700",
+                    location.pathname.includes('/admin/exams') && "bg-gray-100 dark:bg-gray-700 font-medium"
+                  )}>
+                    <div className="flex items-center gap-3">
+                      <FileBox className="h-5 w-5" />
+                      <span>Exam Types</span>
+                    </div>
+                    {openSections['exams'] ? (
+                      <ChevronDown className="h-4 w-4" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4" />
+                    )}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pl-4 pt-2">
+                    {examTypes.map((exam) => (
+                      <Collapsible key={exam.id} 
+                        open={openSections[`exam-${exam.id}`] || isActiveExamType(exam.id)} 
+                        onOpenChange={() => {
+                          const examId = `exam-${exam.id}`;
+                          setOpenSections(prev => ({
+                            ...prev,
+                            [examId]: !prev[examId]
+                          }));
+                        }}
+                        className="w-full"
+                      >
+                        <CollapsibleTrigger className={cn(
+                          "flex w-full items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700 my-1",
+                          isActiveExamType(exam.id) && "bg-gray-100 dark:bg-gray-700 font-medium"
+                        )}>
+                          <div className="flex items-center gap-3">
+                            <span>{exam.name}</span>
+                          </div>
+                          {openSections[`exam-${exam.id}`] || isActiveExamType(exam.id) ? (
+                            <ChevronDown className="h-4 w-4" />
+                          ) : (
+                            <ChevronRight className="h-4 w-4" />
+                          )}
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="pl-4 pt-1">
+                          {exam.sections.map((section) => (
+                            <Link
+                              key={section.id}
+                              to={`/admin/exams/${exam.id}/${section.id}`}
+                              className={cn(
+                                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-gray-100 dark:hover:bg-gray-700 my-1",
+                                isActiveExamSection(exam.id, section.id) && "bg-gray-100 dark:bg-gray-700 font-medium"
+                              )}
+                            >
+                              {section.icon}
+                              <span>{section.name}</span>
+                            </Link>
+                          ))}
+                        </CollapsibleContent>
+                      </Collapsible>
+                    ))}
+                  </CollapsibleContent>
+                </Collapsible>
+              </nav>
+            </div>
           </ScrollArea>
         </aside>
         <main className="flex-1 p-6 overflow-auto w-full md:w-auto">
