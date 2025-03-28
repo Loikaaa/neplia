@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -16,10 +16,14 @@ import {
   AlertTriangle,
   ChevronRight,
   Calculator,
-  BookText
+  BookText,
+  ExternalLink,
+  VolumeX,
+  Info
 } from 'lucide-react';
 import { mockTestData } from '@/data/mockTestData';
 import AudioPlayer from './listening/AudioPlayer';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface FullMockExamProps {
   examType?: string;
@@ -46,6 +50,9 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     writing: 0,
     speaking: 0
   });
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [showExamRules, setShowExamRules] = useState(true);
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const { toast } = useToast();
 
   const isSatTest = examType?.includes('sat');
@@ -61,6 +68,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
 
   const startExam = () => {
     setExamStarted(true);
+    setShowExamRules(false);
     const listeningSection = mockTestData.sections.find(section => section.type === 'listening');
     setTimeRemaining(listeningSection ? listeningSection.duration * 60 : 30 * 60);
     
@@ -68,6 +76,13 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
       title: "Exam Started",
       description: `Your ${examType ? examType.toUpperCase() : 'IELTS'} mock exam has begun. Good luck!`,
     });
+
+    // Request fullscreen
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen()
+        .then(() => setIsFullScreen(true))
+        .catch(err => console.error("Error attempting to enable fullscreen:", err));
+    }
   };
 
   useEffect(() => {
@@ -83,12 +98,39 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
           return prev - 1;
         });
       }, 1000);
+    } else if (timeRemaining === 0) {
+      handleTimeUp();
     }
     
     return () => {
       if (timer) clearInterval(timer);
     };
   }, [examStarted, timeRemaining]);
+
+  const handleTimeUp = () => {
+    toast({
+      title: "Time's Up!",
+      description: `The time for the ${currentSection} section has ended.`,
+      variant: "destructive",
+    });
+
+    if (currentSection === 'speaking') {
+      completeExam();
+    } else {
+      const nextSection = 
+        currentSection === 'listening' ? 'reading' : 
+        currentSection === 'reading' ? 'writing' : 'speaking';
+      navigateToSection(nextSection as 'listening' | 'reading' | 'writing' | 'speaking');
+    }
+  };
+
+  const exitFullScreen = useCallback(() => {
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen()
+        .then(() => setIsFullScreen(false))
+        .catch(err => console.error("Error attempting to exit fullscreen:", err));
+    }
+  }, []);
 
   const navigateToSection = (section: 'listening' | 'reading' | 'writing' | 'speaking') => {
     setCurrentSection(section);
@@ -144,6 +186,13 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     return Math.round(baseScore * 2) / 2;
   };
 
+  const handleAnswerChange = (questionId: string, answer: string) => {
+    setAnswers(prev => ({
+      ...prev,
+      [questionId]: answer
+    }));
+  };
+
   const completeExam = () => {
     const updatedScores = {
       ...sectionScores,
@@ -153,10 +202,11 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     setSectionScores(updatedScores);
     setProgress(100);
     setExamStarted(false);
+    exitFullScreen();
     
     toast({
       title: "Exam Completed",
-      description: "Congratulations! You've completed the full IELTS mock exam.",
+      description: "Congratulations! You've completed the full mock exam.",
       variant: "default",
     });
     
@@ -166,8 +216,13 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
   };
 
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
+    
+    if (hours > 0) {
+      return `${hours}:${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
@@ -214,6 +269,26 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     return sectionType.charAt(0).toUpperCase() + sectionType.slice(1);
   };
 
+  const getExamRules = () => {
+    if (isSatTest) {
+      return [
+        "No calculators are allowed except on designated sections",
+        "All questions must be completed within the allocated time",
+        "One point is awarded for each correct answer",
+        "There is no penalty for incorrect answers",
+        "Electronic devices must be turned off during the test"
+      ];
+    }
+    
+    return [
+      "Each section must be completed within the allocated time",
+      "Once a section is completed, you cannot return to it",
+      "Listen carefully during the listening section - audio will only play once",
+      "In the writing section, stay within the word count guidelines",
+      "For the speaking section, speak clearly and follow the prompts"
+    ];
+  };
+
   const getCurrentSectionContent = () => {
     const sectionData = mockTestData.sections.find(section => section.type === currentSection);
     if (!sectionData || sectionData.questions.length === 0) {
@@ -250,12 +325,15 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                   <div 
                     key={option.id} 
                     className="flex items-center space-x-2 p-3 rounded-md border hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                    onClick={() => handleAnswerChange(question.id, option.id)}
                   >
                     <input 
                       type="radio" 
                       id={option.id} 
                       name={question.id} 
                       className="h-4 w-4 text-indigo"
+                      checked={answers[question.id] === option.id}
+                      onChange={() => handleAnswerChange(question.id, option.id)}
                     />
                     <label htmlFor={option.id} className="flex-grow cursor-pointer">
                       {option.text}
@@ -271,6 +349,8 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                   type="text" 
                   className="w-full p-2 border rounded-md dark:bg-gray-700"
                   placeholder="Type your answer here"
+                  value={answers[question.id] || ''}
+                  onChange={(e) => handleAnswerChange(question.id, e.target.value)}
                 />
               </div>
             )}
@@ -280,10 +360,15 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                 <textarea 
                   className="w-full p-3 border rounded-md min-h-[200px] dark:bg-gray-700"
                   placeholder="Write your response here"
+                  value={answers[question.id] || ''}
+                  onChange={(e) => handleAnswerChange(question.id, e.target.value)}
                 ></textarea>
                 {question.maxWords && (
                   <p className="text-sm text-gray-500 mt-2">
                     Maximum word count: {question.maxWords} words
+                    <span className="ml-2">
+                      Current: {(answers[question.id] || '').split(/\s+/).filter(Boolean).length} words
+                    </span>
                   </p>
                 )}
               </div>
@@ -328,34 +413,65 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="rounded-lg border p-6">
-              <h3 className="font-medium text-lg mb-4">Exam Structure</h3>
-              
-              <div className="space-y-4">
-                {mockTestData.sections.map(section => {
-                  if (examType === 'sat-math' && section.type !== 'reading') return null;
-                  if (examType === 'sat-english' && section.type !== 'writing') return null;
+            {showExamRules ? (
+              <div className="space-y-6">
+                <div className="rounded-lg border p-6">
+                  <h3 className="font-medium text-lg mb-4 flex items-center">
+                    <Info className="h-5 w-5 mr-2 text-indigo" />
+                    Exam Rules and Instructions
+                  </h3>
                   
-                  return (
-                    <div key={section.id} className="flex items-start space-x-3">
-                      {getSectionIcon(section.type)}
-                      <div>
-                        <h4 className="font-medium">
-                          {getSectionTitle(section.type)} ({section.duration} minutes)
-                        </h4>
-                        <p className="text-sm text-gray-500">
-                          {examType && examType.includes('sat') 
-                            ? (section.type === 'reading' 
-                                ? 'Test your mathematical skills with problem-solving and advanced math.' 
-                                : 'Assess your reading, writing and language proficiency.')
-                            : section.description}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
+                  <ul className="space-y-2 list-disc list-inside mb-6">
+                    {getExamRules().map((rule, index) => (
+                      <li key={index} className="text-gray-700 dark:text-gray-300">{rule}</li>
+                    ))}
+                  </ul>
+                  
+                  <Alert variant="destructive" className="mb-4">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertTitle>Important Notice</AlertTitle>
+                    <AlertDescription>
+                      This mock test will use full-screen mode to simulate real exam conditions. Make sure all distractions are minimized.
+                    </AlertDescription>
+                  </Alert>
+                  
+                  <div className="flex items-center space-x-4">
+                    <Button onClick={() => setShowExamRules(false)}>
+                      View Exam Structure
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="rounded-lg border p-6">
+                <h3 className="font-medium text-lg mb-4">Exam Structure</h3>
+                
+                <div className="space-y-4">
+                  {mockTestData.sections.map(section => {
+                    if (examType === 'sat-math' && section.type !== 'reading') return null;
+                    if (examType === 'sat-english' && section.type !== 'writing') return null;
+                    
+                    return (
+                      <div key={section.id} className="flex items-start space-x-3">
+                        {getSectionIcon(section.type)}
+                        <div>
+                          <h4 className="font-medium">
+                            {getSectionTitle(section.type)} ({section.duration} minutes)
+                          </h4>
+                          <p className="text-sm text-gray-500">
+                            {examType && examType.includes('sat') 
+                              ? (section.type === 'reading' 
+                                  ? 'Test your mathematical skills with problem-solving and advanced math.' 
+                                  : 'Assess your reading, writing and language proficiency.')
+                              : section.description}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             
             <div className="flex items-start space-x-3">
               <AlertTriangle className="h-5 w-5 text-orange-500 mt-0.5" />
@@ -368,7 +484,10 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
               </div>
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex justify-between">
+            <Button variant="outline" onClick={() => setShowExamRules(!showExamRules)}>
+              {showExamRules ? 'View Exam Structure' : 'View Exam Rules'}
+            </Button>
             <Button onClick={startExam} className="w-full sm:w-auto">
               Start Full Mock Exam
             </Button>
@@ -392,9 +511,11 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                       Current section: {getSectionTitle(currentSection)}
                     </p>
                   </div>
-                  <Badge variant="outline" className="flex items-center">
-                    <Clock className="h-4 w-4 mr-1" />
-                    {timeRemaining ? formatTime(timeRemaining) : 'Time not set'}
+                  <Badge variant="outline" className="flex items-center p-2 bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800">
+                    <Clock className="h-4 w-4 mr-1 text-red-500" />
+                    <span className="text-red-600 dark:text-red-400 font-mono">
+                      {timeRemaining ? formatTime(timeRemaining) : 'Time not set'}
+                    </span>
                   </Badge>
                 </div>
                 
@@ -405,7 +526,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                     <Badge 
                       variant={currentSection === 'listening' ? 'default' : 'outline'}
                       className="cursor-pointer"
-                      onClick={() => navigateToSection('listening')}
+                      onClick={() => {}}
                     >
                       <Headphones className="h-3 w-3 mr-1" />
                       Listening
@@ -416,7 +537,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                   <Badge 
                     variant={currentSection === 'reading' ? 'default' : 'outline'}
                     className="cursor-pointer"
-                    onClick={() => navigateToSection('reading')}
+                    onClick={() => {}}
                   >
                     {isSatTest ? <Calculator className="h-3 w-3 mr-1" /> : <BookOpen className="h-3 w-3 mr-1" />}
                     {isSatTest ? 'Math' : 'Reading'}
@@ -426,7 +547,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                   <Badge 
                     variant={currentSection === 'writing' ? 'default' : 'outline'}
                     className="cursor-pointer"
-                    onClick={() => navigateToSection('writing')}
+                    onClick={() => {}}
                   >
                     {isSatTest ? <BookText className="h-3 w-3 mr-1" /> : <Edit className="h-3 w-3 mr-1" />}
                     {isSatTest ? 'English' : 'Writing'}
@@ -437,7 +558,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                     <Badge 
                       variant={currentSection === 'speaking' ? 'default' : 'outline'}
                       className="cursor-pointer"
-                      onClick={() => navigateToSection('speaking')}
+                      onClick={() => {}}
                     >
                       <MessageSquare className="h-3 w-3 mr-1" />
                       Speaking
@@ -445,6 +566,13 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                     </Badge>
                   )}
                 </div>
+                
+                {isFullScreen && (
+                  <div className="flex items-center space-x-2 text-xs text-gray-500">
+                    <VolumeX className="h-3 w-3" /> 
+                    <span>Please silence all electronic devices</span>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
