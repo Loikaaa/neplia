@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -55,6 +56,20 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
+  
+  useEffect(() => {
+    // Set initial exam type openings based on URL
+    if (location.pathname.includes('/admin/exams')) {
+      const path = location.pathname.split('/');
+      if (path.length >= 4) {
+        const currentExamType = path[3];
+        setOpenSections(prev => ({
+          ...prev,
+          [`exam-${currentExamType}`]: true
+        }));
+      }
+    }
+  }, []);
   
   const toggleSection = (section: string) => {
     setOpenSections(prev => ({
@@ -147,7 +162,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
       <div className="flex h-16 items-center justify-between border-b bg-white dark:bg-gray-800 px-4 md:px-6">
         <div className="flex items-center gap-2">
           <button 
@@ -175,7 +190,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           </Link>
         </div>
       </div>
-      <div className="flex">
+      <div className="flex flex-1 overflow-hidden">
         <div 
           className={cn(
             "fixed inset-0 z-40 bg-black/50 md:hidden transition-opacity duration-200",
@@ -186,11 +201,11 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         
         <aside 
           className={cn(
-            "fixed md:static top-16 bottom-0 left-0 z-50 w-64 border-r bg-white dark:bg-gray-800 transition-transform duration-300 md:translate-x-0",
+            "fixed md:sticky top-16 md:top-0 bottom-0 left-0 z-50 w-64 border-r bg-white dark:bg-gray-800 transition-transform duration-300 md:translate-x-0 h-[calc(100vh-4rem)] md:h-screen",
             mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
-          <ScrollArea className="h-[calc(100vh-4rem)]">
+          <ScrollArea className="h-full">
             <div className="p-4">
               <nav className="flex flex-col gap-1">
                 {mainNavItems.map((item) => (
@@ -275,8 +290,10 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             </div>
           </ScrollArea>
         </aside>
-        <main className="flex-1 p-6 overflow-auto w-full md:w-auto">
-          {children}
+        <main className="flex-1 overflow-auto p-6">
+          <div className="container mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </div>
