@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -23,6 +22,7 @@ import SpeakingPractice from "./pages/practice/SpeakingPractice";
 import PracticePage from "./pages/practice/PracticePage";
 import MockTestPage from "./pages/practice/MockTestPage";
 import AdminLink from "./components/AdminLink";
+import UserDashboard from "./pages/UserDashboard";
 
 // Admin pages
 import BlogPostCMS from "./pages/admin/BlogPostCMS";
@@ -40,16 +40,26 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   const adminUsername = localStorage.getItem('adminUsername') === 'admin';
   const location = useLocation();
   
-  // If the user is remembered as admin, set their session
   useEffect(() => {
     if (rememberedAdmin && adminUsername && !isLoggedIn) {
       sessionStorage.setItem('demoAdminLoggedIn', 'true');
     }
   }, [rememberedAdmin, adminUsername, isLoggedIn]);
   
-  // Check either direct login or remembered login
   if (!isLoggedIn && !(rememberedAdmin && adminUsername)) {
     return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  }
+  
+  return <>{children}</>;
+};
+
+// Protected route for User Dashboard
+const ProtectedUserRoute = ({ children }: { children: React.ReactNode }) => {
+  const isLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
+  const location = useLocation();
+  
+  if (!isLoggedIn) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
   
   return <>{children}</>;
@@ -75,10 +85,10 @@ const App: React.FC = () => {
               <Route path="/practice/writing" element={<><WritingPractice /><AdminLink /></>} />
               <Route path="/practice/speaking" element={<><SpeakingPractice /><AdminLink /></>} />
               <Route path="/practice/mock-test" element={<><MockTestPage /><AdminLink /></>} />
-              {/* Adding additional route for mock-tests (plural) that points to the same component */}
               <Route path="/practice/mock-tests" element={<><MockTestPage /><AdminLink /></>} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={<ProtectedUserRoute><UserDashboard /></ProtectedUserRoute>} />
               <Route path="/resources" element={<><Resources /><AdminLink /></>} />
               <Route path="/resources/all" element={<><AllResources /><AdminLink /></>} />
               <Route path="/resources/:resourceId" element={<><ResourceDetail /><AdminLink /></>} />
@@ -87,20 +97,16 @@ const App: React.FC = () => {
               <Route path="/blog" element={<><Blog /><AdminLink /></>} />
               <Route path="/blog/:slug" element={<><BlogPost /><AdminLink /></>} />
               
-              {/* Admin login route */}
               <Route path="/admin/login" element={<DemoAdminLogin />} />
               
-              {/* Protected admin routes */}
               <Route path="/admin" element={<ProtectedAdminRoute><Dashboard /></ProtectedAdminRoute>} />
               <Route path="/admin/blog-posts" element={<ProtectedAdminRoute><BlogPostCMS /></ProtectedAdminRoute>} />
               <Route path="/admin/users" element={<ProtectedAdminRoute><UsersCMS /></ProtectedAdminRoute>} />
               <Route path="/admin/settings" element={<ProtectedAdminRoute><Settings /></ProtectedAdminRoute>} />
               
-              {/* Exam section routes */}
               <Route path="/admin/exams/:examType/:sectionType" element={<ProtectedAdminRoute><ExamSectionPage /></ProtectedAdminRoute>} />
               <Route path="/admin/speaking-reviews" element={<ProtectedAdminRoute><SpeakingReviewPage /></ProtectedAdminRoute>} />
               
-              {/* 404 route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

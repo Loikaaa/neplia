@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { LogOut, Settings, User, ChevronDown } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { LogOut, Settings, User, ChevronDown, LayoutDashboard } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   DropdownMenu, 
@@ -74,6 +75,14 @@ const UserProfileMenu = () => {
         </DropdownMenuLabel>
         
         <DropdownMenuSeparator />
+        
+        <DropdownMenuItem onClick={() => {
+          navigate('/dashboard');
+          setOpen(false);
+        }}>
+          <LayoutDashboard className="mr-2 h-4 w-4" />
+          <span>Dashboard</span>
+        </DropdownMenuItem>
         
         <DropdownMenuItem onClick={() => {
           toast({
