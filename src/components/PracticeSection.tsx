@@ -1,10 +1,20 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Headphones, BookOpen, Edit, MessageSquare, Quote, ArrowRight, Trophy } from 'lucide-react';
+import { Headphones, BookOpen, Edit, MessageSquare, Quote, ArrowRight, Trophy, ChevronDown, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { cn } from '@/lib/utils';
 
 const practiceOptions = [
   {
@@ -49,6 +59,75 @@ const practiceOptions = [
   }
 ];
 
+const proficiencyExams = [
+  {
+    name: "IELTS",
+    description: "International English Language Testing System",
+    path: "/exams/ielts",
+    sections: [
+      { name: "Listening", path: "/practice/listening" },
+      { name: "Reading", path: "/practice/reading" },
+      { name: "Writing", path: "/practice/writing" },
+      { name: "Speaking", path: "/practice/speaking" },
+      { name: "Full Mock Test", path: "/practice/mock-test" }
+    ]
+  },
+  {
+    name: "TOEFL",
+    description: "Test of English as a Foreign Language",
+    path: "/exams/toefl",
+    sections: [
+      { name: "Listening", path: "/practice/listening?exam=toefl" },
+      { name: "Reading", path: "/practice/reading?exam=toefl" },
+      { name: "Writing", path: "/practice/writing?exam=toefl" },
+      { name: "Speaking", path: "/practice/speaking?exam=toefl" }
+    ]
+  },
+  {
+    name: "PTE",
+    description: "Pearson Test of English",
+    path: "/exams/pte",
+    sections: [
+      { name: "Speaking & Writing", path: "/practice/speaking?exam=pte" },
+      { name: "Reading", path: "/practice/reading?exam=pte" },
+      { name: "Listening", path: "/practice/listening?exam=pte" }
+    ]
+  }
+];
+
+const academicExams = [
+  {
+    name: "SAT",
+    description: "Scholastic Assessment Test",
+    path: "/exams/sat",
+    sections: [
+      { name: "Math", path: "/practice/sat/math" },
+      { name: "English", path: "/practice/sat/english" }
+    ]
+  },
+  {
+    name: "GRE",
+    description: "Graduate Record Examination",
+    path: "/exams/gre",
+    sections: [
+      { name: "Verbal Reasoning", path: "/practice/gre/verbal" },
+      { name: "Quantitative Reasoning", path: "/practice/gre/quantitative" },
+      { name: "Analytical Writing", path: "/practice/gre/analytical" }
+    ]
+  },
+  {
+    name: "GMAT",
+    description: "Graduate Management Admission Test",
+    path: "/exams/gmat",
+    sections: [
+      { name: "Verbal Reasoning", path: "/practice/gmat/verbal" },
+      { name: "Quantitative Reasoning", path: "/practice/gmat/quantitative" },
+      { name: "Integrated Reasoning", path: "/practice/gmat/integrated" },
+      { name: "Analytical Writing", path: "/practice/gmat/analytical" }
+    ]
+  }
+];
+
 const quotes = [
   {
     text: "The more you practice, the more you realize what you need to improve.",
@@ -64,7 +143,35 @@ const quotes = [
   }
 ];
 
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";
+
 const PracticeSection = () => {
+  const [selectedTab, setSelectedTab] = useState("skills");
+
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
       <div className="absolute inset-0 -z-10 overflow-hidden">
@@ -80,11 +187,115 @@ const PracticeSection = () => {
           <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
             Our comprehensive practice modules help you prepare for all sections of the IELTS exam
           </p>
-          <Link to="/practice">
-            <Button className="bg-indigo hover:bg-indigo-600">
-              View All Practice Options <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+          
+          <div className="mb-8">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Proficiency Exams</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      {proficiencyExams.map((exam) => (
+                        <li key={exam.name} className="row-span-3">
+                          <NavigationMenuLink asChild>
+                            <Link
+                              className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-4 no-underline outline-none focus:shadow-md"
+                              to={exam.path}
+                            >
+                              <div className="mb-2 mt-4 text-lg font-medium">
+                                {exam.name}
+                              </div>
+                              <p className="text-sm leading-tight text-muted-foreground">
+                                {exam.description}
+                              </p>
+                              <div className="mt-4">
+                                <ul className="grid gap-2">
+                                  {exam.sections.map((section) => (
+                                    <li key={section.name}>
+                                      <Link 
+                                        to={section.path}
+                                        className="text-sm hover:underline flex items-center text-indigo"
+                                      >
+                                        <ChevronRight className="h-3 w-3 mr-1" />
+                                        {section.name}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Academic Exams</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      {academicExams.map((exam) => (
+                        <li key={exam.name} className="row-span-3">
+                          <NavigationMenuLink asChild>
+                            <Link
+                              className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-4 no-underline outline-none focus:shadow-md"
+                              to={exam.path}
+                            >
+                              <div className="mb-2 mt-4 text-lg font-medium">
+                                {exam.name}
+                              </div>
+                              <p className="text-sm leading-tight text-muted-foreground">
+                                {exam.description}
+                              </p>
+                              <div className="mt-4">
+                                <ul className="grid gap-2">
+                                  {exam.sections.map((section) => (
+                                    <li key={section.name}>
+                                      <Link 
+                                        to={section.path}
+                                        className="text-sm hover:underline flex items-center text-indigo"
+                                      >
+                                        <ChevronRight className="h-3 w-3 mr-1" />
+                                        {section.name}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+          
+          <Tabs defaultValue="skills" value={selectedTab} onValueChange={setSelectedTab} className="mb-8">
+            <TabsList className="mb-4">
+              <TabsTrigger value="skills">By Skills</TabsTrigger>
+              <TabsTrigger value="exams">By Exam Type</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="skills">
+              <Link to="/practice">
+                <Button className="bg-indigo hover:bg-indigo-600">
+                  View All Skills <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </TabsContent>
+            
+            <TabsContent value="exams">
+              <Link to="/selection">
+                <Button className="bg-indigo hover:bg-indigo-600">
+                  Choose Your Exam <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </TabsContent>
+          </Tabs>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16">
