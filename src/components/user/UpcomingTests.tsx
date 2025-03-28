@@ -1,13 +1,26 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CalendarClock, Calendar, Clock, AlertCircle } from 'lucide-react';
+import { CalendarClock, Calendar as CalendarIcon, Clock, AlertCircle, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { format } from 'date-fns';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 const UpcomingTests = () => {
   const currentDate = new Date();
-  
-  const tests = [
+  const [tests, setTests] = useState([
     {
       title: "Full Mock Test",
       date: new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
@@ -26,12 +39,32 @@ const UpcomingTests = () => {
       duration: "1 hour",
       isPriority: false
     }
-  ];
+  ]);
+
+  // State for new test scheduling
+  const [newTest, setNewTest] = useState({
+    title: "IELTS Mock Test",
+    date: new Date(currentDate.getTime() + 14 * 24 * 60 * 60 * 1000), // 14 days from now by default
+    duration: "2 hours 45 minutes",
+    isPriority: false
+  });
 
   // Format date to display
   const formatDate = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
+  };
+
+  // Add a new scheduled test
+  const handleAddTest = () => {
+    setTests([...tests, newTest]);
+    // Reset form for next entry
+    setNewTest({
+      title: "IELTS Mock Test",
+      date: new Date(currentDate.getTime() + 14 * 24 * 60 * 60 * 1000),
+      duration: "2 hours 45 minutes",
+      isPriority: false
+    });
   };
 
   return (
@@ -54,7 +87,7 @@ const UpcomingTests = () => {
               </div>
               <div className="space-y-2 mb-3">
                 <div className="flex items-center text-sm text-muted-foreground">
-                  <Calendar className="mr-2 h-4 w-4" />
+                  <CalendarIcon className="mr-2 h-4 w-4" />
                   {formatDate(test.date)}
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground">
@@ -68,9 +101,110 @@ const UpcomingTests = () => {
             </div>
           ))}
         </div>
-        <Button variant="ghost" className="w-full mt-4 hover:text-indigo">
-          Schedule New Test
-        </Button>
+        
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="ghost" className="w-full mt-4 hover:text-indigo">
+              <PlusCircle className="h-4 w-4 mr-2" /> Schedule New Test
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Schedule Exam</DialogTitle>
+              <DialogDescription>
+                Select a date and time for your upcoming IELTS exam or practice test.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="test-title" className="text-right">
+                  Test Title
+                </Label>
+                <select 
+                  id="test-title"
+                  className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2"
+                  value={newTest.title}
+                  onChange={(e) => setNewTest({...newTest, title: e.target.value})}
+                >
+                  <option value="IELTS Mock Test">IELTS Mock Test</option>
+                  <option value="Listening Practice">Listening Practice</option>
+                  <option value="Reading Practice">Reading Practice</option>
+                  <option value="Writing Task 1 & 2">Writing Task 1 & 2</option>
+                  <option value="Speaking Practice">Speaking Practice</option>
+                </select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="test-date" className="text-right">
+                  Date
+                </Label>
+                <div className="col-span-3">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id="test-date"
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !newTest.date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {newTest.date ? format(newTest.date, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={newTest.date}
+                        onSelect={(date) => date && setNewTest({...newTest, date})}
+                        initialFocus
+                        className="p-3 pointer-events-auto"
+                        disabled={(date) => date < new Date()}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="test-duration" className="text-right">
+                  Duration
+                </Label>
+                <select 
+                  id="test-duration"
+                  className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2"
+                  value={newTest.duration}
+                  onChange={(e) => setNewTest({...newTest, duration: e.target.value})}
+                >
+                  <option value="30 minutes">30 minutes</option>
+                  <option value="1 hour">1 hour</option>
+                  <option value="1 hour 30 minutes">1 hour 30 minutes</option>
+                  <option value="2 hours">2 hours</option>
+                  <option value="2 hours 45 minutes">2 hours 45 minutes (Full Test)</option>
+                </select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="test-priority" className="text-right">
+                  Priority
+                </Label>
+                <div className="flex items-center space-x-2 col-span-3">
+                  <input
+                    type="checkbox"
+                    id="test-priority"
+                    checked={newTest.isPriority}
+                    onChange={(e) => setNewTest({...newTest, isPriority: e.target.checked})}
+                    className="h-4 w-4 rounded border-gray-300 text-indigo focus:ring-indigo"
+                  />
+                  <label htmlFor="test-priority" className="text-sm text-gray-700">
+                    Mark as priority
+                  </label>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" onClick={handleAddTest}>Schedule Test</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );
