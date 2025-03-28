@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -10,6 +9,7 @@ import UserStats from '@/components/user/UserStats';
 import UserCourseProgress from '@/components/user/UserCourseProgress';
 import RecentActivity from '@/components/user/RecentActivity';
 import UpcomingTests from '@/components/user/UpcomingTests';
+import PremiumPlans from '@/components/user/PremiumPlans';
 
 const UserDashboard = () => {
   // Get user name from localStorage
@@ -109,6 +109,11 @@ const UserDashboard = () => {
             <div>
               <RecentActivity />
             </div>
+          </div>
+          
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-6">Upgrade Your Experience</h2>
+            <PremiumPlans />
           </div>
           
           <div className="bg-indigo-50 dark:bg-gray-800/50 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between">
