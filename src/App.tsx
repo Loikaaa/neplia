@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Index from "./pages/Index";
+import SelectionHome from "./pages/SelectionHome";
 import NotFound from "./pages/NotFound";
 import ListeningPractice from "./pages/practice/ListeningPractice";
 import ReadingPractice from "./pages/practice/ReadingPractice";
@@ -79,6 +80,7 @@ const App: React.FC = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<><Index /><AdminLink /></>} />
+              <Route path="/selection" element={<SelectionHome />} />
               <Route path="/practice" element={<><PracticePage /><AdminLink /></>} />
               <Route path="/practice/listening" element={<><ListeningPractice /><AdminLink /></>} />
               <Route path="/practice/reading" element={<><ReadingPractice /><AdminLink /></>} />

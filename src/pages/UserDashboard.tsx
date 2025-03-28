@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -11,6 +10,7 @@ import UserCourseProgress from '@/components/user/UserCourseProgress';
 import RecentActivity from '@/components/user/RecentActivity';
 import UpcomingTests from '@/components/user/UpcomingTests';
 import PremiumPlans from '@/components/user/PremiumPlans';
+import UserPreferences from '@/components/user/UserPreferences';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { mockTestData } from '@/data/mockTestData';
 import { useToast } from '@/hooks/use-toast';
@@ -119,6 +119,99 @@ const UserDashboard = () => {
     }
   ];
 
+  // Get selected preferences
+  const selectedExam = localStorage.getItem('selectedExam') || '';
+  
+  // Get exam-specific services based on selected exam
+  const getExamSpecificServices = () => {
+    // Basic services available for all exam types
+    const baseServices = [
+      {
+        icon: Headphones,
+        title: "Listening Practice",
+        description: "Improve your English listening skills with our curated practice tests",
+        color: "bg-indigo text-white",
+        link: "/practice/listening"
+      },
+      {
+        icon: BookOpen,
+        title: "Reading Tests",
+        description: "Enhance your reading comprehension with timed exercises",
+        color: "bg-teal text-white",
+        link: "/practice/reading"
+      },
+      {
+        icon: Edit,
+        title: "Writing Evaluation",
+        description: "Get AI-powered feedback on your writing tasks",
+        color: "bg-coral text-white",
+        link: "/practice/writing"
+      },
+      {
+        icon: MessageSquare,
+        title: "Speaking Assessment",
+        description: "Practice your speaking skills with our voice analysis tools",
+        color: "bg-indigo text-white",
+        link: "/practice/speaking"
+      }
+    ];
+    
+    // Add exam-specific services
+    if (selectedExam.includes('ielts')) {
+      baseServices.push({
+        icon: BarChart3,
+        title: "IELTS Band Score Calculator",
+        description: "Estimate your IELTS band score based on practice results",
+        color: "bg-teal text-white",
+        link: "#progress"
+      });
+    } else if (selectedExam === 'toefl') {
+      baseServices.push({
+        icon: BarChart3,
+        title: "TOEFL Score Predictor",
+        description: "Predict your TOEFL score based on practice performance",
+        color: "bg-teal text-white",
+        link: "#progress"
+      });
+    } else if (selectedExam === 'pte') {
+      baseServices.push({
+        icon: BarChart3,
+        title: "PTE Score Analyzer",
+        description: "Analyze your PTE practice scores and get improvement recommendations",
+        color: "bg-teal text-white",
+        link: "#progress"
+      });
+    }
+    
+    // Add mock test for all exam types
+    baseServices.push({
+      icon: Calendar,
+      title: `${selectedExam ? getExamName(selectedExam) : 'Mock'} Tests`,
+      description: "Take full-length mock tests under exam conditions",
+      color: "bg-coral text-white",
+      link: "/practice/mock-test"
+    });
+    
+    return baseServices;
+  };
+  
+  // Helper function to get exam name
+  const getExamName = (id: string): string => {
+    const exams: Record<string, string> = {
+      'ielts-academic': 'IELTS Academic',
+      'ielts-general': 'IELTS General Training',
+      'toefl': 'TOEFL',
+      'pte': 'PTE Academic',
+      'duolingo': 'Duolingo',
+      'cambridge': 'Cambridge English',
+    };
+    
+    return exams[id] || 'Mock';
+  };
+  
+  // Get services based on selected exam
+  const services = getExamSpecificServices();
+
   return (
     <Layout>
       <div className="bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800 pt-12 pb-6">
@@ -198,11 +291,16 @@ const UserDashboard = () => {
               <UserStats />
             </div>
             <div>
-              <UpcomingTests />
+              <UserPreferences />
             </div>
           </div>
           
-          <h2 className="text-2xl font-bold mb-6">Services & Practice Areas</h2>
+          <h2 className="text-2xl font-bold mb-6">
+            {selectedExam 
+              ? `${getExamName(selectedExam)} Practice & Resources` 
+              : "Services & Practice Areas"}
+          </h2>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {services.map((service, index) => (
               <Link key={index} to={service.link} className="group">
