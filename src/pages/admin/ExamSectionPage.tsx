@@ -80,6 +80,45 @@ const ExamSectionPage = () => {
           </div>
         );
       }
+    } else if (examType === 'gmat') {
+      // GMAT sections
+      if (sectionType === 'verbal') {
+        return (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold mb-2">GMAT Verbal Reasoning Management</h2>
+            <p className="text-muted-foreground">
+              Manage reading comprehension, critical reasoning, and sentence correction.
+            </p>
+          </div>
+        );
+      } else if (sectionType === 'quantitative') {
+        return (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold mb-2">GMAT Quantitative Reasoning Management</h2>
+            <p className="text-muted-foreground">
+              Manage problem-solving and data sufficiency questions.
+            </p>
+          </div>
+        );
+      } else if (sectionType === 'integrated') {
+        return (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold mb-2">GMAT Integrated Reasoning Management</h2>
+            <p className="text-muted-foreground">
+              Manage multi-source reasoning, graphics interpretation, and two-part analysis questions.
+            </p>
+          </div>
+        );
+      } else if (sectionType === 'analytical') {
+        return (
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold mb-2">GMAT Analytical Writing Management</h2>
+            <p className="text-muted-foreground">
+              Manage analytical writing tasks and prompts.
+            </p>
+          </div>
+        );
+      }
     }
     
     // Default coming soon message for sections under development
