@@ -64,7 +64,14 @@ const Login = () => {
           description: "Welcome to the admin panel",
         });
         
+        // Store admin login state in session storage by default
         sessionStorage.setItem('demoAdminLoggedIn', 'true');
+        
+        // If remember me is checked, also store in localStorage for persistence
+        if (data.rememberMe) {
+          localStorage.setItem('rememberAdminLogin', 'true');
+          localStorage.setItem('adminUsername', DEMO_ADMIN_USERNAME);
+        }
         
         setIsLoading(false);
         navigate('/admin');
@@ -144,6 +151,20 @@ const Login = () => {
   };
 
   React.useEffect(() => {
+    // Check for remembered admin login
+    const rememberedAdmin = localStorage.getItem('rememberAdminLogin');
+    const adminUsername = localStorage.getItem('adminUsername');
+    
+    if (rememberedAdmin === 'true' && adminUsername === DEMO_ADMIN_USERNAME) {
+      sessionStorage.setItem('demoAdminLoggedIn', 'true');
+      
+      // If we're on the login page and admin is remembered, redirect to admin panel
+      if (location.pathname === '/login' || location.pathname === '/admin/login') {
+        navigate('/admin');
+      }
+    }
+    
+    // Check for remembered user
     const rememberedUser = localStorage.getItem('rememberUser');
     const savedEmail = localStorage.getItem('userEmail');
     
@@ -151,7 +172,7 @@ const Login = () => {
       form.setValue('email', savedEmail);
       form.setValue('rememberMe', true);
     }
-  }, [form]);
+  }, [form, navigate, location.pathname]);
 
   return (
     <Layout>

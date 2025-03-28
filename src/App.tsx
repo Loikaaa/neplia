@@ -36,9 +36,19 @@ import { DemoAdminLogin } from "./components/admin/DemoAdminLogin";
 // Protected route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isLoggedIn = sessionStorage.getItem('demoAdminLoggedIn') === 'true';
+  const rememberedAdmin = localStorage.getItem('rememberAdminLogin') === 'true';
+  const adminUsername = localStorage.getItem('adminUsername') === 'admin';
   const location = useLocation();
   
-  if (!isLoggedIn) {
+  // If the user is remembered as admin, set their session
+  useEffect(() => {
+    if (rememberedAdmin && adminUsername && !isLoggedIn) {
+      sessionStorage.setItem('demoAdminLoggedIn', 'true');
+    }
+  }, [rememberedAdmin, adminUsername, isLoggedIn]);
+  
+  // Check either direct login or remembered login
+  if (!isLoggedIn && !(rememberedAdmin && adminUsername)) {
     return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
   

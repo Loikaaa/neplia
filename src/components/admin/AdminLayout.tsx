@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   FileText, 
   BookOpen, 
@@ -15,7 +14,8 @@ import {
   ChevronRight,
   Menu,
   X,
-  Calculator
+  Calculator,
+  LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -31,7 +31,6 @@ interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-// Define exam types and their sections
 interface ExamSection {
   id: string;
   name: string;
@@ -46,13 +45,13 @@ interface ExamType {
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     'exams': location.pathname.includes('/admin/exams')
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { toast } = useToast();
   
-  // Close mobile menu when route changes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
@@ -64,7 +63,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     }));
   };
   
-  // Standard skills for language exams
   const standardLanguageSkills: ExamSection[] = [
     { id: 'reading', name: 'Reading', icon: <BookOpen className="h-5 w-5" /> },
     { id: 'writing', name: 'Writing', icon: <FileText className="h-5 w-5" /> },
@@ -72,7 +70,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     { id: 'speaking', name: 'Speaking', icon: <MicIcon className="h-5 w-5" /> },
   ];
   
-  // Define exam types with their specific sections
   const examTypes: ExamType[] = [
     { 
       id: 'ielts', 
@@ -126,6 +123,17 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     { name: 'Settings', path: '/admin/settings', icon: <Settings className="h-5 w-5" /> },
   ];
 
+  const handleLogout = () => {
+    sessionStorage.removeItem('demoAdminLoggedIn');
+    
+    toast({
+      title: "Logged Out",
+      description: "You have been successfully logged out",
+    });
+    
+    navigate('/admin/login');
+  };
+
   const isActivePath = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
@@ -152,12 +160,22 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             <h1 className="text-xl font-bold">Neplia Admin</h1>
           </Link>
         </div>
-        <Link to="/">
-          <Button variant="outline" size="sm">Back to Site</Button>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="flex items-center gap-1 text-red-500 hover:text-red-600 hover:bg-red-50"
+            onClick={handleLogout}
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="hidden sm:inline">Logout</span>
+          </Button>
+          <Link to="/">
+            <Button variant="outline" size="sm">Back to Site</Button>
+          </Link>
+        </div>
       </div>
       <div className="flex">
-        {/* Mobile sidebar overlay */}
         <div 
           className={cn(
             "fixed inset-0 z-40 bg-black/50 md:hidden transition-opacity duration-200",
@@ -166,7 +184,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           onClick={() => setMobileMenuOpen(false)}
         />
         
-        {/* Sidebar */}
         <aside 
           className={cn(
             "fixed md:static top-16 bottom-0 left-0 z-50 w-64 border-r bg-white dark:bg-gray-800 transition-transform duration-300 md:translate-x-0",
@@ -189,7 +206,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 </Link>
               ))}
               
-              {/* Collapsible Exams Section */}
               <Collapsible
                 open={openSections['exams']}
                 onOpenChange={() => toggleSection('exams')}
