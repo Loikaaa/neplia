@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -24,6 +25,19 @@ const UserDashboard = () => {
   const [examTime, setExamTime] = useState(0);
   const [examStartTime, setExamStartTime] = useState<Date | null>(null);
   const [showPremiumPlans, setShowPremiumPlans] = useState(false);
+  
+  // Define the missing handleUpgradeClick function
+  const handleUpgradeClick = () => {
+    setShowPremiumPlans(true);
+    
+    // Scroll to the premium plans section
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.getElementById('premium-plans')?.offsetTop || 0,
+        behavior: 'smooth',
+      });
+    }, 100);
+  };
   
   // Calculate remaining time
   const getRemainingTime = () => {
@@ -224,7 +238,7 @@ const UserDashboard = () => {
           </div>
           
           {showPremiumPlans ? (
-            <div className="mb-12">
+            <div className="mb-12" id="premium-plans">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold">Upgrade Your Experience</h2>
                 <Button 
