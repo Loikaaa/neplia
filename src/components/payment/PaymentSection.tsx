@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, CreditCard, Clock, Shield, CheckCircle } from 'lucide-react';
+import { ArrowLeft, CreditCard, Clock, Shield, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface PaymentSectionProps {
   planId: string;
@@ -17,6 +17,18 @@ const PaymentSection = ({ planId, onBack }: PaymentSectionProps) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [formData, setFormData] = useState({
+    cardName: '',
+    cardNumber: '',
+    expiry: '',
+    cvc: ''
+  });
+  const [formErrors, setFormErrors] = useState({
+    cardName: false,
+    cardNumber: false,
+    expiry: false,
+    cvc: false
+  });
   
   // Get plan details based on planId
   const getPlanDetails = (id: string) => {
@@ -41,25 +53,71 @@ const PaymentSection = ({ planId, onBack }: PaymentSectionProps) => {
       }
     };
     
-    return plans[id] || plans.monthly;
+    return plans[id as keyof typeof plans] || plans.monthly;
   };
   
   const plan = getPlanDetails(planId);
   
+  const validateForm = () => {
+    const errors = {
+      cardName: !formData.cardName.trim(),
+      cardNumber: !/^[0-9\s]{13,19}$/.test(formData.cardNumber.replace(/\s/g, '')),
+      expiry: !/^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(formData.expiry),
+      cvc: !/^[0-9]{3,4}$/.test(formData.cvc)
+    };
+    
+    setFormErrors(errors);
+    return !Object.values(errors).some(error => error);
+  };
+  
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    let formattedValue = value;
+    
+    // Format card number with spaces
+    if (id === 'card-number') {
+      formattedValue = value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim();
+    }
+    
+    // Format expiry date with slash
+    if (id === 'expiry') {
+      if (value.length === 2 && formData.expiry.length === 1) {
+        formattedValue = value + '/';
+      } else {
+        formattedValue = value.replace(/[^0-9]/g, '').replace(/(.{2})/, '$1/').substring(0, 5);
+      }
+    }
+    
+    setFormData({
+      ...formData,
+      [id === 'card-name' ? 'cardName' : id === 'card-number' ? 'cardNumber' : id === 'expiry' ? 'expiry' : 'cvc']: formattedValue
+    });
+  };
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsProcessing(true);
     
-    // Simulate payment processing
-    setTimeout(() => {
-      setIsProcessing(false);
+    if (validateForm()) {
+      setIsProcessing(true);
+      
+      // Simulate payment processing
+      setTimeout(() => {
+        setIsProcessing(false);
+        toast({
+          title: "Payment Successful",
+          description: `You have successfully upgraded to the ${plan.name} plan.`,
+          duration: 5000,
+        });
+        navigate('/dashboard');
+      }, 2000);
+    } else {
       toast({
-        title: "Payment Successful",
-        description: `You have successfully upgraded to the ${plan.name} plan.`,
-        duration: 5000,
+        title: "Form Error",
+        description: "Please check the payment form and try again.",
+        variant: "destructive",
+        duration: 3000,
       });
-      navigate('/dashboard');
-    }, 2000);
+    }
   };
   
   return (
@@ -82,31 +140,73 @@ const PaymentSection = ({ planId, onBack }: PaymentSectionProps) => {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="card-name">Name on Card</Label>
-                <Input id="card-name" placeholder="John Smith" required />
+                <Label htmlFor="card-name" className={formErrors.cardName ? "text-red-500" : ""}>Name on Card</Label>
+                <Input 
+                  id="card-name" 
+                  placeholder="John Smith" 
+                  value={formData.cardName}
+                  onChange={handleInputChange}
+                  className={formErrors.cardName ? "border-red-500 focus:ring-red-500" : ""}
+                />
+                {formErrors.cardName && (
+                  <p className="text-xs text-red-500 flex items-center mt-1">
+                    <AlertCircle className="h-3 w-3 mr-1" /> Please enter the name on card
+                  </p>
+                )}
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="card-number">Card Number</Label>
+                <Label htmlFor="card-number" className={formErrors.cardNumber ? "text-red-500" : ""}>Card Number</Label>
                 <div className="relative">
                   <Input 
                     id="card-number" 
                     placeholder="1234 5678 9012 3456" 
-                    required 
-                    pattern="[0-9\s]{13,19}"
+                    value={formData.cardNumber}
+                    onChange={handleInputChange}
+                    className={formErrors.cardNumber ? "border-red-500 focus:ring-red-500" : ""}
+                    maxLength={19}
                   />
                   <CreditCard className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 </div>
+                {formErrors.cardNumber && (
+                  <p className="text-xs text-red-500 flex items-center mt-1">
+                    <AlertCircle className="h-3 w-3 mr-1" /> Please enter a valid card number
+                  </p>
+                )}
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="expiry">Expiry Date</Label>
-                  <Input id="expiry" placeholder="MM/YY" required pattern="(0[1-9]|1[0-2])\/[0-9]{2}" />
+                  <Label htmlFor="expiry" className={formErrors.expiry ? "text-red-500" : ""}>Expiry Date</Label>
+                  <Input 
+                    id="expiry" 
+                    placeholder="MM/YY" 
+                    value={formData.expiry}
+                    onChange={handleInputChange}
+                    className={formErrors.expiry ? "border-red-500 focus:ring-red-500" : ""}
+                    maxLength={5}
+                  />
+                  {formErrors.expiry && (
+                    <p className="text-xs text-red-500 flex items-center mt-1">
+                      <AlertCircle className="h-3 w-3 mr-1" /> Invalid format
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="cvc">CVC</Label>
-                  <Input id="cvc" placeholder="123" required pattern="[0-9]{3,4}" />
+                  <Label htmlFor="cvc" className={formErrors.cvc ? "text-red-500" : ""}>CVC</Label>
+                  <Input 
+                    id="cvc" 
+                    placeholder="123" 
+                    value={formData.cvc}
+                    onChange={handleInputChange}
+                    className={formErrors.cvc ? "border-red-500 focus:ring-red-500" : ""}
+                    maxLength={4}
+                  />
+                  {formErrors.cvc && (
+                    <p className="text-xs text-red-500 flex items-center mt-1">
+                      <AlertCircle className="h-3 w-3 mr-1" /> Invalid code
+                    </p>
+                  )}
                 </div>
               </div>
               

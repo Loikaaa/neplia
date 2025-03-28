@@ -1,10 +1,9 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Headphones, BookOpen, Edit, MessageSquare, BarChart3, Calendar, Crown, Clock, Award, PlusCircle, Timer } from 'lucide-react';
 import UserStats from '@/components/user/UserStats';
 import UserCourseProgress from '@/components/user/UserCourseProgress';
@@ -13,15 +12,18 @@ import UpcomingTests from '@/components/user/UpcomingTests';
 import PremiumPlans from '@/components/user/PremiumPlans';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { mockTestData } from '@/data/mockTestData';
+import { useToast } from '@/hooks/use-toast';
 
 const UserDashboard = () => {
   // Get user name from localStorage
   const userName = localStorage.getItem('userName') || 'User';
+  const { toast } = useToast();
   
   // State for exam timer
   const [timerActive, setTimerActive] = useState(false);
   const [examTime, setExamTime] = useState(0);
   const [examStartTime, setExamStartTime] = useState<Date | null>(null);
+  const [showPremiumPlans, setShowPremiumPlans] = useState(false);
   
   // Calculate remaining time
   const getRemainingTime = () => {
@@ -154,7 +156,6 @@ const UserDashboard = () => {
                         className="w-full justify-start text-left"
                         onClick={() => {
                           startExamTimer(section.id);
-                          // Fix: Use type assertion to access the click method
                           const closeButton = document.querySelector('[data-radix-alert-dialog-close-button]');
                           if (closeButton) {
                             (closeButton as HTMLElement).click();
@@ -222,60 +223,79 @@ const UserDashboard = () => {
             </div>
           </div>
           
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">Upgrade Your Experience</h2>
-            <PremiumPlans />
-          </div>
-          
-          <div className="bg-indigo-50 dark:bg-gray-800/50 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between">
-            <div className="mb-4 md:mb-0">
-              <h3 className="text-xl font-bold mb-2 flex items-center">
-                <Crown className="mr-2 h-5 w-5 text-indigo" /> Premium Features
-              </h3>
-              <p className="text-muted-foreground max-w-md">
-                Unlock advanced features with our premium plan for even better IELTS preparation
-              </p>
+          {showPremiumPlans ? (
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">Upgrade Your Experience</h2>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowPremiumPlans(false)}
+                  className="text-sm"
+                >
+                  Hide Plans
+                </Button>
+              </div>
+              <PremiumPlans />
             </div>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button className="btn-primary">View Premium Features</Button>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle className="flex items-center">
-                    <Crown className="mr-2 h-5 w-5 text-indigo" /> Premium Features
-                  </SheetTitle>
-                  <SheetDescription>
-                    Elevate your IELTS preparation with our premium tools
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="space-y-4 mt-6">
-                  <div className="flex items-start gap-3 p-4 rounded-lg bg-muted">
-                    <Award className="h-5 w-5 text-indigo mt-0.5" />
-                    <div>
-                      <h4 className="font-medium mb-1">Expert Evaluation</h4>
-                      <p className="text-sm text-muted-foreground">Get your essays evaluated by IELTS certified experts</p>
-                    </div>
+          ) : (
+            <div className="bg-indigo-50 dark:bg-gray-800/50 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between mb-12">
+              <div className="mb-4 md:mb-0">
+                <h3 className="text-xl font-bold mb-2 flex items-center">
+                  <Crown className="mr-2 h-5 w-5 text-indigo" /> Premium Features
+                </h3>
+                <p className="text-muted-foreground max-w-md">
+                  Unlock advanced features with our premium plan for even better IELTS preparation
+                </p>
+              </div>
+              <Button className="bg-indigo hover:bg-indigo/90" onClick={handleUpgradeClick}>
+                View Premium Plans
+              </Button>
+            </div>
+          )}
+          
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button className="hidden">View Premium Features</Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle className="flex items-center">
+                  <Crown className="mr-2 h-5 w-5 text-indigo" /> Premium Features
+                </SheetTitle>
+                <SheetDescription>
+                  Elevate your IELTS preparation with our premium tools
+                </SheetDescription>
+              </SheetHeader>
+              <div className="space-y-4 mt-6">
+                <div className="flex items-start gap-3 p-4 rounded-lg bg-muted">
+                  <Award className="h-5 w-5 text-indigo mt-0.5" />
+                  <div>
+                    <h4 className="font-medium mb-1">Expert Evaluation</h4>
+                    <p className="text-sm text-muted-foreground">Get your essays evaluated by IELTS certified experts</p>
                   </div>
-                  <div className="flex items-start gap-3 p-4 rounded-lg bg-muted">
-                    <Clock className="h-5 w-5 text-indigo mt-0.5" />
-                    <div>
-                      <h4 className="font-medium mb-1">Unlimited Mock Tests</h4>
-                      <p className="text-sm text-muted-foreground">Take as many full-length tests as you need</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-4 rounded-lg bg-muted">
-                    <MessageSquare className="h-5 w-5 text-indigo mt-0.5" />
-                    <div>
-                      <h4 className="font-medium mb-1">1-on-1 Coaching</h4>
-                      <p className="text-sm text-muted-foreground">Live video sessions with IELTS tutors</p>
-                    </div>
-                  </div>
-                  <Button className="w-full mt-4 btn-primary">Upgrade Now</Button>
                 </div>
-              </SheetContent>
-            </Sheet>
-          </div>
+                <div className="flex items-start gap-3 p-4 rounded-lg bg-muted">
+                  <Clock className="h-5 w-5 text-indigo mt-0.5" />
+                  <div>
+                    <h4 className="font-medium mb-1">Unlimited Mock Tests</h4>
+                    <p className="text-sm text-muted-foreground">Take as many full-length tests as you need</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 rounded-lg bg-muted">
+                  <MessageSquare className="h-5 w-5 text-indigo mt-0.5" />
+                  <div>
+                    <h4 className="font-medium mb-1">1-on-1 Coaching</h4>
+                    <p className="text-sm text-muted-foreground">Live video sessions with IELTS tutors</p>
+                  </div>
+                </div>
+                <SheetClose asChild>
+                  <Button className="w-full mt-4 bg-indigo hover:bg-indigo/90" onClick={handleUpgradeClick}>
+                    Upgrade Now
+                  </Button>
+                </SheetClose>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </Layout>

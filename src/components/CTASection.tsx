@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const features = [
   "Full access to all IELTS practice modules",
@@ -59,8 +60,10 @@ const CTASection = () => {
                 </div>
                 
                 <div className="space-y-4">
-                  <Link to="/signup" className="block w-full btn-primary text-center">
-                    Start Free Trial
+                  <Link to="/signup" className="block w-full">
+                    <Button className="w-full bg-indigo hover:bg-indigo/90 text-white">
+                      Start Free Trial <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
                   </Link>
                   <Link to="/pricing" className="block w-full text-center text-indigo dark:text-indigo-300 hover:underline text-sm">
                     View all pricing options
