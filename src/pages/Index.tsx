@@ -96,7 +96,7 @@ const Index = () => {
                 description: "Accepted worldwide for education, migration, and employment",
                 icon: "🎓",
                 color: "bg-indigo",
-                link: "/selection?exam=ielts-academic"
+                link: "/exams/ielts"
               },
               {
                 title: "TOEFL",
@@ -104,7 +104,7 @@ const Index = () => {
                 description: "Recognized by over 11,000 universities in 150+ countries",
                 icon: "🌎",
                 color: "bg-teal",
-                link: "/selection?exam=toefl"
+                link: "/exams/toefl"
               },
               {
                 title: "PTE Academic",
@@ -112,7 +112,7 @@ const Index = () => {
                 description: "Computer-based test accepted by thousands of institutions",
                 icon: "💻",
                 color: "bg-coral",
-                link: "/selection?exam=pte"
+                link: "/exams/pte"
               },
               {
                 title: "Cambridge English",
@@ -175,41 +175,53 @@ const Index = () => {
               {
                 title: "Country-Specific Content",
                 description: "Resources tailored to visa and immigration requirements for your target country",
-                icon: Globe
+                icon: Globe,
+                link: "/countries"
               },
               {
                 title: "AI-Powered Assessment",
                 description: "Get instant feedback on your speaking and writing with advanced AI technology",
-                icon: MessageSquare
+                icon: MessageSquare,
+                link: "/practice"
               },
               {
                 title: "Comprehensive Practice Tests",
                 description: "Full-length mock exams that simulate the real testing experience",
-                icon: BookOpen
+                icon: BookOpen,
+                link: "/practice/mock-tests"
               },
               {
                 title: "Performance Analytics",
                 description: "Track your progress with detailed insights and personalized recommendations",
-                icon: BarChart3
+                icon: BarChart3,
+                link: "/dashboard"
               },
               {
                 title: "Expert Guidance",
                 description: "Learning strategies and tips from certified instructors and top scorers",
-                icon: Award
+                icon: Award,
+                link: "/resources"
               },
               {
                 title: "Community Support",
-                description: "Connect with fellow test-takers and share experiences and resources",
-                icon: Users
+                description: "Connect with fellow test-takers to share experiences and resources",
+                icon: Users,
+                link: "/resources"
               }
             ].map((feature, index) => (
-              <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <div className="bg-indigo-50 dark:bg-indigo-900/30 h-12 w-12 rounded-lg flex items-center justify-center mb-4">
-                  <feature.icon className="h-6 w-6 text-indigo" />
+              <Link 
+                key={index} 
+                to={feature.link}
+                className="block hover:scale-105 transition-transform"
+              >
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 h-full">
+                  <div className="bg-indigo-50 dark:bg-indigo-900/30 h-12 w-12 rounded-lg flex items-center justify-center mb-4">
+                    <feature.icon className="h-6 w-6 text-indigo" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
                 </div>
-                <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -263,18 +275,26 @@ const Index = () => {
                       <h3 className="text-lg font-medium mb-3">Select Your Destination</h3>
                       <div className="grid grid-cols-3 gap-2 mb-4">
                         {["🇺🇸", "🇬🇧", "🇨🇦", "🇦🇺", "🇳🇿", "🇮🇳"].map((flag, i) => (
-                          <div key={i} className="aspect-square flex items-center justify-center text-2xl bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer transition-colors">
+                          <Link key={i} to="/countries" className="aspect-square flex items-center justify-center text-2xl bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer transition-colors">
                             {flag}
-                          </div>
+                          </Link>
                         ))}
                       </div>
                       <h3 className="text-lg font-medium mb-3">Choose Your Exam</h3>
                       <div className="space-y-2">
-                        {["IELTS Academic", "TOEFL", "PTE Academic"].map((exam, i) => (
-                          <div key={i} className="bg-gray-50 dark:bg-gray-700 p-2 rounded-lg flex items-center hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer transition-colors">
+                        {[
+                          { name: "IELTS Academic", link: "/exams/ielts" },
+                          { name: "TOEFL", link: "/exams/toefl" },
+                          { name: "PTE Academic", link: "/exams/pte" }
+                        ].map((exam, i) => (
+                          <Link 
+                            key={i} 
+                            to={exam.link}
+                            className="bg-gray-50 dark:bg-gray-700 p-2 rounded-lg flex items-center hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer transition-colors"
+                          >
                             <div className="w-4 h-4 rounded-full border-2 border-indigo mr-2 flex-shrink-0"></div>
-                            <span className="text-sm">{exam}</span>
-                          </div>
+                            <span className="text-sm">{exam.name}</span>
+                          </Link>
                         ))}
                       </div>
                     </div>

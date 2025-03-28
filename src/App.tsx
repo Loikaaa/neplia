@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -24,6 +25,13 @@ import PracticePage from "./pages/practice/PracticePage";
 import MockTestPage from "./pages/practice/MockTestPage";
 import AdminLink from "./components/AdminLink";
 import UserDashboard from "./pages/UserDashboard";
+
+// Exam-specific pages
+import IeltsPage from "./pages/exams/IeltsPage";
+import ToeflPage from "./pages/exams/ToeflPage";
+import PtePage from "./pages/exams/PtePage";
+import CountriesPage from "./pages/CountriesPage";
+import ResourcesHome from "./pages/ResourcesHome";
 
 // Admin pages
 import BlogPostCMS from "./pages/admin/BlogPostCMS";
@@ -91,13 +99,20 @@ const App: React.FC = () => {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<ProtectedUserRoute><UserDashboard /></ProtectedUserRoute>} />
-              <Route path="/resources" element={<><Resources /><AdminLink /></>} />
+              <Route path="/resources" element={<><ResourcesHome /><AdminLink /></>} />
+              <Route path="/resources/old" element={<><Resources /><AdminLink /></>} />
               <Route path="/resources/all" element={<><AllResources /><AdminLink /></>} />
               <Route path="/resources/:resourceId" element={<><ResourceDetail /><AdminLink /></>} />
               <Route path="/resources/category/:categoryId" element={<><CategoryDetail /><AdminLink /></>} />
               <Route path="/about" element={<><About /><AdminLink /></>} />
               <Route path="/blog" element={<><Blog /><AdminLink /></>} />
               <Route path="/blog/:slug" element={<><BlogPost /><AdminLink /></>} />
+              
+              {/* Exam-specific pages */}
+              <Route path="/exams/ielts" element={<><IeltsPage /><AdminLink /></>} />
+              <Route path="/exams/toefl" element={<><ToeflPage /><AdminLink /></>} />
+              <Route path="/exams/pte" element={<><PtePage /><AdminLink /></>} />
+              <Route path="/countries" element={<><CountriesPage /><AdminLink /></>} />
               
               <Route path="/admin/login" element={<DemoAdminLogin />} />
               
