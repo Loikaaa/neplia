@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -21,8 +20,6 @@ import {
   Trash2, 
   RefreshCw,
   FileText,
-  Upload,
-  Download,
   Search,
   Filter,
   SortAsc,
@@ -83,7 +80,6 @@ const ExamSectionPage = () => {
   // State for edit dialog
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -298,38 +294,6 @@ const ExamSectionPage = () => {
     });
   };
 
-  // Handle bulk import
-  const handleBulkImport = () => {
-    const newQuestions = [
-      {
-        id: `${mathQuestions.length + 1}`,
-        category: 'algebra',
-        difficulty: 'medium',
-        question: 'If 5x + 2 = 17, what is the value of x?',
-        options: ['2', '3', '4', '5'],
-        correctAnswer: '3',
-        explanation: 'To solve for x, subtract 2 from both sides to get 5x = 15, then divide by 5 to get x = 3.'
-      },
-      {
-        id: `${mathQuestions.length + 2}`,
-        category: 'probability',
-        difficulty: 'medium',
-        question: 'If a fair die is rolled once, what is the probability of rolling a number greater than 4?',
-        options: ['1/6', '1/3', '1/2', '2/3'],
-        correctAnswer: '1/3',
-        explanation: 'There are 6 possible outcomes when rolling a die. Numbers greater than 4 are 5 and 6, which is 2 outcomes. So the probability is 2/6 = 1/3.'
-      }
-    ];
-    
-    setMathQuestions([...mathQuestions, ...newQuestions]);
-    setIsImportDialogOpen(false);
-    
-    toast({
-      title: "Questions imported",
-      description: `Successfully imported ${newQuestions.length} questions.`,
-    });
-  };
-
   // Filter questions based on search term, category, and difficulty
   const filteredQuestions = mathQuestions.filter(q => {
     const matchesSearch = q.question.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -364,14 +328,6 @@ const ExamSectionPage = () => {
                   <Button className="bg-indigo hover:bg-indigo/90" onClick={() => setIsAddDialogOpen(true)}>
                     <Plus className="h-4 w-4 mr-2" />
                     Add Question
-                  </Button>
-                  <Button variant="outline" onClick={() => setIsImportDialogOpen(true)}>
-                    <Upload className="h-4 w-4 mr-2" />
-                    Import
-                  </Button>
-                  <Button variant="outline">
-                    <Download className="h-4 w-4 mr-2" />
-                    Export
                   </Button>
                 </div>
               </div>
@@ -1093,37 +1049,6 @@ const ExamSectionPage = () => {
                 </DialogFooter>
               </form>
             </Form>
-          </DialogContent>
-        </Dialog>
-
-        {/* Import Questions Dialog */}
-        <Dialog open={isImportDialogOpen} onOpenChange={setIsImportDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Import Questions</DialogTitle>
-              <DialogDescription>
-                Upload a CSV or JSON file with questions to bulk import.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="py-6">
-              <div className="border-2 border-dashed rounded-lg p-10 text-center">
-                <Upload className="h-10 w-10 mx-auto text-gray-400 mb-4" />
-                <p className="text-sm text-gray-500 mb-2">
-                  Drag and drop your file here, or click to browse
-                </p>
-                <p className="text-xs text-gray-400">
-                  Supported formats: CSV, JSON, XLSX (max 5MB)
-                </p>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsImportDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleBulkImport}>
-                Import Questions
-              </Button>
-            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
