@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, User } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import UserProfileMenu from './UserProfileMenu';
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -21,6 +22,8 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
+  
+  const isLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,14 +54,12 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <Link to="/" className="flex items-center">
             <span className="font-heading text-xl md:text-2xl font-bold text-indigo">
               Neplia<span className="text-coral">.</span>
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <div key={link.name} className="relative group">
@@ -85,7 +86,6 @@ const Navbar = () => {
                   </Link>
                 )}
 
-                {/* Submenu */}
                 {link.submenu && (
                   <div className={cn(
                     "absolute top-full left-0 mt-2 w-48 rounded-md overflow-hidden shadow-lg transition-all duration-300 origin-top-right bg-white dark:bg-gray-800 transform",
@@ -112,23 +112,27 @@ const Navbar = () => {
             ))}
           </nav>
 
-          {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-3">
-            <Link 
-              to="/login" 
-              className="px-4 py-2 rounded-lg border border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
-            >
-              Log In
-            </Link>
-            <Link 
-              to="/signup" 
-              className="btn-primary"
-            >
-              Sign Up
-            </Link>
+            {isLoggedIn ? (
+              <UserProfileMenu />
+            ) : (
+              <>
+                <Link 
+                  to="/login" 
+                  className="px-4 py-2 rounded-lg border border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                >
+                  Log In
+                </Link>
+                <Link 
+                  to="/signup" 
+                  className="btn-primary"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className="md:hidden text-gray-700 dark:text-gray-200 focus:outline-none"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -142,7 +146,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div
         className={cn(
           "fixed inset-0 z-40 transform transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 md:hidden",
@@ -214,20 +217,28 @@ const Navbar = () => {
           </nav>
 
           <div className="mt-6 space-y-3">
-            <Link
-              to="/login"
-              className="block w-full text-center px-4 py-3 rounded-lg border border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Log In
-            </Link>
-            <Link
-              to="/signup"
-              className="block w-full text-center btn-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Sign Up
-            </Link>
+            {isLoggedIn ? (
+              <div className="py-3 px-4 border border-muted rounded-lg">
+                <UserProfileMenu />
+              </div>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="block w-full text-center px-4 py-3 rounded-lg border border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Log In
+                </Link>
+                <Link
+                  to="/signup"
+                  className="block w-full text-center btn-primary"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
