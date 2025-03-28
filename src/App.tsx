@@ -30,6 +30,7 @@ import UserDashboard from "./pages/UserDashboard";
 import IeltsPage from "./pages/exams/IeltsPage";
 import ToeflPage from "./pages/exams/ToeflPage";
 import PtePage from "./pages/exams/PtePage";
+import SatPage from "./pages/exams/SatPage";
 import CountriesPage from "./pages/CountriesPage";
 import ResourcesHome from "./pages/ResourcesHome";
 
@@ -96,6 +97,11 @@ const App: React.FC = () => {
               <Route path="/practice/speaking" element={<><SpeakingPractice /><AdminLink /></>} />
               <Route path="/practice/mock-test" element={<><MockTestPage /><AdminLink /></>} />
               <Route path="/practice/mock-tests" element={<><MockTestPage /><AdminLink /></>} />
+              
+              {/* SAT-specific practice routes */}
+              <Route path="/practice/sat/math" element={<><MockTestPage type="sat-math" /><AdminLink /></>} />
+              <Route path="/practice/sat/english" element={<><MockTestPage type="sat-english" /><AdminLink /></>} />
+              
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<ProtectedUserRoute><UserDashboard /></ProtectedUserRoute>} />
@@ -112,6 +118,7 @@ const App: React.FC = () => {
               <Route path="/exams/ielts" element={<><IeltsPage /><AdminLink /></>} />
               <Route path="/exams/toefl" element={<><ToeflPage /><AdminLink /></>} />
               <Route path="/exams/pte" element={<><PtePage /><AdminLink /></>} />
+              <Route path="/exams/sat" element={<><SatPage /><AdminLink /></>} />
               <Route path="/countries" element={<><CountriesPage /><AdminLink /></>} />
               
               <Route path="/admin/login" element={<DemoAdminLogin />} />

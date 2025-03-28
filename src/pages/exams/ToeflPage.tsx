@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookOpen, Headphones, MessageSquare, Edit, BarChart3, Calendar, CheckCircle2, Award, Users, Shield, Laptop } from 'lucide-react';
+import { ArrowRight, BookOpen, Headphones, MessageSquare, Edit, BarChart3, Calendar, CheckCircle2, Award, Shield, Laptop, Brain, Clock, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const ToeflPage = () => {
@@ -66,11 +66,11 @@ const ToeflPage = () => {
         </div>
       </section>
 
-      {/* Modules Section */}
+      {/* TOEFL-Specific Sections */}
       <section className="py-16">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">TOEFL Test Sections</h2>
+            <h2 className="text-3xl font-bold mb-4">TOEFL iBT Test Sections</h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Prepare for all four TOEFL iBT test sections with our specialized modules.
             </p>
@@ -83,28 +83,28 @@ const ToeflPage = () => {
                 description: "Academic passages with questions that test your comprehension skills",
                 icon: BookOpen,
                 color: "bg-teal-600",
-                link: "/practice/reading"
+                link: "/practice/reading?exam=toefl"
               },
               {
                 title: "Listening",
                 description: "Lectures, classroom discussions and conversations with comprehension questions",
                 icon: Headphones,
                 color: "bg-indigo",
-                link: "/practice/listening"
+                link: "/practice/listening?exam=toefl"
               },
               {
                 title: "Speaking",
                 description: "Express yourself clearly on academic topics and everyday experiences",
                 icon: MessageSquare,
                 color: "bg-coral",
-                link: "/practice/speaking"
+                link: "/practice/speaking?exam=toefl"
               },
               {
                 title: "Writing",
                 description: "Write essay responses based on reading and listening tasks",
                 icon: Edit,
                 color: "bg-indigo-800",
-                link: "/practice/writing"
+                link: "/practice/writing?exam=toefl"
               }
             ].map((module, index) => (
               <Link key={index} to={module.link} className="block">

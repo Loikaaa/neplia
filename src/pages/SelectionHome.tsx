@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -9,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-// Exam types data
+// Exam types data - expanded to include non-English exams
 const examTypes = [
   {
     id: 'ielts-academic',
@@ -52,6 +51,24 @@ const examTypes = [
     name: 'OET',
     description: 'Occupational English Test for healthcare professionals',
     icon: '⚕️'
+  },
+  {
+    id: 'sat',
+    name: 'SAT',
+    description: 'Scholastic Assessment Test for college admissions in the US',
+    icon: '🧮'
+  },
+  {
+    id: 'gre',
+    name: 'GRE',
+    description: 'Graduate Record Examination for graduate school admissions',
+    icon: '🎯'
+  },
+  {
+    id: 'gmat',
+    name: 'GMAT',
+    description: 'Graduate Management Admission Test for business schools',
+    icon: '📊'
   }
 ];
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Globe, Search, Bookmark, CircleCheck, Info } from 'lucide-react';
+import { ArrowRight, Globe, Search, Bookmark, CircleCheck, Info, BookOpen, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const CountriesPage = () => {
