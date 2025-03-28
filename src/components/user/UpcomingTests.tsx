@@ -46,7 +46,11 @@ const UpcomingTests = () => {
     title: "IELTS Mock Test",
     date: new Date(currentDate.getTime() + 14 * 24 * 60 * 60 * 1000), // 14 days from now by default
     duration: "2 hours 45 minutes",
-    isPriority: false
+    isPriority: false,
+    // Adding exam timer values
+    examTimerDays: 22,
+    examTimerMonths: 1,
+    examTimerType: "preparation"
   });
 
   // Format date to display
@@ -63,7 +67,10 @@ const UpcomingTests = () => {
       title: "IELTS Mock Test",
       date: new Date(currentDate.getTime() + 14 * 24 * 60 * 60 * 1000),
       duration: "2 hours 45 minutes",
-      isPriority: false
+      isPriority: false,
+      examTimerDays: 22,
+      examTimerMonths: 1,
+      examTimerType: "preparation"
     });
   };
 
@@ -182,6 +189,58 @@ const UpcomingTests = () => {
                   <option value="2 hours 45 minutes">2 hours 45 minutes (Full Test)</option>
                 </select>
               </div>
+              
+              {/* Added days input for exam timer */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="exam-timer-days" className="text-right">
+                  Days Until Exam
+                </Label>
+                <input
+                  type="number"
+                  id="exam-timer-days"
+                  className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2"
+                  value={newTest.examTimerDays}
+                  onChange={(e) => setNewTest({...newTest, examTimerDays: parseInt(e.target.value)})}
+                  min="1"
+                  max="365"
+                />
+              </div>
+              
+              {/* Added months input for exam timer */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="exam-timer-months" className="text-right">
+                  Months Until Exam
+                </Label>
+                <input
+                  type="number"
+                  id="exam-timer-months"
+                  className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2"
+                  value={newTest.examTimerMonths}
+                  onChange={(e) => setNewTest({...newTest, examTimerMonths: parseInt(e.target.value)})}
+                  min="0"
+                  max="36"
+                />
+              </div>
+              
+              {/* Added exam type dropdown */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="exam-timer-type" className="text-right">
+                  Exam Type
+                </Label>
+                <select 
+                  id="exam-timer-type"
+                  className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2"
+                  value={newTest.examTimerType}
+                  onChange={(e) => setNewTest({...newTest, examTimerType: e.target.value})}
+                >
+                  <option value="preparation">Preparation Period</option>
+                  <option value="academic">Academic IELTS</option>
+                  <option value="general">General Training IELTS</option>
+                  <option value="speaking">Speaking Only</option>
+                  <option value="writing">Writing Only</option>
+                </select>
+              </div>
+              
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="test-priority" className="text-right">
                   Priority
