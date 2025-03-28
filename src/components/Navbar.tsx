@@ -1,16 +1,33 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import UserProfileMenu from './UserProfileMenu';
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
   { name: 'Home', path: '/' },
   { name: 'Practice', path: '/practice', submenu: [
-    { name: 'Listening', path: '/practice/listening' },
-    { name: 'Reading', path: '/practice/reading' },
-    { name: 'Writing', path: '/practice/writing' },
-    { name: 'Speaking', path: '/practice/speaking' },
+    { name: 'Listening', path: '/practice/listening', icon: Headphones, description: 'Improve your listening skills with our practice tests' },
+    { name: 'Reading', path: '/practice/reading', icon: BookOpen, description: 'Enhance your reading comprehension with timed exercises' },
+    { name: 'Writing', path: '/practice/writing', icon: Edit, description: 'Get AI-powered feedback on your writing tasks' },
+    { name: 'Speaking', path: '/practice/speaking', icon: MessageSquare, description: 'Practice your speaking skills with voice analysis tools' },
+    { name: 'Mock Tests', path: '/practice/mock-test', icon: BarChart3, description: 'Take full-length IELTS mock tests under exam conditions' },
   ]},
   { name: 'Resources', path: '/resources' },
   { name: 'Blog', path: '/blog' },
@@ -39,17 +56,13 @@ const Navbar = () => {
     };
   }, [scrolled]);
 
-  const toggleSubmenu = (name: string) => {
-    setOpenSubmenu(openSubmenu === name ? null : name);
-  };
-
   return (
     <header 
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         scrolled 
-          ? 'py-3 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-md' 
-          : 'py-5 bg-transparent'
+          ? 'py-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg shadow-md' 
+          : 'py-4 bg-transparent'
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -60,59 +73,70 @@ const Navbar = () => {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <div key={link.name} className="relative group">
-                {link.submenu ? (
-                  <button 
-                    onClick={() => toggleSubmenu(link.name)}
-                    className="flex items-center text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300 font-medium transition-colors"
-                  >
-                    {link.name}
-                    <ChevronDown className={cn(
-                      "ml-1 h-4 w-4 transition-transform duration-200",
-                      openSubmenu === link.name ? "rotate-180" : ""
-                    )} />
-                  </button>
-                ) : (
-                  <Link 
-                    to={link.path}
-                    className={cn(
-                      "text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300 font-medium transition-colors link-underline",
-                      location.pathname === link.path && "text-indigo dark:text-indigo-300"
-                    )}
-                  >
-                    {link.name}
-                  </Link>
-                )}
-
-                {link.submenu && (
-                  <div className={cn(
-                    "absolute top-full left-0 mt-2 w-48 rounded-md overflow-hidden shadow-lg transition-all duration-300 origin-top-right bg-white dark:bg-gray-800 transform",
-                    openSubmenu === link.name ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
-                  )}>
-                    <div className="py-2">
-                      {link.submenu.map((sublink) => (
-                        <Link
-                          key={sublink.name}
-                          to={sublink.path}
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex md:flex-1 md:justify-center">
+            <NavigationMenu className="mx-auto">
+              <NavigationMenuList className="gap-1">
+                {navLinks.map((link) => (
+                  <NavigationMenuItem key={link.name}>
+                    {link.submenu ? (
+                      <>
+                        <NavigationMenuTrigger 
                           className={cn(
-                            "block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo dark:hover:text-indigo-300",
-                            location.pathname === sublink.path && "bg-indigo-50 dark:bg-indigo-900/30 text-indigo dark:text-indigo-300"
+                            "text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300 font-medium",
+                            location.pathname.startsWith(link.path) && "text-indigo dark:text-indigo-300"
                           )}
-                          onClick={() => setOpenSubmenu(null)}
                         >
-                          {sublink.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </nav>
+                          {link.name}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <div className="w-[550px] p-4 md:grid md:grid-cols-2 gap-3">
+                            {link.submenu.map((sublink) => (
+                              <Link
+                                key={sublink.name}
+                                to={sublink.path}
+                                className={cn(
+                                  "block select-none space-y-1 rounded-md p-3 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors",
+                                  location.pathname === sublink.path && "bg-indigo-50 dark:bg-indigo-900/30"
+                                )}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <div className="w-8 h-8 flex items-center justify-center rounded-md bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300">
+                                    <sublink.icon className="h-4 w-4" />
+                                  </div>
+                                  <div className="text-sm font-medium">{sublink.name}</div>
+                                </div>
+                                <p className="line-clamp-2 text-xs text-muted-foreground">
+                                  {sublink.description}
+                                </p>
+                              </Link>
+                            ))}
+                          </div>
+                        </NavigationMenuContent>
+                      </>
+                    ) : (
+                      <Link 
+                        to={link.path}
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          "text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300 font-medium transition-colors",
+                          location.pathname === link.path && "text-indigo dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30"
+                        )}
+                      >
+                        {link.name}
+                      </Link>
+                    )}
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
 
-          <div className="hidden md:flex items-center space-x-3">
+          <div className="hidden md:flex items-center gap-3">
+            <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+              <Search className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+            </button>
+
             {isLoggedIn ? (
               <UserProfileMenu />
             ) : (
@@ -125,7 +149,7 @@ const Navbar = () => {
                 </Link>
                 <Link 
                   to="/signup" 
-                  className="btn-primary"
+                  className="px-4 py-2 bg-indigo hover:bg-indigo/90 text-white rounded-lg transition-colors"
                 >
                   Sign Up
                 </Link>
@@ -133,26 +157,31 @@ const Navbar = () => {
             )}
           </div>
 
-          <button
-            className="md:hidden text-gray-700 dark:text-gray-200 focus:outline-none"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden items-center gap-2">
+            {isLoggedIn && <UserProfileMenu />}
+            <button
+              className="ml-2 text-gray-700 dark:text-gray-200 focus:outline-none"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
+      {/* Mobile Menu */}
       <div
         className={cn(
-          "fixed inset-0 z-40 transform transition-all duration-300 ease-in-out bg-white dark:bg-gray-900 md:hidden",
+          "fixed inset-y-0 right-0 z-40 w-full sm:w-80 transform transition-transform duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl md:hidden overflow-y-auto",
           mobileMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
-        <div className="flex flex-col h-full p-6 overflow-y-auto">
+        <div className="flex flex-col h-full p-6">
           <div className="flex items-center justify-between mb-8">
             <Link to="/" className="font-heading text-xl font-bold text-indigo" onClick={() => setMobileMenuOpen(false)}>
               Neplia<span className="text-coral">.</span>
@@ -169,37 +198,37 @@ const Navbar = () => {
             {navLinks.map((link) => (
               <div key={link.name} className="py-2">
                 {link.submenu ? (
-                  <>
-                    <button
-                      onClick={() => toggleSubmenu(link.name)}
-                      className="flex items-center justify-between w-full text-lg font-medium text-gray-700 dark:text-gray-200"
-                    >
-                      {link.name}
-                      <ChevronDown className={cn(
-                        "h-5 w-5 transition-transform duration-200",
-                        openSubmenu === link.name ? "rotate-180" : ""
-                      )} />
-                    </button>
+                  <DropdownMenu open={openSubmenu === link.name} onOpenChange={() => setOpenSubmenu(openSubmenu === link.name ? null : link.name)}>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        className="flex items-center justify-between w-full text-lg font-medium text-gray-700 dark:text-gray-200"
+                      >
+                        {link.name}
+                        <ChevronDown className={cn(
+                          "h-5 w-5 transition-transform duration-200",
+                          openSubmenu === link.name ? "rotate-180" : ""
+                        )} />
+                      </button>
+                    </DropdownMenuTrigger>
                     
-                    <div className={cn(
-                      "mt-2 space-y-2 pl-4 transition-all duration-200",
-                      openSubmenu === link.name ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
-                    )}>
+                    <DropdownMenuContent className="w-full p-2 bg-gray-50 dark:bg-gray-800 rounded-md my-1">
                       {link.submenu.map((sublink) => (
-                        <Link
-                          key={sublink.name}
-                          to={sublink.path}
-                          className={cn(
-                            "block py-2 text-gray-600 dark:text-gray-400 hover:text-indigo dark:hover:text-indigo-300",
-                            location.pathname === sublink.path && "text-indigo dark:text-indigo-300"
-                          )}
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {sublink.name}
-                        </Link>
+                        <DropdownMenuItem key={sublink.name} asChild>
+                          <Link
+                            to={sublink.path}
+                            className={cn(
+                              "flex items-center gap-2 py-3 px-2 text-gray-600 dark:text-gray-400 hover:text-indigo dark:hover:text-indigo-300 rounded-md transition-colors",
+                              location.pathname === sublink.path && "text-indigo dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30"
+                            )}
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            <sublink.icon className="h-4 w-4" />
+                            {sublink.name}
+                          </Link>
+                        </DropdownMenuItem>
                       ))}
-                    </div>
-                  </>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 ) : (
                   <Link
                     to={link.path}
@@ -216,30 +245,24 @@ const Navbar = () => {
             ))}
           </nav>
 
-          <div className="mt-6 space-y-3">
-            {isLoggedIn ? (
-              <div className="py-3 px-4 border border-muted rounded-lg">
-                <UserProfileMenu />
-              </div>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="block w-full text-center px-4 py-3 rounded-lg border border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Log In
-                </Link>
-                <Link
-                  to="/signup"
-                  className="block w-full text-center btn-primary"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
-          </div>
+          {!isLoggedIn && (
+            <div className="mt-6 space-y-3">
+              <Link
+                to="/login"
+                className="block w-full text-center px-4 py-3 rounded-lg border border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Log In
+              </Link>
+              <Link
+                to="/signup"
+                className="block w-full text-center px-4 py-2 bg-indigo hover:bg-indigo/90 text-white rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </header>
