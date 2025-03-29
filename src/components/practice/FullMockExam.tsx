@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -77,7 +76,6 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
       description: `Your ${examType ? examType.toUpperCase() : 'IELTS'} mock exam has begun. Good luck!`,
     });
 
-    // Request fullscreen
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen()
         .then(() => setIsFullScreen(true))
@@ -269,6 +267,22 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
     return sectionType.charAt(0).toUpperCase() + sectionType.slice(1);
   };
 
+  const getExamDescription = (examType: string) => {
+    const descriptionMap: Record<string, string> = {
+      'academic': "This full mock exam simulates the real IELTS Academic test environment with timed sections",
+      'general': "This full mock exam simulates the real IELTS General Training test environment with timed sections",
+      'toefl': "This full mock exam simulates the real TOEFL test environment with timed sections",
+      'pte': "This full mock exam simulates the real PTE Academic test environment with timed sections",
+      'sat': "This full mock exam simulates the real SAT test environment with timed sections",
+      'sat-math': "This math section of the SAT exam focuses on problem-solving, data analysis, and advanced mathematics",
+      'sat-english': "This English section of the SAT exam focuses on reading comprehension, writing, and language skills",
+      'gre': "This full mock exam simulates the real GRE test environment with timed sections",
+      'gmat': "This full mock exam simulates the real GMAT test environment with timed sections"
+    };
+    
+    return descriptionMap[examType] || "This full mock exam simulates the real test environment with timed sections";
+  };
+
   const getExamRules = () => {
     if (isSatTest) {
       return [
@@ -409,7 +423,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                 : 'IELTS Academic Mock Exam'}
             </CardTitle>
             <CardDescription>
-              This full mock exam simulates the real test environment with timed sections
+              {getExamDescription(examType)}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
