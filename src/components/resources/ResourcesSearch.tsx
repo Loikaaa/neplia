@@ -32,7 +32,7 @@ const ResourcesSearch = () => {
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={isMobile ? 16 : 20} />
           <Button 
             className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-md" 
-            size={isMobile ? "xs" : "sm"}
+            size="sm"
             onClick={handleSearch}
           >
             Search
