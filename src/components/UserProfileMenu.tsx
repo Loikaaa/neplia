@@ -61,7 +61,7 @@ const UserProfileMenu = ({ isMobile = false }: UserProfileMenuProps) => {
     return (
       <Avatar className="h-8 w-8 border border-muted">
         <AvatarImage src="" />
-        <AvatarFallback className="bg-indigo-50 text-indigo-700">
+        <AvatarFallback className="bg-blue-50 text-blue-700">
           {getInitials(userName)}
         </AvatarFallback>
       </Avatar>
@@ -73,7 +73,7 @@ const UserProfileMenu = ({ isMobile = false }: UserProfileMenuProps) => {
       <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
         <Avatar className="h-8 w-8 border border-muted">
           <AvatarImage src="" />
-          <AvatarFallback className="bg-indigo-50 text-indigo-700">
+          <AvatarFallback className="bg-blue-50 text-blue-700">
             {getInitials(userName)}
           </AvatarFallback>
         </Avatar>

@@ -8,17 +8,17 @@ const HeroSection = () => {
     <section className="relative overflow-hidden pt-12 md:pt-20 lg:pt-24 pb-16 md:pb-24">
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-[30%] -right-[20%] h-[600px] w-[600px] rounded-full bg-indigo/5 blur-3xl"></div>
-        <div className="absolute top-[20%] -left-[10%] h-[400px] w-[400px] rounded-full bg-teal/5 blur-3xl"></div>
-        <div className="absolute bottom-[10%] right-[5%] h-[300px] w-[300px] rounded-full bg-coral/5 blur-3xl"></div>
+        <div className="absolute -top-[30%] -right-[20%] h-[600px] w-[600px] rounded-full bg-blue-600/5 blur-3xl"></div>
+        <div className="absolute top-[20%] -left-[10%] h-[400px] w-[400px] rounded-full bg-cyan-500/5 blur-3xl"></div>
+        <div className="absolute bottom-[10%] right-[5%] h-[300px] w-[300px] rounded-full bg-rose-500/5 blur-3xl"></div>
       </div>
 
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
           {/* Text Content */}
           <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left animate-fade-in">
-            <div className="inline-flex items-center rounded-full bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 text-sm font-medium text-indigo dark:text-indigo-300 mb-4">
-              <span className="flex h-2 w-2 rounded-full bg-indigo mr-2"></span>
+            <div className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-300 mb-4">
+              <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2"></span>
               The Ultimate IELTS Platform
             </div>
             
@@ -50,7 +50,7 @@ const HeroSection = () => {
           {/* Hero Image/Illustration */}
           <div className="w-full lg:w-1/2 animate-scale-in">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-indigo/10 to-teal/10 rounded-2xl transform rotate-3 scale-105"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-cyan-500/10 rounded-2xl transform rotate-3 scale-105"></div>
               <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
@@ -70,7 +70,7 @@ const HeroSection = () => {
                         key={i} 
                         className="w-2.5 h-10 rounded-full"
                         style={{ 
-                          backgroundColor: i === 1 ? '#4E54C8' : i === 2 ? '#38B2AC' : i === 3 ? '#FD79A8' : '#E2E8F0',
+                          backgroundColor: i === 1 ? '#1E56A0' : i === 2 ? '#00ADDF' : i === 3 ? '#F06A7C' : '#E2E8F0',
                           height: `${i * 10}px`
                         }}
                       ></div>
@@ -80,8 +80,8 @@ const HeroSection = () => {
               </div>
               
               {/* Decorative Elements */}
-              <div className="absolute -bottom-6 -right-6 h-12 w-12 rounded-full bg-coral animate-pulse-slow"></div>
-              <div className="absolute -top-6 -left-6 h-12 w-12 rounded-full bg-teal animate-pulse-slow"></div>
+              <div className="absolute -bottom-6 -right-6 h-12 w-12 rounded-full bg-rose-500 animate-pulse-slow"></div>
+              <div className="absolute -top-6 -left-6 h-12 w-12 rounded-full bg-cyan-500 animate-pulse-slow"></div>
             </div>
           </div>
         </div>

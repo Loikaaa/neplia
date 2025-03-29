@@ -79,7 +79,7 @@ export const ReadingTest = () => {
         <CardContent className="p-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium">Time Remaining</span>
-            <span className="text-sm font-medium text-red-600 dark:text-red-400 font-mono">
+            <span className="text-sm font-medium text-rose-500 dark:text-rose-400 font-mono">
               {formatTime(timeRemaining)}
             </span>
           </div>
@@ -96,7 +96,7 @@ export const ReadingTest = () => {
             className={cn(
               "py-2 px-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap",
               currentPassage === index 
-                ? "border-indigo text-indigo dark:border-indigo-400 dark:text-indigo-400" 
+                ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400" 
                 : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
             )}
           >
@@ -148,13 +148,14 @@ export const ReadingTest = () => {
         {currentPassage < testData.passages.length - 1 ? (
           <Button
             onClick={() => setCurrentPassage(currentPassage + 1)}
+            className="bg-blue-600 hover:bg-blue-700"
           >
             Next Passage
           </Button>
         ) : (
           <Button 
             onClick={submitTest}
-            className="bg-indigo hover:bg-indigo-600"
+            className="bg-blue-600 hover:bg-blue-700"
           >
             Submit Test
           </Button>
