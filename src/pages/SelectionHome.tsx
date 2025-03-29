@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Layout from '@/components/Layout';
 import CountrySelector from '@/components/selection/CountrySelector';
 import ExamTypeSelector from '@/components/selection/ExamTypeSelector';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Users } from 'lucide-react';
+import { ArrowRight, Users, LogIn, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const examTypes = [
@@ -75,12 +75,18 @@ const examTypes = [
 const SelectionHome: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedExam, setSelectedExam] = useState('');
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0); // Start with auth step (0) now instead of country (1)
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+  const isLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
 
   useEffect(() => {
+    // If user is already logged in, skip to country selection step
+    if (isLoggedIn) {
+      setStep(1);
+    }
+    
     const queryParams = new URLSearchParams(location.search);
     const examParam = queryParams.get('exam');
     
@@ -88,10 +94,14 @@ const SelectionHome: React.FC = () => {
       const validExam = examTypes.find(exam => exam.id === examParam);
       if (validExam) {
         setSelectedExam(examParam);
-        setStep(1);
+        if (isLoggedIn) {
+          setStep(1);
+        } else {
+          setStep(0);
+        }
       }
     }
-  }, [location]);
+  }, [location, isLoggedIn]);
 
   useEffect(() => {
     const savedCountry = localStorage.getItem('selectedCountry');
@@ -153,7 +163,10 @@ const SelectionHome: React.FC = () => {
   };
 
   const handleNextStep = () => {
-    if (step === 1) {
+    if (step === 0) {
+      // Login step - this is just for demonstration, in real app you'd check authentication
+      setStep(1);
+    } else if (step === 1) {
       if (!selectedCountry) {
         toast({
           title: "Please select a country",
@@ -192,6 +205,18 @@ const SelectionHome: React.FC = () => {
     return exam ? exam.name : '';
   };
 
+  const renderStepIndicator = () => {
+    return (
+      <div className="flex items-center text-sm text-muted-foreground">
+        <span className={`h-6 w-6 rounded-full inline-flex items-center justify-center mr-2 ${step >= 0 ? "bg-indigo text-white" : "bg-gray-200 dark:bg-gray-700"}`}>1</span>
+        <span className="mr-2">→</span>
+        <span className={`h-6 w-6 rounded-full inline-flex items-center justify-center mr-2 ${step >= 1 ? "bg-indigo text-white" : "bg-gray-200 dark:bg-gray-700"}`}>2</span>
+        <span className="mr-2">→</span>
+        <span className={`h-6 w-6 rounded-full inline-flex items-center justify-center ${step >= 2 ? "bg-indigo text-white" : "bg-gray-200 dark:bg-gray-700"}`}>3</span>
+      </div>
+    );
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800 pt-16 pb-12">
@@ -203,7 +228,9 @@ const SelectionHome: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {selectedExam ? `Prepare for ${getCurrentExamName()}` : 'Personalize Your Exam Proficiency Journey'}
+              {step === 0 ? 'Welcome to Neplia' : 
+               selectedExam ? `Prepare for ${getCurrentExamName()}` : 
+               'Personalize Your Exam Proficiency Journey'}
             </motion.h1>
             <motion.p 
               className="text-muted-foreground max-w-2xl mx-auto"
@@ -211,9 +238,9 @@ const SelectionHome: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              {selectedExam 
-                ? getExamDescription(selectedExam)
-                : "Let's customize your experience to match your specific needs. We'll tailor our resources and practice tests to your target exam and destination."}
+              {step === 0 ? 'Sign in or create an account to personalize your exam preparation journey' :
+               selectedExam ? getExamDescription(selectedExam) :
+               "Let's customize your experience to match your specific needs. We'll tailor our resources and practice tests to your target exam and destination."}
             </motion.p>
           </div>
 
@@ -225,17 +252,48 @@ const SelectionHome: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold">
-                {step === 1 ? "Step 1: Your Location" : "Step 2: Target Exam"}
+                {step === 0 ? "Step 1: Authentication" : 
+                 step === 1 ? "Step 2: Your Location" : 
+                 "Step 3: Target Exam"}
               </h2>
-              <div className="flex items-center text-sm text-muted-foreground">
-                <span className={`h-6 w-6 rounded-full inline-flex items-center justify-center mr-2 ${step >= 1 ? "bg-indigo text-white" : "bg-gray-200 dark:bg-gray-700"}`}>1</span>
-                <span className="mr-2">→</span>
-                <span className={`h-6 w-6 rounded-full inline-flex items-center justify-center ${step >= 2 ? "bg-indigo text-white" : "bg-gray-200 dark:bg-gray-700"}`}>2</span>
-              </div>
+              {renderStepIndicator()}
             </div>
 
             <div className="min-h-[300px]">
-              {step === 1 ? (
+              {step === 0 ? (
+                <div className="flex flex-col items-center justify-center space-y-6 py-8">
+                  <div className="text-center max-w-md">
+                    <h3 className="text-lg font-medium mb-2">Join Neplia to track your progress</h3>
+                    <p className="text-muted-foreground text-sm mb-6">
+                      Create an account to save your progress, access personalized recommendations, and get tailored study plans.
+                    </p>
+                    
+                    <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                      <Link to="/login" className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-indigo hover:bg-indigo/90 text-white rounded-lg transition-colors">
+                        <LogIn className="h-4 w-4" />
+                        Sign In
+                      </Link>
+                      <Link to="/signup" className="flex items-center justify-center gap-2 w-full px-4 py-3 border border-indigo text-indigo bg-white hover:bg-indigo-50 rounded-lg transition-colors">
+                        <UserPlus className="h-4 w-4" />
+                        Sign Up
+                      </Link>
+                    </div>
+                  </div>
+                  
+                  <div className="w-full max-w-md pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <p className="text-center text-sm text-muted-foreground mb-4">
+                      Want to explore first without an account?
+                    </p>
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={() => setStep(1)}
+                    >
+                      Continue as Guest
+                    </Button>
+                  </div>
+                </div>
+              ) : step === 1 ? (
                 <div className="space-y-6">
                   <div className="max-w-md mx-auto">
                     <CountrySelector 
@@ -271,9 +329,13 @@ const SelectionHome: React.FC = () => {
             </div>
 
             <div className="flex justify-between mt-8">
-              {step === 1 ? (
+              {step === 0 ? (
                 <Button variant="ghost" onClick={handleSkip}>
                   Skip for now
+                </Button>
+              ) : step === 1 ? (
+                <Button variant="outline" onClick={() => setStep(0)}>
+                  Back
                 </Button>
               ) : (
                 <Button variant="outline" onClick={() => setStep(1)}>
@@ -281,7 +343,7 @@ const SelectionHome: React.FC = () => {
                 </Button>
               )}
               <Button onClick={handleNextStep} className="bg-indigo hover:bg-indigo/90">
-                {step === 2 ? "Start Practice" : "Continue"}
+                {step === 0 ? "Continue" : step === 2 ? "Start Practice" : "Continue"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
