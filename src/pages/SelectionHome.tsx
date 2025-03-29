@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -75,14 +74,13 @@ const examTypes = [
 const SelectionHome: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedExam, setSelectedExam] = useState('');
-  const [step, setStep] = useState(0); // Start with auth step (0) now instead of country (1)
+  const [step, setStep] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
   const isLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
 
   useEffect(() => {
-    // If user is already logged in, skip to country selection step
     if (isLoggedIn) {
       setStep(1);
     }
@@ -164,7 +162,6 @@ const SelectionHome: React.FC = () => {
 
   const handleNextStep = () => {
     if (step === 0) {
-      // Login step - this is just for demonstration, in real app you'd check authentication
       setStep(1);
     } else if (step === 1) {
       if (!selectedCountry) {
@@ -189,7 +186,6 @@ const SelectionHome: React.FC = () => {
       localStorage.setItem('selectedCountry', selectedCountry);
       localStorage.setItem('selectedExam', selectedExam);
       
-      // Navigate to the exam page instead of directly to practice
       const redirectPath = getExamRedirectPath(selectedExam);
       navigate(redirectPath);
     }
@@ -197,6 +193,13 @@ const SelectionHome: React.FC = () => {
 
   const handleSkip = () => {
     navigate('/');
+  };
+
+  const handleContinueAsGuest = () => {
+    localStorage.setItem('userName', 'Guest');
+    localStorage.removeItem('demoUserLoggedIn');
+    localStorage.removeItem('userEmail');
+    setStep(1);
   };
 
   const getCurrentExamName = () => {
@@ -287,7 +290,7 @@ const SelectionHome: React.FC = () => {
                     <Button 
                       variant="outline" 
                       className="w-full"
-                      onClick={() => setStep(1)}
+                      onClick={handleContinueAsGuest}
                     >
                       Continue as Guest
                     </Button>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy } from 'lucide-react';
@@ -13,14 +12,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Button } from "@/components/ui/button";
 
 const examTypes = [
   {
@@ -103,6 +94,8 @@ const Navbar = () => {
   const location = useLocation();
   
   const isLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
+  const isGuest = localStorage.getItem('userName') === 'Guest' && !isLoggedIn;
+  const isUserActive = isLoggedIn || isGuest;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -135,7 +128,6 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex md:flex-1 md:justify-center">
             <NavigationMenu className="mx-auto">
               <NavigationMenuList className="gap-1">
@@ -211,7 +203,7 @@ const Navbar = () => {
               <Search className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             </button>
 
-            {isLoggedIn ? (
+            {isUserActive ? (
               <UserProfileMenu />
             ) : (
               <>
@@ -231,9 +223,8 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-2">
-            {isLoggedIn && <UserProfileMenu />}
+            {isUserActive && <UserProfileMenu />}
             <button
               className="ml-2 text-gray-700 dark:text-gray-200 focus:outline-none"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -248,7 +239,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div
         className={cn(
           "fixed inset-y-0 right-0 z-40 w-full sm:w-80 transform transition-transform duration-300 ease-in-out bg-white dark:bg-gray-900 shadow-xl md:hidden overflow-y-auto",

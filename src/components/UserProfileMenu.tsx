@@ -20,7 +20,8 @@ const UserProfileMenu = () => {
   
   // Get user details from localStorage
   const userEmail = localStorage.getItem('userEmail') || '';
-  const userName = localStorage.getItem('userName') || 'User';
+  const userName = localStorage.getItem('userName') || 'Guest';
+  const isGuest = !localStorage.getItem('demoUserLoggedIn') && !userEmail;
   
   // Generate initials for avatar fallback
   const getInitials = (name: string) => {
@@ -61,7 +62,7 @@ const UserProfileMenu = () => {
           </AvatarFallback>
         </Avatar>
         <span className="text-sm font-medium hidden sm:block">
-          {userName}
+          {isGuest ? "Guest" : userName}
         </span>
         <ChevronDown className="h-4 w-4 text-muted-foreground" />
       </DropdownMenuTrigger>
@@ -69,8 +70,13 @@ const UserProfileMenu = () => {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium">{userName}</p>
-            <p className="text-xs text-muted-foreground truncate">{userEmail}</p>
+            <p className="text-sm font-medium">{isGuest ? "Guest User" : userName}</p>
+            {!isGuest && userEmail && (
+              <p className="text-xs text-muted-foreground truncate">{userEmail}</p>
+            )}
+            {isGuest && (
+              <p className="text-xs text-muted-foreground">Using Neplia in guest mode</p>
+            )}
           </div>
         </DropdownMenuLabel>
         
@@ -84,34 +90,48 @@ const UserProfileMenu = () => {
           <span>Dashboard</span>
         </DropdownMenuItem>
         
-        <DropdownMenuItem onClick={() => {
-          toast({
-            title: "Profile",
-            description: "Profile page is coming soon!",
-          });
-          setOpen(false);
-        }}>
-          <User className="mr-2 h-4 w-4" />
-          <span>Profile</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem onClick={() => {
-          toast({
-            title: "Settings",
-            description: "Settings page is coming soon!",
-          });
-          setOpen(false);
-        }}>
-          <Settings className="mr-2 h-4 w-4" />
-          <span>Settings</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuSeparator />
-        
-        <DropdownMenuItem onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-        </DropdownMenuItem>
+        {isGuest ? (
+          <>
+            <DropdownMenuItem onClick={() => {
+              navigate('/login');
+              setOpen(false);
+            }}>
+              <User className="mr-2 h-4 w-4" />
+              <span>Sign In</span>
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <>
+            <DropdownMenuItem onClick={() => {
+              toast({
+                title: "Profile",
+                description: "Profile page is coming soon!",
+              });
+              setOpen(false);
+            }}>
+              <User className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem onClick={() => {
+              toast({
+                title: "Settings",
+                description: "Settings page is coming soon!",
+              });
+              setOpen(false);
+            }}>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </DropdownMenuItem>
+            
+            <DropdownMenuSeparator />
+            
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
