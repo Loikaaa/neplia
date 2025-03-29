@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -175,7 +176,9 @@ const SelectionHome: React.FC = () => {
       localStorage.setItem('selectedCountry', selectedCountry);
       localStorage.setItem('selectedExam', selectedExam);
       
-      navigate('/practice');
+      // Navigate to the exam page instead of directly to practice
+      const redirectPath = getExamRedirectPath(selectedExam);
+      navigate(redirectPath);
     }
   };
 

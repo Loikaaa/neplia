@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -18,15 +18,58 @@ import {
 import PracticeSection from '@/components/PracticeSection';
 import { useToast } from "@/hooks/use-toast";
 
+const examTitles: Record<string, string> = {
+  'ielts': 'IELTS',
+  'toefl': 'TOEFL',
+  'pte': 'PTE Academic',
+  'duolingo': 'Duolingo English Test',
+  'cambridge': 'Cambridge English',
+  'oet': 'OET',
+  'sat': 'SAT',
+  'gre': 'GRE',
+  'gmat': 'GMAT'
+};
+
 const PracticePage = () => {
   const [selectedTab, setSelectedTab] = useState('module');
+  const [examType, setExamType] = useState('ielts');
   const { toast } = useToast();
+  const location = useLocation();
+  
+  useEffect(() => {
+    // Get the selected exam from localStorage
+    const savedExam = localStorage.getItem('selectedExam');
+    
+    if (savedExam) {
+      // Extract the base exam type
+      let baseExamType = savedExam.split('-')[0];
+      
+      // Handle special case for ielts variants
+      if (savedExam.startsWith('ielts')) {
+        baseExamType = 'ielts';
+      }
+      
+      setExamType(baseExamType);
+    }
+    
+    // Check for exam type in URL query params (for direct links)
+    const queryParams = new URLSearchParams(location.search);
+    const examParam = queryParams.get('exam');
+    
+    if (examParam) {
+      setExamType(examParam);
+    }
+  }, [location]);
   
   const startFullMockExam = () => {
     toast({
       title: "Mock Exam Scheduled",
-      description: "Your full IELTS mock exam has been scheduled. Good luck!",
+      description: `Your full ${examTitles[examType] || 'IELTS'} mock exam has been scheduled. Good luck!`,
     });
+  };
+
+  const getExamTitle = () => {
+    return examTitles[examType] || 'IELTS';
   };
 
   return (
@@ -34,9 +77,9 @@ const PracticePage = () => {
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <div className="space-y-6">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">IELTS Practice Center</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{getExamTitle()} Practice Center</h1>
             <p className="text-gray-500 dark:text-gray-400">
-              Prepare for your IELTS exam with our comprehensive practice modules and full mock tests.
+              Prepare for your {getExamTitle()} exam with our comprehensive practice modules and full mock tests.
             </p>
           </div>
 
@@ -48,6 +91,7 @@ const PracticePage = () => {
             
             <TabsContent value="module" className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Listening Practice Card */}
                 <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   <CardHeader className="bg-indigo/90 text-white p-6 flex flex-row items-center space-x-4">
                     <div className="bg-white/20 p-2 rounded-full">
@@ -71,17 +115,18 @@ const PracticePage = () => {
                         <span>Multiple choice, fill-in-the-blank, and more</span>
                       </div>
                       <p className="text-sm text-gray-500 mt-2">
-                        Practice with authentic IELTS-style audio recordings and answer various question types.
+                        Practice with authentic {getExamTitle()}-style audio recordings and answer various question types.
                       </p>
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/listening" className="w-full">
+                    <Link to={`/practice/listening?exam=${examType}`} className="w-full">
                       <Button className="w-full" variant="outline">Start Listening Practice</Button>
                     </Link>
                   </CardFooter>
                 </Card>
 
+                {/* Reading Practice Card */}
                 <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   <CardHeader className="bg-teal-600 text-white p-6 flex flex-row items-center space-x-4">
                     <div className="bg-white/20 p-2 rounded-full">
@@ -102,20 +147,21 @@ const PracticePage = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         <CheckCircle2 className="h-5 w-5 text-gray-500" />
-                        <span>Academic and General Training passages</span>
+                        <span>{examType === 'ielts' ? 'Academic and General Training passages' : 'Practice passages'}</span>
                       </div>
                       <p className="text-sm text-gray-500 mt-2">
-                        Read academic passages and answer various question types to improve your comprehension.
+                        Read {examType === 'sat' || examType === 'gre' || examType === 'gmat' ? 'challenging' : 'academic'} passages and answer various question types to improve your comprehension.
                       </p>
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/reading" className="w-full">
+                    <Link to={`/practice/reading?exam=${examType}`} className="w-full">
                       <Button className="w-full" variant="outline">Start Reading Practice</Button>
                     </Link>
                   </CardFooter>
                 </Card>
 
+                {/* Writing Practice Card */}
                 <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   <CardHeader className="bg-coral text-white p-6 flex flex-row items-center space-x-4">
                     <div className="bg-white/20 p-2 rounded-full">
@@ -136,20 +182,26 @@ const PracticePage = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         <CheckCircle2 className="h-5 w-5 text-gray-500" />
-                        <span>Task 1 and Task 2 practice</span>
+                        <span>{examType === 'ielts' ? 'Task 1 and Task 2 practice' : 
+                              examType === 'gre' || examType === 'gmat' ? 'Analytical Writing practice' : 
+                              'Writing task practice'}</span>
                       </div>
                       <p className="text-sm text-gray-500 mt-2">
-                        Practice writing essays, reports, letters, and more with detailed feedback.
+                        Practice writing {examType === 'ielts' ? 'essays, reports, letters, and more' : 
+                                         examType === 'toefl' ? 'integrated and independent tasks' : 
+                                         examType === 'gre' || examType === 'gmat' ? 'analytical essays' : 
+                                         'various writing tasks'} with detailed feedback.
                       </p>
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/writing" className="w-full">
+                    <Link to={`/practice/writing?exam=${examType}`} className="w-full">
                       <Button className="w-full" variant="outline">Start Writing Practice</Button>
                     </Link>
                   </CardFooter>
                 </Card>
 
+                {/* Speaking Practice Card */}
                 <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   <CardHeader className="bg-indigo-800 text-white p-6 flex flex-row items-center space-x-4">
                     <div className="bg-white/20 p-2 rounded-full">
@@ -166,19 +218,25 @@ const PracticePage = () => {
                     <div className="space-y-4">
                       <div className="flex items-center space-x-2">
                         <Clock className="h-5 w-5 text-gray-500" />
-                        <span>11-14 minutes per test</span>
+                        <span>{examType === 'ielts' ? '11-14' : 
+                              examType === 'toefl' ? '17' : 
+                              examType === 'pte' ? '30-35' : '15-20'} minutes per test</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <CheckCircle2 className="h-5 w-5 text-gray-500" />
-                        <span>Parts 1, 2, and 3 with recording</span>
+                        <span>{examType === 'ielts' ? 'Parts 1, 2, and 3 with recording' : 
+                              examType === 'toefl' ? '4 integrated speaking tasks' : 
+                              'Speaking tasks with recording'}</span>
                       </div>
                       <p className="text-sm text-gray-500 mt-2">
-                        Practice with simulated interview questions and record your responses.
+                        Practice with {examType === 'ielts' ? 'simulated interview questions' : 
+                                    examType === 'toefl' ? 'integrated and independent tasks' : 
+                                    'various speaking exercises'} and record your responses.
                       </p>
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/speaking" className="w-full">
+                    <Link to={`/practice/speaking?exam=${examType}`} className="w-full">
                       <Button className="w-full" variant="outline">Start Speaking Practice</Button>
                     </Link>
                   </CardFooter>
@@ -189,50 +247,103 @@ const PracticePage = () => {
             <TabsContent value="mock" className="space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Full IELTS Mock Test</CardTitle>
+                  <CardTitle>Full {getExamTitle()} Mock Test</CardTitle>
                   <CardDescription>
-                    Take a complete mock IELTS test under timed conditions to simulate the real exam experience
+                    Take a complete mock {getExamTitle()} test under timed conditions to simulate the real exam experience
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="rounded-lg border p-6 space-y-4">
                     <h3 className="font-semibold text-lg flex items-center">
                       <Trophy className="h-5 w-5 mr-2 text-yellow-500" /> 
-                      Complete IELTS Experience
+                      Complete {getExamTitle()} Experience
                     </h3>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="flex items-start">
-                        <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
-                        <div>
-                          <p className="font-medium">Listening (30 min)</p>
-                          <p className="text-sm text-gray-500">4 sections, 40 questions</p>
-                        </div>
-                      </div>
+                      {/* Adjust sections based on exam type */}
+                      {(examType === 'ielts' || examType === 'toefl' || examType === 'pte') && (
+                        <>
+                          <div className="flex items-start">
+                            <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
+                            <div>
+                              <p className="font-medium">Listening ({examType === 'ielts' ? '30' : examType === 'toefl' ? '41-57' : '30-40'} min)</p>
+                              <p className="text-sm text-gray-500">{examType === 'ielts' ? '4 sections, 40 questions' : 
+                                                                  examType === 'toefl' ? '3-4 lectures, 2-3 conversations' : 
+                                                                  'Various listening tasks'}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start">
+                            <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
+                            <div>
+                              <p className="font-medium">Reading ({examType === 'ielts' ? '60' : examType === 'toefl' ? '54-72' : '32-41'} min)</p>
+                              <p className="text-sm text-gray-500">{examType === 'ielts' ? '3 passages, 40 questions' : 
+                                                                  examType === 'toefl' ? '3-4 passages, 30-40 questions' : 
+                                                                  'Reading tasks with MCQs'}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start">
+                            <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
+                            <div>
+                              <p className="font-medium">Writing ({examType === 'ielts' ? '60' : examType === 'toefl' ? '50' : '40-60'} min)</p>
+                              <p className="text-sm text-gray-500">{examType === 'ielts' ? 'Task 1 and Task 2' : 
+                                                                  examType === 'toefl' ? 'Integrated and Independent tasks' : 
+                                                                  'Writing tasks'}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start">
+                            <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
+                            <div>
+                              <p className="font-medium">Speaking ({examType === 'ielts' ? '11-14' : examType === 'toefl' ? '17' : '30-35'} min)</p>
+                              <p className="text-sm text-gray-500">{examType === 'ielts' ? '3 parts interview' : 
+                                                                  examType === 'toefl' ? '4 tasks' : 
+                                                                  'Speaking tasks'}</p>
+                            </div>
+                          </div>
+                        </>
+                      )}
                       
-                      <div className="flex items-start">
-                        <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
-                        <div>
-                          <p className="font-medium">Reading (60 min)</p>
-                          <p className="text-sm text-gray-500">3 passages, 40 questions</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-start">
-                        <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
-                        <div>
-                          <p className="font-medium">Writing (60 min)</p>
-                          <p className="text-sm text-gray-500">Task 1 and Task 2</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-start">
-                        <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
-                        <div>
-                          <p className="font-medium">Speaking (11-14 min)</p>
-                          <p className="text-sm text-gray-500">3 parts interview</p>
-                        </div>
-                      </div>
+                      {(examType === 'sat' || examType === 'gre' || examType === 'gmat') && (
+                        <>
+                          <div className="flex items-start">
+                            <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
+                            <div>
+                              <p className="font-medium">{examType === 'sat' ? 'Reading & Writing' : 'Verbal Reasoning'} (65 min)</p>
+                              <p className="text-sm text-gray-500">Multiple-choice questions</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start">
+                            <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
+                            <div>
+                              <p className="font-medium">{examType === 'sat' ? 'Math' : 'Quantitative Reasoning'} (80 min)</p>
+                              <p className="text-sm text-gray-500">Problem-solving questions</p>
+                            </div>
+                          </div>
+                          
+                          {examType !== 'sat' && (
+                            <div className="flex items-start">
+                              <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
+                              <div>
+                                <p className="font-medium">Analytical Writing (30 min)</p>
+                                <p className="text-sm text-gray-500">Essay tasks</p>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {examType === 'gmat' && (
+                            <div className="flex items-start">
+                              <CheckCircle2 className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
+                              <div>
+                                <p className="font-medium">Integrated Reasoning (30 min)</p>
+                                <p className="text-sm text-gray-500">12 questions in various formats</p>
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      )}
                     </div>
                     
                     <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-md">
@@ -241,9 +352,14 @@ const PracticePage = () => {
                         <h4 className="font-medium">Take Your Mock Test</h4>
                       </div>
                       <p className="text-sm text-gray-500 mb-4">
-                        Set aside approximately 3 hours to complete all sections of the test. You can take breaks between sections.
+                        Set aside approximately {examType === 'ielts' ? '3' : 
+                                               examType === 'toefl' ? '3.5' : 
+                                               examType === 'pte' ? '3' : 
+                                               examType === 'sat' ? '3' : 
+                                               examType === 'gre' ? '3.75' : 
+                                               examType === 'gmat' ? '3.5' : '3'} hours to complete all sections of the test. You can take breaks between sections.
                       </p>
-                      <Link to="/practice/mock-test">
+                      <Link to={`/practice/mock-test?exam=${examType}`}>
                         <Button className="w-full sm:w-auto">
                           Start Full Mock Test
                         </Button>
@@ -251,39 +367,41 @@ const PracticePage = () => {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-base">Academic Test</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-gray-500">
-                          For university admission and professional registration.
-                        </p>
-                      </CardContent>
-                      <CardFooter>
-                        <Link to="/practice/mock-test">
-                          <Button variant="outline" className="w-full">Start Academic Mock</Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                    
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-base">General Training Test</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-gray-500">
-                          For work, migration, or training in an English-speaking environment.
-                        </p>
-                      </CardContent>
-                      <CardFooter>
-                        <Link to="/practice/mock-test?type=general">
-                          <Button variant="outline" className="w-full">Start General Mock</Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  </div>
+                  {examType === 'ielts' && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Academic Test</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-gray-500">
+                            For university admission and professional registration.
+                          </p>
+                        </CardContent>
+                        <CardFooter>
+                          <Link to="/practice/mock-test?type=academic&exam=ielts">
+                            <Button variant="outline" className="w-full">Start Academic Mock</Button>
+                          </Link>
+                        </CardFooter>
+                      </Card>
+                      
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">General Training Test</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-gray-500">
+                            For work, migration, or training in an English-speaking environment.
+                          </p>
+                        </CardContent>
+                        <CardFooter>
+                          <Link to="/practice/mock-test?type=general&exam=ielts">
+                            <Button variant="outline" className="w-full">Start General Mock</Button>
+                          </Link>
+                        </CardFooter>
+                      </Card>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
               

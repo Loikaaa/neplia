@@ -1,6 +1,5 @@
-
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Headphones, BookOpen, Edit, MessageSquare, Quote, ArrowRight, Trophy, ChevronDown, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
@@ -171,6 +170,22 @@ ListItem.displayName = "ListItem";
 
 const PracticeSection = () => {
   const [selectedTab, setSelectedTab] = useState("skills");
+  const [examType, setExamType] = useState('ielts');
+  const location = useLocation();
+  
+  useEffect(() => {
+    const savedExam = localStorage.getItem('selectedExam');
+    
+    if (savedExam) {
+      let baseExamType = savedExam.split('-')[0];
+      
+      if (savedExam.startsWith('ielts')) {
+        baseExamType = 'ielts';
+      }
+      
+      setExamType(baseExamType);
+    }
+  }, []);
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
@@ -211,17 +226,24 @@ const PracticeSection = () => {
                               </p>
                               <div className="mt-4">
                                 <ul className="grid gap-2">
-                                  {exam.sections.map((section) => (
-                                    <li key={section.name}>
-                                      <Link 
-                                        to={section.path}
-                                        className="text-sm hover:underline flex items-center text-indigo"
-                                      >
-                                        <ChevronRight className="h-3 w-3 mr-1" />
-                                        {section.name}
-                                      </Link>
-                                    </li>
-                                  ))}
+                                  {exam.sections.map((section) => {
+                                    const basePathParts = section.path.split('?');
+                                    const basePath = basePathParts[0];
+                                    const examParam = exam.name.toLowerCase();
+                                    const finalPath = `${basePath}?exam=${examParam === 'ielts' ? 'ielts' : examParam}`;
+                                    
+                                    return (
+                                      <li key={section.name}>
+                                        <Link 
+                                          to={finalPath}
+                                          className="text-sm hover:underline flex items-center text-indigo"
+                                        >
+                                          <ChevronRight className="h-3 w-3 mr-1" />
+                                          {section.name}
+                                        </Link>
+                                      </li>
+                                    );
+                                  })}
                                 </ul>
                               </div>
                             </Link>
@@ -251,17 +273,24 @@ const PracticeSection = () => {
                               </p>
                               <div className="mt-4">
                                 <ul className="grid gap-2">
-                                  {exam.sections.map((section) => (
-                                    <li key={section.name}>
-                                      <Link 
-                                        to={section.path}
-                                        className="text-sm hover:underline flex items-center text-indigo"
-                                      >
-                                        <ChevronRight className="h-3 w-3 mr-1" />
-                                        {section.name}
-                                      </Link>
-                                    </li>
-                                  ))}
+                                  {exam.sections.map((section) => {
+                                    const basePathParts = section.path.split('?');
+                                    const basePath = basePathParts[0];
+                                    const examParam = exam.name.toLowerCase();
+                                    const finalPath = `${basePath}?exam=${examParam}`;
+                                    
+                                    return (
+                                      <li key={section.name}>
+                                        <Link 
+                                          to={finalPath}
+                                          className="text-sm hover:underline flex items-center text-indigo"
+                                        >
+                                          <ChevronRight className="h-3 w-3 mr-1" />
+                                          {section.name}
+                                        </Link>
+                                      </li>
+                                    );
+                                  })}
                                 </ul>
                               </div>
                             </Link>
@@ -281,7 +310,7 @@ const PracticeSection = () => {
               </TabsList>
               
               <TabsContent value="skills">
-                <Link to="/practice">
+                <Link to={`/practice?exam=${examType}`}>
                   <Button className="bg-indigo hover:bg-indigo-600">
                     View All Skills <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -300,37 +329,42 @@ const PracticeSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16">
-          {practiceOptions.map((option, index) => (
-            <Link 
-              key={index} 
-              to={option.path}
-              className="block transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl"
-            >
-              <Card className="overflow-hidden bg-white dark:bg-gray-800 border-none shadow-lg h-full">
-                <CardHeader className={`${option.color} p-6`}>
-                  <div className="rounded-full bg-white/20 w-12 h-12 flex items-center justify-center mb-3">
-                    <option.icon className="h-6 w-6" />
-                  </div>
-                  <CardTitle className="text-xl font-bold">{option.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <CardDescription className="text-gray-600 dark:text-gray-300 mb-4 text-base">
-                    {option.description}
-                  </CardDescription>
-                  <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg text-sm italic text-gray-700 dark:text-gray-300">
-                    <p>✨ {option.fact}</p>
-                  </div>
-                </CardContent>
-                <CardFooter className="p-6 pt-0">
-                  <div 
-                    className="w-full py-2.5 px-4 text-center rounded-lg border-2 border-indigo text-indigo dark:text-indigo-300 dark:border-indigo-300 font-medium hover:bg-indigo hover:text-white dark:hover:bg-indigo-800 transition-colors"
-                  >
-                    Start Practice
-                  </div>
-                </CardFooter>
-              </Card>
-            </Link>
-          ))}
+          {practiceOptions.map((option, index) => {
+            const basePath = option.path;
+            const finalPath = `${basePath}?exam=${examType}`;
+            
+            return (
+              <Link 
+                key={index} 
+                to={finalPath}
+                className="block transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl"
+              >
+                <Card className="overflow-hidden bg-white dark:bg-gray-800 border-none shadow-lg h-full">
+                  <CardHeader className={`${option.color} p-6`}>
+                    <div className="rounded-full bg-white/20 w-12 h-12 flex items-center justify-center mb-3">
+                      <option.icon className="h-6 w-6" />
+                    </div>
+                    <CardTitle className="text-xl font-bold">{option.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <CardDescription className="text-gray-600 dark:text-gray-300 mb-4 text-base">
+                      {option.description}
+                    </CardDescription>
+                    <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg text-sm italic text-gray-700 dark:text-gray-300">
+                      <p>✨ {option.fact}</p>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="p-6 pt-0">
+                    <div 
+                      className="w-full py-2.5 px-4 text-center rounded-lg border-2 border-indigo text-indigo dark:text-indigo-300 dark:border-indigo-300 font-medium hover:bg-indigo hover:text-white dark:hover:bg-indigo-800 transition-colors"
+                    >
+                      Start Practice
+                    </div>
+                  </CardFooter>
+                </Card>
+              </Link>
+            );
+          })}
         </div>
 
         <div className="max-w-4xl mx-auto mb-8">
