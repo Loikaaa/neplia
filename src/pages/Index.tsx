@@ -88,7 +88,8 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-6">
+          {/* First row of exams */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-8">
             {[
               {
                 title: "IELTS",
@@ -118,7 +119,7 @@ const Index = () => {
               <Link 
                 key={index} 
                 to={exam.link}
-                className="block bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700 group"
+                className="block bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700 group h-full"
               >
                 <div className={`${exam.color} h-2 w-full`}></div>
                 <div className="p-6">
@@ -134,6 +135,7 @@ const Index = () => {
             ))}
           </div>
 
+          {/* Second row of exams */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
               {
@@ -164,7 +166,7 @@ const Index = () => {
               <Link 
                 key={index} 
                 to={exam.link}
-                className="block bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700 group"
+                className="block bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700 group h-full"
               >
                 <div className={`${exam.color} h-2 w-full`}></div>
                 <div className="p-6">
