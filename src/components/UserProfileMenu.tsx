@@ -13,7 +13,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 
-const UserProfileMenu = () => {
+interface UserProfileMenuProps {
+  isMobile?: boolean;
+}
+
+const UserProfileMenu = ({ isMobile = false }: UserProfileMenuProps) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -51,6 +55,18 @@ const UserProfileMenu = () => {
     navigate('/');
     setOpen(false);
   };
+
+  // If on mobile, just return the avatar without the dropdown
+  if (isMobile) {
+    return (
+      <Avatar className="h-8 w-8 border border-muted">
+        <AvatarImage src="" />
+        <AvatarFallback className="bg-indigo-50 text-indigo-700">
+          {getInitials(userName)}
+        </AvatarFallback>
+      </Avatar>
+    );
+  }
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
