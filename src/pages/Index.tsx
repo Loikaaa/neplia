@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -87,7 +88,7 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-6">
             {[
               {
                 title: "IELTS",
@@ -113,6 +114,28 @@ const Index = () => {
                 color: "bg-coral",
                 link: "/exams/pte"
               },
+            ].map((exam, index) => (
+              <Link 
+                key={index} 
+                to={exam.link}
+                className="block bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700 group"
+              >
+                <div className={`${exam.color} h-2 w-full`}></div>
+                <div className="p-6">
+                  <div className="text-3xl mb-3">{exam.icon}</div>
+                  <h3 className="text-xl font-bold mb-1 group-hover:text-indigo transition-colors">{exam.title}</h3>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">{exam.subtitle}</p>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{exam.description}</p>
+                  <div className="text-indigo text-sm font-medium flex items-center">
+                    Prepare Now <ArrowRight className="ml-1 h-3 w-3" />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
               {
                 title: "Cambridge English",
                 subtitle: "B2 First, C1 Advanced & C2 Proficiency",
