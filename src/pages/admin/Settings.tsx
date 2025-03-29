@@ -1,4 +1,3 @@
-
 import React from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import DatabaseSettings from '@/components/admin/DatabaseSettings';
 import EmailMarketingSettings from '@/components/admin/EmailMarketingSettings';
+import SocialAuthSettings from '@/components/admin/SocialAuthSettings';
 import { Server } from 'lucide-react';
 
 const Settings = () => {
@@ -38,6 +38,7 @@ const Settings = () => {
             <TabsTrigger value="general">General</TabsTrigger>
             <TabsTrigger value="appearance">Appearance</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="auth">Authentication</TabsTrigger>
             <TabsTrigger value="email">Email</TabsTrigger>
             <TabsTrigger value="database">Database</TabsTrigger>
           </TabsList>
@@ -175,6 +176,10 @@ const Settings = () => {
                 <Button onClick={handleSave}>Save Changes</Button>
               </CardFooter>
             </Card>
+          </TabsContent>
+          
+          <TabsContent value="auth" className="space-y-6">
+            <SocialAuthSettings />
           </TabsContent>
           
           <TabsContent value="email" className="space-y-6">
