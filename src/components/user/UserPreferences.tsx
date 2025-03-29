@@ -7,20 +7,30 @@ import { useNavigate } from 'react-router-dom';
 
 // Get country name from code
 const getCountryName = (code: string): string => {
-  const countries: Record<string, string> = {
-    'us': 'United States 🇺🇸',
-    'ca': 'Canada 🇨🇦',
-    'uk': 'United Kingdom 🇬🇧',
-    'au': 'Australia 🇦🇺',
-    'nz': 'New Zealand 🇳🇿',
-    'in': 'India 🇮🇳',
-    'sg': 'Singapore 🇸🇬',
-    'my': 'Malaysia 🇲🇾',
-    'ph': 'Philippines 🇵🇭',
-    'hk': 'Hong Kong 🇭🇰',
+  const countries: Record<string, { name: string, flag: string }> = {
+    'us': { name: 'United States', flag: '🇺🇸' },
+    'ca': { name: 'Canada', flag: '🇨🇦' },
+    'uk': { name: 'United Kingdom', flag: '🇬🇧' },
+    'au': { name: 'Australia', flag: '🇦🇺' },
+    'nz': { name: 'New Zealand', flag: '🇳🇿' },
+    'in': { name: 'India', flag: '🇮🇳' },
+    'sg': { name: 'Singapore', flag: '🇸🇬' },
+    'my': { name: 'Malaysia', flag: '🇲🇾' },
+    'ph': { name: 'Philippines', flag: '🇵🇭' },
+    'hk': { name: 'Hong Kong', flag: '🇭🇰' },
+    'de': { name: 'Germany', flag: '🇩🇪' },
+    'fr': { name: 'France', flag: '🇫🇷' },
+    'it': { name: 'Italy', flag: '🇮🇹' },
+    'es': { name: 'Spain', flag: '🇪🇸' },
+    'jp': { name: 'Japan', flag: '🇯🇵' },
+    'cn': { name: 'China', flag: '🇨🇳' },
+    'br': { name: 'Brazil', flag: '🇧🇷' },
+    'mx': { name: 'Mexico', flag: '🇲🇽' },
+    'nl': { name: 'Netherlands', flag: '🇳🇱' },
+    'se': { name: 'Sweden', flag: '🇸🇪' },
   };
   
-  return countries[code] || 'Not specified';
+  return countries[code] ? `${countries[code].flag} ${countries[code].name}` : 'Not specified';
 };
 
 // Get exam name from ID
