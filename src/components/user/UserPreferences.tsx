@@ -4,6 +4,7 @@ import { Settings, Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Get country name from code
 const getCountryName = (code: string): string => {
@@ -227,6 +228,7 @@ const getExamName = (id: string): string => {
 
 const UserPreferences: React.FC = () => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const selectedCountry = localStorage.getItem('selectedCountry') || '';
   const selectedExam = localStorage.getItem('selectedExam') || '';
 
@@ -235,7 +237,7 @@ const UserPreferences: React.FC = () => {
   };
 
   return (
-    <Card>
+    <Card className={isMobile ? "w-full" : ""}>
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
           <Settings className="h-5 w-5 text-indigo" />

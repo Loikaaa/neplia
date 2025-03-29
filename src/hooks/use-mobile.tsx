@@ -1,19 +1,38 @@
+
 import * as React from "react"
+import { useCallback, useEffect, useState } from "react"
 
 const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined)
 
-  React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    const onChange = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+  // Add a debounce function to avoid excessive rerenders
+  const debounce = (fn: Function, ms = 300) => {
+    let timeoutId: ReturnType<typeof setTimeout>
+    return function(this: any, ...args: any[]) {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => fn.apply(this, args), ms)
     }
-    mql.addEventListener("change", onChange)
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    return () => mql.removeEventListener("change", onChange)
-  }, [])
+  }
+
+  const handleResize = useCallback(
+    debounce(() => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+    }, 250),
+    []
+  )
+
+  useEffect(() => {
+    // Set initial value
+    handleResize()
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize)
+    
+    // Clean up
+    return () => window.removeEventListener("resize", handleResize)
+  }, [handleResize])
 
   return !!isMobile
 }
