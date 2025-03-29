@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -98,12 +99,17 @@ const SelectionHome: React.FC = () => {
     
     if (savedCountry) {
       setSelectedCountry(savedCountry);
+      
+      // If country is already selected, skip directly to exam selection
+      if (!selectedExam && step === 1) {
+        setStep(2);
+      }
     }
     
     if (savedExam && !selectedExam) {
       setSelectedExam(savedExam);
     }
-  }, [selectedExam]);
+  }, [selectedExam, step]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -111,6 +117,24 @@ const SelectionHome: React.FC = () => {
 
   const handleExamChange = (exam: string) => {
     setSelectedExam(exam);
+  };
+
+  // Function to get the correct redirect path based on exam type
+  const getExamRedirectPath = (examId: string) => {
+    const examMap: Record<string, string> = {
+      'ielts-academic': '/exams/ielts',
+      'ielts-general': '/exams/ielts',
+      'toefl': '/exams/toefl',
+      'pte': '/exams/pte',
+      'duolingo': '/exams/ielts', // Fallback to IELTS for now
+      'cambridge': '/exams/ielts', // Fallback to IELTS for now
+      'oet': '/exams/ielts', // Fallback to IELTS for now
+      'sat': '/exams/sat',
+      'gre': '/exams/gre',
+      'gmat': '/exams/gmat'
+    };
+    
+    return examMap[examId] || '/dashboard'; // Default to dashboard if no specific page
   };
 
   const handleNextStep = () => {
@@ -137,7 +161,8 @@ const SelectionHome: React.FC = () => {
       localStorage.setItem('selectedCountry', selectedCountry);
       localStorage.setItem('selectedExam', selectedExam);
       
-      navigate('/dashboard');
+      // Redirect to the specific exam page instead of dashboard
+      navigate(getExamRedirectPath(selectedExam));
     }
   };
 
