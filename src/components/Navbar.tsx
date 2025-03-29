@@ -117,19 +117,21 @@ const Navbar = () => {
   return (
     <header 
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 sticky-header',
         scrolled 
-          ? 'py-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg shadow-md' 
+          ? 'py-2 scrolled' 
           : 'py-4 bg-transparent'
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center">
-            <span className="font-heading text-xl md:text-2xl font-bold text-indigo">
-              Neplia<span className="text-coral">.</span>
-            </span>
-          </Link>
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center">
+              <span className="font-heading text-xl md:text-2xl font-bold text-indigo">
+                Neplia<span className="text-coral">.</span>
+              </span>
+            </Link>
+          </div>
 
           <div className="hidden md:flex md:flex-1 md:justify-center">
             <NavigationMenu className="mx-auto">
@@ -201,43 +203,57 @@ const Navbar = () => {
             </NavigationMenu>
           </div>
 
-          <div className="hidden md:flex items-center gap-3">
-            <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-              <Search className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-            </button>
+          <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-3">
+              <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                <Search className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              </button>
+            </div>
 
             {isUserActive ? (
-              <UserProfileMenu />
+              <div className="flex items-center gap-2">
+                <UserProfileMenu />
+                <button
+                  className="md:hidden text-gray-700 dark:text-gray-200 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                >
+                  {mobileMenuOpen ? (
+                    <X className="h-6 w-6" />
+                  ) : (
+                    <Menu className="h-6 w-6" />
+                  )}
+                </button>
+              </div>
             ) : (
-              <>
-                <Link 
-                  to="/login" 
-                  className="px-4 py-2 rounded-lg border border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+              <div className="flex items-center gap-2">
+                <div className="hidden md:block">
+                  <Link 
+                    to="/login" 
+                    className="px-4 py-2 rounded-lg border border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                  >
+                    Log In
+                  </Link>
+                </div>
+                <div className="hidden md:block ml-2">
+                  <Link 
+                    to="/signup" 
+                    className="px-4 py-2 bg-indigo hover:bg-indigo/90 text-white rounded-lg transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+                <button
+                  className="md:hidden text-gray-700 dark:text-gray-200 focus:outline-none"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
-                  Log In
-                </Link>
-                <Link 
-                  to="/signup" 
-                  className="px-4 py-2 bg-indigo hover:bg-indigo/90 text-white rounded-lg transition-colors"
-                >
-                  Sign Up
-                </Link>
-              </>
+                  {mobileMenuOpen ? (
+                    <X className="h-6 w-6" />
+                  ) : (
+                    <Menu className="h-6 w-6" />
+                  )}
+                </button>
+              </div>
             )}
-          </div>
-
-          <div className="flex md:hidden items-center gap-2">
-            {isUserActive && <UserProfileMenu />}
-            <button
-              className="ml-2 text-gray-700 dark:text-gray-200 focus:outline-none"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
           </div>
         </div>
       </div>
