@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -15,6 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import BlogTextEditorToolbar from '@/components/admin/BlogTextEditorToolbar';
 
 interface BlogPost {
   id: number;
@@ -94,6 +94,7 @@ const BlogPostCMS = () => {
   const [selectedTemplate, setSelectedTemplate] = useState("standard");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const thumbnailInputRef = useRef<HTMLInputElement>(null);
+  const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const savedPosts = localStorage.getItem('adminBlogPosts');
@@ -266,6 +267,94 @@ const BlogPostCMS = () => {
       title: "Image Inserted",
       description: "The image has been inserted into your content",
     });
+  };
+
+  const handleFormatText = (formatType: string, formatValue?: string) => {
+    if (!currentPost || !contentTextareaRef.current) return;
+    
+    const textarea = contentTextareaRef.current;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = currentPost.content.substring(start, end);
+    
+    let formattedText = '';
+    let newCursorPosition = start;
+    
+    switch (formatType) {
+      case 'bold':
+        formattedText = `**${selectedText}**`;
+        newCursorPosition = start + 2; // Position cursor after the first **
+        break;
+      case 'italic':
+        formattedText = `*${selectedText}*`;
+        newCursorPosition = start + 1; // Position cursor after the first *
+        break;
+      case 'underline':
+        formattedText = `<u>${selectedText}</u>`;
+        newCursorPosition = start + 3; // Position cursor after <u>
+        break;
+      case 'heading':
+      case 'list':
+      case 'quote':
+        // These need to be at the start of a line
+        // First check if we're at the start of a line already
+        const beforeSelection = currentPost.content.substring(0, start);
+        const isAtLineStart = beforeSelection.length === 0 || beforeSelection.charAt(beforeSelection.length - 1) === '\n';
+        
+        if (isAtLineStart) {
+          formattedText = `${formatValue}${selectedText}`;
+        } else {
+          formattedText = `\n${formatValue}${selectedText}`;
+        }
+        
+        newCursorPosition = start + formattedText.length; // Position cursor at the end
+        break;
+      case 'link':
+        if (formatValue) {
+          formattedText = formatValue;
+          newCursorPosition = start + formattedText.length;
+        }
+        break;
+      case 'align':
+        if (formatValue === 'center') {
+          formattedText = `<div style="text-align: center">${selectedText}</div>`;
+        } else if (formatValue === 'right') {
+          formattedText = `<div style="text-align: right">${selectedText}</div>`;
+        } else {
+          formattedText = `<div style="text-align: left">${selectedText}</div>`;
+        }
+        newCursorPosition = start + formattedText.length;
+        break;
+      default:
+        return;
+    }
+    
+    // Insert the formatted text
+    const newContent = 
+      currentPost.content.substring(0, start) + 
+      formattedText + 
+      currentPost.content.substring(end);
+    
+    setCurrentPost({
+      ...currentPost,
+      content: newContent
+    });
+    
+    // This needs a slight delay to ensure the state is updated and the textarea rerenders
+    setTimeout(() => {
+      if (contentTextareaRef.current) {
+        if (selectedText.length > 0) {
+          // If text was selected, place cursor at the end of the inserted text
+          contentTextareaRef.current.selectionStart = start + formattedText.length;
+          contentTextareaRef.current.selectionEnd = start + formattedText.length;
+        } else {
+          // If no text was selected, place cursor appropriately depending on the format
+          contentTextareaRef.current.selectionStart = newCursorPosition;
+          contentTextareaRef.current.selectionEnd = newCursorPosition;
+        }
+        contentTextareaRef.current.focus();
+      }
+    }, 10);
   };
 
   const filteredPosts = posts.filter(post => 
@@ -441,8 +530,12 @@ const BlogPostCMS = () => {
                     onChange={(e) => handleFileChange(e)}
                   />
                 </div>
+                
+                <BlogTextEditorToolbar onFormatText={handleFormatText} />
+                
                 <Textarea 
                   id="content" 
+                  ref={contentTextareaRef}
                   value={currentPost.content} 
                   rows={15}
                   onChange={(e) => handleInputChange("content", e.target.value)}
