@@ -7,7 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Search, Mail, Ban, Shield, Filter, User, Flag, Clock } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Search, Mail, Ban, Shield, Filter, User, Flag, Clock, Check, UserCheck, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 
@@ -17,7 +19,9 @@ const UsersCMS = () => {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [showRoleDialog, setShowRoleDialog] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedRole, setSelectedRole] = useState<string>("");
 
   // Sample user data for demonstration
   const users = [
@@ -30,26 +34,51 @@ const UsersCMS = () => {
 
   // Available roles for the role management dialog
   const availableRoles = [
-    { id: 'student', label: 'Student' },
-    { id: 'teacher', label: 'Teacher' },
-    { id: 'admin', label: 'Admin' },
-    { id: 'moderator', label: 'Moderator' },
-    { id: 'contentCreator', label: 'Content Creator' }
+    { id: 'student', label: 'Student', description: 'Can access learning materials and take tests' },
+    { id: 'teacher', label: 'Teacher', description: 'Can create content and grade student work' },
+    { id: 'admin', label: 'Admin', description: 'Full access to all platform features' },
+    { id: 'moderator', label: 'Moderator', description: 'Can moderate forum discussions and content' },
+    { id: 'contentCreator', label: 'Content Creator', description: 'Can create and publish educational content' }
   ];
 
   // Handler for opening role management dialog
   const handleManageRoles = (user: any) => {
     setSelectedUser(user);
+    setSelectedRole(user.role.toLowerCase());
     setShowRoleDialog(true);
+  };
+
+  // Handler for role selection
+  const handleRoleSelect = (roleId: string) => {
+    setSelectedRole(roleId);
+  };
+
+  // Handler for confirm role change
+  const handleConfirmRoleChange = () => {
+    setShowRoleDialog(false);
+    setShowConfirmDialog(true);
   };
 
   // Handler for saving role changes
   const handleSaveRoles = () => {
+    const selectedRoleObj = availableRoles.find(role => role.id === selectedRole);
+    
+    if (selectedRoleObj) {
+      toast({
+        title: "Role Updated",
+        description: `${selectedUser.name}'s role has been updated to ${selectedRoleObj.label}.`,
+      });
+    }
+    
+    setShowConfirmDialog(false);
+  };
+
+  // Bulk role management
+  const handleBulkRoleManagement = () => {
     toast({
-      title: "Roles Updated",
-      description: `Roles for ${selectedUser.name} have been updated successfully.`,
+      title: "Bulk Role Management",
+      description: "Select users and assign roles in bulk. Coming soon!",
     });
-    setShowRoleDialog(false);
   };
 
   // Filter users based on selected filters and search term
@@ -69,12 +98,7 @@ const UsersCMS = () => {
           <h1 className="text-3xl font-bold">Users</h1>
           <Button 
             className="flex items-center gap-2" 
-            onClick={() => {
-              toast({
-                title: "Feature Coming Soon",
-                description: "Bulk user role management will be available in the next update.",
-              });
-            }}
+            onClick={handleBulkRoleManagement}
           >
             <Shield className="h-4 w-4" />
             Manage Roles
@@ -208,34 +232,69 @@ const UsersCMS = () => {
       <Dialog open={showRoleDialog} onOpenChange={setShowRoleDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Manage User Roles</DialogTitle>
+            <DialogTitle>Manage User Role</DialogTitle>
             <DialogDescription>
-              {selectedUser ? `Assign roles to ${selectedUser.name}` : 'Assign roles to user'}
+              {selectedUser ? `Update role for ${selectedUser.name}` : 'Update user role'}
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
-            <div className="space-y-4">
+            <RadioGroup value={selectedRole} onValueChange={handleRoleSelect} className="space-y-4">
               {availableRoles.map(role => (
-                <div key={role.id} className="flex items-center space-x-2">
-                  <Checkbox id={`role-${role.id}`} defaultChecked={selectedUser?.role === role.label} />
-                  <label
-                    htmlFor={`role-${role.id}`}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {role.label}
-                  </label>
+                <div key={role.id} className="flex items-start space-x-3 border p-3 rounded-md hover:bg-slate-50 cursor-pointer">
+                  <RadioGroupItem value={role.id} id={`role-${role.id}`} className="mt-1" />
+                  <div className="space-y-1">
+                    <label
+                      htmlFor={`role-${role.id}`}
+                      className="text-sm font-medium leading-none block cursor-pointer"
+                    >
+                      {role.label}
+                    </label>
+                    <p className="text-xs text-muted-foreground">{role.description}</p>
+                  </div>
                 </div>
               ))}
-            </div>
+            </RadioGroup>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowRoleDialog(false)}>Cancel</Button>
-            <Button onClick={handleSaveRoles}>Save Changes</Button>
+            <Button onClick={handleConfirmRoleChange} className="gap-2">
+              <Check className="h-4 w-4" />
+              Update Role
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Confirmation Dialog */}
+      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Role Change</AlertDialogTitle>
+            <AlertDialogDescription>
+              {selectedUser && selectedRole && (
+                <>
+                  You are about to change <strong>{selectedUser.name}</strong>'s role from <Badge className="ml-1 mr-1">{selectedUser.role}</Badge>
+                  to <Badge className="ml-1 mr-1">{availableRoles.find(r => r.id === selectedRole)?.label}</Badge>
+                  <div className="flex items-center gap-2 mt-4 p-3 bg-amber-50 border border-amber-200 rounded-md">
+                    <AlertCircle className="h-5 w-5 text-amber-500" />
+                    <p className="text-sm text-amber-700">This action will update user permissions immediately.</p>
+                  </div>
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleSaveRoles} className="gap-2 bg-blue-600">
+              <UserCheck className="h-4 w-4" />
+              Confirm Change
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AdminLayout>
   );
 };
 
 export default UsersCMS;
+
