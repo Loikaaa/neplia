@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-// Exam types data - expanded to include non-English exams
 const examTypes = [
   {
     id: 'ielts-academic',
@@ -80,7 +79,6 @@ const SelectionHome: React.FC = () => {
   const location = useLocation();
   const { toast } = useToast();
 
-  // Check for exam parameter in URL
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const examParam = queryParams.get('exam');
@@ -89,13 +87,11 @@ const SelectionHome: React.FC = () => {
       const validExam = examTypes.find(exam => exam.id === examParam);
       if (validExam) {
         setSelectedExam(examParam);
-        // If we have an exam from URL, start at step 1 (country selection)
         setStep(1);
       }
     }
   }, [location]);
 
-  // Check if we have saved preferences
   useEffect(() => {
     const savedCountry = localStorage.getItem('selectedCountry');
     const savedExam = localStorage.getItem('selectedExam');
@@ -138,11 +134,9 @@ const SelectionHome: React.FC = () => {
         return;
       }
       
-      // Save preferences to localStorage
       localStorage.setItem('selectedCountry', selectedCountry);
       localStorage.setItem('selectedExam', selectedExam);
       
-      // Navigate to dashboard
       navigate('/dashboard');
     }
   };
@@ -151,7 +145,6 @@ const SelectionHome: React.FC = () => {
     navigate('/');
   };
 
-  // Get the current exam name for the page title
   const getCurrentExamName = () => {
     if (!selectedExam) return '';
     const exam = examTypes.find(e => e.id === selectedExam);
@@ -169,7 +162,7 @@ const SelectionHome: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {selectedExam ? `Prepare for ${getCurrentExamName()}` : 'Personalize Your Learning Journey'}
+              {selectedExam ? `Prepare for ${getCurrentExamName()}` : 'Personalize Your Exam Proficiency Journey'}
             </motion.h1>
             <motion.p 
               className="text-muted-foreground max-w-2xl mx-auto"
@@ -179,7 +172,7 @@ const SelectionHome: React.FC = () => {
             >
               {selectedExam 
                 ? `Let's customize your ${getCurrentExamName()} preparation based on your target country.`
-                : "Let's customize your experience to match your specific needs. We'll tailor our resources and practice tests to your target exam."}
+                : "Let's customize your experience to match your specific needs. We'll tailor our resources and practice tests to your target exam and destination."}
             </motion.p>
           </div>
 
