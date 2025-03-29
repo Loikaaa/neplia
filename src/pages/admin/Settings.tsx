@@ -10,6 +10,7 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import DatabaseSettings from '@/components/admin/DatabaseSettings';
+import EmailMarketingSettings from '@/components/admin/EmailMarketingSettings';
 
 const Settings = () => {
   const { toast } = useToast();
@@ -37,6 +38,7 @@ const Settings = () => {
             <TabsTrigger value="appearance">Appearance</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
             <TabsTrigger value="database">Database</TabsTrigger>
+            <TabsTrigger value="marketing">Marketing</TabsTrigger>
           </TabsList>
           
           <TabsContent value="general" className="space-y-6">
@@ -176,6 +178,10 @@ const Settings = () => {
           
           <TabsContent value="database" className="space-y-6">
             <DatabaseSettings />
+          </TabsContent>
+          
+          <TabsContent value="marketing" className="space-y-6">
+            <EmailMarketingSettings />
           </TabsContent>
         </Tabs>
       </div>
