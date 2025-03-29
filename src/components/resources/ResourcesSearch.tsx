@@ -17,7 +17,7 @@ const ResourcesSearch = () => {
   };
 
   return (
-    <div className="mb-12 bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6">
+    <div className="mb-12 bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 md:p-6 sticky top-36 md:top-40 z-10">
       <div className="flex flex-col space-y-4">
         <h2 className={`${isMobile ? 'text-xl' : 'text-2xl md:text-3xl'} font-bold text-center mb-2`}>Find the Perfect Learning Resource</h2>
         

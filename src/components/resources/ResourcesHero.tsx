@@ -9,7 +9,7 @@ const ResourcesHero = () => {
   return (
     <div className="mb-8 md:mb-12">
       <div className="flex flex-col md:flex-row items-center justify-between">
-        <div className="w-full md:w-1/2 mb-8 md:mb-0">
+        <div className="w-full md:w-1/2 mb-8 md:mb-0 sticky top-16 md:top-20 z-10 bg-background pt-4 pb-2">
           <h1 className={`${isMobile ? 'text-3xl' : 'text-4xl md:text-5xl'} font-bold mb-4 font-heading`}>
             <span className="highlight-text">Learning Resources</span>
           </h1>
