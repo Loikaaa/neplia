@@ -7,6 +7,7 @@ import { listeningTestData } from '@/data/listeningTestData';
 import { ListeningQuestions } from './ListeningQuestions';
 import AudioPlayer from './AudioPlayer';
 import { Badge } from '@/components/ui/badge';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Define the test types and difficulty levels
 export type TestType = 'general' | 'academic' | 'practice';
@@ -25,6 +26,7 @@ export const ListeningTest: React.FC<ListeningTestProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [testCompleted, setTestCompleted] = useState(false);
+  const isMobile = useIsMobile();
   
   const testData = listeningTestData;
 
@@ -47,16 +49,16 @@ export const ListeningTest: React.FC<ListeningTestProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between mb-4">
+      <div className={`${isMobile ? 'flex flex-col space-y-2' : 'flex items-center justify-between'} mb-4`}>
         <div className="space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight">
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight">
             {testType.charAt(0).toUpperCase() + testType.slice(1)} Listening Test
           </h2>
           <p className="text-sm text-muted-foreground">
             {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} level • {testData.duration} minutes
           </p>
         </div>
-        <Badge variant="outline" className="px-3 py-1">
+        <Badge variant="outline" className="px-3 py-1 mt-2 md:mt-0">
           Section {currentSection + 1} of {testData.sections.length}
         </Badge>
       </div>
@@ -94,7 +96,7 @@ export const ListeningTest: React.FC<ListeningTestProps> = ({
       />
       
       {/* Navigation Buttons */}
-      <div className="flex justify-between mt-8">
+      <div className={`${isMobile ? 'flex flex-col space-y-3' : 'flex justify-between'} mt-8`}>
         <Button
           variant="outline"
           onClick={() => {
@@ -103,6 +105,7 @@ export const ListeningTest: React.FC<ListeningTestProps> = ({
             }
           }}
           disabled={currentSection === 0}
+          className={isMobile ? 'w-full' : ''}
         >
           Previous Section
         </Button>
@@ -110,13 +113,14 @@ export const ListeningTest: React.FC<ListeningTestProps> = ({
         {currentSection < testData.sections.length - 1 ? (
           <Button
             onClick={() => setCurrentSection(currentSection + 1)}
+            className={isMobile ? 'w-full' : ''}
           >
             Next Section
           </Button>
         ) : (
           <Button 
             onClick={submitTest}
-            className="bg-indigo hover:bg-indigo-600"
+            className={`bg-indigo hover:bg-indigo-600 ${isMobile ? 'w-full' : ''}`}
           >
             Submit Test
           </Button>

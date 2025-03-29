@@ -24,15 +24,21 @@ export function useIsMobile() {
   )
 
   useEffect(() => {
-    // Set initial value
-    handleResize()
-
-    // Add event listener for window resize
-    window.addEventListener("resize", handleResize)
+    // Initial value setup - important for SSR
+    if (typeof window !== 'undefined') {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+      
+      // Add event listener for window resize
+      window.addEventListener("resize", handleResize)
+      
+      // Clean up
+      return () => window.removeEventListener("resize", handleResize)
+    }
     
-    // Clean up
-    return () => window.removeEventListener("resize", handleResize)
+    // Default to non-mobile if window is undefined (SSR)
+    return setIsMobile(false)
   }, [handleResize])
 
-  return !!isMobile
+  // Return boolean instead of undefined (for initial render)
+  return isMobile === undefined ? false : isMobile
 }
