@@ -33,14 +33,14 @@ const UserCourseProgress = () => {
     <Card className="w-full shadow-sm">
       <CardHeader>
         <CardTitle className="text-xl flex items-center">
-          <Book className="mr-2 h-5 w-5 text-indigo" />
+          <Book className="mr-2 h-5 w-5 text-purple-600" />
           Your Learning Paths
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
           {courses.map((course, index) => (
-            <div key={index} className="border border-muted rounded-lg p-4 hover:border-indigo transition-colors">
+            <div key={index} className="border border-muted rounded-lg p-4 hover:border-purple-600 transition-colors">
               <div className="flex justify-between items-start mb-3">
                 <h3 className="font-medium">{course.title}</h3>
                 <span className="text-sm text-muted-foreground">{course.lastActivity}</span>
@@ -48,7 +48,7 @@ const UserCourseProgress = () => {
               
               <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mb-2">
                 <div 
-                  className={`h-full rounded-full ${index % 3 === 0 ? 'bg-indigo' : index % 3 === 1 ? 'bg-teal' : 'bg-coral'}`} 
+                  className={`h-full rounded-full ${index % 3 === 0 ? 'bg-purple-600' : index % 3 === 1 ? 'bg-teal-500' : 'bg-pink-500'}`} 
                   style={{ width: `${course.progress}%` }}
                 ></div>
               </div>
@@ -65,7 +65,7 @@ const UserCourseProgress = () => {
             </div>
           ))}
           
-          <Button variant="ghost" className="w-full border border-dashed border-muted hover:border-indigo">
+          <Button variant="ghost" className="w-full border border-dashed border-muted hover:border-purple-600">
             Explore More Courses
           </Button>
         </div>

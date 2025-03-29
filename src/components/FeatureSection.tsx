@@ -7,37 +7,37 @@ const features = [
     icon: Headphones,
     title: "Listening Practice",
     description: "Master listening with authentic audio samples and interactive question formats.",
-    color: "bg-indigo text-white"
+    color: "bg-purple-600 text-white"
   },
   {
     icon: BookOpen,
     title: "Reading Tests",
     description: "Improve comprehension with diverse reading passages and timed exercises.",
-    color: "bg-teal text-white"
+    color: "bg-teal-500 text-white"
   },
   {
     icon: Edit,
     title: "Writing Evaluation",
     description: "Get AI-powered feedback on Task 1 and Task 2 writing with detailed scoring.",
-    color: "bg-coral text-white"
+    color: "bg-pink-500 text-white"
   },
   {
     icon: MessageSquare,
     title: "Speaking Assessment",
     description: "Practice speaking with voice recording and detailed pronunciation analysis.",
-    color: "bg-indigo text-white"
+    color: "bg-indigo-600 text-white"
   },
   {
     icon: BarChart3,
     title: "Progress Tracking",
     description: "Visualize your improvement with detailed analytics and performance insights.",
-    color: "bg-teal text-white"
+    color: "bg-cyan-500 text-white"
   },
   {
     icon: Calendar,
     title: "Study Planning",
     description: "Get personalized study schedules tailored to your target test date.",
-    color: "bg-coral text-white"
+    color: "bg-coral-500 text-white"
   }
 ];
 

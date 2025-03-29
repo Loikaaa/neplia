@@ -22,7 +22,7 @@ const ResourcesHero = () => {
               <Book size={isMobile ? 16 : 20} />
               Browse All Resources
             </button>
-            <button className={`border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all ${isMobile ? 'px-4 py-2 text-sm' : 'px-6 py-3'}`}>
+            <button className={`border border-purple-600 text-purple-600 hover:bg-purple-50 font-medium rounded-lg transition-all ${isMobile ? 'px-4 py-2 text-sm' : 'px-6 py-3'}`}>
               Recommended For You
             </button>
           </div>
@@ -31,7 +31,7 @@ const ResourcesHero = () => {
         {!isMobile && (
           <div className="w-full md:w-1/2 flex justify-center">
             <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg blur-md opacity-75"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-cyan-500 rounded-lg blur-md opacity-75"></div>
               <div className="relative bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl">
                 <img 
                   src="https://images.unsplash.com/photo-1456513080867-f24142c9fa3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1673&q=80" 
@@ -46,7 +46,7 @@ const ResourcesHero = () => {
         {isMobile && (
           <div className="w-full flex justify-center">
             <div className="relative w-full">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg blur-md opacity-75"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-cyan-500 rounded-lg blur-md opacity-75"></div>
               <div className="relative bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl">
                 <img 
                   src="https://images.unsplash.com/photo-1456513080867-f24142c9fa3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1673&q=80" 

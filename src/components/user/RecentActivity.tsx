@@ -11,7 +11,7 @@ const RecentActivity = () => {
       time: "Today",
       score: "24/30",
       icon: Headphones,
-      color: "bg-indigo-100 text-indigo"
+      color: "bg-purple-100 text-purple-600"
     },
     {
       type: "writing",
@@ -19,7 +19,7 @@ const RecentActivity = () => {
       time: "Yesterday",
       status: "Pending Review",
       icon: FileText,
-      color: "bg-coral-100 text-coral"
+      color: "bg-pink-100 text-pink-500"
     },
     {
       type: "speaking",
@@ -27,7 +27,7 @@ const RecentActivity = () => {
       time: "3 days ago",
       duration: "15 minutes",
       icon: MessageSquare,
-      color: "bg-teal-100 text-teal"
+      color: "bg-teal-100 text-teal-500"
     },
     {
       type: "test",
@@ -35,7 +35,7 @@ const RecentActivity = () => {
       time: "1 week ago",
       score: "Overall: 7.0",
       icon: FileText,
-      color: "bg-indigo-100 text-indigo"
+      color: "bg-indigo-100 text-indigo-600"
     }
   ];
 
@@ -43,7 +43,7 @@ const RecentActivity = () => {
     <Card className="w-full shadow-sm h-full">
       <CardHeader>
         <CardTitle className="text-xl flex items-center">
-          <Activity className="mr-2 h-5 w-5 text-indigo" />
+          <Activity className="mr-2 h-5 w-5 text-purple-600" />
           Recent Activity
         </CardTitle>
       </CardHeader>
@@ -60,7 +60,7 @@ const RecentActivity = () => {
                   <Clock className="h-3 w-3 mr-1" />
                   <span>{activity.time}</span>
                   {activity.score && (
-                    <span className="ml-2 px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo rounded text-xs">
+                    <span className="ml-2 px-1.5 py-0.5 bg-purple-50 dark:bg-purple-900/30 text-purple-600 rounded text-xs">
                       {activity.score}
                     </span>
                   )}
@@ -74,7 +74,7 @@ const RecentActivity = () => {
             </div>
           ))}
         </div>
-        <button className="text-sm text-indigo dark:text-indigo-300 mt-4 hover:underline w-full text-center">
+        <button className="text-sm text-purple-600 dark:text-purple-400 mt-4 hover:underline w-full text-center">
           View All Activity
         </button>
       </CardContent>

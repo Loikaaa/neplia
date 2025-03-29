@@ -7,7 +7,7 @@ const SpeakingHeader = () => {
   return (
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-2">
-        <Mic className="h-6 w-6 text-indigo" />
+        <Mic className="h-6 w-6 text-purple-600" />
         <h1 className="text-3xl font-bold">IELTS Speaking Practice</h1>
       </div>
       <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-3xl">

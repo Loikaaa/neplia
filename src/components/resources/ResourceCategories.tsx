@@ -74,15 +74,15 @@ const ResourceCategories = () => {
       id: "lesson-plans",
       title: "Lesson Plans",
       description: "Structured learning schedules to optimize your study time and ensure comprehensive preparation.",
-      icon: <Calendar size={24} style={{ color: "#3B82F6" }} />,
-      color: "#3B82F6"
+      icon: <Calendar size={24} style={{ color: "#6366F1" }} />,
+      color: "#6366F1"
     },
     {
       id: "downloadable-worksheets",
       title: "Downloadable Worksheets",
       description: "Printable exercises for offline practice with answer keys and detailed explanations for self-study.",
-      icon: <Download size={24} style={{ color: "#6366F1" }} />,
-      color: "#6366F1"
+      icon: <Download size={24} style={{ color: "#06B6D4" }} />,
+      color: "#06B6D4"
     }
   ];
 
