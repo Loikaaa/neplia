@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -7,14 +7,46 @@ import { readingTestData } from '@/data/readingTestData';
 import { ReadingQuestions } from './ReadingQuestions';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 export const ReadingTest = () => {
   const [currentPassage, setCurrentPassage] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [testCompleted, setTestCompleted] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(60 * 60); // 60 minutes in seconds
+  const { toast } = useToast();
   
   const testData = readingTestData;
+
+  // Timer effect
+  useEffect(() => {
+    // Start the timer when the component mounts
+    const timer = setInterval(() => {
+      setTimeRemaining(prev => {
+        if (prev <= 0) {
+          clearInterval(timer);
+          handleTimeUp();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    // Clean up the timer when the component unmounts
+    return () => clearInterval(timer);
+  }, []);
+
+  // Handle time up
+  const handleTimeUp = () => {
+    toast({
+      title: "Time's up!",
+      description: "Your reading test time has ended. Please submit your answers.",
+      variant: "destructive",
+    });
+    
+    // Auto-submit when time is up
+    submitTest();
+  };
 
   const handleAnswerChange = (questionId: string, answer: string) => {
     setUserAnswers(prev => ({
@@ -27,6 +59,17 @@ export const ReadingTest = () => {
     // In a real app, you would send the answers to the server
     // For now, we'll just mark the test as completed
     setTestCompleted(true);
+    toast({
+      title: "Test submitted",
+      description: "Your reading test has been submitted successfully.",
+    });
+  };
+
+  // Format time as MM:SS
+  const formatTime = (totalSeconds: number) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   return (
@@ -36,8 +79,8 @@ export const ReadingTest = () => {
         <CardContent className="p-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium">Time Remaining</span>
-            <span className="text-sm font-medium">
-              {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, '0')}
+            <span className="text-sm font-medium text-red-600 dark:text-red-400 font-mono">
+              {formatTime(timeRemaining)}
             </span>
           </div>
           <Progress value={(timeRemaining / (60 * 60)) * 100} className="h-2" />
@@ -45,13 +88,13 @@ export const ReadingTest = () => {
       </Card>
       
       {/* Passage Navigation */}
-      <div className="flex mb-6 border-b dark:border-gray-700">
+      <div className="flex mb-6 border-b dark:border-gray-700 overflow-x-auto">
         {testData.passages.map((passage, index) => (
           <button
             key={index}
             onClick={() => setCurrentPassage(index)}
             className={cn(
-              "py-2 px-4 font-medium text-sm border-b-2 transition-colors",
+              "py-2 px-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap",
               currentPassage === index 
                 ? "border-indigo text-indigo dark:border-indigo-400 dark:text-indigo-400" 
                 : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
