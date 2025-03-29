@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -89,9 +88,10 @@ const App: React.FC = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <AdminLink />
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/official" element={<><Index /><AdminLink /></>} />
+              <Route path="/official" element={<Index />} />
               <Route path="/selection" element={<SelectionHome />} />
               <Route path="/practice" element={<PracticePage />} />
               <Route path="/practice/listening" element={<ListeningPractice />} />

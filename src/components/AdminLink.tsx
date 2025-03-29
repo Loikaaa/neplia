@@ -1,47 +1,47 @@
 
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Shield } from 'lucide-react';
+import { Shield, Settings, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const AdminLink = () => {
-  const [showAdmin, setShowAdmin] = useState(false);
-  
-  useEffect(() => {
-    // Check if the current URL is neplia.com/official
-    const checkUrl = () => {
-      const currentUrl = window.location.href;
-      if (currentUrl.includes('neplia.com/official')) {
-        setShowAdmin(true);
-      } else {
-        setShowAdmin(false);
-      }
-    };
-    
-    // Check initially
-    checkUrl();
-    
-    // Listen for URL changes (for SPA navigation)
-    window.addEventListener('popstate', checkUrl);
-    
-    return () => {
-      window.removeEventListener('popstate', checkUrl);
-    };
-  }, []);
-  
-  // Don't render anything if we're not on the special URL
-  if (!showAdmin) {
-    return null;
-  }
+  const [showAdmin, setShowAdmin] = useState(true); // Set to true to always display
   
   return (
-    <div className="fixed bottom-4 right-4 z-50">
-      <Link to="/admin">
-        <Button variant="outline" className="flex items-center gap-2 bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-all">
-          <Shield className="h-4 w-4" />
-          <span>Admin Dashboard</span>
-        </Button>
-      </Link>
+    <div className="fixed top-1/2 right-0 -translate-y-1/2 z-50 flex flex-col gap-2">
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link to="/admin">
+              <Button variant="default" size="icon" className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-l-md rounded-r-none h-12 w-12 shadow-lg border-r border-indigo-700">
+                <LayoutDashboard className="h-5 w-5" />
+              </Button>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="left">
+            <p>Admin Dashboard</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link to="/admin/settings">
+              <Button variant="default" size="icon" className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-l-md rounded-r-none h-12 w-12 shadow-lg border-r border-indigo-700">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="left">
+            <p>Admin Settings</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };
