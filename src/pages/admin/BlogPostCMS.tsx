@@ -312,7 +312,6 @@ const BlogPostCMS = () => {
       case 'heading':
       case 'list':
       case 'quote':
-        // These need to be at the start of a line
         // First check if we're at the start of a line already
         const beforeSelection = currentPost.content.substring(0, start);
         const isAtLineStart = beforeSelection.length === 0 || beforeSelection.charAt(beforeSelection.length - 1) === '\n';
@@ -343,10 +342,14 @@ const BlogPostCMS = () => {
         break;
       case 'color':
         if (formatValue) {
-          formattedText = formatValue;
-          // If there was selected text, replace "Text" in the span with the selected text
-          if (selectedText) {
-            formattedText = formatValue.replace(">Text<", `>${selectedText}<`);
+          if (formatValue.includes('$SELECTED_TEXT$')) {
+            const textToUse = selectedText || 'Text';
+            formattedText = formatValue.replace('$SELECTED_TEXT$', textToUse);
+          } else {
+            formattedText = formatValue;
+            if (selectedText) {
+              formattedText = formatValue.replace(">Text<", `>${selectedText}<`);
+            }
           }
           newCursorPosition = start + formattedText.length;
         }
@@ -376,11 +379,9 @@ const BlogPostCMS = () => {
     setTimeout(() => {
       if (contentTextareaRef.current) {
         if (selectedText.length > 0) {
-          // If text was selected, place cursor at the end of the inserted text
           contentTextareaRef.current.selectionStart = start + formattedText.length;
           contentTextareaRef.current.selectionEnd = start + formattedText.length;
         } else {
-          // If no text was selected, place cursor appropriately depending on the format
           contentTextareaRef.current.selectionStart = newCursorPosition;
           contentTextareaRef.current.selectionEnd = newCursorPosition;
         }

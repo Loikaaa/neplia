@@ -20,8 +20,7 @@ import {
   Code, 
   Subscript, 
   Superscript, 
-  Strikethrough, 
-  ChevronDown
+  Strikethrough
 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -124,7 +123,9 @@ const BlogTextEditorToolbar: React.FC<BlogTextEditorToolbarProps> = ({ onFormatT
 
   const handleColorSelect = (color: string, isBackground: boolean) => {
     const type = isBackground ? 'background-color' : 'color';
-    onFormatText('color', `<span style="${type}: ${color}">Text</span>`);
+    // Pass just the style template, the formatting will be handled in the parent component
+    // to properly handle selected text
+    onFormatText('color', `<span style="${type}: ${color}">$SELECTED_TEXT$</span>`);
   };
 
   return (
