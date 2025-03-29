@@ -137,6 +137,24 @@ const SelectionHome: React.FC = () => {
     return examMap[examId] || '/dashboard'; // Default to dashboard if no specific page
   };
 
+  // Function to get the exam-specific description
+  const getExamDescription = (examId: string) => {
+    const descriptionMap: Record<string, string> = {
+      'ielts-academic': "Let's customize your IELTS Academic preparation based on your target country. We'll provide university-specific requirements and academic materials.",
+      'ielts-general': "Let's tailor your IELTS General Training preparation for immigration or work purposes in your target country.",
+      'toefl': "Let's optimize your TOEFL preparation with university-specific requirements for your desired destinations.",
+      'pte': "Let's prepare you for the Pearson Test of English with country-specific immigration and academic requirements.",
+      'duolingo': "Let's get you ready for the Duolingo English Test with customized practice for your target institutions.",
+      'cambridge': "Let's prepare you for Cambridge English qualifications with region-specific training resources.",
+      'oet': "Let's focus your Occupational English Test preparation for healthcare professionals in your target country.",
+      'sat': "Let's customize your SAT preparation strategy for college admissions in the United States.",
+      'gre': "Let's tailor your GRE preparation for graduate school applications with school-specific focus areas.",
+      'gmat': "Let's optimize your GMAT preparation with business school-specific requirements for your target institutions."
+    };
+    
+    return descriptionMap[examId] || "Let's customize your experience to match your specific needs. We'll tailor our resources and practice tests to your target exam and destination.";
+  };
+
   const handleNextStep = () => {
     if (step === 1) {
       if (!selectedCountry) {
@@ -196,7 +214,7 @@ const SelectionHome: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               {selectedExam 
-                ? `Let's customize your ${getCurrentExamName()} preparation based on your target country.`
+                ? getExamDescription(selectedExam)
                 : "Let's customize your experience to match your specific needs. We'll tailor our resources and practice tests to your target exam and destination."}
             </motion.p>
           </div>
