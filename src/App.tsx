@@ -90,40 +90,41 @@ const App: React.FC = () => {
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<><Index /><AdminLink /></>} />
+              <Route path="/" element={<Index />} />
+              <Route path="/official" element={<><Index /><AdminLink /></>} />
               <Route path="/selection" element={<SelectionHome />} />
-              <Route path="/practice" element={<><PracticePage /><AdminLink /></>} />
-              <Route path="/practice/listening" element={<><ListeningPractice /><AdminLink /></>} />
-              <Route path="/practice/reading" element={<><ReadingPractice /><AdminLink /></>} />
-              <Route path="/practice/writing" element={<><WritingPractice /><AdminLink /></>} />
-              <Route path="/practice/speaking" element={<><SpeakingPractice /><AdminLink /></>} />
-              <Route path="/practice/mock-test" element={<><MockTestPage /><AdminLink /></>} />
-              <Route path="/practice/mock-tests" element={<><MockTestPage /><AdminLink /></>} />
+              <Route path="/practice" element={<PracticePage />} />
+              <Route path="/practice/listening" element={<ListeningPractice />} />
+              <Route path="/practice/reading" element={<ReadingPractice />} />
+              <Route path="/practice/writing" element={<WritingPractice />} />
+              <Route path="/practice/speaking" element={<SpeakingPractice />} />
+              <Route path="/practice/mock-test" element={<MockTestPage />} />
+              <Route path="/practice/mock-tests" element={<MockTestPage />} />
               
               {/* SAT-specific practice routes */}
-              <Route path="/practice/sat/math" element={<><MockTestPage examType="sat-math" /><AdminLink /></>} />
-              <Route path="/practice/sat/english" element={<><MockTestPage examType="sat-english" /><AdminLink /></>} />
+              <Route path="/practice/sat/math" element={<MockTestPage examType="sat-math" />} />
+              <Route path="/practice/sat/english" element={<MockTestPage examType="sat-english" />} />
               
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<ProtectedUserRoute><UserDashboard /></ProtectedUserRoute>} />
-              <Route path="/resources" element={<><ResourcesHome /><AdminLink /></>} />
-              <Route path="/resources/old" element={<><Resources /><AdminLink /></>} />
-              <Route path="/resources/all" element={<><AllResources /><AdminLink /></>} />
-              <Route path="/resources/:resourceId" element={<><ResourceDetail /><AdminLink /></>} />
-              <Route path="/resources/category/:categoryId" element={<><CategoryDetail /><AdminLink /></>} />
-              <Route path="/about" element={<><About /><AdminLink /></>} />
-              <Route path="/blog" element={<><Blog /><AdminLink /></>} />
-              <Route path="/blog/:slug" element={<><BlogPost /><AdminLink /></>} />
+              <Route path="/resources" element={<ResourcesHome />} />
+              <Route path="/resources/old" element={<Resources />} />
+              <Route path="/resources/all" element={<AllResources />} />
+              <Route path="/resources/:resourceId" element={<ResourceDetail />} />
+              <Route path="/resources/category/:categoryId" element={<CategoryDetail />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
               
               {/* Exam-specific pages */}
-              <Route path="/exams/ielts" element={<><IeltsPage /><AdminLink /></>} />
-              <Route path="/exams/toefl" element={<><ToeflPage /><AdminLink /></>} />
-              <Route path="/exams/pte" element={<><PtePage /><AdminLink /></>} />
-              <Route path="/exams/sat" element={<><SatPage /><AdminLink /></>} />
-              <Route path="/exams/gre" element={<><GrePage /><AdminLink /></>} />
-              <Route path="/exams/gmat" element={<><GmatPage /><AdminLink /></>} />
-              <Route path="/countries" element={<><CountriesPage /><AdminLink /></>} />
+              <Route path="/exams/ielts" element={<IeltsPage />} />
+              <Route path="/exams/toefl" element={<ToeflPage />} />
+              <Route path="/exams/pte" element={<PtePage />} />
+              <Route path="/exams/sat" element={<SatPage />} />
+              <Route path="/exams/gre" element={<GrePage />} />
+              <Route path="/exams/gmat" element={<GmatPage />} />
+              <Route path="/countries" element={<CountriesPage />} />
               
               <Route path="/admin/login" element={<DemoAdminLogin />} />
               
