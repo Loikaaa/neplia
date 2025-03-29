@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,24 +11,165 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import EmailMarketingSettings from '@/components/admin/EmailMarketingSettings';
+import { Mail, MessageSquare, Edit } from 'lucide-react';
+
+// Define types for our marketing campaigns
+interface Campaign {
+  id: string;
+  name: string;
+  description: string;
+  scheduleType: string;
+  isActive: boolean;
+}
+
+// Define types for subscribers
+interface Subscriber {
+  id: string;
+  email: string;
+  name: string;
+  listId: string;
+  dateAdded: string;
+}
+
+// Define types for subscriber lists
+interface SubscriberList {
+  id: string;
+  name: string;
+  subscriberCount: number;
+}
 
 const Marketing = () => {
   const { toast } = useToast();
   const [selectedCampaign, setSelectedCampaign] = useState<string | null>(null);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [subscriberLists, setSubscriberLists] = useState<SubscriberList[]>([]);
+  const [campaignForm, setCampaignForm] = useState({
+    name: '',
+    description: '',
+    scheduleType: 'immediate',
+    isActive: false
+  });
   
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    const savedCampaigns = localStorage.getItem('marketingCampaigns');
+    if (savedCampaigns) {
+      setCampaigns(JSON.parse(savedCampaigns));
+    } else {
+      // Set default campaigns if none exist
+      const defaultCampaigns = [
+        { id: "welcome", name: "Welcome Series", description: "Sent to new users after sign up", scheduleType: "immediate", isActive: true },
+        { id: "retention", name: "User Retention", description: "Re-engage inactive users", scheduleType: "scheduled", isActive: false },
+        { id: "exam-prep", name: "Exam Preparation", description: "Tips for upcoming exams", scheduleType: "recurring", isActive: true },
+      ];
+      setCampaigns(defaultCampaigns);
+      localStorage.setItem('marketingCampaigns', JSON.stringify(defaultCampaigns));
+    }
+    
+    const savedLists = localStorage.getItem('subscriberLists');
+    if (savedLists) {
+      setSubscriberLists(JSON.parse(savedLists));
+    } else {
+      // Set default subscriber lists if none exist
+      const defaultLists = [
+        { id: "main", name: "Main List", subscriberCount: 543 },
+        { id: "ielts", name: "IELTS Students", subscriberCount: 212 },
+        { id: "toefl", name: "TOEFL Students", subscriberCount: 189 },
+        { id: "inactive", name: "Inactive Users", subscriberCount: 87 },
+      ];
+      setSubscriberLists(defaultLists);
+      localStorage.setItem('subscriberLists', JSON.stringify(defaultLists));
+    }
+  }, []);
+
+  // Update form when campaign selection changes
+  useEffect(() => {
+    if (selectedCampaign) {
+      const campaign = campaigns.find(c => c.id === selectedCampaign);
+      if (campaign) {
+        setCampaignForm({
+          name: campaign.name,
+          description: campaign.description || '',
+          scheduleType: campaign.scheduleType || 'immediate',
+          isActive: campaign.isActive
+        });
+      }
+    }
+  }, [selectedCampaign, campaigns]);
+
   const handleSave = () => {
+    if (selectedCampaign) {
+      // Update existing campaign
+      const updatedCampaigns = campaigns.map(campaign => {
+        if (campaign.id === selectedCampaign) {
+          return {
+            ...campaign,
+            name: campaignForm.name,
+            description: campaignForm.description,
+            scheduleType: campaignForm.scheduleType,
+            isActive: campaignForm.isActive
+          };
+        }
+        return campaign;
+      });
+      
+      setCampaigns(updatedCampaigns);
+      localStorage.setItem('marketingCampaigns', JSON.stringify(updatedCampaigns));
+      
+      toast({
+        title: "Campaign Updated",
+        description: "Your campaign has been updated successfully",
+      });
+    } else {
+      // For other settings
+      toast({
+        title: "Settings Saved",
+        description: "Your marketing settings have been saved successfully",
+      });
+    }
+  };
+
+  const handleCreateCampaign = () => {
+    const newCampaign = {
+      id: `campaign-${Date.now()}`,
+      name: "New Campaign",
+      description: "Campaign description",
+      scheduleType: "immediate",
+      isActive: false
+    };
+    
+    const updatedCampaigns = [...campaigns, newCampaign];
+    setCampaigns(updatedCampaigns);
+    localStorage.setItem('marketingCampaigns', JSON.stringify(updatedCampaigns));
+    setSelectedCampaign(newCampaign.id);
+    
     toast({
-      title: "Marketing Settings Saved",
-      description: "Your marketing settings have been saved successfully",
+      title: "Campaign Created",
+      description: "New campaign has been created",
     });
   };
 
-  const mockCampaigns = [
-    { id: "welcome", name: "Welcome Series" },
-    { id: "retention", name: "User Retention" },
-    { id: "exam-prep", name: "Exam Preparation" },
-  ];
-  
+  const handleDeleteCampaign = () => {
+    if (selectedCampaign) {
+      const updatedCampaigns = campaigns.filter(campaign => campaign.id !== selectedCampaign);
+      setCampaigns(updatedCampaigns);
+      localStorage.setItem('marketingCampaigns', JSON.stringify(updatedCampaigns));
+      setSelectedCampaign(null);
+      
+      toast({
+        title: "Campaign Deleted",
+        description: "The campaign has been deleted",
+      });
+    }
+  };
+
+  const handleFormChange = (field: string, value: string | boolean) => {
+    setCampaignForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -41,9 +182,18 @@ const Marketing = () => {
 
         <Tabs defaultValue="campaigns" className="w-full">
           <TabsList className="mb-4">
-            <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
-            <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
-            <TabsTrigger value="templates">Templates</TabsTrigger>
+            <TabsTrigger value="campaigns" className="flex items-center gap-2">
+              <Mail className="h-4 w-4" />
+              Campaigns
+            </TabsTrigger>
+            <TabsTrigger value="subscribers" className="flex items-center gap-2">
+              <MessageSquare className="h-4 w-4" />
+              Subscribers
+            </TabsTrigger>
+            <TabsTrigger value="templates" className="flex items-center gap-2">
+              <Edit className="h-4 w-4" />
+              Templates
+            </TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
           
@@ -58,17 +208,26 @@ const Marketing = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <Button className="w-full" variant="default">
+                    <Button 
+                      className="w-full" 
+                      variant="default"
+                      onClick={handleCreateCampaign}
+                    >
                       Create New Campaign
                     </Button>
                     <div className="space-y-2">
-                      {mockCampaigns.map(campaign => (
+                      {campaigns.map(campaign => (
                         <div 
                           key={campaign.id}
                           className={`p-2 rounded cursor-pointer ${selectedCampaign === campaign.id ? 'bg-muted' : 'hover:bg-muted/50'}`}
                           onClick={() => setSelectedCampaign(campaign.id)}
                         >
-                          {campaign.name}
+                          <div className="flex items-center justify-between">
+                            <span>{campaign.name}</span>
+                            {campaign.isActive && (
+                              <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -81,13 +240,13 @@ const Marketing = () => {
                   <CardHeader>
                     <CardTitle>
                       {selectedCampaign 
-                        ? mockCampaigns.find(c => c.id === selectedCampaign)?.name 
+                        ? campaigns.find(c => c.id === selectedCampaign)?.name 
                         : "Campaign Details"}
                     </CardTitle>
                     <CardDescription>
                       {selectedCampaign 
                         ? "Edit your campaign settings and content" 
-                        : "Select a campaign from the list"}
+                        : "Select a campaign from the list or create a new one"}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -97,7 +256,8 @@ const Marketing = () => {
                           <Label htmlFor="campaign-name">Campaign Name</Label>
                           <Input 
                             id="campaign-name" 
-                            value={mockCampaigns.find(c => c.id === selectedCampaign)?.name || ''}
+                            value={campaignForm.name}
+                            onChange={(e) => handleFormChange('name', e.target.value)}
                           />
                         </div>
                         <div className="space-y-2">
@@ -105,11 +265,16 @@ const Marketing = () => {
                           <Textarea 
                             id="campaign-description" 
                             placeholder="Enter a description for this campaign..."
+                            value={campaignForm.description}
+                            onChange={(e) => handleFormChange('description', e.target.value)}
                           />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="schedule-type">Schedule Type</Label>
-                          <Select defaultValue="immediate">
+                          <Select 
+                            value={campaignForm.scheduleType}
+                            onValueChange={(value) => handleFormChange('scheduleType', value)}
+                          >
                             <SelectTrigger>
                               <SelectValue placeholder="Select schedule type" />
                             </SelectTrigger>
@@ -127,7 +292,11 @@ const Marketing = () => {
                               Enable or disable this campaign
                             </div>
                           </div>
-                          <Switch id="campaign-active" defaultChecked={selectedCampaign === "welcome"} />
+                          <Switch 
+                            id="campaign-active" 
+                            checked={campaignForm.isActive}
+                            onCheckedChange={(checked) => handleFormChange('isActive', checked)}
+                          />
                         </div>
                       </>
                     ) : (
@@ -141,7 +310,7 @@ const Marketing = () => {
                       <>
                         <Button variant="outline">Preview</Button>
                         <div className="space-x-2">
-                          <Button variant="destructive">Delete</Button>
+                          <Button variant="destructive" onClick={handleDeleteCampaign}>Delete</Button>
                           <Button onClick={handleSave}>Save Changes</Button>
                         </div>
                       </>
@@ -175,28 +344,28 @@ const Marketing = () => {
                 <div className="space-y-2">
                   <Label>Subscriber Lists</Label>
                   <div className="border rounded-md">
-                    <div className="p-3 border-b bg-muted/50 flex justify-between items-center">
-                      <div className="font-medium">Main List</div>
-                      <div className="text-sm text-muted-foreground">543 subscribers</div>
-                    </div>
-                    <div className="p-3 border-b flex justify-between items-center">
-                      <div className="font-medium">IELTS Students</div>
-                      <div className="text-sm text-muted-foreground">212 subscribers</div>
-                    </div>
-                    <div className="p-3 border-b flex justify-between items-center">
-                      <div className="font-medium">TOEFL Students</div>
-                      <div className="text-sm text-muted-foreground">189 subscribers</div>
-                    </div>
-                    <div className="p-3 flex justify-between items-center">
-                      <div className="font-medium">Inactive Users</div>
-                      <div className="text-sm text-muted-foreground">87 subscribers</div>
-                    </div>
+                    {subscriberLists.map(list => (
+                      <div key={list.id} className="p-3 border-b flex justify-between items-center last:border-0">
+                        <div className="font-medium">{list.name}</div>
+                        <div className="text-sm text-muted-foreground">{list.subscriberCount} subscribers</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <Button>Create New List</Button>
+                <Button onClick={() => {
+                  toast({
+                    title: "Feature Coming Soon",
+                    description: "This feature is currently under development",
+                  });
+                }}>Create New List</Button>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" onClick={handleSave}>Import Subscribers</Button>
+                <Button className="w-full" onClick={() => {
+                  toast({
+                    title: "Import Subscribers",
+                    description: "Import feature will be available soon",
+                  });
+                }}>Import Subscribers</Button>
               </CardFooter>
             </Card>
           </TabsContent>
@@ -212,16 +381,31 @@ const Marketing = () => {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Card className="border border-dashed flex flex-col items-center justify-center p-6 h-40">
-                    <Button variant="ghost">+ New Template</Button>
+                    <Button variant="ghost" onClick={() => {
+                      toast({
+                        title: "Template Editor",
+                        description: "Template editor will be available soon",
+                      });
+                    }}>+ New Template</Button>
                   </Card>
-                  <Card className="border hover:border-primary/50 cursor-pointer h-40 overflow-hidden">
+                  <Card className="border hover:border-primary/50 cursor-pointer h-40 overflow-hidden" onClick={() => {
+                    toast({
+                      title: "Template Editor",
+                      description: "Template editor will be available soon",
+                    });
+                  }}>
                     <div className="h-24 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800"></div>
                     <div className="p-2">
                       <h3 className="font-medium">Welcome Email</h3>
                       <p className="text-xs text-muted-foreground">Last edited 3 days ago</p>
                     </div>
                   </Card>
-                  <Card className="border hover:border-primary/50 cursor-pointer h-40 overflow-hidden">
+                  <Card className="border hover:border-primary/50 cursor-pointer h-40 overflow-hidden" onClick={() => {
+                    toast({
+                      title: "Template Editor",
+                      description: "Template editor will be available soon",
+                    });
+                  }}>
                     <div className="h-24 bg-gradient-to-r from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800"></div>
                     <div className="p-2">
                       <h3 className="font-medium">Course Completion</h3>
