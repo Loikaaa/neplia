@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -7,13 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Plus, Search, Edit, Trash2, Eye, Save, X } from 'lucide-react';
-import { blogPosts } from '@/data/blogData';
+import { blogPosts as initialBlogPosts } from '@/data/blogData';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
-// Define the Blog Post type
 interface BlogPost {
   id: number;
   title: string;
@@ -29,6 +27,23 @@ interface BlogPost {
   categories: string[];
 }
 
+const convertBlogPosts = () => {
+  return initialBlogPosts.map(post => ({
+    id: Number(post.id),
+    title: post.title,
+    content: post.content,
+    excerpt: post.excerpt,
+    slug: post.slug,
+    publishedAt: post.publishedAt,
+    author: {
+      name: post.author.name,
+      avatar: post.author.avatar || "/placeholder.svg"
+    },
+    coverImage: post.coverImage,
+    categories: post.tags || []
+  }));
+};
+
 const BlogPostCMS = () => {
   const { toast } = useToast();
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -38,20 +53,18 @@ const BlogPostCMS = () => {
   const [isNewPost, setIsNewPost] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  // Load blog posts on component mount
   useEffect(() => {
     const savedPosts = localStorage.getItem('adminBlogPosts');
     if (savedPosts) {
       setPosts(JSON.parse(savedPosts));
     } else {
-      // If no saved posts, use the imported default ones
-      setPosts(blogPosts);
-      localStorage.setItem('adminBlogPosts', JSON.stringify(blogPosts));
+      const converted = convertBlogPosts();
+      setPosts(converted);
+      localStorage.setItem('adminBlogPosts', JSON.stringify(converted));
     }
   }, []);
 
   const handleCreatePost = () => {
-    // Create a new post with default values
     const newPost: BlogPost = {
       id: Date.now(),
       title: "New Blog Post",
@@ -93,7 +106,6 @@ const BlogPostCMS = () => {
     if (!currentPost) return;
     
     if (isNewPost) {
-      // Add new post to the list
       const updatedPosts = [...posts, currentPost];
       setPosts(updatedPosts);
       localStorage.setItem('adminBlogPosts', JSON.stringify(updatedPosts));
@@ -102,7 +114,6 @@ const BlogPostCMS = () => {
         description: "Your new blog post has been created successfully",
       });
     } else {
-      // Update existing post
       const updatedPosts = posts.map(post => 
         post.id === currentPost.id ? currentPost : post
       );
@@ -122,7 +133,6 @@ const BlogPostCMS = () => {
     if (!currentPost) return;
     
     if (field === "title") {
-      // Also update the slug based on the title
       const slug = value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       setCurrentPost({
         ...currentPost,
@@ -214,7 +224,6 @@ const BlogPostCMS = () => {
         </div>
       </div>
 
-      {/* Blog Post Editor Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
@@ -283,6 +292,21 @@ const BlogPostCMS = () => {
                   id="coverImage" 
                   value={currentPost.coverImage} 
                   onChange={(e) => handleInputChange("coverImage", e.target.value)}
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="categories">Categories (comma separated)</Label>
+                <Input 
+                  id="categories" 
+                  value={currentPost.categories.join(', ')} 
+                  onChange={(e) => {
+                    const categoriesArray = e.target.value.split(',').map(cat => cat.trim()).filter(Boolean);
+                    setCurrentPost({
+                      ...currentPost,
+                      categories: categoriesArray
+                    });
+                  }}
                 />
               </div>
             </div>
