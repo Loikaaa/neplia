@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -100,7 +99,6 @@ const SelectionHome: React.FC = () => {
     if (savedCountry) {
       setSelectedCountry(savedCountry);
       
-      // If country is already selected, skip directly to exam selection
       if (!selectedExam && step === 1) {
         setStep(2);
       }
@@ -119,25 +117,23 @@ const SelectionHome: React.FC = () => {
     setSelectedExam(exam);
   };
 
-  // Function to get the correct redirect path based on exam type
   const getExamRedirectPath = (examId: string) => {
     const examMap: Record<string, string> = {
       'ielts-academic': '/exams/ielts',
       'ielts-general': '/exams/ielts',
       'toefl': '/exams/toefl',
       'pte': '/exams/pte',
-      'duolingo': '/exams/ielts', // Fallback to IELTS for now
-      'cambridge': '/exams/ielts', // Fallback to IELTS for now
-      'oet': '/exams/ielts', // Fallback to IELTS for now
+      'duolingo': '/exams/ielts',
+      'cambridge': '/exams/ielts',
+      'oet': '/exams/ielts',
       'sat': '/exams/sat',
       'gre': '/exams/gre',
       'gmat': '/exams/gmat'
     };
     
-    return examMap[examId] || '/dashboard'; // Default to dashboard if no specific page
+    return examMap[examId] || '/dashboard';
   };
 
-  // Function to get the exam-specific description
   const getExamDescription = (examId: string) => {
     const descriptionMap: Record<string, string> = {
       'ielts-academic': "Let's customize your IELTS Academic preparation based on your target country. We'll provide university-specific requirements and academic materials.",
@@ -179,8 +175,7 @@ const SelectionHome: React.FC = () => {
       localStorage.setItem('selectedCountry', selectedCountry);
       localStorage.setItem('selectedExam', selectedExam);
       
-      // Redirect to the specific exam page instead of dashboard
-      navigate(getExamRedirectPath(selectedExam));
+      navigate('/practice');
     }
   };
 
@@ -283,7 +278,7 @@ const SelectionHome: React.FC = () => {
                 </Button>
               )}
               <Button onClick={handleNextStep} className="bg-indigo hover:bg-indigo/90">
-                {step === 2 ? "Finish Setup" : "Continue"}
+                {step === 2 ? "Start Practice" : "Continue"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>

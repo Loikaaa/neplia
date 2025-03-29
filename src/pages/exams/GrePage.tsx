@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -29,7 +28,7 @@ const GrePage = () => {
                 Comprehensive preparation for the Graduate Record Examination with tailored resources for your target score and graduate program.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link to="/selection?exam=gre">
+                <Link to="/practice">
                   <Button size="lg" className="bg-indigo hover:bg-indigo/90 text-white rounded-lg px-6 py-6 h-auto">
                     Start GRE Preparation
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -265,7 +264,7 @@ const GrePage = () => {
             <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
               Join thousands of successful test-takers who achieved their target scores with Neplia.
             </p>
-            <Link to="/selection?exam=gre">
+            <Link to="/practice">
               <Button size="lg" className="bg-white text-indigo hover:bg-gray-100 rounded-lg px-6 py-6 h-auto">
                 Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />

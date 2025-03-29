@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -29,7 +28,7 @@ const PtePage = () => {
                 Comprehensive preparation for the Pearson Test of English Academic with AI-powered tools.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link to="/selection?exam=pte">
+                <Link to="/practice">
                   <Button size="lg" className="bg-coral hover:bg-coral/90 text-white rounded-lg px-6 py-6 h-auto">
                     Start PTE Preparation
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -269,7 +268,7 @@ const PtePage = () => {
             <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
               Join thousands of successful test-takers who achieved their target scores with Neplia.
             </p>
-            <Link to="/selection?exam=pte">
+            <Link to="/practice">
               <Button size="lg" className="bg-white text-coral hover:bg-gray-100 rounded-lg px-6 py-6 h-auto">
                 Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
