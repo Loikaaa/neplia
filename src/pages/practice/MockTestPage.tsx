@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from "@/hooks/use-toast";
 import { getRecommendationForBand, getSectionSpecificRecommendation } from '@/data/mockTestData';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type SectionScore = {
   listening: number;
@@ -40,6 +41,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ examType }) => {
   });
   const [testHistory, setTestHistory] = useState<TestHistory[]>([]);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     const fetchTestHistory = async () => {
@@ -424,18 +426,18 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ examType }) => {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="space-x-4">
+                <CardFooter className={`${isMobile ? 'flex-col space-y-3' : 'space-x-4'}`}>
                   <Button 
                     variant="default" 
                     onClick={handleRetakeTest}
-                    className="flex-1"
+                    className={`${isMobile ? 'w-full' : 'flex-1'} bg-indigo hover:bg-indigo/90`}
                   >
                     Retake Mock Test
                   </Button>
                   <Button 
                     variant="outline" 
                     onClick={handleBackToPractice}
-                    className="flex-1"
+                    className={`${isMobile ? 'w-full' : 'flex-1'}`}
                   >
                     Back to Practice
                   </Button>

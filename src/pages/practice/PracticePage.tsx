@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -17,6 +16,7 @@ import {
 } from 'lucide-react';
 import PracticeSection from '@/components/PracticeSection';
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const examTitles: Record<string, string> = {
   'ielts': 'IELTS',
@@ -35,16 +35,14 @@ const PracticePage = () => {
   const [examType, setExamType] = useState('ielts');
   const { toast } = useToast();
   const location = useLocation();
+  const isMobile = useIsMobile();
   
   useEffect(() => {
-    // Get the selected exam from localStorage
     const savedExam = localStorage.getItem('selectedExam');
     
     if (savedExam) {
-      // Extract the base exam type
       let baseExamType = savedExam.split('-')[0];
       
-      // Handle special case for ielts variants
       if (savedExam.startsWith('ielts')) {
         baseExamType = 'ielts';
       }
@@ -52,7 +50,6 @@ const PracticePage = () => {
       setExamType(baseExamType);
     }
     
-    // Check for exam type in URL query params (for direct links)
     const queryParams = new URLSearchParams(location.search);
     const examParam = queryParams.get('exam');
     
@@ -91,7 +88,6 @@ const PracticePage = () => {
             
             <TabsContent value="module" className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Listening Practice Card */}
                 <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   <CardHeader className="bg-indigo/90 text-white p-6 flex flex-row items-center space-x-4">
                     <div className="bg-white/20 p-2 rounded-full">
@@ -126,7 +122,6 @@ const PracticePage = () => {
                   </CardFooter>
                 </Card>
 
-                {/* Reading Practice Card */}
                 <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   <CardHeader className="bg-teal-600 text-white p-6 flex flex-row items-center space-x-4">
                     <div className="bg-white/20 p-2 rounded-full">
@@ -161,7 +156,6 @@ const PracticePage = () => {
                   </CardFooter>
                 </Card>
 
-                {/* Writing Practice Card */}
                 <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   <CardHeader className="bg-coral text-white p-6 flex flex-row items-center space-x-4">
                     <div className="bg-white/20 p-2 rounded-full">
@@ -201,7 +195,6 @@ const PracticePage = () => {
                   </CardFooter>
                 </Card>
 
-                {/* Speaking Practice Card */}
                 <Card className="overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                   <CardHeader className="bg-indigo-800 text-white p-6 flex flex-row items-center space-x-4">
                     <div className="bg-white/20 p-2 rounded-full">
@@ -260,7 +253,6 @@ const PracticePage = () => {
                     </h3>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Adjust sections based on exam type */}
                       {(examType === 'ielts' || examType === 'toefl' || examType === 'pte') && (
                         <>
                           <div className="flex items-start">
@@ -360,7 +352,7 @@ const PracticePage = () => {
                                                examType === 'gmat' ? '3.5' : '3'} hours to complete all sections of the test. You can take breaks between sections.
                       </p>
                       <Link to={`/practice/mock-test?exam=${examType}`}>
-                        <Button className="w-full sm:w-auto">
+                        <Button className="w-full bg-indigo hover:bg-indigo/90">
                           Start Full Mock Test
                         </Button>
                       </Link>

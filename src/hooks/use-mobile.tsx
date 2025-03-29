@@ -1,5 +1,4 @@
 
-import * as React from "react"
 import { useCallback, useEffect, useState } from "react"
 
 const MOBILE_BREAKPOINT = 768
@@ -18,7 +17,9 @@ export function useIsMobile() {
 
   const handleResize = useCallback(
     debounce(() => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+      }
     }, 250),
     []
   )
@@ -36,7 +37,7 @@ export function useIsMobile() {
     }
     
     // Default to non-mobile if window is undefined (SSR)
-    return setIsMobile(false)
+    return () => setIsMobile(false)
   }, [handleResize])
 
   // Return boolean instead of undefined (for initial render)

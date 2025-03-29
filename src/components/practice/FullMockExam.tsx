@@ -23,6 +23,7 @@ import {
 import { mockTestData } from '@/data/mockTestData';
 import AudioPlayer from './listening/AudioPlayer';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface FullMockExamProps {
   examType?: string;
@@ -53,6 +54,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
   const [showExamRules, setShowExamRules] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const isSatTest = examType?.includes('sat');
   const isSpecializedTest = isSatTest || examType?.includes('gre') || examType?.includes('gmat');
@@ -449,8 +451,11 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
                     </AlertDescription>
                   </Alert>
                   
-                  <div className="flex items-center space-x-4">
-                    <Button onClick={() => setShowExamRules(false)}>
+                  <div className="flex flex-col sm:flex-row items-center gap-3">
+                    <Button 
+                      onClick={() => setShowExamRules(false)}
+                      className="w-full sm:w-auto"
+                    >
                       View Exam Structure
                     </Button>
                   </div>
@@ -488,7 +493,7 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
             )}
             
             <div className="flex items-start space-x-3">
-              <AlertTriangle className="h-5 w-5 text-orange-500 mt-0.5" />
+              <AlertTriangle className="h-5 w-5 text-orange-500 mt-0.5 flex-shrink-0" />
               <div>
                 <h4 className="font-medium">Important</h4>
                 <p className="text-sm text-gray-500">
@@ -498,11 +503,18 @@ export const FullMockExam: React.FC<FullMockExamProps> = ({
               </div>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button variant="outline" onClick={() => setShowExamRules(!showExamRules)}>
+          <CardFooter className={`flex ${isMobile ? 'flex-col gap-4' : 'justify-between'}`}>
+            <Button 
+              variant="outline" 
+              onClick={() => setShowExamRules(!showExamRules)}
+              className={`${isMobile ? 'w-full' : ''}`}
+            >
               {showExamRules ? 'View Exam Structure' : 'View Exam Rules'}
             </Button>
-            <Button onClick={startExam} className="w-full sm:w-auto">
+            <Button 
+              onClick={startExam} 
+              className="w-full sm:w-auto bg-indigo hover:bg-indigo/90"
+            >
               Start Full Mock Exam
             </Button>
           </CardFooter>
