@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -38,6 +37,7 @@ import {
   RadioGroup, 
   RadioGroupItem 
 } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
 import { 
   User, 
   Mail, 
@@ -48,10 +48,13 @@ import {
   Globe, 
   Calendar, 
   BookOpen, 
-  GraduationCap
-} from "lucide-react";
+  GraduationCap,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Github
+} from 'lucide-react';
 
-// Define the form schema with validation
 const formSchema = z.object({
   firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
   lastName: z.string().min(2, { message: "Last name must be at least 2 characters." }),
@@ -97,7 +100,6 @@ type FormValues = z.infer<typeof formSchema>;
 const SignUp = () => {
   const { toast } = useToast();
   
-  // Initialize the form
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -123,13 +125,20 @@ const SignUp = () => {
     },
   });
 
-  // Handle form submission
   const onSubmit = (values: FormValues) => {
     toast({
       title: "Account created successfully!",
       description: "Welcome to our IELTS preparation platform.",
     });
     console.log(values);
+  };
+
+  const handleSocialLogin = (provider: string) => {
+    toast({
+      title: `Logging in with ${provider}`,
+      description: "Redirecting to authentication provider...",
+    });
+    console.log(`Login with ${provider}`);
   };
 
   return (
@@ -142,9 +151,59 @@ const SignUp = () => {
           </CardHeader>
           
           <CardContent className="pt-6">
+            <div className="mb-8 space-y-4">
+              <h3 className="text-xl font-semibold border-b pb-2 text-indigo-700">Quick Sign Up</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button 
+                  variant="outline" 
+                  className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-2"
+                  onClick={() => handleSocialLogin("Google")}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
+                    <path d="M15.547 8.303A5.148 5.148 0 0 0 12.11 7C9.287 7 7 9.239 7 12s2.287 5 5.11 5c3.627 0 4.92-2.999 5.24-4.5h-4.86"></path>
+                    <path d="M12 7v10"></path>
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
+                  <span className="text-gray-700">Continue with Google</span>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-2"
+                  onClick={() => handleSocialLogin("Facebook")}
+                >
+                  <Facebook className="text-blue-600" size={20} />
+                  <span className="text-gray-700">Continue with Facebook</span>
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button 
+                  variant="outline" 
+                  className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-2"
+                  onClick={() => handleSocialLogin("Twitter")}
+                >
+                  <Twitter className="text-blue-400" size={20} />
+                  <span className="text-gray-700">Continue with Twitter</span>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border-2"
+                  onClick={() => handleSocialLogin("LinkedIn")}
+                >
+                  <Linkedin className="text-blue-700" size={20} />
+                  <span className="text-gray-700">Continue with LinkedIn</span>
+                </Button>
+              </div>
+            </div>
+            
+            <div className="relative my-8">
+              <Separator />
+              <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-gray-500">
+                Or sign up with email
+              </span>
+            </div>
+
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                {/* Personal Information Section */}
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold border-b pb-2 text-indigo-700">Personal Information</h3>
                   
@@ -283,7 +342,6 @@ const SignUp = () => {
                   </div>
                 </div>
                 
-                {/* Address Section */}
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold border-b pb-2 text-indigo-700">Address Information</h3>
                   
@@ -386,7 +444,6 @@ const SignUp = () => {
                   />
                 </div>
                 
-                {/* Education & IELTS Information */}
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold border-b pb-2 text-indigo-700">Education & Test Information</h3>
                   
@@ -499,7 +556,6 @@ const SignUp = () => {
                   />
                 </div>
                 
-                {/* Account Security */}
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold border-b pb-2 text-indigo-700">Account Security</h3>
                   
@@ -543,7 +599,6 @@ const SignUp = () => {
                   </div>
                 </div>
                 
-                {/* Terms and Conditions */}
                 <div className="space-y-4 p-4 bg-muted rounded-lg">
                   <h3 className="text-xl font-semibold text-indigo-700">Terms and Agreements</h3>
                   
