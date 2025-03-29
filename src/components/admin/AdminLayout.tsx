@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -16,7 +15,8 @@ import {
   Menu,
   X,
   Calculator,
-  LogOut
+  LogOut,
+  Mail
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -58,7 +58,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   }, [location.pathname]);
   
   useEffect(() => {
-    // Set initial exam type openings based on URL
     if (location.pathname.includes('/admin/exams')) {
       const path = location.pathname.split('/');
       if (path.length >= 4) {
@@ -135,6 +134,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard className="h-5 w-5" /> },
     { name: 'Blog Posts', path: '/admin/blog-posts', icon: <MessageSquare className="h-5 w-5" /> },
     { name: 'Users', path: '/admin/users', icon: <Users className="h-5 w-5" /> },
+    { name: 'Marketing', path: '/admin/marketing', icon: <Mail className="h-5 w-5" /> },
     { name: 'Settings', path: '/admin/settings', icon: <Settings className="h-5 w-5" /> },
   ];
 

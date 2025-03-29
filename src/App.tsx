@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -40,6 +41,7 @@ import BlogPostCMS from "./pages/admin/BlogPostCMS";
 import UsersCMS from "./pages/admin/UsersCMS";
 import Settings from "./pages/admin/Settings";
 import Dashboard from "./pages/admin/Dashboard";
+import Marketing from "./pages/admin/Marketing";
 import ExamSectionPage from "./pages/admin/ExamSectionPage";
 import SpeakingReviewPage from "./pages/admin/SpeakingReviewPage";
 import { DemoAdminLogin } from "./components/admin/DemoAdminLogin";
@@ -132,6 +134,7 @@ const App: React.FC = () => {
               <Route path="/admin/blog-posts" element={<ProtectedAdminRoute><BlogPostCMS /></ProtectedAdminRoute>} />
               <Route path="/admin/users" element={<ProtectedAdminRoute><UsersCMS /></ProtectedAdminRoute>} />
               <Route path="/admin/settings" element={<ProtectedAdminRoute><Settings /></ProtectedAdminRoute>} />
+              <Route path="/admin/marketing" element={<ProtectedAdminRoute><Marketing /></ProtectedAdminRoute>} />
               
               <Route path="/admin/exams/:examType/:sectionType" element={<ProtectedAdminRoute><ExamSectionPage /></ProtectedAdminRoute>} />
               <Route path="/admin/speaking-reviews" element={<ProtectedAdminRoute><SpeakingReviewPage /></ProtectedAdminRoute>} />
