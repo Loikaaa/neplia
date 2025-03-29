@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
@@ -21,8 +20,11 @@ import {
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import PerformanceMetricsDetail from '@/components/admin/PerformanceMetricsDetail';
 
 const AdminDashboard = () => {
+  const [showDetailedMetrics, setShowDetailedMetrics] = useState(false);
+
   const examTypes = [
     { id: 'ielts', name: 'IELTS', count: 42 },
     { id: 'toefl', name: 'TOEFL', count: 36 },
@@ -77,7 +79,6 @@ const AdminDashboard = () => {
     },
   ];
 
-  // New performance metrics data
   const performanceMetrics = [
     { 
       title: 'Visitors', 
@@ -134,31 +135,49 @@ const AdminDashboard = () => {
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="exams">Exam Types</TabsTrigger>
             <TabsTrigger value="content">Content</TabsTrigger>
+            <TabsTrigger value="performance">Performance</TabsTrigger>
           </TabsList>
           
           <TabsContent value="overview" className="space-y-6">
-            {/* Performance Metrics Section */}
             <div>
-              <h2 className="text-xl font-semibold mb-4">Performance Metrics</h2>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-                {performanceMetrics.map((metric, index) => (
-                  <Card key={index} className="overflow-hidden">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                      <CardTitle className="text-lg font-medium">{metric.title}</CardTitle>
-                      {metric.icon}
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-baseline space-x-2">
-                        <div className="text-3xl font-bold">{metric.value}</div>
-                        <div className={`text-xs font-medium ${metric.trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
-                          {metric.change}
-                        </div>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">{metric.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Performance Metrics</h2>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowDetailedMetrics(!showDetailedMetrics)}
+                >
+                  {showDetailedMetrics ? 'Show Summary' : 'Show Details'}
+                </Button>
               </div>
+              
+              {showDetailedMetrics ? (
+                <PerformanceMetricsDetail />
+              ) : (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                  {performanceMetrics.map((metric, index) => (
+                    <Card 
+                      key={index} 
+                      className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+                      onClick={() => setShowDetailedMetrics(true)}
+                    >
+                      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                        <CardTitle className="text-lg font-medium">{metric.title}</CardTitle>
+                        {metric.icon}
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-baseline space-x-2">
+                          <div className="text-3xl font-bold">{metric.value}</div>
+                          <div className={`text-xs font-medium ${metric.trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+                            {metric.change}
+                          </div>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">{metric.description}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
 
             <h2 className="text-xl font-semibold mb-4">Content Summary</h2>
@@ -334,6 +353,10 @@ const AdminDashboard = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+          
+          <TabsContent value="performance" className="space-y-6">
+            <PerformanceMetricsDetail />
           </TabsContent>
         </Tabs>
       </div>
