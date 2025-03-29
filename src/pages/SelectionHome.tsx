@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -7,6 +8,33 @@ import ExamTypeSelector from '@/components/selection/ExamTypeSelector';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Users, LogIn, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+
+// Helper function to generate temporary credentials
+const generateTempCredentials = () => {
+  const randomId = Math.floor(10000 + Math.random() * 90000); // 5 digit number
+  const username = `guest${randomId}`;
+  const password = Math.random().toString(36).slice(2, 10); // Random string
+  const expiryDate = new Date();
+  expiryDate.setMonth(expiryDate.getMonth() + 1); // Set expiry to 1 month from now
+  
+  return {
+    username,
+    password,
+    expiryDate: expiryDate.toISOString()
+  };
+};
+
+// Helper to save guest data for admin
+const saveGuestDataForAdmin = (guestData) => {
+  // Get existing guest users from localStorage
+  const existingGuestUsers = JSON.parse(localStorage.getItem('guestUsers') || '[]');
+  
+  // Add new guest user to the array
+  existingGuestUsers.push(guestData);
+  
+  // Save updated array back to localStorage
+  localStorage.setItem('guestUsers', JSON.stringify(existingGuestUsers));
+};
 
 const examTypes = [
   {
@@ -196,9 +224,32 @@ const SelectionHome: React.FC = () => {
   };
 
   const handleContinueAsGuest = () => {
+    // Generate temporary credentials
+    const tempCredentials = generateTempCredentials();
+    
+    // Save in localStorage for current session
     localStorage.setItem('userName', 'Guest');
+    localStorage.setItem('guestUsername', tempCredentials.username);
+    localStorage.setItem('guestPassword', tempCredentials.password);
+    localStorage.setItem('guestExpiryDate', tempCredentials.expiryDate);
     localStorage.removeItem('demoUserLoggedIn');
     localStorage.removeItem('userEmail');
+    
+    // Save guest data for admin
+    const guestData = {
+      ...tempCredentials,
+      createdAt: new Date().toISOString(),
+      id: `guest-${Date.now()}`
+    };
+    saveGuestDataForAdmin(guestData);
+    
+    // Show temporary credentials to user
+    toast({
+      title: "Temporary Account Created",
+      description: `Username: ${tempCredentials.username} | Password: ${tempCredentials.password} | Valid for 1 month`,
+      duration: 10000,
+    });
+    
     setStep(1);
   };
 
