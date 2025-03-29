@@ -293,6 +293,22 @@ const BlogPostCMS = () => {
         formattedText = `<u>${selectedText}</u>`;
         newCursorPosition = start + 3; // Position cursor after <u>
         break;
+      case 'strikethrough':
+        formattedText = `~~${selectedText}~~`;
+        newCursorPosition = start + 2;
+        break;
+      case 'code':
+        formattedText = `\`${selectedText}\``;
+        newCursorPosition = start + 1;
+        break;
+      case 'superscript':
+        formattedText = `<sup>${selectedText}</sup>`;
+        newCursorPosition = start + 5;
+        break;
+      case 'subscript':
+        formattedText = `<sub>${selectedText}</sub>`;
+        newCursorPosition = start + 5;
+        break;
       case 'heading':
       case 'list':
       case 'quote':
@@ -324,6 +340,22 @@ const BlogPostCMS = () => {
           formattedText = `<div style="text-align: left">${selectedText}</div>`;
         }
         newCursorPosition = start + formattedText.length;
+        break;
+      case 'color':
+        if (formatValue) {
+          formattedText = formatValue;
+          // If there was selected text, replace "Text" in the span with the selected text
+          if (selectedText) {
+            formattedText = formatValue.replace(">Text<", `>${selectedText}<`);
+          }
+          newCursorPosition = start + formattedText.length;
+        }
+        break;
+      case 'table':
+        if (formatValue) {
+          formattedText = formatValue;
+          newCursorPosition = start + formattedText.length;
+        }
         break;
       default:
         return;
