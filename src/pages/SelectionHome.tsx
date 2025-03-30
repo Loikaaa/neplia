@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -6,17 +5,17 @@ import Layout from '@/components/Layout';
 import CountrySelector from '@/components/selection/CountrySelector';
 import ExamTypeSelector from '@/components/selection/ExamTypeSelector';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Users, LogIn, UserPlus } from 'lucide-react';
+import { ArrowRight, Users, LogIn, UserPlus, Globe } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-// Helper function to generate temporary credentials
 const generateTempCredentials = () => {
-  const randomId = Math.floor(10000 + Math.random() * 90000); // 5 digit number
+  const randomId = Math.floor(10000 + Math.random() * 90000);
   const username = `guest${randomId}`;
-  const password = Math.random().toString(36).slice(2, 10); // Random string
+  const password = Math.random().toString(36).slice(2, 10);
   const expiryDate = new Date();
-  expiryDate.setMonth(expiryDate.getMonth() + 1); // Set expiry to 1 month from now
-  
+  expiryDate.setMonth(expiryDate.getMonth() + 1);
+
   return {
     username,
     password,
@@ -24,15 +23,9 @@ const generateTempCredentials = () => {
   };
 };
 
-// Helper to save guest data for admin
 const saveGuestDataForAdmin = (guestData) => {
-  // Get existing guest users from localStorage
   const existingGuestUsers = JSON.parse(localStorage.getItem('guestUsers') || '[]');
-  
-  // Add new guest user to the array
   existingGuestUsers.push(guestData);
-  
-  // Save updated array back to localStorage
   localStorage.setItem('guestUsers', JSON.stringify(existingGuestUsers));
 };
 
@@ -107,6 +100,7 @@ const SelectionHome: React.FC = () => {
   const location = useLocation();
   const { toast } = useToast();
   const isLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -224,10 +218,8 @@ const SelectionHome: React.FC = () => {
   };
 
   const handleContinueAsGuest = () => {
-    // Generate temporary credentials
     const tempCredentials = generateTempCredentials();
     
-    // Save in localStorage for current session
     localStorage.setItem('userName', 'Guest');
     localStorage.setItem('guestUsername', tempCredentials.username);
     localStorage.setItem('guestPassword', tempCredentials.password);
@@ -235,7 +227,6 @@ const SelectionHome: React.FC = () => {
     localStorage.removeItem('demoUserLoggedIn');
     localStorage.removeItem('userEmail');
     
-    // Save guest data for admin
     const guestData = {
       ...tempCredentials,
       createdAt: new Date().toISOString(),
@@ -243,7 +234,6 @@ const SelectionHome: React.FC = () => {
     };
     saveGuestDataForAdmin(guestData);
     
-    // Show temporary credentials to user
     toast({
       title: "Temporary Account Created",
       description: `Username: ${tempCredentials.username} | Password: ${tempCredentials.password} | Valid for 1 month`,
@@ -273,11 +263,11 @@ const SelectionHome: React.FC = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800 pt-16 pb-12">
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-indigo-950/30 dark:to-purple-950/20 pt-16 pb-12">
         <div className="container px-4 md:px-6 max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <motion.h1 
-              className="text-3xl md:text-4xl font-bold mb-3"
+              className="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-indigo via-purple-500 to-pink-500 text-transparent bg-clip-text"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -305,10 +295,23 @@ const SelectionHome: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold">
-                {step === 0 ? "Step 1: Authentication" : 
-                 step === 1 ? "Step 2: Your Location" : 
-                 "Step 3: Target Exam"}
+              <h2 className="text-xl font-semibold flex items-center">
+                {step === 0 ? (
+                  <>
+                    <UserPlus className="h-5 w-5 mr-2 text-indigo" />
+                    Step 1: Authentication
+                  </>
+                ) : step === 1 ? (
+                  <>
+                    <Globe className="h-5 w-5 mr-2 text-indigo" />
+                    Step 2: Your Location
+                  </>
+                ) : (
+                  <>
+                    <Users className="h-5 w-5 mr-2 text-indigo" />
+                    Step 3: Target Exam
+                  </>
+                )}
               </h2>
               {renderStepIndicator()}
             </div>
@@ -356,9 +359,9 @@ const SelectionHome: React.FC = () => {
                     />
                   </div>
                   
-                  <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg mt-8">
+                  <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 p-4 rounded-lg mt-8 border border-indigo-100 dark:border-indigo-800">
                     <div className="flex items-start">
-                      <Users className="h-5 w-5 text-indigo mr-3 mt-0.5" />
+                      <Globe className="h-5 w-5 text-indigo mr-3 mt-0.5" />
                       <div className="text-sm">
                         <p className="font-medium mb-1">Why do we ask for your location?</p>
                         <p className="text-muted-foreground">
@@ -396,7 +399,10 @@ const SelectionHome: React.FC = () => {
                   Back
                 </Button>
               )}
-              <Button onClick={handleNextStep} className="bg-indigo hover:bg-indigo/90">
+              <Button 
+                onClick={handleNextStep} 
+                className="bg-gradient-to-r from-indigo to-purple-600 hover:from-indigo/90 hover:to-purple-600/90 text-white"
+              >
                 {step === 0 ? "Continue" : step === 2 ? "Start Practice" : "Continue"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
