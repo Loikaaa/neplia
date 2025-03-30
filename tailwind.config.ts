@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -67,6 +66,32 @@ export default {
 					700: '#B5196A',
 					800: '#8B1251',
 					900: '#620C39',
+				},
+				magenta: {
+					DEFAULT: '#D946EF',
+					50: '#FAE8FD',
+					100: '#F5D0FB',
+					200: '#EBA5F7',
+					300: '#E17AF3',
+					400: '#D74FEF',
+					500: '#D946EF',
+					600: '#C422DD',
+					700: '#9E1CB3',
+					800: '#77158A',
+					900: '#510F60',
+				},
+				orange: {
+					DEFAULT: '#F97316',
+					50: '#FEF2E7',
+					100: '#FDE5CF',
+					200: '#FBCB9F',
+					300: '#FAB16F',
+					400: '#F8973F',
+					500: '#F97316',
+					600: '#D95C06',
+					700: '#A74605',
+					800: '#763103',
+					900: '#441C02',
 				},
 				indigo: {
 					DEFAULT: '#6366F1',

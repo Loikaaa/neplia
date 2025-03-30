@@ -4,7 +4,13 @@ import { useCallback, useEffect, useState } from "react"
 const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined)
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    // Initialize with server-side value if possible
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < MOBILE_BREAKPOINT
+    }
+    return false
+  })
 
   // Add a debounce function to avoid excessive rerenders
   const debounce = (fn: Function, ms = 300) => {
@@ -25,8 +31,8 @@ export function useIsMobile() {
   )
 
   useEffect(() => {
-    // Initial value setup - important for SSR
     if (typeof window !== 'undefined') {
+      // Set initial value
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
       
       // Add event listener for window resize
@@ -35,11 +41,7 @@ export function useIsMobile() {
       // Clean up
       return () => window.removeEventListener("resize", handleResize)
     }
-    
-    // Default to non-mobile if window is undefined (SSR)
-    return () => setIsMobile(false)
   }, [handleResize])
 
-  // Return boolean instead of undefined (for initial render)
-  return isMobile === undefined ? false : isMobile
+  return isMobile
 }
