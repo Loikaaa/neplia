@@ -15,7 +15,7 @@ const StatisticsSection = () => {
   return (
     <section className="py-12 md:py-20">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="bg-gradient-to-r from-purple-600 via-magenta-500 to-pink-500 rounded-2xl overflow-hidden shadow-lg">
+        <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 rounded-2xl overflow-hidden shadow-lg">
           <div className="px-6 py-10 md:p-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-10">
               Join Thousands of Successful IELTS Test-Takers

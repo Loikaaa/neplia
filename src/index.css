@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap');
 
 @tailwind base;
@@ -114,6 +115,22 @@
   
   .highlight-text {
     @apply bg-gradient-to-r from-purple-600 via-cyan-500 to-pink-500 bg-clip-text text-transparent;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-indigo-500 via-teal-500 to-coral-500 bg-clip-text text-transparent;
+  }
+  
+  .gradient-bg {
+    @apply bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500;
+  }
+  
+  .colorful-border {
+    @apply border-2 border-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-border;
+  }
+  
+  .rainbow-text {
+    @apply bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 bg-clip-text text-transparent;
   }
 }
 
