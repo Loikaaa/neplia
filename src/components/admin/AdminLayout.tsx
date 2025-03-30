@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
+import { NotificationBadge } from './NotificationBadge';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -176,6 +177,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           </Link>
         </div>
         <div className="flex items-center gap-3">
+          <NotificationBadge />
           <Button 
             variant="ghost" 
             size="sm" 

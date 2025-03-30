@@ -1,12 +1,12 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Mic, MicOff, Play, Pause, SkipForward, Save, CheckCircle, ArrowLeft } from 'lucide-react';
+import { Mic, MicOff, Play, Pause, SkipForward, Save, CheckCircle, ArrowLeft, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from "@/hooks/use-toast";
-import { SpeakingResponse, SpeakingTask } from '@/types/speaking';
+import { SpeakingResponse, SpeakingTask, SpeakingSubmission } from '@/types/speaking';
+import { generateSpeakingQuestions, evaluateSpeakingSubmission } from '@/services/aiEvaluation';
 
 interface SpeakingTestProps {
   task: SpeakingTask;
@@ -24,6 +24,10 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
   const [testCompleted, setTestCompleted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [aiGeneratedQuestions, setAiGeneratedQuestions] = useState<string[]>([]);
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
+  const [aiEvaluation, setAiEvaluation] = useState<any>(null);
+  const [isEvaluating, setIsEvaluating] = useState(false);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<BlobPart[]>([]);
@@ -33,7 +37,6 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
   
   const currentQuestion = task.questions[currentQuestionIndex];
   
-  // Set up timer when question changes
   useEffect(() => {
     if (!currentQuestion) return;
     
@@ -54,7 +57,6 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
     };
   }, [currentQuestionIndex, currentQuestion]);
   
-  // Request microphone access at component mount
   useEffect(() => {
     const checkMicrophoneAccess = async () => {
       try {
@@ -90,14 +92,12 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
           [currentQuestion.id]: audioUrl
         }));
         
-        // Stop all tracks on the stream to release the microphone
         stream.getTracks().forEach(track => track.stop());
       };
       
       mediaRecorderRef.current.start();
       setIsRecording(true);
       
-      // Start timer countdown
       startTimer();
       
       toast({
@@ -119,7 +119,6 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
       mediaRecorderRef.current.stop();
       setIsRecording(false);
       
-      // Stop the timer
       if (timerIntervalRef.current) {
         clearInterval(timerIntervalRef.current);
         timerIntervalRef.current = null;
@@ -140,15 +139,12 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
     timerIntervalRef.current = window.setInterval(() => {
       setTimer(prev => {
         if (prev <= 1) {
-          // Time's up
           if (isPreparing) {
-            // Move from preparation to speaking (in Part 2)
             setIsPreparing(false);
             setTimer(currentQuestion.duration || 120);
             setMaxTime(currentQuestion.duration || 120);
             startRecording();
           } else if (isRecording) {
-            // Stop recording when time is up
             stopRecording();
           }
           
@@ -184,7 +180,6 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
   };
   
   const nextQuestion = () => {
-    // Stop any ongoing recording or playback
     if (isRecording) {
       stopRecording();
     }
@@ -193,7 +188,6 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
       setIsPlayingBack(false);
     }
     
-    // Move to next question or finish test
     if (currentQuestionIndex < task.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
@@ -205,7 +199,6 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
     setIsSubmitting(true);
     
     try {
-      // Prepare responses data
       const responses: SpeakingResponse[] = Object.keys(recordedAudios).map(questionId => ({
         questionId,
         audioUrl: recordedAudios[questionId],
@@ -213,26 +206,79 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
         submittedAt: new Date()
       }));
       
-      // This would normally be an API call to submit the recordings
-      // For now, we'll just simulate a successful submission with setTimeout
+      const submission: SpeakingSubmission = {
+        id: `submission-${Date.now()}`,
+        userId: 'current-user-id',
+        taskId: task.id,
+        responses,
+        status: 'pending',
+        submittedAt: new Date()
+      };
+      
+      console.log('Submitting speaking test:', submission);
+      
+      setIsEvaluating(true);
+      
+      if (responses.length > 0) {
+        const firstResponse = responses[0];
+        const evaluation = await evaluateSpeakingSubmission(
+          firstResponse.audioUrl,
+          firstResponse.questionId
+        );
+        
+        setAiEvaluation(evaluation);
+      }
+      
       setTimeout(() => {
         setIsSubmitted(true);
         setIsSubmitting(false);
+        setIsEvaluating(false);
         
         toast({
           title: "Test Submitted Successfully",
           description: "Your speaking test has been submitted for review.",
         });
+        
+        console.log('Admin notification sent for new speaking submission');
       }, 1500);
     } catch (error) {
       console.error('Error submitting test', error);
       setIsSubmitting(false);
+      setIsEvaluating(false);
       
       toast({
         title: "Submission Failed",
         description: "There was an error submitting your test. Please try again.",
         variant: "destructive"
       });
+    }
+  };
+  
+  const generateAdditionalQuestions = async () => {
+    if (isLoadingQuestions) return;
+    
+    setIsLoadingQuestions(true);
+    try {
+      const questions = await generateSpeakingQuestions(
+        currentQuestion.category || 'general',
+        currentQuestion.part
+      );
+      
+      setAiGeneratedQuestions(questions);
+      
+      toast({
+        title: "Questions Generated",
+        description: "AI has suggested some additional questions for practice.",
+      });
+    } catch (error) {
+      console.error('Error generating questions', error);
+      toast({
+        title: "Generation Failed",
+        description: "Could not generate additional questions.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoadingQuestions(false);
     }
   };
   
@@ -381,10 +427,8 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
             </CardFooter>
           </Card>
           
-          {/* Audio element for playback (hidden) */}
           <audio ref={audioPlayerRef} className="hidden" />
           
-          {/* Follow-up Questions Section */}
           {currentQuestion.followUp && (
             <Card>
               <CardContent className="p-4">
@@ -399,6 +443,34 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
               </CardContent>
             </Card>
           )}
+          
+          {aiGeneratedQuestions.length > 0 && (
+            <Card className="bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800">
+              <CardContent className="p-4">
+                <h3 className="font-medium mb-2 flex items-center">
+                  <span className="mr-2">AI Suggested Questions</span>
+                  <span className="bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 px-2 py-1 rounded text-xs">AI Generated</span>
+                </h3>
+                <ul className="list-disc pl-5 space-y-1">
+                  {aiGeneratedQuestions.map((question, index) => (
+                    <li key={index} className="text-gray-700 dark:text-gray-300">
+                      {question}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+          
+          <Button 
+            variant="outline" 
+            className="w-full flex items-center justify-center gap-2"
+            onClick={generateAdditionalQuestions}
+            disabled={isLoadingQuestions}
+          >
+            <HelpCircle className="h-4 w-4" />
+            {isLoadingQuestions ? 'Generating Questions...' : 'Generate More Practice Questions with AI'}
+          </Button>
         </>
       ) : (
         <Card className="mt-8 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800">
@@ -432,6 +504,36 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
               )}
             </div>
             
+            {isSubmitted && aiEvaluation && (
+              <div className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-green-200 dark:border-green-800">
+                <h4 className="font-medium text-lg mb-3">AI Preliminary Evaluation</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h5 className="font-medium mb-2">Overall Score</h5>
+                    <div className="text-3xl font-bold text-indigo-600">{aiEvaluation.score}</div>
+                    <p className="text-sm text-gray-500 mt-1">
+                      This is a preliminary score. An admin will review your submission for the final score.
+                    </p>
+                  </div>
+                  <div>
+                    <h5 className="font-medium mb-2">Breakdown</h5>
+                    <div className="space-y-2">
+                      {aiEvaluation.details && Object.entries(aiEvaluation.details).map(([key, value]) => (
+                        <div key={key} className="flex justify-between">
+                          <span className="capitalize">{key}</span>
+                          <span className="font-medium">{value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h5 className="font-medium mb-2">Feedback</h5>
+                  <p className="text-gray-700 dark:text-gray-300">{aiEvaluation.feedback}</p>
+                </div>
+              </div>
+            )}
+            
             <div className="mt-6 flex flex-col sm:flex-row sm:justify-between gap-3">
               {!isSubmitted ? (
                 <>
@@ -441,20 +543,20 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
                       setTestCompleted(false);
                       setCurrentQuestionIndex(0);
                     }}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isEvaluating}
                   >
                     Retake Test
                   </Button>
                   
                   <Button 
                     onClick={submitTest}
-                    disabled={isSubmitting || Object.keys(recordedAudios).length === 0}
+                    disabled={isSubmitting || isEvaluating || Object.keys(recordedAudios).length === 0}
                     className="bg-green-600 hover:bg-green-700 gap-2"
                   >
-                    {isSubmitting ? (
+                    {isSubmitting || isEvaluating ? (
                       <>
                         <span className="animate-spin">↻</span>
-                        Submitting...
+                        {isEvaluating ? 'AI Evaluating...' : 'Submitting...'}
                       </>
                     ) : (
                       <>
