@@ -396,9 +396,9 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
                         variant="outline"
                       >
                         {isPlayingBack ? (
-                          <><Pause className="h-4 w-4 mr-2" /> Pause</>
+                          <React.Fragment><Pause className="h-4 w-4 mr-2" /> Pause</React.Fragment>
                         ) : (
-                          <><Play className="h-4 w-4 mr-2" /> Play Recording</>
+                          <React.Fragment><Play className="h-4 w-4 mr-2" /> Play Recording</React.Fragment>
                         )}
                       </Button>
                       
@@ -418,7 +418,7 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
                   disabled={isPreparing && !currentQuestion.followUp}
                 >
                   {currentQuestionIndex < task.questions.length - 1 ? (
-                    <><SkipForward className="h-4 w-4 mr-2" /> Next Question</>
+                    <React.Fragment><SkipForward className="h-4 w-4 mr-2" /> Next Question</React.Fragment>
                   ) : (
                     "Finish Test"
                   )}

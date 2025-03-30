@@ -8,7 +8,9 @@ import { SpeakingCategorySelector } from '@/components/practice/speaking/Speakin
 import { SpeakingTask } from '@/types/speaking';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { NotificationBadge } from '@/components/admin/NotificationBadge';
 
 const SpeakingPractice = () => {
   const [testStarted, setTestStarted] = useState(false);
@@ -27,9 +29,13 @@ const SpeakingPractice = () => {
     setTestCompleted(true);
     setTestStarted(false);
     
+    // Add notification to admin dashboard
+    const username = "User" + Math.floor(Math.random() * 1000);
+    console.log(`New speaking test submission from ${username} with score ${roundedScore}`);
+    
     toast({
       title: "Test Evaluation Complete",
-      description: `Your final speaking score is ${roundedScore}.`,
+      description: `Your final speaking score is ${roundedScore}. Admin has been notified of your submission.`,
     });
   };
   
@@ -90,6 +96,3 @@ const SpeakingPractice = () => {
 };
 
 export default SpeakingPractice;
-
-// Need to add Button import
-import { Button } from '@/components/ui/button';

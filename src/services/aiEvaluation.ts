@@ -150,6 +150,92 @@ export const generateSpeakingQuestions = async (
   return questionsByCategory[category]?.[part] || defaultQuestions;
 };
 
+// Generate reading questions based on a category/topic
+export const generateReadingQuestions = async (
+  topic: string
+): Promise<string[]> => {
+  console.log('Generating reading questions for:', topic);
+  
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 1200));
+  
+  // Mock questions based on topic
+  const questionsByTopic: Record<string, string[]> = {
+    'environment': [
+      "What are the main causes of climate change according to the passage?",
+      "How might rising sea levels affect coastal communities?",
+      "What solutions does the author propose to address environmental challenges?"
+    ],
+    'technology': [
+      "How has artificial intelligence changed the workplace according to the text?",
+      "What ethical concerns does the passage raise about new technologies?",
+      "What future developments in technology does the author predict?"
+    ],
+    'health': [
+      "What factors contribute to a healthy lifestyle according to the passage?",
+      "How does the author compare traditional and modern medicine?",
+      "What recommendations does the text make for improving public health?"
+    ],
+    'education': [
+      "What challenges in modern education does the passage identify?",
+      "How does the author compare educational systems in different countries?",
+      "What reforms to education does the passage suggest?"
+    ]
+  };
+  
+  // Default questions if topic is not found
+  const defaultQuestions = [
+    "What is the main idea of the passage?",
+    "What evidence does the author provide to support their argument?",
+    "How would you summarize the key points of the text?"
+  ];
+  
+  return questionsByTopic[topic.toLowerCase()] || defaultQuestions;
+};
+
+// Generate listening questions based on audio content
+export const generateListeningQuestions = async (
+  contentType: string
+): Promise<string[]> => {
+  console.log('Generating listening questions for:', contentType);
+  
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 1100));
+  
+  // Mock questions based on content type
+  const questionsByContentType: Record<string, string[]> = {
+    'conversation': [
+      "What is the relationship between the speakers?",
+      "What problem are the speakers trying to solve?",
+      "What solution do they agree on?"
+    ],
+    'lecture': [
+      "What is the main topic of the lecture?",
+      "What examples does the speaker use to illustrate key points?",
+      "What conclusion does the lecturer reach?"
+    ],
+    'interview': [
+      "What is the purpose of the interview?",
+      "What qualifications does the interviewee mention?",
+      "What future plans does the interviewee discuss?"
+    ],
+    'news': [
+      "What is the main news story being reported?",
+      "What details support the main story?",
+      "What different perspectives are presented in the report?"
+    ]
+  };
+  
+  // Default questions if content type is not found
+  const defaultQuestions = [
+    "What is the main topic of the audio?",
+    "Who are the main speakers and what roles do they play?",
+    "What key information is presented in the recording?"
+  ];
+  
+  return questionsByContentType[contentType.toLowerCase()] || defaultQuestions;
+};
+
 // Evaluate speaking submission
 export const evaluateSpeakingSubmission = async (
   audioUrl: string,
@@ -173,6 +259,93 @@ export const evaluateSpeakingSubmission = async (
       pronunciation: Math.round((finalScore - 0.5) * 2) / 2,
       vocabulary: Math.round(finalScore * 2) / 2,
       grammar: Math.round((finalScore - 0.3) * 2) / 2
+    }
+  };
+};
+
+// Evaluate reading submission
+export const evaluateReadingSubmission = async (
+  answers: Record<string, string>,
+  correctAnswers: Record<string, string>
+): Promise<SectionScore> => {
+  console.log('Evaluating reading submission:', { answers, correctAnswers });
+  
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 1800));
+  
+  // Calculate score based on correct answers
+  let correctCount = 0;
+  const totalQuestions = Object.keys(correctAnswers).length;
+  
+  for (const [id, answer] of Object.entries(answers)) {
+    if (correctAnswers[id] && answer.toLowerCase().trim() === correctAnswers[id].toLowerCase().trim()) {
+      correctCount++;
+    }
+  }
+  
+  // Convert to IELTS band score (0-9)
+  const percentageCorrect = correctCount / totalQuestions;
+  let bandScore = Math.min(9, Math.max(0, Math.round((percentageCorrect * 9) * 2) / 2));
+  
+  // Adjust for very low scores to match IELTS bands
+  if (percentageCorrect > 0 && bandScore < 1) {
+    bandScore = 1;
+  }
+  
+  return {
+    score: bandScore,
+    feedback: `You answered ${correctCount} out of ${totalQuestions} questions correctly. ${
+      bandScore >= 7 
+        ? "Excellent work! You demonstrated a strong understanding of the text."
+        : bandScore >= 5 
+          ? "Good effort. Work on improving your detailed comprehension of texts."
+          : "You need to focus on improving your reading comprehension skills."
+    }`,
+    details: {
+      correctAnswers: correctCount,
+      totalQuestions,
+      percentageCorrect: Math.round(percentageCorrect * 100)
+    }
+  };
+};
+
+// Evaluate listening submission
+export const evaluateListeningSubmission = async (
+  answers: Record<string, string>,
+  correctAnswers: Record<string, string>
+): Promise<SectionScore> => {
+  console.log('Evaluating listening submission:', { answers, correctAnswers });
+  
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 1700));
+  
+  // Calculate score based on correct answers
+  let correctCount = 0;
+  const totalQuestions = Object.keys(correctAnswers).length;
+  
+  for (const [id, answer] of Object.entries(answers)) {
+    if (correctAnswers[id] && answer.toLowerCase().trim() === correctAnswers[id].toLowerCase().trim()) {
+      correctCount++;
+    }
+  }
+  
+  // Convert to IELTS band score (0-9)
+  const percentageCorrect = correctCount / totalQuestions;
+  let bandScore = Math.min(9, Math.max(0, Math.round((percentageCorrect * 9) * 2) / 2));
+  
+  return {
+    score: bandScore,
+    feedback: `You answered ${correctCount} out of ${totalQuestions} questions correctly. ${
+      bandScore >= 7 
+        ? "Excellent! You demonstrated strong listening comprehension skills."
+        : bandScore >= 5 
+          ? "Good effort. Continue practicing to improve your listening skills."
+          : "You need to focus on developing your listening comprehension skills."
+    }`,
+    details: {
+      correctAnswers: correctCount,
+      totalQuestions,
+      percentageCorrect: Math.round(percentageCorrect * 100)
     }
   };
 };
