@@ -521,7 +521,7 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
                       {aiEvaluation.details && Object.entries(aiEvaluation.details).map(([key, value]) => (
                         <div key={key} className="flex justify-between">
                           <span className="capitalize">{key}</span>
-                          <span className="font-medium">{value}</span>
+                          <span className="font-medium">{String(value)}</span>
                         </div>
                       ))}
                     </div>
