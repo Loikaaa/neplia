@@ -110,8 +110,8 @@ const App: React.FC = () => {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<ProtectedUserRoute><UserDashboard /></ProtectedUserRoute>} />
-              <Route path="/resources" element={<ResourcesHome />} />
-              <Route path="/resources/old" element={<Resources />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/resources/home" element={<ResourcesHome />} />
               <Route path="/resources/all" element={<AllResources />} />
               <Route path="/resources/:resourceId" element={<ResourceDetail />} />
               <Route path="/resources/category/:categoryId" element={<CategoryDetail />} />
