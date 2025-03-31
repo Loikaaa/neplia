@@ -5,51 +5,17 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Badge } from '@/components/ui/badge';
 import { Star, ArrowRight, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Resource } from '@/types/resource';
 
 interface PopularResourcesProps {
   title?: string;
+  resources?: Resource[];
 }
 
-const PopularResources = ({ title = "Popular Resources" }: PopularResourcesProps) => {
-  const resources = [
-    {
-      id: 'ielts-writing-guide',
-      title: 'IELTS Writing Task 2 Guide',
-      description: 'Master the IELTS Writing Task 2 with our comprehensive guide featuring model answers and examiner tips.',
-      type: 'Study Guide',
-      rating: 4.9,
-      downloads: '24.5K',
-      badge: 'Popular'
-    },
-    {
-      id: 'toefl-speaking-templates',
-      title: 'TOEFL Speaking Templates',
-      description: 'Ready-to-use templates for all TOEFL speaking tasks with expert guidance on timing and delivery.',
-      type: 'Template Pack',
-      rating: 4.8,
-      downloads: '18.3K',
-      badge: 'New'
-    },
-    {
-      id: 'gre-vocab-flashcards',
-      title: 'GRE Vocabulary Flashcards',
-      description: 'Interactive flashcards covering the most frequently tested GRE vocabulary words with mnemonics.',
-      type: 'Study Cards',
-      rating: 4.7,
-      downloads: '15.7K',
-      badge: 'Premium'
-    },
-    {
-      id: 'sat-math-practice',
-      title: 'SAT Math Practice Questions',
-      description: 'Comprehensive collection of SAT math practice questions organized by difficulty level with step-by-step solutions.',
-      type: 'Practice Set',
-      rating: 4.8,
-      downloads: '21.2K',
-      badge: 'Bestseller'
-    }
-  ];
-
+const PopularResources = ({ 
+  title = "Popular Resources", 
+  resources = defaultResources 
+}: PopularResourcesProps) => {
   return (
     <div className="my-8">
       <div className="flex justify-between items-center mb-6">
@@ -95,9 +61,11 @@ const PopularResources = ({ title = "Popular Resources" }: PopularResourcesProps
               </p>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">
-                View Resource
-              </Button>
+              <Link to={`/resources/${resource.id}`} className="w-full">
+                <Button className="w-full">
+                  View Resource
+                </Button>
+              </Link>
             </CardFooter>
           </Card>
         ))}
@@ -105,5 +73,49 @@ const PopularResources = ({ title = "Popular Resources" }: PopularResourcesProps
     </div>
   );
 };
+
+// Default resources data
+const defaultResources: Resource[] = [
+  {
+    id: 'ielts-writing-guide',
+    title: 'IELTS Writing Task 2 Guide',
+    description: 'Master the IELTS Writing Task 2 with our comprehensive guide featuring model answers and examiner tips.',
+    type: 'Study Guide',
+    category: 'IELTS',
+    rating: 4.9,
+    downloads: '24.5K',
+    badge: 'Popular'
+  },
+  {
+    id: 'toefl-speaking-templates',
+    title: 'TOEFL Speaking Templates',
+    description: 'Ready-to-use templates for all TOEFL speaking tasks with expert guidance on timing and delivery.',
+    type: 'Template Pack',
+    category: 'TOEFL',
+    rating: 4.8,
+    downloads: '18.3K',
+    badge: 'New'
+  },
+  {
+    id: 'gre-vocab-flashcards',
+    title: 'GRE Vocabulary Flashcards',
+    description: 'Interactive flashcards covering the most frequently tested GRE vocabulary words with mnemonics.',
+    type: 'Study Cards',
+    category: 'GRE',
+    rating: 4.7,
+    downloads: '15.7K',
+    badge: 'Premium'
+  },
+  {
+    id: 'sat-math-practice',
+    title: 'SAT Math Practice Questions',
+    description: 'Comprehensive collection of SAT math practice questions organized by difficulty level with step-by-step solutions.',
+    type: 'Practice Set',
+    category: 'SAT',
+    rating: 4.8,
+    downloads: '21.2K',
+    badge: 'Bestseller'
+  }
+];
 
 export default PopularResources;

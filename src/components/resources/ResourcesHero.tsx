@@ -1,12 +1,13 @@
 
 import React from 'react';
-import { Book, Download, Users, Award, FileText } from 'lucide-react';
+import { Book, Download, Users, Award, FileText, Shield } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
 const ResourcesHero = () => {
   const isMobile = useIsMobile();
+  const isAdmin = sessionStorage.getItem('demoAdminLoggedIn') === 'true';
   
   const stats = [
     { icon: <FileText size={18} />, value: "500+", label: "Practice Materials" },
@@ -49,6 +50,15 @@ const ResourcesHero = () => {
             <Button className={`colorful-border bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 font-medium rounded-lg transition-all ${isMobile ? 'px-4 py-2 text-sm' : 'px-6 py-3'}`}>
               Recommended For You
             </Button>
+            
+            {isAdmin && (
+              <Link to="/admin/resources">
+                <Button variant="outline" className="flex items-center gap-2 ml-2">
+                  <Shield size={16} />
+                  Manage Resources
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
         

@@ -44,6 +44,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import Marketing from "./pages/admin/Marketing";
 import ExamSectionPage from "./pages/admin/ExamSectionPage";
 import SpeakingReviewPage from "./pages/admin/SpeakingReviewPage";
+import ResourceManagement from "./pages/admin/ResourceManagement";
 import { DemoAdminLogin } from "./components/admin/DemoAdminLogin";
 
 // Protected route component for Admin
@@ -136,6 +137,7 @@ const App: React.FC = () => {
               <Route path="/admin/users" element={<ProtectedAdminRoute><UsersCMS /></ProtectedAdminRoute>} />
               <Route path="/admin/settings" element={<ProtectedAdminRoute><Settings /></ProtectedAdminRoute>} />
               <Route path="/admin/marketing" element={<ProtectedAdminRoute><Marketing /></ProtectedAdminRoute>} />
+              <Route path="/admin/resources" element={<ProtectedAdminRoute><ResourceManagement /></ProtectedAdminRoute>} />
               <Route path="/admin/exams/:examType/:sectionType" element={<ProtectedAdminRoute><ExamSectionPage /></ProtectedAdminRoute>} />
               <Route path="/admin/speaking-reviews" element={<ProtectedAdminRoute><SpeakingReviewPage /></ProtectedAdminRoute>} />
               
