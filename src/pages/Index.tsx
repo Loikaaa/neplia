@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -102,53 +101,52 @@ const Index = () => {
           </div>
 
           {isMobile ? (
-            // Mobile version - scrollable cards
-            <div className="space-y-4 max-w-sm mx-auto">
+            <div className="grid grid-cols-2 gap-3">
               {[
                 {
                   title: "IELTS",
-                  subtitle: "Academic & General Training",
-                  description: "Accepted worldwide for education, migration, and employment",
+                  subtitle: "Academic & General",
+                  description: "For education, migration, and employment",
                   icon: "🎓",
                   color: "bg-indigo",
                   link: "/exams/ielts"
                 },
                 {
                   title: "TOEFL",
-                  subtitle: "Test of English as a Foreign Language",
-                  description: "Recognized by over 11,000 universities in 150+ countries",
+                  subtitle: "Foreign Language",
+                  description: "For 11,000+ universities",
                   icon: "🌎",
                   color: "bg-teal",
                   link: "/exams/toefl"
                 },
                 {
-                  title: "PTE Academic",
-                  subtitle: "Pearson Test of English",
-                  description: "Computer-based test accepted by thousands of institutions",
+                  title: "PTE",
+                  subtitle: "Pearson Test",
+                  description: "Computer-based test",
                   icon: "💻",
                   color: "bg-coral",
                   link: "/exams/pte"
                 },
                 {
-                  title: "Cambridge English",
-                  subtitle: "B2 First, C1 Advanced & C2 Proficiency",
-                  description: "In-depth assessment recognized by top employers & universities",
+                  title: "Cambridge",
+                  subtitle: "B2, C1 & C2",
+                  description: "Recognized globally",
                   icon: "🏛️",
                   color: "bg-indigo",
                   link: "/selection?exam=cambridge"
                 },
                 {
                   title: "Duolingo",
-                  subtitle: "Duolingo English Test",
-                  description: "Convenient online test accepted by thousands of institutions",
+                  subtitle: "English Test",
+                  description: "Online test",
                   icon: "🦉",
                   color: "bg-teal",
                   link: "/selection?exam=duolingo"
                 },
                 {
                   title: "OET",
-                  subtitle: "Occupational English Test",
-                  description: "English language test for healthcare professionals",
+                  subtitle: "For Healthcare",
+                  description: "Healthcare professionals",
                   icon: "⚕️",
                   color: "bg-coral",
                   link: "/selection?exam=oet"
@@ -159,14 +157,10 @@ const Index = () => {
                   to={exam.link}
                   className="block bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700 group"
                 >
-                  <div className="flex p-4">
-                    <div className="mr-4 text-2xl">{exam.icon}</div>
-                    <div>
-                      <h3 className="text-lg font-bold mb-1 group-hover:text-indigo transition-colors">{exam.title}</h3>
-                      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{exam.subtitle}</p>
-                      <p className="text-gray-600 dark:text-gray-300 text-xs line-clamp-2">{exam.description}</p>
-                    </div>
-                    <ArrowRight className="ml-auto self-center h-4 w-4 text-indigo" />
+                  <div className="p-3">
+                    <div className="text-xl mb-1">{exam.icon}</div>
+                    <h3 className="text-sm font-bold group-hover:text-indigo transition-colors">{exam.title}</h3>
+                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{exam.subtitle}</p>
                   </div>
                 </Link>
               ))}
@@ -282,7 +276,6 @@ const Index = () => {
           </div>
 
           {isMobile ? (
-            // Mobile version with smaller, more compact cards
             <div className="space-y-3 max-w-sm mx-auto">
               {[
                 {
@@ -338,14 +331,13 @@ const Index = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-bold mb-1">{feature.title}</h3>
-                      <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">{feature.description}</p>
+                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{feature.description}</p>
                     </div>
                   </motion.div>
                 </Link>
               ))}
             </div>
           ) : (
-            // Desktop version with grid layout
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
               {[
                 {
@@ -448,7 +440,6 @@ const Index = () => {
                 </div>
                 
                 {isMobile ? (
-                  // Mobile version - simplified destination selector
                   <div className="p-6 bg-indigo-50 dark:bg-indigo-900/20">
                     <h3 className="text-lg font-medium mb-3">Popular Destinations</h3>
                     <div className="grid grid-cols-3 gap-2 mb-4">
@@ -479,7 +470,6 @@ const Index = () => {
                     </div>
                   </div>
                 ) : (
-                  // Desktop version
                   <div className="relative h-64 lg:h-auto bg-indigo-50 dark:bg-indigo-900/30 overflow-hidden">
                     <div className="absolute inset-0 flex items-center justify-center p-6">
                       <div className="relative w-full max-w-sm bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">

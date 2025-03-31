@@ -2,12 +2,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Youtube, Mail, Phone } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Footer = () => {
+  const isMobile = useIsMobile();
+  
   return (
     <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-4 md:px-6 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+        <div className={`grid grid-cols-1 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-4'} gap-8 md:gap-12`}>
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="inline-block">
@@ -38,69 +41,141 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Practice Tests
-                </Link>
-              </li>
-              <li>
-                <Link to="/resources" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Resources
-                </Link>
-              </li>
-              <li>
-                <Link to="/blog" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Pricing
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {isMobile ? (
+            // Mobile layout - Quick Links and IELTS Modules in a 2-column grid
+            <div className="grid grid-cols-2 gap-8">
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Practice Tests
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/resources" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Resources
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/blog" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Pricing
+                    </Link>
+                  </li>
+                </ul>
+              </div>
 
-          {/* IELTS Modules */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Listening
-                </Link>
-              </li>
-              <li>
-                <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Reading
-                </Link>
-              </li>
-              <li>
-                <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Writing
-                </Link>
-              </li>
-              <li>
-                <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Speaking
-                </Link>
-              </li>
-              <li>
-                <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Full Mock Tests
-                </Link>
-              </li>
-            </ul>
-          </div>
+              {/* IELTS Modules */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Listening
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Reading
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Writing
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Speaking
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Full Mock Tests
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          ) : (
+            // Desktop layout - Separate columns
+            <>
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Practice Tests
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/resources" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Resources
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/blog" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Pricing
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* IELTS Modules */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Listening
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Reading
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Writing
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Speaking
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Full Mock Tests
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </>
+          )}
 
           {/* Contact */}
           <div>
@@ -127,11 +202,11 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className={`flex ${isMobile ? 'flex-col space-y-4' : 'flex-row'} justify-between items-center`}>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
               © {new Date().getFullYear()} Neplia.com. All rights reserved.
             </p>
-            <div className="mt-4 md:mt-0 flex space-x-6">
+            <div className={`${isMobile ? 'flex flex-wrap justify-center gap-4' : 'flex space-x-6'}`}>
               <Link to="/terms" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 text-sm">
                 Terms of Service
               </Link>
