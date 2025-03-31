@@ -1,7 +1,7 @@
-
 import { BlogPost, BlogCategory } from "@/types/blog";
+import { generateAdditionalBlogPosts } from "@/utils/blogGenerator";
 
-export const blogPosts: BlogPost[] = [
+export const originalBlogPosts: BlogPost[] = [
   {
     id: "1",
     title: "How to Prepare for IELTS Speaking Test: A Comprehensive Guide",
@@ -90,9 +90,9 @@ Good luck with your IELTS preparation!
     author: {
       name: "Emma Richardson",
       title: "IELTS Instructor",
-      avatar: "/images/avatars/emma.jpg"
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80"
     },
-    coverImage: "/placeholder.svg",
+    coverImage: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
     publishedAt: "2023-12-15",
     readingTime: "8 min read",
     tags: ["IELTS", "Speaking", "English Proficiency", "Test Preparation"]
@@ -623,13 +623,19 @@ Remember that consistency is key in preparing for banking exams. Dedicate at lea
   }
 ];
 
+const generatedPosts = generateAdditionalBlogPosts(95);
+
+export const blogPosts: BlogPost[] = [...originalBlogPosts, ...generatedPosts];
+
 export const blogCategories: BlogCategory[] = [
   { name: "All", slug: "all", count: blogPosts.length },
-  { name: "IELTS", slug: "ielts", count: blogPosts.filter(post => post.category === "IELTS").length },
-  { name: "TOEFL", slug: "toefl", count: blogPosts.filter(post => post.category === "TOEFL").length },
-  { name: "PTE", slug: "pte", count: blogPosts.filter(post => post.category === "PTE").length },
-  { name: "SAT", slug: "sat", count: blogPosts.filter(post => post.category === "SAT").length },
-  { name: "Banking", slug: "banking", count: blogPosts.filter(post => post.category === "Banking").length },
+  ...Array.from(new Set(blogPosts.map(post => post.category)))
+    .sort()
+    .map(category => ({
+      name: category,
+      slug: category.toLowerCase(),
+      count: blogPosts.filter(post => post.category === category).length
+    }))
 ];
 
 export const getTags = (): string[] => {
@@ -655,4 +661,17 @@ export const getRelatedPosts = (currentPostId: string, count = 2): BlogPost[] =>
     )
     .sort(() => 0.5 - Math.random())
     .slice(0, count);
+};
+
+export const getFeaturedPosts = (count = 3): BlogPost[] => {
+  const featured = blogPosts.filter(post => post.featured);
+  if (featured.length >= count) {
+    return featured.slice(0, count);
+  }
+  
+  // If we don't have enough featured posts, grab the most recent ones to fill the gap
+  const recentPosts = getRecentPosts(count - featured.length)
+    .filter(post => !featured.find(p => p.id === post.id));
+  
+  return [...featured, ...recentPosts];
 };
