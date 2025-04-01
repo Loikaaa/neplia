@@ -82,18 +82,6 @@ export const DemoAdminLogin = () => {
                 required
               />
             </div>
-            
-            <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-md">
-              <p className="text-sm text-yellow-800">
-                <strong>Demo Credentials:</strong>
-              </p>
-              <p className="text-sm text-yellow-800">
-                Username: <code className="bg-yellow-100 px-1 py-0.5 rounded">admin</code>
-              </p>
-              <p className="text-sm text-yellow-800">
-                Password: <code className="bg-yellow-100 px-1 py-0.5 rounded">demo123</code>
-              </p>
-            </div>
           </CardContent>
           <CardFooter>
             <Button

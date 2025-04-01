@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -11,7 +11,8 @@ import {
   Zap,
   MessageSquare,
   Award,
-  Shield
+  Shield,
+  Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -24,18 +25,58 @@ import {
 } from '@/components/ui/dialog';
 import PaymentSection from '../payment/PaymentSection';
 
+// Country-based pricing configuration
+const countryPricing = {
+  'US': { currency: 'USD', monthlyPrice: 14.99, quarterlyPrice: 39.99, yearlyPrice: 149.99 },
+  'UK': { currency: 'GBP', monthlyPrice: 11.99, quarterlyPrice: 32.99, yearlyPrice: 119.99 },
+  'IN': { currency: 'INR', monthlyPrice: 999, quarterlyPrice: 2699, yearlyPrice: 9999 },
+  'AU': { currency: 'AUD', monthlyPrice: 19.99, quarterlyPrice: 53.99, yearlyPrice: 199.99 },
+  'CA': { currency: 'CAD', monthlyPrice: 19.99, quarterlyPrice: 53.99, yearlyPrice: 199.99 },
+  'NZ': { currency: 'NZD', monthlyPrice: 22.99, quarterlyPrice: 61.99, yearlyPrice: 229.99 },
+  'SG': { currency: 'SGD', monthlyPrice: 19.99, quarterlyPrice: 53.99, yearlyPrice: 199.99 },
+  'default': { currency: 'USD', monthlyPrice: 14.99, quarterlyPrice: 39.99, yearlyPrice: 149.99 }
+};
+
+// Currency symbols for formatting
+const currencySymbols = {
+  'USD': '$',
+  'GBP': '£',
+  'INR': '₹',
+  'AUD': 'A$',
+  'CAD': 'C$',
+  'NZD': 'NZ$',
+  'SGD': 'S$'
+};
+
 const PremiumPlans = () => {
   const { toast } = useToast();
-  const [showDialog, setShowDialog] = React.useState(false);
-  const [selectedPlan, setSelectedPlan] = React.useState<string | null>(null);
-  const [showPayment, setShowPayment] = React.useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [showPayment, setShowPayment] = useState(false);
+  const [userCountry, setUserCountry] = useState('default');
+  const [pricing, setPricing] = useState(countryPricing.default);
+
+  useEffect(() => {
+    // Get the country from localStorage
+    const country = localStorage.getItem('selectedCountry');
+    if (country && countryPricing[country]) {
+      setUserCountry(country);
+      setPricing(countryPricing[country]);
+    }
+  }, []);
+
+  // Format price with currency symbol
+  const formatPrice = (price: number) => {
+    const symbol = currencySymbols[pricing.currency] || '$';
+    return `${symbol}${price}`;
+  };
 
   const plans = [
     {
       id: 'monthly',
       name: 'Monthly',
-      price: '$14.99',
-      period: 'per month',
+      price: formatPrice(pricing.monthlyPrice),
+      period: `per month`,
       color: 'bg-indigo hover:bg-indigo/90',
       features: [
         'Full access to all practice modules',
@@ -48,8 +89,8 @@ const PremiumPlans = () => {
     {
       id: 'quarterly',
       name: 'Quarterly',
-      price: '$39.99',
-      period: 'per 3 months',
+      price: formatPrice(pricing.quarterlyPrice),
+      period: `per 3 months`,
       color: 'bg-teal hover:bg-teal/90',
       features: [
         'Everything in Monthly',
@@ -64,8 +105,8 @@ const PremiumPlans = () => {
     {
       id: 'yearly',
       name: 'Yearly',
-      price: '$149.99',
-      period: 'per year',
+      price: formatPrice(pricing.yearlyPrice),
+      period: `per year`,
       color: 'bg-coral hover:bg-coral/90',
       features: [
         'Everything in Quarterly',
@@ -106,6 +147,12 @@ const PremiumPlans = () => {
           <CardTitle className="text-xl flex items-center">
             <Diamond className="mr-2 h-5 w-5 text-indigo" />
             Upgrade Your IELTS Preparation
+            {userCountry !== 'default' && (
+              <div className="ml-auto flex items-center text-sm text-muted-foreground">
+                <Globe className="h-4 w-4 mr-1.5" />
+                Prices shown in {pricing.currency}
+              </div>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>

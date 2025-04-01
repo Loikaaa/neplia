@@ -11,7 +11,15 @@ import {
 } from "@/components/ui/tooltip";
 
 const AdminLink = () => {
-  const [showAdmin, setShowAdmin] = useState(true); // Set to true to always display
+  const [showAdmin, setShowAdmin] = useState(false);
+  
+  useEffect(() => {
+    // In a real app, you would check for admin privileges
+    // For now, we'll just display the link always
+    setShowAdmin(true);
+  }, []);
+  
+  if (!showAdmin) return null;
   
   return (
     <div className="fixed top-1/2 right-0 -translate-y-1/2 z-50 flex flex-col gap-2">
