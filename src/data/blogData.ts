@@ -75,6 +75,37 @@ For Part 3:
 
 Regularly practice with previous IELTS Speaking test topics. Time yourself and record your responses for self-assessment.
 
+## Sample Responses for Common Topics
+
+### Part 1 Example: Hometown
+
+**Question:** "Tell me about your hometown."
+
+**Strong Answer:** "I come from Chennai, a coastal city in southern India. It's known for its beautiful beaches, especially Marina Beach, which is one of the longest urban beaches in the world. The city has a perfect blend of traditional culture and modern development, which makes it an interesting place to live."
+
+**Question:** "What do you like most about your hometown?"
+
+**Strong Answer:** "What I appreciate most is the rich cultural heritage. Chennai is considered the cultural capital of South India with numerous classical dance and music performances happening throughout the year. I particularly enjoy attending the annual Music Festival in December, where artists from all over the country perform."
+
+### Part 2 Example: Describing a Person
+
+**Topic Card:** Describe a person who has had a significant influence on your life.
+
+**Strong Response Structure:**
+- Introduction: "I'd like to talk about my high school mathematics teacher, Mr. Sharma, who greatly influenced my academic journey and personal development."
+- Body:
+  - Who they are: "Mr. Sharma taught advanced mathematics at my high school for over 20 years and was known for his unique teaching methods."
+  - How you know them: "I had the privilege of being in his class for two consecutive years during my final years of high school."
+  - What qualities you admire: "What I admire most about him is his extraordinary patience and ability to explain complex concepts in simple terms."
+  - Why they influenced you: "He completely transformed my relationship with mathematics from fear to fascination."
+- Conclusion: "His influence extended beyond mathematics, teaching me that with the right approach, any challenge can be overcome."
+
+### Part 3 Example: Education
+
+**Question:** "Do you think the education system in your country adequately prepares students for the job market?"
+
+**Strong Answer:** "I believe there's room for improvement. While our education system excels at teaching theoretical knowledge, it often lacks practical application. For instance, engineering students may graduate with extensive technical knowledge but have limited hands-on experience with real-world problems. Many companies report having to provide significant additional training to new graduates. I think incorporating more internships, project-based learning, and industry collaboration would better prepare students for their future careers. Some universities have started implementing these changes with positive results."
+
 ## On Test Day
 
 - Speak clearly and at a natural pace
@@ -84,6 +115,24 @@ Regularly practice with previous IELTS Speaking test topics. Time yourself and r
 - Be yourself and show your personality
 
 Remember, the Speaking test assesses your communication skills, not your knowledge. The examiner wants to see how well you can express yourself in English, so focus on communicating your ideas clearly and naturally.
+
+## Common Mistakes to Avoid
+
+1. **Speaking too fast**: When nervous, many candidates rush their speech, which affects clarity and pronunciation. Practice speaking at a measured pace.
+
+2. **One-word answers**: In Part 1 especially, avoid giving minimal responses. Develop your answers with reasons and examples.
+
+3. **Memorized scripts**: Examiners can easily identify rehearsed answers, which can lower your score. Instead, practice expressing ideas naturally.
+
+4. **Limited vocabulary**: Using the same words repeatedly shows limited range. Work on incorporating synonyms and varied expressions.
+
+5. **Ignoring the question**: Make sure you directly address the question asked, rather than shifting to a prepared topic.
+
+## Additional Resources
+
+- [Official IELTS Speaking Practice Materials](https://www.ielts.org)
+- [Cambridge IELTS Practice Tests](https://www.cambridge.org)
+- [British Council IELTS Preparation](https://www.britishcouncil.org)
 
 Good luck with your IELTS preparation!
     `,
@@ -95,7 +144,8 @@ Good luck with your IELTS preparation!
     coverImage: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
     publishedAt: "2023-12-15",
     readingTime: "8 min read",
-    tags: ["IELTS", "Speaking", "English Proficiency", "Test Preparation"]
+    tags: ["IELTS", "Speaking", "English Proficiency", "Test Preparation"],
+    featured: true
   },
   {
     id: "2",
@@ -120,6 +170,24 @@ Before diving into practice, make sure you understand the structure of the Readi
 
 Each question type requires a different approach, so familiarize yourself with the specific strategies for each.
 
+### For Multiple-Choice Questions:
+- Read the question stem carefully first
+- Look for keywords in both the question and answer options
+- Eliminate obviously incorrect answers
+- Remember that for multiple answer questions, there is no partial credit
+
+### For Re-order Paragraphs:
+- Identify the topic sentence (often introduces a new concept)
+- Look for connecting words (however, therefore, additionally)
+- Pay attention to pronoun references (it, they, these)
+- Identify logical progression of ideas
+
+### For Fill in the Blanks:
+- Read the entire text first to understand the context
+- Consider grammar rules (part of speech, subject-verb agreement)
+- Look for contextual clues before and after the blank
+- Check collocations (words that naturally go together)
+
 ## 2. Develop Strategic Skimming and Scanning Skills
 
 You won't have time to read every text in detail, so develop these two crucial skills:
@@ -134,6 +202,9 @@ You won't have time to read every text in detail, so develop these two crucial s
 - Use your finger or cursor to guide your eyes
 - Focus only on the information relevant to the question
 
+### Practical Exercise:
+Take a newspaper article and give yourself 30 seconds to skim it. Then try to summarize the main point. Next, ask yourself a specific question about the article (like "What date did this event occur?") and scan to find the answer.
+
 ## 3. Manage Your Time Effectively
 
 The Reading section has a strict time limit, with an average of about 1.5-2 minutes per question.
@@ -142,6 +213,13 @@ The Reading section has a strict time limit, with an average of about 1.5-2 minu
 - If you're stuck on a question, mark it and move on
 - Leave some time at the end to review your answers
 - Practice with timed exercises to improve your speed
+
+### Sample Time Management Strategy:
+- Multiple-choice questions: 90 seconds each
+- Re-order paragraphs: 2-3 minutes each
+- Fill in the blanks: 2 minutes each
+
+Remember that no single question is worth sacrificing your entire test. If you're spending too much time on one question, make an educated guess and move forward.
 
 ## 4. Build Academic Vocabulary
 
@@ -152,6 +230,19 @@ A strong vocabulary is essential for the Reading section:
 - Read academic articles, journals, and textbooks regularly
 - Create flashcards for new words and review them daily
 
+### Key Academic Vocabulary Resources:
+- Academic Word List (AWL) by Averil Coxhead
+- Vocabulary for Academic IELTS (also useful for PTE)
+- Subject-specific glossaries in areas like science, business, humanities
+
+### Vocabulary Building Strategy:
+Create a system where you learn 5-10 new words daily. For each word:
+1. Write the definition
+2. Note the part of speech
+3. Write an example sentence
+4. Identify synonyms and antonyms
+5. Review after 1 day, 1 week, and 1 month
+
 ## 5. Practice with Collocations and Contextual Understanding
 
 For fill-in-the-blank questions:
@@ -160,6 +251,25 @@ For fill-in-the-blank questions:
 - Pay attention to articles, prepositions, and connectors
 - Consider the overall context before selecting an answer
 - Read before and after the blank to understand what fits grammatically and semantically
+
+### Common Collocations to Study:
+- Verb + Noun: conduct research, reach a conclusion
+- Adjective + Noun: significant impact, controversial issue
+- Adverb + Adjective: highly effective, particularly important
+- Noun + Noun: research findings, climate change
+
+## Practice Exercise: Fill in the Blanks
+
+Read the following paragraph and fill in the blanks with appropriate words:
+
+*"Climate change has become one of the most ________ (1) challenges facing our planet today. Scientists have ________ (2) substantial evidence showing that human activities are a ________ (3) contributor to global warming. The ________ (4) in greenhouse gas emissions has led to rising sea levels, extreme weather patterns, and disruptions to ecosystems worldwide. Addressing this issue requires ________ (5) cooperation among nations and significant changes in how we produce and consume energy."*
+
+Answers:
+1. significant/pressing/critical
+2. gathered/collected/accumulated
+3. major/primary/significant
+4. increase/rise/surge
+5. international/global/worldwide
 
 ## Bonus Tip: Regular Practice with Analysis
 
@@ -170,7 +280,28 @@ The key to improving in the Reading section is regular, focused practice:
 - Review correct answers and understand why they're right
 - Keep track of your progress to stay motivated
 
+### Effective Practice Method:
+1. Time yourself strictly as you would in the real exam
+2. After completing the practice section, review each question
+3. For incorrect answers, identify why your answer was wrong and why the correct answer is right
+4. Keep an error log to track patterns in your mistakes
+5. Focus your study on addressing these patterns
+
 Remember that the PTE Academic Reading section not only tests your reading comprehension but also your ability to work efficiently under time pressure. With consistent practice using these strategies, you'll be well-prepared to achieve your target score.
+
+## Additional Resources
+
+### Practice Materials:
+- Official PTE Academic Practice Tests (Pearson)
+- PTE Academic Testbuilder (Macmillan)
+- Online platforms like E2Language and PTE Tutorials
+
+### Reading Sources for Practice:
+- Academic journals
+- The Economist
+- Scientific American
+- Nature
+- Harvard Business Review
 
 Good luck with your PTE Academic preparation!
     `,
@@ -179,10 +310,11 @@ Good luck with your PTE Academic preparation!
       title: "PTE Academic Expert",
       avatar: "/images/avatars/michael.jpg"
     },
-    coverImage: "/placeholder.svg",
+    coverImage: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
     publishedAt: "2023-11-28",
     readingTime: "7 min read",
-    tags: ["PTE Academic", "Reading Skills", "Test Preparation", "Study Tips"]
+    tags: ["PTE Academic", "Reading Skills", "Test Preparation", "Study Tips"],
+    featured: true
   },
   {
     id: "3",
@@ -263,6 +395,63 @@ Example:
 Example:
 *"In conclusion, [restate thesis differently]. As illustrated through [brief mention of your main points], the benefits of this approach are clear. Ultimately, [broader statement about the significance of your position]."*
 
+## Sample Essays With Examiner Commentary
+
+### Integrated Writing Task Sample
+
+**Prompt:**
+Reading passage: Discusses the disappearance of the ancient Anasazi civilization from the Four Corners region of the United States around 1300 CE, suggesting drought as the primary cause.
+Lecture: Challenges the drought theory and presents archaeological evidence suggesting that internal social conflict was a more significant factor in the Anasazi's disappearance.
+
+**Sample Essay:**
+
+*The reading passage and the lecture both examine possible explanations for the sudden abandonment of Anasazi settlements in the American Southwest around 1300 CE. While the reading emphasizes environmental factors, particularly drought, as the main cause for their disappearance, the lecturer presents compelling evidence that internal social conflict played a more significant role.*
+
+*According to the reading, severe drought in the region made agriculture unsustainable, forcing the Anasazi to abandon their settlements. The author supports this claim by citing tree ring studies showing a 50-year drought period coinciding with the civilization's collapse. However, the lecturer challenges this view by pointing out that the Anasazi had successfully survived previous drought periods of similar severity. She explains that archaeological evidence shows they had developed advanced water conservation techniques, including terraced fields and irrigation systems, which would have helped them withstand dry conditions.*
+
+*The reading also suggests that the Anasazi likely migrated peacefully to regions with more reliable water sources, particularly to areas near the Rio Grande. In contrast, the lecturer argues that archaeological evidence reveals signs of violence and conflict within the communities before abandonment. She describes discoveries of unburied bodies, deliberately destroyed ceremonial structures, and defensive fortifications built during this period, none of which support the theory of an orderly migration.*
+
+*Additionally, the reading proposes that the uniform abandonment across all Anasazi settlements supports the drought theory, as an environmental crisis would affect the entire region. The lecturer counters this by explaining that recent archaeological findings show the abandonment was actually gradual and occurred at different times in different areas, which contradicts what would be expected if drought were the sole cause.*
+
+*Both the reading passage and the lecture offer different interpretations of the archaeological evidence regarding the Anasazi disappearance. While environmental factors certainly played a role, the lecturer makes a convincing case that internal social conflict was a major contributing factor that has been overlooked in traditional explanations.*
+
+**Examiner Commentary:**
+This response would receive a high score (5) because it:
+- Accurately summarizes the main points from both the reading and the lecture
+- Clearly organizes the comparison of each main point
+- Uses effective signal phrases to attribute ideas to their sources
+- Includes specific details from both the reading and lecture
+- Demonstrates strong language use with minimal errors
+- Maintains an objective tone without inserting personal opinion
+
+### Independent Writing Task Sample
+
+**Prompt:**
+*"Some people believe that university students should be required to attend classes. Others believe that going to classes should be optional for students. Which point of view do you agree with? Use specific reasons and details to explain your answer."*
+
+**Sample Essay:**
+
+*In the realm of higher education, the debate over mandatory class attendance has grown increasingly relevant. Some educational institutions enforce strict attendance policies, while others allow students complete freedom to decide whether to attend lectures. In my view, while optional attendance might seem appealing, mandatory class attendance ultimately provides greater benefits for the majority of university students, particularly in terms of academic performance, comprehensive learning experiences, and preparation for professional responsibilities.*
+
+*The most compelling reason for requiring class attendance is its direct correlation with academic success. When students consistently attend lectures, they benefit from structured learning and timely exposure to course material. During my undergraduate studies in economics, I observed a clear pattern: classmates who regularly attended lectures typically performed better on examinations than those with sporadic attendance. This pattern exists because in-person instruction provides immediate clarification of complex concepts, something that cannot be fully replicated through independent study. Furthermore, research from educational psychology consistently demonstrates that distributed learning over time leads to better retention than cramming before exams, making regular attendance an essential component of knowledge acquisition.*
+
+*Beyond academic performance, mandatory attendance creates a more comprehensive educational experience through peer interaction and discussion. University education isn't solely about absorbing information; it's about engaging with diverse perspectives and developing critical thinking skills through debate and dialogue. For instance, in philosophy seminars I attended, the most valuable insights often emerged not from the assigned readings, but from the spontaneous discussions that followed, where students challenged each other's interpretations and collectively explored complicated ideas. These dynamic interactions cannot be replicated through reviewing lecture notes or watching recordings and represent an irreplaceable aspect of higher education that optional attendance policies undermine.*
+
+*Some opponents of mandatory attendance argue that university students are adults who should take responsibility for their own education, including deciding whether to attend classes. While this perspective has merit, it overlooks the reality that mandatory attendance policies actually help students develop the professional responsibility they will need in their future careers. Nearly all professional environments have attendance expectations; medical professionals, teachers, lawyers, and business executives cannot simply opt out of meetings or responsibilities when they don't feel like participating. By enforcing attendance, universities help students internalize the importance of reliability and commitment, providing valuable preparation for workplace expectations.*
+
+*Admittedly, there are circumstances where flexibility in attendance policies is warranted. Students facing health challenges, family emergencies, or significant financial hardships may occasionally need accommodations. However, these exceptions should be addressed through reasonable absence policies rather than making attendance entirely optional for all students.*
+
+*In conclusion, while the argument for optional attendance appeals to notions of student autonomy, the benefits of mandatory attendance—improved academic performance, enhanced learning experiences, and development of professional responsibility—outweigh these concerns. Universities that implement reasonable attendance requirements ultimately provide greater value to their students by creating structured environments that foster both intellectual growth and professional development. As education continues to evolve, finding the right balance between structure and flexibility remains essential, but the fundamental importance of consistent class participation should not be underestimated.*
+
+**Examiner Commentary:**
+This response would receive a high score (5) because it:
+- Presents a clear thesis that addresses the prompt
+- Develops three main points with specific examples and explanations
+- Acknowledges and responds to counterarguments
+- Uses a variety of sentence structures and sophisticated vocabulary
+- Shows coherent organization with effective transitions
+- Demonstrates control of grammar with minimal errors
+
 ## Key Strategies for Both Tasks
 
 1. **Use a variety of sentence structures**
@@ -281,6 +470,28 @@ Example:
    - For Integrated: 2-3 minutes to plan, 15 minutes to write, 2 minutes to review
    - For Independent: 5 minutes to plan, 20 minutes to write, 5 minutes to review
 
+## Common Mistakes to Avoid
+
+### Integrated Writing
+1. **Neglecting the lecture information**: Some students focus too much on the reading and not enough on the lecture content.
+2. **Adding personal opinions**: Remember this task asks you to objectively compare the sources, not give your view.
+3. **Copying too much language directly**: Paraphrase information using your own words.
+4. **Improper organization**: Each paragraph should clearly address one point from both sources.
+
+### Independent Writing
+1. **Vague or generic examples**: Specific, detailed examples are much more persuasive.
+2. **Ignoring counterarguments**: Acknowledging opposing views shows critical thinking.
+3. **Weak introduction or conclusion**: These sections frame your entire essay and leave lasting impressions.
+4. **Limited vocabulary**: Using the same words repeatedly suggests limited language proficiency.
+
+## Final Preparation Tips
+
+1. **Practice with official TOEFL prompts**
+2. **Time yourself strictly**
+3. **Have your practice essays evaluated by proficient English speakers**
+4. **Review high-scoring sample essays**
+5. **Create templates for both essay types**
+
 Remember that TOEFL raters are looking for clear organization, development of ideas, and language use. With these structures and strategies, you'll be well-prepared to tackle both writing tasks and achieve your target scores.
     `,
     author: {
@@ -288,10 +499,11 @@ Remember that TOEFL raters are looking for clear organization, development of id
       title: "TOEFL Writing Coach",
       avatar: "/images/avatars/sarah.jpg"
     },
-    coverImage: "/placeholder.svg",
+    coverImage: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
     publishedAt: "2023-10-05",
     readingTime: "10 min read",
-    tags: ["TOEFL", "Essay Writing", "Academic English", "Test Preparation"]
+    tags: ["TOEFL", "Essay Writing", "Academic English", "Test Preparation"],
+    featured: true
   },
   {
     id: "4",
@@ -405,18 +617,75 @@ If you're running out of time or stuck on a difficult problem:
    - Remember SOH-CAH-TOA for trigonometric ratios
    - Use the unit circle for angle measures
 
-## Practice Example
+## Worked Examples
 
-Let's apply these strategies to a sample problem:
+Let's apply these strategies to several sample problems from actual SAT tests:
 
-*"A rectangular garden has a perimeter of 30 feet. If the length is 3 feet more than twice the width, what is the area of the garden in square feet?"*
+### Example 1: Systems of Equations
 
-**Strategy 1: Define variables and write equations**
+**Question:** *If 3x + 5y = 15 and 2x - y = 4, what is the value of x + y?*
+
+**Strategy:** Solve the system of equations to find x and y, then add them.
+
+**Solution:**
+From the second equation: 2x - y = 4, so y = 2x - 4
+Substitute into the first equation:
+3x + 5(2x - 4) = 15
+3x + 10x - 20 = 15
+13x = 35
+x = 35/13
+
+Now find y:
+y = 2x - 4 = 2(35/13) - 4 = 70/13 - 4 = (70 - 52)/13 = 18/13
+
+Therefore:
+x + y = 35/13 + 18/13 = 53/13
+
+But there's a more elegant approach. Adding the two original equations:
+(3x + 5y) + (2x - y) = 15 + 4
+5x + 4y = 19
+
+Multiplying the first equation by 2:
+6x + 10y = 30
+
+Subtracting the previous equation:
+-x - 6y = -11
+x + 6y = 11
+
+Now adding this to 5x + 4y = 19:
+6x + 10y = 30
+Therefore:
+x + y = 30/6 = 5
+
+### Example 2: Data Analysis
+
+**Question:** *The table shows the results of a survey asking 200 people about their exercise habits. Based on the data, what percentage of people who exercise at least once a week are female?*
+
+| Exercise Frequency | Male | Female |
+|-------------------|------|--------|
+| Daily             | 24   | 36     |
+| 2-3 times a week  | 45   | 39     |
+| Once a week       | 18   | 12     |
+| Rarely/Never      | 13   | 13     |
+
+**Strategy:** Identify the specific data requested, which requires finding the number of females who exercise at least once a week as a percentage of all people who exercise at least once a week.
+
+**Solution:**
+Number of females who exercise at least once a week = 36 + 39 + 12 = 87
+Total number of people who exercise at least once a week = (24 + 45 + 18) + (36 + 39 + 12) = 87 + 87 = 174
+Percentage of females = 87/174 × 100% = 50%
+
+### Example 3: Problem Solving with Algebra
+
+**Question:** *A rectangular garden has a perimeter of 30 feet. If the length is 3 feet more than twice the width, what is the area of the garden in square feet?*
+
+**Strategy:** Define variables, write equations based on the given information, solve the system, and calculate the area.
+
+**Solution:**
 Let w = width and l = length
 From the perimeter: 2l + 2w = 30
 From the relationship: l = 2w + 3
 
-**Strategy 2: Solve the system**
 Substitute l = 2w + 3 into 2l + 2w = 30
 2(2w + 3) + 2w = 30
 4w + 6 + 2w = 30
@@ -427,251 +696,34 @@ w = 4
 Now find l:
 l = 2w + 3 = 2(4) + 3 = 11
 
-**Strategy 3: Calculate the answer**
+Therefore:
 Area = l × w = 11 × 4 = 44 square feet
 
-By applying systematic problem-solving strategies, you can approach even the most challenging SAT Math questions with confidence. Remember to practice these techniques regularly with official SAT questions to reinforce your skills and improve your speed.
-    `,
-    author: {
-      name: "Prof. James Wilson",
-      title: "Mathematics Education Specialist",
-      avatar: "/images/avatars/james.jpg"
-    },
-    coverImage: "/placeholder.svg",
-    publishedAt: "2023-09-18",
-    readingTime: "9 min read",
-    tags: ["SAT", "Mathematics", "Problem Solving", "Test Preparation"]
-  },
-  {
-    id: "5",
-    title: "Banking Exams: Mastering Quantitative Aptitude and Reasoning",
-    slug: "banking-exams-quantitative-aptitude-reasoning",
-    category: "Banking",
-    excerpt: "Enhance your preparation for banking exams with these proven strategies for quantitative aptitude and reasoning sections that have helped thousands of candidates succeed.",
-    content: `
-# Banking Exams: Mastering Quantitative Aptitude and Reasoning
+## Practice Plan
 
-Banking exams are highly competitive, with quantitative aptitude and reasoning sections often being the most challenging for candidates. These sections test your mathematical skills, logical thinking, and problem-solving abilities under strict time constraints. This comprehensive guide provides strategies to help you master these crucial sections and gain a competitive edge.
+To master SAT Math, follow this structured practice plan:
 
-## Quantitative Aptitude: Strategic Approach
+### 8 Weeks Before the Test
+- Take a full-length practice test to identify weaknesses
+- Review core mathematical concepts
+- Focus on understanding rather than memorizing formulas
 
-### 1. Prioritize High-Yield Topics
+### 6 Weeks Before
+- Practice 10-15 questions daily, focusing on your weak areas
+- Review mistakes thoroughly
+- Begin timing yourself on sets of 5-10 questions
 
-Focus your preparation on topics that consistently appear with higher weightage:
+### 4 Weeks Before
+- Complete one full math section under timed conditions twice a week
+- Continue targeted practice on weak areas
+- Review the College Board's formula sheet
 
-- **Number Series** (Typically 5 questions)
-- **Simplification/Approximation** (5 questions)
-- **Data Interpretation** (5-10 questions)
-- **Arithmetic Word Problems** (10-15 questions)
-  - Percentages
-  - Profit & Loss
-  - Simple & Compound Interest
-  - Time, Speed & Distance
-  - Time & Work
-  - Averages
-  - Ratio & Proportion
-  - Mixtures & Alligations
+### 2 Weeks Before
+- Take complete practice tests, including both math sections
+- Focus on test-taking strategies and time management
+- Review common mistakes and create a personal "watch out for" list
 
-### 2. Master Short Calculation Techniques
-
-Banking exams reward speed. Learn these calculation shortcuts:
-
-**Percentage Calculations**
-- 10% of a number = Move decimal point one place left
-- 25% = 1/4 (divide by 4)
-- To find x% of y: (x×y)/100 or (y×x)/100
-
-**Multiplication Shortcuts**
-- Multiplying by 5: Multiply by 10 and divide by 2
-- Multiplying by 9: Multiply by 10 and subtract the original number
-- Multiplying by 11: For two-digit numbers, add the digits and place between them (e.g., 11×25 = 2(2+5)5 = 275)
-
-**Square Calculations**
-- For numbers ending in 5: Square the tens digit, then add the tens digit, then append 25
-  Example: 35² = 3×4 | 25 = 1225
-
-### 3. Data Interpretation Strategy
-
-DI sets often take time but have multiple questions, making them high-value targets:
-
-- First, understand what the data represents (skim through questions for clues)
-- Identify the units and scales
-- Calculate key values in advance (totals, averages, percentages)
-- Apply approximation to save time
-
-### 4. Practice Section-Specific Time Management
-
-Allocation strategy for a 35-question, 35-minute section:
-- Simplification/Approximation: 5 minutes
-- Number Series: 5 minutes
-- Quadratic Equations: 3 minutes
-- Data Interpretation: 10 minutes
-- Arithmetic Word Problems: 12 minutes
-
-## Reasoning: Systematic Problem-Solving
-
-### 1. Puzzles and Seating Arrangement
-
-These typically account for 10-15 marks. Approach systematically:
-
-**For Linear Arrangements**:
-1. Draw a line with positions numbered
-2. Note all direct information first
-3. Work with the most restrictive clues
-4. Verify your arrangement satisfies all conditions
-
-**For Circular Arrangements**:
-1. Always specify if it's clockwise or counterclockwise
-2. Remember that in a circle of n people, the person opposite to the person at position 1 is at position (n/2)+1
-
-**For Floor Puzzles**:
-1. Create a table with floors numbered
-2. Fill definite information first
-3. Use elimination when possible
-
-### 2. Syllogisms and Logical Deductions
-
-Use Venn diagrams to solve quickly:
-- All A are B: Draw A completely inside B
-- Some A are B: Draw A and B overlapping
-- No A are B: Draw A and B as separate circles
-- Some A are not B: Ensure part of A is outside B
-
-Common conclusion patterns:
-- All A are B + All B are C = All A are C
-- All A are B + Some C are A = Some C are B
-- No A are B + All C are A = No C are B
-
-### 3. Coding-Decoding and Blood Relations
-
-**For Coding-Decoding**:
-1. Look for patterns in letter positions (e.g., +1, +2, alternate, etc.)
-2. Check for letter replacements (e.g., vowels replaced with symbols)
-3. Analyze if words are coded based on positions or some other logic
-
-**For Blood Relations**:
-1. Always draw a family tree
-2. Use symbols: ♂ for male, ♀ for female, = for marriage, ↓ for children
-3. Start with the most concrete relationship mentioned
-
-### 4. Direction Sense Test
-
-1. Always draw a diagram with North pointing upward
-2. Track each movement step-by-step
-3. Remember: Right turn means 90° clockwise, Left turn means 90° counterclockwise
-
-## Exam Day Execution Strategy
-
-### 1. First 15 Minutes: Quick Wins
-
-Begin with questions you can solve quickly:
-- Simplification/Approximation
-- Quadratic Equations
-- Simple Inequalities
-- Basic Reasoning Questions
-
-### 2. Middle 35 Minutes: Moderate Challenges
-
-Move on to:
-- Number Series
-- Arithmetic Word Problems
-- Basic Puzzle Sets
-- Blood Relations
-
-### 3. Final 15 Minutes: Maximum Value
-
-Tackle high-yield, time-consuming questions:
-- Data Interpretation Sets
-- Complex Puzzles
-- Seating Arrangements
-
-### 4. Last 5 Minutes: Strategic Guessing
-
-For any unattempted questions:
-- Eliminate obviously wrong options
-- Look for patterns in answer choices
-- Make educated guesses rather than leaving questions unanswered (if there's no negative marking)
-
-## Preparation Timeline
-
-**3-4 Months Before Exam**:
-- Learn concepts and formulas
-- Practice basic to intermediate level questions
-- Build calculation speed
-
-**2 Months Before Exam**:
-- Focus on advanced problems
-- Take topic-wise tests
-- Analyze mistakes and weak areas
-
-**1 Month Before Exam**:
-- Take full-length mock tests
-- Practice previous years' question papers
-- Refine time management strategy
-
-Remember that consistency is key in preparing for banking exams. Dedicate at least 2-3 hours daily to these sections, gradually increasing your speed and accuracy. With disciplined practice and strategic preparation, you can excel in the quantitative aptitude and reasoning sections, significantly improving your overall score and chances of selection.
-    `,
-    author: {
-      name: "Anita Sharma",
-      title: "Banking Exam Coach",
-      avatar: "/images/avatars/anita.jpg"
-    },
-    coverImage: "/placeholder.svg",
-    publishedAt: "2023-08-22",
-    readingTime: "11 min read",
-    tags: ["Banking Exams", "Quantitative Aptitude", "Logical Reasoning", "Competitive Exams"]
-  }
-];
-
-const generatedPosts = generateAdditionalBlogPosts(95);
-
-export const blogPosts: BlogPost[] = [...originalBlogPosts, ...generatedPosts];
-
-export const blogCategories: BlogCategory[] = [
-  { name: "All", slug: "all", count: blogPosts.length },
-  ...Array.from(new Set(blogPosts.map(post => post.category)))
-    .sort()
-    .map(category => ({
-      name: category,
-      slug: category.toLowerCase(),
-      count: blogPosts.filter(post => post.category === category).length
-    }))
-];
-
-export const getTags = (): string[] => {
-  const allTags = blogPosts.flatMap(post => post.tags);
-  return Array.from(new Set(allTags)).sort();
-};
-
-export const getRecentPosts = (count = 3): BlogPost[] => {
-  return [...blogPosts]
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-    .slice(0, count);
-};
-
-export const getRelatedPosts = (currentPostId: string, count = 2): BlogPost[] => {
-  const currentPost = blogPosts.find(post => post.id === currentPostId);
-  if (!currentPost) return getRecentPosts(count);
-  
-  return blogPosts
-    .filter(post => post.id !== currentPostId)
-    .filter(post => 
-      post.category === currentPost.category || 
-      post.tags.some(tag => currentPost.tags.includes(tag))
-    )
-    .sort(() => 0.5 - Math.random())
-    .slice(0, count);
-};
-
-export const getFeaturedPosts = (count = 3): BlogPost[] => {
-  const featured = blogPosts.filter(post => post.featured);
-  if (featured.length >= count) {
-    return featured.slice(0, count);
-  }
-  
-  // If we don't have enough featured posts, grab the most recent ones to fill the gap
-  const recentPosts = getRecentPosts(count - featured.length)
-    .filter(post => !featured.find(p => p.id === post.id));
-  
-  return [...featured, ...recentPosts];
-};
+### Final Week
+- Light review of formulas and strategies
+- Continue with short, focused practice sessions
+- Rest
