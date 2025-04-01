@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Shield, Settings, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,11 +26,11 @@ const AdminLink = () => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <a href="/admin">
+            <Link to="/admin">
               <Button variant="default" size="icon" className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-l-md rounded-r-none h-12 w-12 shadow-lg border-r border-indigo-700">
                 <LayoutDashboard className="h-5 w-5" />
               </Button>
-            </a>
+            </Link>
           </TooltipTrigger>
           <TooltipContent side="left">
             <p>Admin Dashboard</p>
@@ -38,11 +39,11 @@ const AdminLink = () => {
 
         <Tooltip>
           <TooltipTrigger asChild>
-            <a href="/admin/settings">
+            <Link to="/admin/settings">
               <Button variant="default" size="icon" className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-l-md rounded-r-none h-12 w-12 shadow-lg border-r border-indigo-700">
                 <Settings className="h-5 w-5" />
               </Button>
-            </a>
+            </Link>
           </TooltipTrigger>
           <TooltipContent side="left">
             <p>Admin Settings</p>
