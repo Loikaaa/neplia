@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import BlogCard from '@/components/blog/BlogCard';
@@ -31,21 +30,18 @@ const Blog = () => {
   useEffect(() => {
     let filtered = [...blogPosts];
     
-    // Filter by tab/category
     if (activeTab !== "all") {
       filtered = filtered.filter(post => 
         post.category.toLowerCase() === activeTab.toLowerCase()
       );
     }
     
-    // Filter by additional category if selected
     if (selectedCategory !== "all" && activeTab === "all") {
       filtered = filtered.filter(post => 
         post.category.toLowerCase() === selectedCategory.toLowerCase()
       );
     }
     
-    // Filter by search query
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(post => 
@@ -56,14 +52,12 @@ const Blog = () => {
       );
     }
     
-    // Filter by selected tag
     if (selectedTag) {
       filtered = filtered.filter(post => 
         post.tags.some(tag => tag.toLowerCase() === selectedTag.toLowerCase())
       );
     }
     
-    // Sort the posts
     switch(sortOption) {
       case "newest":
         filtered.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
@@ -81,10 +75,9 @@ const Blog = () => {
     
     setFilteredPosts(filtered);
     setTotalPages(Math.ceil(filtered.length / POSTS_PER_PAGE));
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   }, [selectedCategory, searchQuery, selectedTag, sortOption, activeTab]);
 
-  // Calculate pagination
   useEffect(() => {
     const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
     const endIndex = startIndex + POSTS_PER_PAGE;
@@ -110,12 +103,10 @@ const Blog = () => {
     const maxPagesToShow = 5;
     
     if (totalPages <= maxPagesToShow) {
-      // If we have fewer pages than max, show all
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      // Always include first page, last page, current page, and one on either side of current page if possible
       pageNumbers.push(1);
       
       if (currentPage > 2) {
@@ -158,12 +149,11 @@ const Blog = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 md:py-16">
-        {/* Hero Section */}
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 bg-gradient-to-r from-indigo-50 via-indigo-100 to-purple-50 dark:from-indigo-950/30 dark:via-indigo-900/20 dark:to-purple-950/30 p-10 rounded-2xl shadow-md relative overflow-hidden">
+          <div className="text-center mb-12 bg-gradient-to-r from-indigo-50 via-indigo-100 to-purple-50 dark:from-indigo-950/30 dark:via-indigo-900/20 dark:to-purple-950/30 p-10 rounded-2xl shadow-md relative overflow-hidden animate-fade-in">
             <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
             <div className="relative z-10">
-              <div className="inline-flex items-center justify-center p-3 bg-indigo-100 dark:bg-indigo-900/40 rounded-full mb-4">
+              <div className="inline-flex items-center justify-center p-3 bg-indigo-100 dark:bg-indigo-900/40 rounded-full mb-4 animate-scale-in">
                 <BookOpen className="h-7 w-7 text-indigo" />
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo via-purple to-pink-500 bg-clip-text text-transparent">
@@ -175,8 +165,7 @@ const Blog = () => {
             </div>
           </div>
 
-          {/* Featured Posts */}
-          <div className="mb-16">
+          <div className="mb-16 animate-fade-in" style={{ animationDelay: '0.2s' }}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold flex items-center">
                 <TrendingUp className="mr-2 h-5 w-5 text-indigo" />
@@ -203,9 +192,8 @@ const Blog = () => {
             </div>
           </div>
 
-          {/* Search and Filters */}
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm mb-8">
-            <div className="relative mb-6">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm mb-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            <div className="relative mb-6 transform transition duration-300 hover:scale-[1.01]">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo h-5 w-5" />
               <Input
                 placeholder="Search for articles, topics or keywords..."
@@ -277,8 +265,7 @@ const Blog = () => {
             )}
           </div>
 
-          {/* Category Tabs */}
-          <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <TabsList className="bg-gray-100 dark:bg-gray-800 p-1 overflow-x-auto flex flex-nowrap custom-scrollbar">
               <TabsTrigger value="all" className="flex-shrink-0">
                 All Posts
@@ -291,8 +278,7 @@ const Blog = () => {
             </TabsList>
           </Tabs>
 
-          {/* Blog Posts Grid */}
-          <div className="mb-10">
+          <div className="mb-10 animate-fade-in" style={{ animationDelay: '0.5s' }}>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">
                 {filteredPosts.length} {filteredPosts.length === 1 ? 'Article' : 'Articles'} Found
@@ -309,13 +295,14 @@ const Blog = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-                {displayedPosts.map(post => (
-                  <BlogCard key={post.id} post={post} />
+                {displayedPosts.map((post, idx) => (
+                  <div key={post.id} className="animate-fade-in" style={{ animationDelay: `${0.1 * (idx % 9)}s` }}>
+                    <BlogCard post={post} />
+                  </div>
                 ))}
               </div>
             )}
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <Pagination className="mt-8">
                 <PaginationContent>
@@ -364,8 +351,7 @@ const Blog = () => {
             )}
           </div>
 
-          {/* Popular Tags */}
-          <div className="p-8 bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 rounded-xl shadow-sm">
+          <div className="p-8 bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 rounded-xl shadow-sm animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <div className="flex items-center mb-4">
               <TagIcon className="h-5 w-5 text-indigo mr-2" />
               <h3 className="text-lg font-semibold text-indigo">Popular Topics</h3>

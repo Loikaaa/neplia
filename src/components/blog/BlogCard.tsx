@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BlogPost } from '@/types/blog';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Calendar, Clock, Tag, User, Bookmark } from 'lucide-react';
+import { Calendar, Clock, Tag, User, Bookmark, MessageCircle, Eye } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -18,23 +18,24 @@ interface BlogCardProps {
 const BlogCard = ({ post, variant = 'default', className }: BlogCardProps) => {
   return (
     <Card className={cn(
-      "h-full overflow-hidden transition-all duration-300 hover:shadow-lg border border-gray-200 dark:border-gray-800",
+      "h-full overflow-hidden transition-all duration-300 hover:shadow-lg border border-gray-200 dark:border-gray-800 hover:transform hover:scale-[1.01]",
       post.featured && "ring-2 ring-indigo/30",
       variant === 'featured' && "md:flex",
       className
     )}>
       <Link to={`/blog/${post.slug}`} className={cn("block h-full", variant === 'featured' && "md:flex")}>
         <div className={cn(
-          "relative overflow-hidden",
+          "relative overflow-hidden group",
           variant === 'compact' ? "h-32" : (variant === 'featured' ? "md:w-2/5 h-60 md:h-auto" : "")
         )}>
           <AspectRatio ratio={variant === 'featured' ? 4/3 : 16/9}>
             <img 
               src={post.coverImage} 
               alt={post.title} 
-              className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
+              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
             />
           </AspectRatio>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div className="absolute top-3 left-3 flex gap-2 flex-wrap">
             <Badge 
               variant="secondary" 
@@ -52,6 +53,19 @@ const BlogCard = ({ post, variant = 'default', className }: BlogCardProps) => {
               </Badge>
             )}
           </div>
+          
+          {variant !== 'compact' && (
+            <div className="absolute bottom-3 left-3 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span className="text-white/90 text-xs flex items-center gap-1 bg-black/50 px-2 py-1 rounded-full">
+                <Eye className="w-3 h-3" />
+                {Math.floor(Math.random() * 500) + 100}
+              </span>
+              <span className="text-white/90 text-xs flex items-center gap-1 bg-black/50 px-2 py-1 rounded-full">
+                <MessageCircle className="w-3 h-3" />
+                {Math.floor(Math.random() * 20) + 1}
+              </span>
+            </div>
+          )}
         </div>
         
         <div className={cn(

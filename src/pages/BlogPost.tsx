@@ -28,7 +28,7 @@ const BlogPost = () => {
       setPost(currentPost);
       
       if (currentPost) {
-        setRelatedPosts(getRelatedPosts(currentPost.id, 2));
+        setRelatedPosts(getRelatedPosts(currentPost.id, 3));
       }
     }
   }, [slug]);
@@ -65,23 +65,29 @@ const BlogPost = () => {
 
   // Custom renderer for markdown elements to apply styling
   const customRenderers = {
-    h1: (props: any) => <h1 className="text-3xl font-bold text-indigo-600 mt-8 mb-4" {...props} />,
-    h2: (props: any) => <h2 className="text-2xl font-bold text-indigo mt-6 mb-3" {...props} />,
-    h3: (props: any) => <h3 className="text-xl font-bold text-indigo-500 mt-5 mb-2" {...props} />,
-    h4: (props: any) => <h4 className="text-lg font-bold text-gray-800 dark:text-gray-200 mt-4 mb-2" {...props} />,
-    p: (props: any) => <p className="my-4 text-gray-700 dark:text-gray-300 leading-relaxed" {...props} />,
-    ul: (props: any) => <ul className="list-disc pl-6 my-4 space-y-2" {...props} />,
-    ol: (props: any) => <ol className="list-decimal pl-6 my-4 space-y-2" {...props} />,
+    h1: (props: any) => <h1 className="text-3xl font-bold text-indigo-600 mt-8 mb-4 animate-fade-in" {...props} />,
+    h2: (props: any) => <h2 className="text-2xl font-bold text-indigo mt-6 mb-3 animate-fade-in" {...props} />,
+    h3: (props: any) => <h3 className="text-xl font-bold text-indigo-500 mt-5 mb-2 animate-fade-in" {...props} />,
+    h4: (props: any) => <h4 className="text-lg font-bold text-gray-800 dark:text-gray-200 mt-4 mb-2 animate-fade-in" {...props} />,
+    p: (props: any) => <p className="my-4 text-gray-700 dark:text-gray-300 leading-relaxed animate-fade-in" {...props} />,
+    ul: (props: any) => <ul className="list-disc pl-6 my-4 space-y-2 animate-fade-in" {...props} />,
+    ol: (props: any) => <ol className="list-decimal pl-6 my-4 space-y-2 animate-fade-in" {...props} />,
     li: (props: any) => <li className="text-gray-700 dark:text-gray-300 pl-2" {...props} />,
     a: (props: any) => <a className="text-indigo underline hover:text-indigo-600 transition-colors" {...props} />,
     blockquote: (props: any) => (
-      <blockquote className="border-l-4 border-indigo pl-4 italic my-6 text-gray-700 dark:text-gray-300" {...props} />
+      <blockquote className="border-l-4 border-indigo pl-4 italic my-6 text-gray-700 dark:text-gray-300 bg-indigo-50 dark:bg-indigo-900/20 py-2 pr-2 rounded-r animate-fade-in" {...props} />
     ),
     code: (props: any) => (
       <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm" {...props} />
     ),
     pre: (props: any) => (
-      <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto my-6" {...props} />
+      <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto my-6 animate-fade-in" {...props} />
+    ),
+    img: (props: any) => (
+      <div className="my-6 animate-fade-in">
+        <img className="rounded-lg shadow-md w-full" {...props} />
+        {props.alt && <p className="text-center text-sm text-gray-500 mt-2">{props.alt}</p>}
+      </div>
     ),
   };
 
@@ -90,7 +96,7 @@ const BlogPost = () => {
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center text-sm text-muted-foreground mb-8">
+          <div className="flex items-center text-sm text-muted-foreground mb-8 animate-fade-in">
             <Link to="/" className="hover:text-indigo transition-colors">Home</Link>
             <ChevronRight className="h-4 w-4 mx-2" />
             <Link to="/blog" className="hover:text-indigo transition-colors">Blog</Link>
@@ -99,7 +105,7 @@ const BlogPost = () => {
           </div>
           
           {/* Cover Image with Gradient Overlay */}
-          <div className="relative rounded-2xl overflow-hidden mb-8 shadow-xl group">
+          <div className="relative rounded-2xl overflow-hidden mb-8 shadow-xl group animate-fade-in">
             <AspectRatio ratio={21 / 9}>
               <img 
                 src={coverImage}
@@ -133,7 +139,7 @@ const BlogPost = () => {
           </div>
           
           {/* Social Sharing and Stats - Fixed Position Sidebar on larger screens */}
-          <div className="hidden lg:flex flex-col fixed left-8 top-1/2 transform -translate-y-1/2 gap-4 z-10">
+          <div className="hidden lg:flex flex-col fixed left-8 top-1/2 transform -translate-y-1/2 gap-4 z-10 animate-fade-in">
             <button 
               onClick={toggleLike}
               className={cn(
@@ -160,7 +166,7 @@ const BlogPost = () => {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="lg:w-2/3">
               {/* Author Information */}
-              <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-indigo-50/80 to-teal-50/80 dark:from-indigo-950/30 dark:to-teal-950/30 rounded-xl mb-8 shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-indigo-50/80 to-teal-50/80 dark:from-indigo-950/30 dark:to-teal-950/30 rounded-xl mb-8 shadow-sm hover:shadow-md transition-shadow duration-300 animate-fade-in">
                 <Avatar className="h-16 w-16 ring-4 ring-white dark:ring-gray-800 shadow-md">
                   {authorAvatar ? (
                     <AvatarImage src={authorAvatar} alt={post.author.name} className="object-cover" />
@@ -177,7 +183,7 @@ const BlogPost = () => {
               </div>
               
               {/* Social Sharing for Mobile */}
-              <div className="flex lg:hidden items-center justify-center gap-3 mb-8">
+              <div className="flex lg:hidden items-center justify-center gap-3 mb-8 animate-fade-in">
                 <button 
                   onClick={toggleLike}
                   className={cn(
@@ -209,7 +215,7 @@ const BlogPost = () => {
                 <ReactMarkdown components={customRenderers}>{post.content}</ReactMarkdown>
                 
                 {/* Tags Section - Mobile (inside article content) */}
-                <div className="lg:hidden mt-12 bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm">
+                <div className="lg:hidden mt-12 bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm animate-fade-in">
                   <h3 className="text-lg font-semibold mb-4 flex items-center">
                     <Tag className="w-5 h-5 mr-2 text-indigo" />
                     Tags
@@ -229,7 +235,7 @@ const BlogPost = () => {
             
             <div className="lg:w-1/3 space-y-8">
               {/* Tags Section - Desktop */}
-              <div className="hidden lg:block bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm">
+              <div className="hidden lg:block bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm animate-fade-in">
                 <h3 className="text-lg font-semibold mb-4 flex items-center">
                   <Tag className="w-5 h-5 mr-2 text-indigo" />
                   Tags
@@ -247,14 +253,14 @@ const BlogPost = () => {
               
               {/* Related Posts */}
               {relatedPosts.length > 0 && (
-                <div className="bg-gradient-to-r from-gray-50 to-teal-50 dark:from-gray-900 dark:to-teal-950/30 p-6 rounded-xl shadow-sm">
+                <div className="bg-gradient-to-r from-gray-50 to-teal-50 dark:from-gray-900 dark:to-teal-950/30 p-6 rounded-xl shadow-sm animate-fade-in" style={{ animationDelay: '0.2s' }}>
                   <h3 className="text-lg font-semibold mb-4 border-l-4 border-indigo pl-3">
                     Related Articles
                   </h3>
                   <div className="space-y-4">
-                    {relatedPosts.map(post => (
+                    {relatedPosts.map((post, idx) => (
                       <Link key={post.id} to={`/blog/${post.slug}`} className="block group">
-                        <div className="flex gap-3 p-3 rounded-lg hover:bg-white/60 dark:hover:bg-gray-800/60 transition-colors">
+                        <div className="flex gap-3 p-3 rounded-lg hover:bg-white/60 dark:hover:bg-gray-800/60 transition-colors animate-fade-in" style={{ animationDelay: `${0.1 * (idx + 1)}s` }}>
                           <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded-md">
                             <img 
                               src={post.coverImage || "https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"} 
@@ -281,7 +287,7 @@ const BlogPost = () => {
               )}
               
               {/* Table of Contents - New Feature */}
-              <div className="bg-gradient-to-r from-teal-50 to-indigo-50 dark:from-teal-950/30 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm">
+              <div className="bg-gradient-to-r from-teal-50 to-indigo-50 dark:from-teal-950/30 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm animate-fade-in" style={{ animationDelay: '0.3s' }}>
                 <h3 className="text-lg font-semibold mb-4 flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-indigo" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
@@ -312,7 +318,7 @@ const BlogPost = () => {
           <Separator className="my-12" />
           
           {/* Call to Action */}
-          <div className="text-center bg-gradient-to-r from-indigo-50/70 to-teal-50/70 dark:from-indigo-950/40 dark:to-teal-950/40 p-10 rounded-2xl shadow-lg transform hover:scale-[1.01] transition-transform duration-300">
+          <div className="text-center bg-gradient-to-r from-indigo-50/70 to-teal-50/70 dark:from-indigo-950/40 dark:to-teal-950/40 p-10 rounded-2xl shadow-lg transform hover:scale-[1.01] transition-transform duration-300 animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <div className="inline-flex items-center justify-center p-4 bg-indigo/10 dark:bg-indigo/20 rounded-full mb-6">
               <Calendar className="h-8 w-8 text-indigo" />
             </div>

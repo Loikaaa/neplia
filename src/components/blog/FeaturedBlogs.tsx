@@ -25,7 +25,7 @@ const FeaturedBlogs = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 animate-fade-in">
           {featuredPosts.map((post, index) => (
             <BlogCard 
               key={post.id}
@@ -37,7 +37,7 @@ const FeaturedBlogs = () => {
         </div>
         
         <div className="text-center">
-          <Button asChild size="lg" className="px-8 bg-gradient-to-r from-indigo to-purple-600 hover:from-indigo-600 hover:to-purple-700 transition-all shadow-md">
+          <Button asChild size="lg" className="px-8 bg-gradient-to-r from-indigo to-purple-600 hover:from-indigo-600 hover:to-purple-700 transition-all shadow-md hover:shadow-lg">
             <Link to="/blog" className="flex items-center gap-2">
               Browse All Articles
               <ArrowRight className="h-4 w-4" />
