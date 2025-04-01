@@ -49,8 +49,8 @@ import Settings from './pages/admin/Settings';
 function App() {
   return (
     <div className="app">
-      <AdminLink />
       <Router>
+        <AdminLink />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
