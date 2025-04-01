@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Headphones, BookOpen, Edit, MessageSquare, BarChart3, Calendar, ArrowRight, CheckCircle, Globe, Award, Microphone } from 'lucide-react';
+import { Headphones, BookOpen, Edit, MessageSquare, BarChart3, Calendar, ArrowRight, CheckCircle, Globe, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -87,7 +86,6 @@ const FeatureSection = () => {
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 relative">
-        {/* Background decorative elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute -top-24 -left-24 w-64 h-64 bg-purple-200 dark:bg-purple-900/20 rounded-full opacity-30 blur-3xl"></div>
           <div className="absolute top-1/4 -right-24 w-80 h-80 bg-teal-200 dark:bg-teal-900/20 rounded-full opacity-30 blur-3xl"></div>
@@ -109,7 +107,6 @@ const FeatureSection = () => {
             </div>
           </FeatureAnimation>
 
-          {/* Exam Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             {examFeatures.map((exam, index) => (
               <FeatureAnimation key={index} delay={index * 0.1}>
@@ -160,7 +157,6 @@ const FeatureSection = () => {
             ))}
           </div>
 
-          {/* Additional Features */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             {additionalFeatures.map((feature, index) => (
               <FeatureAnimation key={index} delay={feature.delay}>

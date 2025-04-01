@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Index from "./pages/Index";
@@ -28,6 +29,22 @@ import CategoryDetail from "./pages/CategoryDetail";
 import ResourceDetail from "./pages/ResourceDetail";
 import Blog from "./pages/Blog";
 import AdminLink from '@/components/AdminLink';
+// Footer Pages
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import Cookies from './pages/Cookies';
+import Contact from './pages/Contact';
+// Admin Pages
+import Dashboard from './pages/admin/Dashboard';
+import ResourceManagement from './pages/admin/ResourceManagement';
+import BlogPostCMS from './pages/admin/BlogPostCMS';
+import ExamSectionPage from './pages/admin/ExamSectionPage';
+import ReadingTaskCMS from './pages/admin/ReadingTaskCMS';
+import WritingTaskCMS from './pages/admin/WritingTaskCMS';
+import SpeakingReviewPage from './pages/admin/SpeakingReviewPage';
+import UsersCMS from './pages/admin/UsersCMS';
+import Marketing from './pages/admin/Marketing';
+import Settings from './pages/admin/Settings';
 
 function App() {
   return (
