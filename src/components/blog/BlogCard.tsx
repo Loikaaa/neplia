@@ -16,6 +16,12 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ post, variant = 'default', className }: BlogCardProps) => {
+  // Ensure we have a valid image URL
+  const coverImage = post.coverImage || "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80";
+  
+  // Ensure we have a valid author avatar
+  const authorAvatar = post.author.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80";
+  
   return (
     <Card className={cn(
       "h-full overflow-hidden transition-all duration-300 hover:shadow-lg border border-gray-200 dark:border-gray-800 hover:transform hover:scale-[1.01]",
@@ -30,7 +36,7 @@ const BlogCard = ({ post, variant = 'default', className }: BlogCardProps) => {
         )}>
           <AspectRatio ratio={variant === 'featured' ? 4/3 : 16/9}>
             <img 
-              src={post.coverImage} 
+              src={coverImage} 
               alt={post.title} 
               className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
             />
@@ -99,8 +105,8 @@ const BlogCard = ({ post, variant = 'default', className }: BlogCardProps) => {
               
               <div className="flex items-center mt-4">
                 <Avatar className="h-8 w-8 mr-2 ring-2 ring-indigo-100 dark:ring-indigo-900">
-                  {post.author.avatar ? (
-                    <AvatarImage src={post.author.avatar} alt={post.author.name} />
+                  {authorAvatar ? (
+                    <AvatarImage src={authorAvatar} alt={post.author.name} />
                   ) : (
                     <AvatarFallback>
                       <User className="h-4 w-4 text-gray-500" />
