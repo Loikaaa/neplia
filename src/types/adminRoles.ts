@@ -5,7 +5,8 @@ export type AdminRole =
   | 'manager'
   | 'teacher'
   | 'instructor'
-  | 'marketing';
+  | 'marketing'
+  | 'student';
 
 export interface AdminRolePermission {
   id: string;
@@ -74,6 +75,13 @@ export const adminRoleDefinitions: Record<AdminRole, AdminRoleDefinition> = {
     description: 'Manages marketing campaigns, blog posts, and promotional content',
     permissions: ['manage_blog', 'manage_promotions', 'view_analytics'],
     color: 'purple'
+  },
+  student: {
+    id: 'student',
+    name: 'Student',
+    description: 'Access to learning materials and can take tests',
+    permissions: ['access_content', 'take_tests', 'view_progress'],
+    color: 'slate'
   }
 };
 
@@ -91,5 +99,8 @@ export const adminPermissions: AdminRolePermission[] = [
   { id: 'evaluate_speaking', name: 'Evaluate Speaking', description: 'Review and grade speaking tests' },
   { id: 'evaluate_writing', name: 'Evaluate Writing', description: 'Review and grade writing tests' },
   { id: 'manage_blog', name: 'Manage Blog', description: 'Create and edit blog posts' },
-  { id: 'manage_promotions', name: 'Manage Promotions', description: 'Create and manage promotional content' }
+  { id: 'manage_promotions', name: 'Manage Promotions', description: 'Create and manage promotional content' },
+  { id: 'access_content', name: 'Access Content', description: 'Access learning materials and resources' },
+  { id: 'take_tests', name: 'Take Tests', description: 'Participate in tests and assessments' },
+  { id: 'view_progress', name: 'View Progress', description: 'View personal learning progress' }
 ];
