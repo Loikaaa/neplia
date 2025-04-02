@@ -8,15 +8,30 @@ import { ReadingQuestions } from './ReadingQuestions';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Lock } from 'lucide-react';
+import { useUserProgress } from '@/services/userProgressService';
 
 export const ReadingTest = () => {
   const [currentPassage, setCurrentPassage] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [testCompleted, setTestCompleted] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(60 * 60); // 60 minutes in seconds
-  const { toast } = useToast();
+  const [score, setScore] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
   
+  const { toast } = useToast();
+  const { trackCompletion } = useUserProgress();
   const testData = readingTestData;
+
+  // Check login status on component mount
+  useEffect(() => {
+    const loggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
+    setIsLoggedIn(loggedIn);
+  }, []);
 
   // Timer effect
   useEffect(() => {
@@ -55,13 +70,57 @@ export const ReadingTest = () => {
     }));
   };
 
-  const submitTest = () => {
+  const calculateScore = () => {
+    // A simple scoring algorithm that gives a point for each answer
+    // In a real app, you would check against correct answers
+    const answeredQuestions = Object.keys(userAnswers).length;
+    const totalQuestions = testData.passages.reduce(
+      (total, passage) => total + passage.questions.length, 
+      0
+    );
+    
+    // Calculate percentage and convert to 0-100 scale
+    const percentageCorrect = (answeredQuestions / totalQuestions) * 100;
+    
+    // Add some randomness for demo purposes
+    const baseScore = Math.min(percentageCorrect + (Math.random() * 20 - 10), 100);
+    return Math.max(0, Math.round(baseScore));
+  };
+
+  const submitTest = async () => {
+    if (!isLoggedIn) {
+      setShowLoginDialog(true);
+      return;
+    }
+    
+    // Calculate score
+    const calculatedScore = calculateScore();
+    setScore(calculatedScore);
+    
     // In a real app, you would send the answers to the server
-    // For now, we'll just mark the test as completed
     setTestCompleted(true);
+    
+    // Track completion
+    await trackCompletion('reading', calculatedScore);
+    
     toast({
       title: "Test submitted",
       description: "Your reading test has been submitted successfully.",
+    });
+  };
+  
+  const handleLogin = () => {
+    // In a real app, this would authenticate with a server
+    localStorage.setItem('demoUserLoggedIn', 'true');
+    setIsLoggedIn(true);
+    setShowLoginDialog(false);
+    
+    // Continue with test submission after login
+    submitTest();
+    
+    toast({
+      title: "Logged In",
+      description: "You have successfully logged in.",
     });
   };
 
@@ -169,14 +228,68 @@ export const ReadingTest = () => {
               Test Completed!
             </h3>
             <p className="text-green-700 dark:text-green-400 mb-4">
-              Your answers have been submitted. You can now view your results.
+              Your reading test score: {score}/100
             </p>
             <Button className="bg-green-600 hover:bg-green-700">
-              View Results
+              View Detailed Results
             </Button>
           </CardContent>
         </Card>
       )}
+      
+      {/* Login Dialog */}
+      <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Sign In Required</DialogTitle>
+            <DialogDescription>
+              You need to sign in to submit your test and track your progress.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium">Email</label>
+              <Input 
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                value={loginData.email}
+                onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-medium">Password</label>
+              <Input 
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={loginData.password}
+                onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+              />
+            </div>
+            
+            <p className="text-sm text-muted-foreground">
+              This is a demo login. For testing, any email and password will work.
+            </p>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowLoginDialog(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleLogin}
+              className="gap-2"
+              disabled={!loginData.email || !loginData.password}
+            >
+              <Lock className="h-4 w-4" />
+              Sign In
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

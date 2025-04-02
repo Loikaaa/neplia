@@ -11,6 +11,7 @@ import {
   BarChart3, MessageSquare, FileImage, PenTool, Brain, Mail, Megaphone
 } from 'lucide-react';
 import { NotificationBadge } from './NotificationBadge';
+import { adminRoleDefinitions, AdminRole } from '@/types/adminRoles';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -19,19 +20,26 @@ interface AdminLayoutProps {
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const location = useLocation();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  // Mock current admin role - in a real app, this would come from auth
+  const currentAdminRole: AdminRole = 'super_admin';
 
   const navItems = [
-    { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/admin/users', label: 'Users', icon: Users },
-    { href: '/admin/resources', label: 'Resources', icon: FileImage },
-    { href: '/admin/exam-sections', label: 'Exam Sections', icon: FileText },
-    { href: '/admin/reading-tasks', label: 'Reading Tasks', icon: BookOpen },
-    { href: '/admin/writing-tasks', label: 'Writing Tasks', icon: PenTool },
-    { href: '/admin/speaking-review', label: 'Speaking Review', icon: MessageSquare, notifications: 5 },
-    { href: '/admin/blog-posts', label: 'Blog Posts', icon: FileText },
-    { href: '/admin/marketing', label: 'Marketing', icon: Megaphone },
-    { href: '/admin/settings', label: 'Settings', icon: Settings },
+    { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, roles: ['super_admin', 'admin', 'manager', 'teacher', 'instructor', 'marketing'] },
+    { href: '/admin/users', label: 'Users', icon: Users, roles: ['super_admin', 'admin', 'manager'] },
+    { href: '/admin/resources', label: 'Resources', icon: FileImage, roles: ['super_admin', 'admin', 'teacher'] },
+    { href: '/admin/exam-sections', label: 'Exam Sections', icon: FileText, roles: ['super_admin', 'admin', 'teacher'] },
+    { href: '/admin/reading-tasks', label: 'Reading Tasks', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
+    { href: '/admin/writing-tasks', label: 'Writing Tasks', icon: PenTool, roles: ['super_admin', 'admin', 'teacher', 'instructor'] },
+    { href: '/admin/speaking-review', label: 'Speaking Review', icon: MessageSquare, roles: ['super_admin', 'admin', 'instructor'], notifications: 5 },
+    { href: '/admin/blog-posts', label: 'Blog Posts', icon: FileText, roles: ['super_admin', 'admin', 'marketing'] },
+    { href: '/admin/marketing', label: 'Marketing', icon: Megaphone, roles: ['super_admin', 'admin', 'marketing'] },
+    { href: '/admin/settings', label: 'Settings', icon: Settings, roles: ['super_admin', 'admin'] },
   ];
+
+  // Filter nav items based on role
+  const filteredNavItems = navItems.filter(item => 
+    item.roles.includes(currentAdminRole)
+  );
 
   const isLinkActive = (path: string) => {
     return location.pathname === path;
@@ -39,6 +47,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
   const closeMobileNav = () => {
     setIsMobileNavOpen(false);
+  };
+
+  const getAdminRoleBadgeColor = (role: AdminRole) => {
+    const roleDefinition = adminRoleDefinitions[role];
+    return roleDefinition ? roleDefinition.color : 'gray';
   };
 
   return (
@@ -58,10 +71,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             </div>
             <span className="text-xl font-bold">Neplia Admin</span>
           </Link>
+          <div className="mt-2 text-xs px-1 py-0.5 rounded bg-red-100 text-red-800 inline-block">
+            {adminRoleDefinitions[currentAdminRole].name}
+          </div>
         </div>
         <ScrollArea className="flex-1 py-2">
           <nav className="space-y-1 px-4">
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
@@ -73,7 +89,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               >
                 <item.icon className="h-5 w-5" />
                 <span>{item.label}</span>
-                {item.notifications && <span className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">{item.notifications}</span>}
+                {item.notifications && (
+                  <span className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
+                    {item.notifications}
+                  </span>
+                )}
               </Link>
             ))}
           </nav>
@@ -114,10 +134,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               </div>
               <span className="text-xl font-bold">Neplia Admin</span>
             </Link>
+            <div className="mt-2 text-xs px-1 py-0.5 rounded bg-red-100 text-red-800 inline-block">
+              {adminRoleDefinitions[currentAdminRole].name}
+            </div>
           </div>
           <ScrollArea className="h-[calc(100vh-8rem)]">
             <nav className="space-y-1 px-4 py-4">
-              {navItems.map((item) => (
+              {filteredNavItems.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
@@ -130,7 +153,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 >
                   <item.icon className="h-5 w-5" />
                   <span>{item.label}</span>
-                  {item.notifications && <span className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">{item.notifications}</span>}
+                  {item.notifications && (
+                    <span className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
+                      {item.notifications}
+                    </span>
+                  )}
                 </Link>
               ))}
             </nav>

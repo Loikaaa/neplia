@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import SpeakingHeader from '@/components/practice/speaking/SpeakingHeader';
 import { SpeakingInstructions } from '@/components/practice/speaking/SpeakingInstructions';
@@ -10,16 +10,30 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { NotificationBadge } from '@/components/admin/NotificationBadge';
+import { useUserProgress } from '@/services/userProgressService';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Lock } from 'lucide-react';
 
 const SpeakingPractice = () => {
   const [testStarted, setTestStarted] = useState(false);
   const [selectedTask, setSelectedTask] = useState<SpeakingTask | null>(null);
   const [testCompleted, setTestCompleted] = useState(false);
   const [finalScore, setFinalScore] = useState<number | null>(null);
-  const { toast } = useToast();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
   
-  const handleTestFinish = () => {
+  const { toast } = useToast();
+  const { trackCompletion } = useUserProgress();
+  
+  useEffect(() => {
+    // Check login status
+    const loggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
+    setIsLoggedIn(loggedIn);
+  }, []);
+  
+  const handleTestFinish = async () => {
     // In a real app, this would fetch the final score from the server
     // For demo purposes, we'll simulate a score
     const simulatedScore = 6 + Math.random() * 3;
@@ -29,9 +43,10 @@ const SpeakingPractice = () => {
     setTestCompleted(true);
     setTestStarted(false);
     
-    // Add notification to admin dashboard
-    const username = "User" + Math.floor(Math.random() * 1000);
-    console.log(`New speaking test submission from ${username} with score ${roundedScore}`);
+    // Track completion in progress system
+    if (isLoggedIn) {
+      await trackCompletion('speaking', roundedScore * 10); // Convert to 0-100 scale
+    }
     
     toast({
       title: "Test Evaluation Complete",
@@ -43,6 +58,27 @@ const SpeakingPractice = () => {
     setTestCompleted(false);
     setSelectedTask(null);
     setFinalScore(null);
+  };
+  
+  const handleLogin = () => {
+    // In a real app, this would authenticate with a server
+    localStorage.setItem('demoUserLoggedIn', 'true');
+    setIsLoggedIn(true);
+    setShowLoginDialog(false);
+    
+    toast({
+      title: "Logged In",
+      description: "You have successfully logged in.",
+    });
+  };
+  
+  const handleStartTask = () => {
+    if (!isLoggedIn) {
+      setShowLoginDialog(true);
+      return;
+    }
+    
+    setTestStarted(true);
   };
   
   return (
@@ -82,7 +118,7 @@ const SpeakingPractice = () => {
             ) : (
               <SpeakingInstructions 
                 task={selectedTask}
-                onStart={() => setTestStarted(true)} 
+                onStart={handleStartTask} 
                 onBack={() => setSelectedTask(null)}
               />
             )}
@@ -91,6 +127,60 @@ const SpeakingPractice = () => {
           <SpeakingTest task={selectedTask!} onFinish={handleTestFinish} />
         )}
       </div>
+      
+      {/* Login Dialog */}
+      <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Sign In Required</DialogTitle>
+            <DialogDescription>
+              You need to sign in to track your progress and take the speaking test.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium">Email</label>
+              <Input 
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                value={loginData.email}
+                onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-medium">Password</label>
+              <Input 
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={loginData.password}
+                onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+              />
+            </div>
+            
+            <p className="text-sm text-muted-foreground">
+              This is a demo login. For testing, any email and password will work.
+            </p>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowLoginDialog(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleLogin}
+              className="gap-2"
+              disabled={!loginData.email || !loginData.password}
+            >
+              <Lock className="h-4 w-4" />
+              Sign In
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };

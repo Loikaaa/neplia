@@ -148,6 +148,37 @@ export const completeSection = async (
   return await saveProgress(performanceData);
 };
 
+// Get all speaking test submissions for admin review
+export const getSpeakingSubmissions = (): Promise<any[]> => {
+  return new Promise((resolve) => {
+    try {
+      // Get progress data from localStorage
+      const progressDataString = localStorage.getItem('userProgressData');
+      const progressData = progressDataString ? JSON.parse(progressDataString) : [];
+      
+      // Filter speaking submissions
+      const speakingSubmissions = progressData.filter((item: any) => item.section === 'speaking');
+      
+      // Add mock response data if available
+      const submissionsWithResponses = speakingSubmissions.map((submission: any) => {
+        return {
+          ...submission,
+          userId: submission.userId,
+          responseAudio: 'https://example.com/mock-audio.mp3', // Mock audio URL
+          responseText: 'This is a mock transcription of the speaking response.',
+          reviewed: submission.reviewed || false
+        };
+      });
+      
+      // Simulate network delay
+      setTimeout(() => resolve(submissionsWithResponses), 600);
+    } catch (error) {
+      console.error("Error fetching speaking submissions:", error);
+      resolve([]);
+    }
+  });
+};
+
 // Use this hook in components to track user performance
 export const useUserProgress = () => {
   const { toast } = useToast();
@@ -198,6 +229,7 @@ export const useUserProgress = () => {
   
   return {
     trackCompletion,
-    getUserProgress
+    getUserProgress,
+    getSpeakingSubmissions
   };
 };
