@@ -1,4 +1,3 @@
-
 import { BlogPost, BlogCategory } from "@/types/blog";
 import { generateAdditionalBlogPosts } from "@/utils/blogGenerator";
 
@@ -742,4 +741,110 @@ To master SAT Math, follow this structured practice plan:
   }
 ];
 
-// The rest of the file would continue here...
+export const blogPosts: BlogPost[] = [
+  ...originalBlogPosts,
+  ...generateAdditionalBlogPosts(20)
+];
+
+export const getFeaturedPosts = (count: number = 3): BlogPost[] => {
+  const explicitlyFeatured = blogPosts.filter(post => post.featured === true);
+  
+  if (explicitlyFeatured.length >= count) {
+    return explicitlyFeatured.slice(0, count);
+  }
+  
+  const recentPosts = blogPosts
+    .filter(post => !explicitlyFeatured.includes(post))
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  
+  return [...explicitlyFeatured, ...recentPosts].slice(0, count);
+};
+
+export const blogCategories: BlogCategory[] = (() => {
+  const categories: { [key: string]: number } = {};
+  
+  blogPosts.forEach(post => {
+    const category = post.category;
+    categories[category] = (categories[category] || 0) + 1;
+  });
+  
+  const categoryArray: BlogCategory[] = Object.keys(categories).map(name => ({
+    name,
+    slug: name.toLowerCase().replace(/\s+/g, '-'),
+    count: categories[name]
+  }));
+  
+  const totalPosts = blogPosts.length;
+  categoryArray.unshift({
+    name: "All Posts",
+    slug: "all",
+    count: totalPosts
+  });
+  
+  return categoryArray;
+})();
+
+export const getTags = (): string[] => {
+  const tagsSet = new Set<string>();
+  
+  blogPosts.forEach(post => {
+    post.tags.forEach(tag => tagsSet.add(tag));
+  });
+  
+  return Array.from(tagsSet);
+};
+
+export const getRelatedPosts = (currentPostId: string, count: number = 3): BlogPost[] => {
+  const currentPost = blogPosts.find(post => post.id === currentPostId);
+  
+  if (!currentPost) {
+    return [];
+  }
+  
+  const scoredPosts = blogPosts
+    .filter(post => post.id !== currentPostId)
+    .map(post => {
+      const matchingTags = post.tags.filter(tag => 
+        currentPost.tags.includes(tag)
+      ).length;
+      
+      const categoryMatch = post.category === currentPost.category ? 3 : 0;
+      
+      const score = matchingTags + categoryMatch;
+      
+      return { post, score };
+    })
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score);
+  
+  if (scoredPosts.length < count) {
+    const sameCategoryPosts = blogPosts
+      .filter(post => 
+        post.id !== currentPostId && 
+        post.category === currentPost.category &&
+        !scoredPosts.some(item => item.post.id === post.id)
+      )
+      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+      .slice(0, count - scoredPosts.length);
+    
+    sameCategoryPosts.forEach(post => {
+      scoredPosts.push({ post, score: 1 });
+    });
+  }
+  
+  if (scoredPosts.length < count) {
+    const recentPosts = blogPosts
+      .filter(post => 
+        post.id !== currentPostId && 
+        !scoredPosts.some(item => item.post.id === post.id)
+      )
+      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+      .slice(0, count - scoredPosts.length);
+    
+    recentPosts.forEach(post => {
+      scoredPosts.push({ post, score: 0 });
+    });
+  }
+  
+  return scoredPosts.slice(0, count).map(item => item.post);
+};
