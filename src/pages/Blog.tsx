@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import BlogCard from '@/components/blog/BlogCard';
@@ -149,27 +150,38 @@ const Blog = () => {
     <Layout>
       <div className="container mx-auto px-4 py-8 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 bg-gradient-to-r from-indigo-50 via-indigo-100 to-purple-50 dark:from-indigo-950/30 dark:via-indigo-900/20 dark:to-purple-950/30 p-10 rounded-2xl shadow-md relative overflow-hidden animate-fade-in">
-            <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-            <div className="relative z-10">
-              <div className="inline-flex items-center justify-center p-3 bg-indigo-100 dark:bg-indigo-900/40 rounded-full mb-4 animate-scale-in">
-                <BookOpen className="h-7 w-7 text-indigo" />
+          {/* Header Section with Parallax Effect */}
+          <div className="text-center mb-12 relative h-80 overflow-hidden rounded-3xl shadow-xl animate-fade-in">
+            <div 
+              className="absolute inset-0 bg-cover bg-center transform hover:scale-105 transition-transform duration-2000 ease-out"
+              style={{
+                backgroundImage: `url('https://images.unsplash.com/photo-1519791883288-dc8bd696e667?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`,
+                backgroundPosition: '0 40%'
+              }}
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-indigo-800/60 via-indigo-800/70 to-indigo-900/90"></div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
+              <div className="relative z-10">
+                <div className="inline-flex items-center justify-center p-3 bg-white/20 backdrop-blur-md rounded-full mb-4 animate-scale-in">
+                  <BookOpen className="h-8 w-8 text-white" />
+                </div>
+                <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white drop-shadow-lg font-heading">
+                  Neplia Knowledge
+                </h1>
+                <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto drop-shadow-md">
+                  Expert guides to accelerate your exam success
+                </p>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo via-purple to-pink-500 bg-clip-text text-transparent">
-                Neplia Blog
-              </h1>
-              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                Expert guides, tips and resources to help you succeed in your exams and educational journey.
-              </p>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm mb-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+          {/* Filter & Search Section */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-8 border border-gray-100 dark:border-gray-700 animate-fade-in backdrop-blur-sm" style={{ animationDelay: '0.3s' }}>
             <div className="relative mb-6 transform transition duration-300 hover:scale-[1.01]">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo h-5 w-5" />
               <Input
                 placeholder="Search for articles, topics or keywords..."
-                className="pl-10 border-indigo/20 focus:border-indigo/60 transition-all"
+                className="pl-10 border-indigo/20 focus:border-indigo/60 transition-all bg-gray-50 dark:bg-gray-900"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -178,20 +190,20 @@ const Blog = () => {
             <div className="flex flex-wrap justify-between gap-4">
               <div className="flex flex-wrap gap-2">
                 <Select value={sortOption} onValueChange={setSortOption}>
-                  <SelectTrigger className="w-[150px]">
+                  <SelectTrigger className="w-[170px] border-indigo/20">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="newest">
                       <div className="flex items-center">
                         <Calendar className="mr-2 h-4 w-4" />
-                        Newest
+                        Newest First
                       </div>
                     </SelectItem>
                     <SelectItem value="oldest">
                       <div className="flex items-center">
                         <Calendar className="mr-2 h-4 w-4" />
-                        Oldest
+                        Oldest First
                       </div>
                     </SelectItem>
                     <SelectItem value="a-z">
@@ -237,38 +249,49 @@ const Blog = () => {
             )}
           </div>
 
+          {/* Category Tabs */}
           <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            <TabsList className="bg-gray-100 dark:bg-gray-800 p-1 overflow-x-auto flex flex-nowrap custom-scrollbar">
-              <TabsTrigger value="all" className="flex-shrink-0">
-                All Posts
-              </TabsTrigger>
-              {topCategories.map(category => (
-                <TabsTrigger key={category.slug} value={category.slug} className="flex-shrink-0">
-                  {category.name}
+            <div className="bg-white dark:bg-gray-800 p-2 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
+              <TabsList className="bg-gray-100 dark:bg-gray-800 p-1 overflow-x-auto flex flex-nowrap custom-scrollbar w-full">
+                <TabsTrigger value="all" className="flex-shrink-0 data-[state=active]:bg-indigo/90 data-[state=active]:text-white">
+                  All Posts
                 </TabsTrigger>
-              ))}
-            </TabsList>
+                {topCategories.map(category => (
+                  <TabsTrigger 
+                    key={category.slug} 
+                    value={category.slug} 
+                    className="flex-shrink-0 data-[state=active]:bg-indigo data-[state=active]:text-white"
+                  >
+                    {category.name}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
           </Tabs>
 
+          {/* Blog Posts Grid */}
           <div className="mb-10 animate-fade-in" style={{ animationDelay: '0.5s' }}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo to-purple bg-clip-text text-transparent">
                 {filteredPosts.length} {filteredPosts.length === 1 ? 'Article' : 'Articles'} Found
               </h2>
             </div>
 
             {displayedPosts.length === 0 ? (
-              <div className="text-center py-12 bg-gray-50 dark:bg-gray-800/50 rounded-lg shadow-inner">
+              <div className="text-center py-16 bg-gradient-to-r from-gray-50 to-indigo-50/30 dark:from-gray-800/50 dark:to-indigo-900/20 rounded-xl shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
                 <h3 className="text-xl font-medium mb-2">No articles found</h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
                   Try adjusting your search or filter to find what you're looking for.
                 </p>
-                <Button onClick={clearFilters} className="mt-4">Clear All Filters</Button>
+                <Button onClick={clearFilters} className="bg-indigo hover:bg-indigo-600">Clear All Filters</Button>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
                 {displayedPosts.map((post, idx) => (
-                  <div key={post.id} className="animate-fade-in" style={{ animationDelay: `${0.1 * (idx % 9)}s` }}>
+                  <div key={post.id} className="animate-fade-in transform hover:translate-y-[-5px] transition-all duration-300" style={{ animationDelay: `${0.1 * (idx % 9)}s` }}>
                     <BlogCard post={post} />
                   </div>
                 ))}
@@ -276,7 +299,7 @@ const Blog = () => {
             )}
 
             {totalPages > 1 && (
-              <Pagination className="mt-8">
+              <Pagination className="mt-12">
                 <PaginationContent>
                   <PaginationItem>
                     <PaginationPrevious 
@@ -301,6 +324,7 @@ const Blog = () => {
                             handlePageChange(page as number);
                           }}
                           isActive={currentPage === page}
+                          className={currentPage === page ? "bg-indigo text-white" : ""}
                         >
                           {page}
                         </PaginationLink>
@@ -323,25 +347,46 @@ const Blog = () => {
             )}
           </div>
 
-          <div className="p-8 bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 rounded-xl shadow-sm animate-fade-in" style={{ animationDelay: '0.6s' }}>
-            <div className="flex items-center mb-4">
-              <TagIcon className="h-5 w-5 text-indigo mr-2" />
-              <h3 className="text-lg font-semibold text-indigo">Popular Topics</h3>
+          {/* Popular Topics Section */}
+          <div className="p-8 bg-gradient-to-r from-indigo-50/70 to-purple-50/70 dark:from-indigo-950/30 dark:to-purple-950/20 rounded-xl shadow-md border border-indigo-100/50 dark:border-indigo-900/20 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+            <div className="flex items-center mb-6">
+              <div className="p-3 bg-indigo-100 dark:bg-indigo-900/40 rounded-full mr-3">
+                <TagIcon className="h-5 w-5 text-indigo" />
+              </div>
+              <h3 className="text-xl font-bold bg-gradient-to-r from-indigo to-purple bg-clip-text text-transparent">Popular Topics</h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {allTags.slice(0, 20).map(tag => (
                 <button
                   key={tag}
                   onClick={() => handleTagClick(tag)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                     selectedTag === tag
-                      ? "bg-indigo text-white shadow-sm"
+                      ? "bg-gradient-to-r from-indigo to-purple text-white shadow-md"
                       : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 border border-gray-200 dark:border-gray-700"
                   }`}
                 >
                   {tag}
                 </button>
               ))}
+            </div>
+          </div>
+          
+          {/* Newsletter Subscription */}
+          <div className="mt-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg overflow-hidden animate-fade-in" style={{ animationDelay: '0.7s' }}>
+            <div className="p-8 md:p-10 relative">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mt-20 -mr-20 blur-3xl"></div>
+              <div className="relative z-10">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Stay Updated with Exam Tips</h3>
+                <p className="text-white/90 mb-6 max-w-2xl">Subscribe to our newsletter and get the latest exam preparation tips, strategies, and resources delivered directly to your inbox.</p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Input 
+                    placeholder="Enter your email address" 
+                    className="bg-white/20 backdrop-blur-sm border-white/30 text-white placeholder:text-white/70 flex-grow"
+                  />
+                  <Button className="bg-white text-indigo hover:bg-white/90">Subscribe</Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
