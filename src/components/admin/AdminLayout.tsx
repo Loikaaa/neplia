@@ -1,303 +1,158 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { 
-  FileText, 
-  BookOpen, 
-  MessageSquare, 
-  Users, 
-  Settings, 
-  LayoutDashboard,
-  Headphones,
-  MicIcon,
-  FileBox,
-  ChevronDown,
-  ChevronRight,
-  Menu,
-  X,
-  Calculator,
-  LogOut,
-  Mail
-} from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useToast } from "@/hooks/use-toast";
-import { NotificationBadge } from './NotificationBadge';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { 
+  LayoutDashboard, Users, FileText, BookOpen, Settings, Menu, 
+  BarChart3, MessageSquare, FileImage, PenTool, Brain, Mail, Megaphone
+} from 'lucide-react';
+import NotificationBadge from './NotificationBadge';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-interface ExamSection {
-  id: string;
-  name: string;
-  icon: React.ReactNode;
-}
-
-interface ExamType {
-  id: string;
-  name: string;
-  sections: ExamSection[];
-}
-
-const AdminLayout = ({ children }: AdminLayoutProps) => {
+const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    'exams': location.pathname.includes('/admin/exams')
-  });
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { toast } = useToast();
-  
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location.pathname]);
-  
-  useEffect(() => {
-    if (location.pathname.includes('/admin/exams')) {
-      const path = location.pathname.split('/');
-      if (path.length >= 4) {
-        const currentExamType = path[3];
-        setOpenSections(prev => ({
-          ...prev,
-          [`exam-${currentExamType}`]: true
-        }));
-      }
-    }
-  }, []);
-  
-  const toggleSection = (section: string) => {
-    setOpenSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
-  };
-  
-  const standardLanguageSkills: ExamSection[] = [
-    { id: 'reading', name: 'Reading', icon: <BookOpen className="h-5 w-5" /> },
-    { id: 'writing', name: 'Writing', icon: <FileText className="h-5 w-5" /> },
-    { id: 'listening', name: 'Listening', icon: <Headphones className="h-5 w-5" /> },
-    { id: 'speaking', name: 'Speaking', icon: <MicIcon className="h-5 w-5" /> },
-  ];
-  
-  const examTypes: ExamType[] = [
-    { 
-      id: 'ielts', 
-      name: 'IELTS', 
-      sections: standardLanguageSkills
-    },
-    { 
-      id: 'toefl', 
-      name: 'TOEFL', 
-      sections: standardLanguageSkills
-    },
-    { 
-      id: 'pte', 
-      name: 'PTE', 
-      sections: standardLanguageSkills
-    },
-    { 
-      id: 'sat', 
-      name: 'SAT', 
-      sections: [
-        { id: 'reading', name: 'Reading', icon: <BookOpen className="h-5 w-5" /> },
-        { id: 'writing', name: 'Writing', icon: <FileText className="h-5 w-5" /> },
-        { id: 'math', name: 'Math', icon: <Calculator className="h-5 w-5" /> }
-      ] 
-    },
-    { 
-      id: 'gre', 
-      name: 'GRE', 
-      sections: [
-        { id: 'verbal', name: 'Verbal', icon: <BookOpen className="h-5 w-5" /> },
-        { id: 'quantitative', name: 'Quantitative', icon: <Calculator className="h-5 w-5" /> },
-        { id: 'analytical', name: 'Analytical Writing', icon: <FileText className="h-5 w-5" /> }
-      ] 
-    },
-    { 
-      id: 'gmat', 
-      name: 'GMAT', 
-      sections: [
-        { id: 'verbal', name: 'Verbal', icon: <BookOpen className="h-5 w-5" /> },
-        { id: 'quantitative', name: 'Quantitative', icon: <Calculator className="h-5 w-5" /> },
-        { id: 'integrated-reasoning', name: 'Integrated Reasoning', icon: <FileText className="h-5 w-5" /> },
-        { id: 'analytical', name: 'Analytical Writing', icon: <FileText className="h-5 w-5" /> }
-      ] 
-    },
-  ];
-  
-  const mainNavItems = [
-    { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard className="h-5 w-5" /> },
-    { name: 'Blog Posts', path: '/admin/blog-posts', icon: <MessageSquare className="h-5 w-5" /> },
-    { name: 'Users', path: '/admin/users', icon: <Users className="h-5 w-5" /> },
-    { name: 'Marketing', path: '/admin/marketing', icon: <Mail className="h-5 w-5" /> },
-    { name: 'Settings', path: '/admin/settings', icon: <Settings className="h-5 w-5" /> },
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+  const navItems = [
+    { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/admin/users', label: 'Users', icon: Users },
+    { href: '/admin/resources', label: 'Resources', icon: FileImage },
+    { href: '/admin/exam-sections', label: 'Exam Sections', icon: FileText },
+    { href: '/admin/reading-tasks', label: 'Reading Tasks', icon: BookOpen },
+    { href: '/admin/writing-tasks', label: 'Writing Tasks', icon: PenTool },
+    { href: '/admin/speaking-review', label: 'Speaking Review', icon: MessageSquare, notifications: 5 },
+    { href: '/admin/blog-posts', label: 'Blog Posts', icon: FileText },
+    { href: '/admin/marketing', label: 'Marketing', icon: Megaphone },
+    { href: '/admin/settings', label: 'Settings', icon: Settings },
   ];
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('demoAdminLoggedIn');
-    
-    toast({
-      title: "Logged Out",
-      description: "You have been successfully logged out",
-    });
-    
-    navigate('/admin/login');
+  const isLinkActive = (path: string) => {
+    return location.pathname === path;
   };
 
-  const isActivePath = (path: string) => {
-    return location.pathname === path || location.pathname.startsWith(`${path}/`);
-  };
-
-  const isActiveExamSection = (examType: string, section: string) => {
-    return location.pathname === `/admin/exams/${examType}/${section}`;
-  };
-
-  const isActiveExamType = (examType: string) => {
-    return location.pathname.includes(`/admin/exams/${examType}`);
+  const closeMobileNav = () => {
+    setIsMobileNavOpen(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
-      <div className="flex h-16 items-center justify-between border-b bg-white dark:bg-gray-800 px-4 md:px-6">
-        <div className="flex items-center gap-2">
-          <button 
-            className="md:hidden text-gray-700 dark:text-gray-200 focus:outline-none"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+    <div className="flex min-h-screen bg-background">
+      {/* Desktop Navigation */}
+      <aside className="hidden lg:flex w-64 flex-col border-r bg-white dark:bg-gray-950">
+        <div className="p-6">
           <Link to="/admin" className="flex items-center gap-2">
-            <h1 className="text-xl font-bold">Neplia Admin</h1>
-          </Link>
-        </div>
-        <div className="flex items-center gap-3">
-          <NotificationBadge />
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="flex items-center gap-1 text-red-500 hover:text-red-600 hover:bg-red-50"
-            onClick={handleLogout}
-          >
-            <LogOut className="h-4 w-4" />
-            <span className="hidden sm:inline">Logout</span>
-          </Button>
-          <Link to="/">
-            <Button variant="outline" size="sm">Back to Site</Button>
-          </Link>
-        </div>
-      </div>
-      <div className="flex flex-1 overflow-hidden">
-        <div 
-          className={cn(
-            "fixed inset-0 z-40 bg-black/50 md:hidden transition-opacity duration-200",
-            mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-          )}
-          onClick={() => setMobileMenuOpen(false)}
-        />
-        
-        <aside 
-          className={cn(
-            "fixed md:sticky top-16 md:top-0 bottom-0 left-0 z-50 w-64 border-r bg-white dark:bg-gray-800 transition-transform duration-300 md:translate-x-0 h-[calc(100vh-4rem)] md:h-screen",
-            mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          )}
-        >
-          <ScrollArea className="h-full">
-            <div className="p-4">
-              <nav className="flex flex-col gap-1">
-                {mainNavItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700",
-                      isActivePath(item.path) && "bg-gray-100 dark:bg-gray-700 font-medium"
-                    )}
-                  >
-                    {item.icon}
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
-                
-                <Collapsible
-                  open={openSections['exams']}
-                  onOpenChange={() => toggleSection('exams')}
-                  className="w-full"
-                >
-                  <CollapsibleTrigger className={cn(
-                    "flex w-full items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700",
-                    location.pathname.includes('/admin/exams') && "bg-gray-100 dark:bg-gray-700 font-medium"
-                  )}>
-                    <div className="flex items-center gap-3">
-                      <FileBox className="h-5 w-5" />
-                      <span>Exam Types</span>
-                    </div>
-                    {openSections['exams'] ? (
-                      <ChevronDown className="h-4 w-4" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4" />
-                    )}
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="pl-4 pt-2">
-                    {examTypes.map((exam) => (
-                      <Collapsible key={exam.id} 
-                        open={openSections[`exam-${exam.id}`] || isActiveExamType(exam.id)} 
-                        onOpenChange={() => {
-                          const examId = `exam-${exam.id}`;
-                          setOpenSections(prev => ({
-                            ...prev,
-                            [examId]: !prev[examId]
-                          }));
-                        }}
-                        className="w-full"
-                      >
-                        <CollapsibleTrigger className={cn(
-                          "flex w-full items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-gray-100 dark:hover:bg-gray-700 my-1",
-                          isActiveExamType(exam.id) && "bg-gray-100 dark:bg-gray-700 font-medium"
-                        )}>
-                          <div className="flex items-center gap-3">
-                            <span>{exam.name}</span>
-                          </div>
-                          {openSections[`exam-${exam.id}`] || isActiveExamType(exam.id) ? (
-                            <ChevronDown className="h-4 w-4" />
-                          ) : (
-                            <ChevronRight className="h-4 w-4" />
-                          )}
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="pl-4 pt-1">
-                          {exam.sections.map((section) => (
-                            <Link
-                              key={section.id}
-                              to={`/admin/exams/${exam.id}/${section.id}`}
-                              className={cn(
-                                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-gray-100 dark:hover:bg-gray-700 my-1",
-                                isActiveExamSection(exam.id, section.id) && "bg-gray-100 dark:bg-gray-700 font-medium"
-                              )}
-                            >
-                              {section.icon}
-                              <span>{section.name}</span>
-                            </Link>
-                          ))}
-                        </CollapsibleContent>
-                      </Collapsible>
-                    ))}
-                  </CollapsibleContent>
-                </Collapsible>
-              </nav>
+            <div className="rounded-md bg-indigo p-1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L20 7V17L12 22L4 17V7L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M12 22V16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M20 7L12 12L4 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M4 17L12 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M20 17L12 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
-          </ScrollArea>
-        </aside>
-        <main className="flex-1 overflow-auto p-6">
-          <div className="container mx-auto">
-            {children}
+            <span className="text-xl font-bold">Neplia Admin</span>
+          </Link>
+        </div>
+        <ScrollArea className="flex-1 py-2">
+          <nav className="space-y-1 px-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                  isLinkActive(item.href)
+                    ? "bg-indigo text-white"
+                    : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                }`}
+              >
+                <item.icon className="h-5 w-5" />
+                <span>{item.label}</span>
+                {item.notifications && <NotificationBadge count={item.notifications} />}
+              </Link>
+            ))}
+          </nav>
+        </ScrollArea>
+        <div className="mt-auto border-t p-4">
+          <div className="flex items-center gap-3">
+            <Avatar>
+              <AvatarImage src="/images/admin-avatar.jpg" alt="Admin" />
+              <AvatarFallback>AD</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-medium">Admin User</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">admin@neplia.com</p>
+            </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </aside>
+
+      {/* Mobile Navigation */}
+      <Sheet open={isMobileNavOpen} onOpenChange={setIsMobileNavOpen}>
+        <SheetTrigger asChild>
+          <Button variant="ghost" size="icon" className="lg:hidden absolute left-4 top-4 z-50">
+            <Menu className="h-6 w-6" />
+            <span className="sr-only">Toggle navigation menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-64 p-0">
+          <div className="p-6 border-b">
+            <Link to="/admin" className="flex items-center gap-2" onClick={closeMobileNav}>
+              <div className="rounded-md bg-indigo p-1">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L20 7V17L12 22L4 17V7L12 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M12 22V16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M20 7L12 12L4 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M4 17L12 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M20 17L12 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <span className="text-xl font-bold">Neplia Admin</span>
+            </Link>
+          </div>
+          <ScrollArea className="h-[calc(100vh-8rem)]">
+            <nav className="space-y-1 px-4 py-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                    isLinkActive(item.href)
+                      ? "bg-indigo text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                  }`}
+                  onClick={closeMobileNav}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span>{item.label}</span>
+                  {item.notifications && <NotificationBadge count={item.notifications} />}
+                </Link>
+              ))}
+            </nav>
+          </ScrollArea>
+          <div className="border-t p-4">
+            <div className="flex items-center gap-3">
+              <Avatar>
+                <AvatarImage src="/images/admin-avatar.jpg" alt="Admin" />
+                <AvatarFallback>AD</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-sm font-medium">Admin User</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">admin@neplia.com</p>
+              </div>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto p-6 lg:p-8">
+        {children}
+      </main>
     </div>
   );
 };
