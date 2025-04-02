@@ -83,12 +83,6 @@ const examTypes = [
 
 const navLinks = [
   { name: 'Home', path: '/' },
-  { 
-    name: 'Practice', 
-    path: '/practice', 
-    highlight: true,
-    submenu: true
-  },
   { name: 'Resources', path: '/resources' },
   { name: 'Blog', path: '/blog' },
   { name: 'About', path: '/about' },
@@ -123,16 +117,16 @@ const Navbar = () => {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300 sticky-header',
         scrolled 
-          ? 'py-2 scrolled' 
-          : 'py-4 bg-transparent'
+          ? 'py-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white shadow-lg' 
+          : 'py-4 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30'
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <span className="font-heading text-xl md:text-2xl font-bold text-indigo">
-                Neplia<span className="text-coral">.</span>
+              <span className="font-heading text-xl md:text-2xl font-bold text-white dark:text-white">
+                Neplia<span className="text-pink-300 dark:text-pink-300">.</span>
               </span>
             </Link>
           </div>
@@ -142,65 +136,16 @@ const Navbar = () => {
               <NavigationMenuList className="gap-1">
                 {navLinks.map((link) => (
                   <NavigationMenuItem key={link.name}>
-                    {link.name === 'Practice' ? (
-                      <>
-                        <NavigationMenuTrigger 
-                          className={cn(
-                            "text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300 font-medium",
-                            link.highlight && "bg-indigo text-white hover:bg-indigo-600 hover:text-white dark:bg-indigo-600 dark:hover:bg-indigo-700",
-                            location.pathname.startsWith(link.path) && !link.highlight && "text-indigo dark:text-indigo-300",
-                            location.pathname.startsWith(link.path) && link.highlight && "bg-indigo-600 text-white dark:bg-indigo-700"
-                          )}
-                        >
-                          {link.name}
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                          <div className="w-[220px] p-4">
-                            <ul className="space-y-2">
-                              {examTypes.map((examType) => (
-                                <li key={examType.name} className="rounded-md transition-colors hover:bg-indigo-50 dark:hover:bg-indigo-900/30">
-                                  <NavigationMenuLink asChild>
-                                    <Link
-                                      to={examType.path}
-                                      className="flex items-center justify-between p-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300"
-                                    >
-                                      {examType.name}
-                                      <ChevronDown className="h-4 w-4" />
-                                    </Link>
-                                  </NavigationMenuLink>
-                                  <div className="absolute left-full top-0 z-10 mt-0 w-[280px] rounded-md border border-gray-200 bg-white p-2 shadow-md dark:border-gray-800 dark:bg-gray-900 hidden group-hover:block">
-                                    <ul className="space-y-1">
-                                      {examType.sections.map((section) => (
-                                        <li key={section.name}>
-                                          <Link
-                                            to={section.path}
-                                            className="flex items-center gap-2 rounded-md p-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo dark:text-gray-200 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-300"
-                                          >
-                                            {section.icon && <section.icon className="h-4 w-4" />}
-                                            <span>{section.name}</span>
-                                          </Link>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </NavigationMenuContent>
-                      </>
-                    ) : (
-                      <Link 
-                        to={link.path}
-                        className={cn(
-                          navigationMenuTriggerStyle(),
-                          "text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300 font-medium transition-colors",
-                          location.pathname === link.path && "text-indigo dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30"
-                        )}
-                      >
-                        {link.name}
-                      </Link>
-                    )}
+                    <Link 
+                      to={link.path}
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        "text-white dark:text-white hover:text-pink-200 dark:hover:text-pink-200 font-medium transition-colors",
+                        location.pathname === link.path && "text-pink-200 dark:text-pink-200 bg-white/10 dark:bg-white/10"
+                      )}
+                    >
+                      {link.name}
+                    </Link>
                   </NavigationMenuItem>
                 ))}
               </NavigationMenuList>
@@ -209,8 +154,8 @@ const Navbar = () => {
 
           <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-3">
-              <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                <Search className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              <button className="p-2 rounded-full hover:bg-white/10 transition-colors">
+                <Search className="h-5 w-5 text-white dark:text-white" />
               </button>
             </div>
 
@@ -222,80 +167,26 @@ const Navbar = () => {
                       <UserProfileMenu isMobile={true} />
                     </div>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-full sm:w-80 p-0">
+                  <SheetContent side="right" className="w-full sm:w-80 p-0 bg-gradient-to-br from-indigo-50 to-pink-50 dark:from-indigo-950 dark:to-pink-950">
                     <div className="flex flex-col h-full p-6">
                       <div className="flex items-center justify-between mb-8">
-                        <Link to="/" className="font-heading text-xl font-bold text-indigo">
-                          Neplia<span className="text-coral">.</span>
+                        <Link to="/" className="font-heading text-xl font-bold text-indigo-600 dark:text-indigo-400">
+                          Neplia<span className="text-pink-500 dark:text-pink-400">.</span>
                         </Link>
                       </div>
 
                       <nav className="flex-1 space-y-6">
                         {navLinks.map((link) => (
                           <div key={link.name} className="py-2">
-                            {link.name === 'Practice' ? (
-                              <Collapsible open={openSubmenu === link.name}>
-                                <CollapsibleTrigger asChild>
-                                  <Button
-                                    variant="ghost"
-                                    onClick={() => setOpenSubmenu(openSubmenu === link.name ? null : link.name)}
-                                    className={cn(
-                                      "flex w-full items-center justify-between p-2 text-lg font-medium",
-                                      link.highlight 
-                                        ? "text-indigo-600 dark:text-indigo-300 font-semibold" 
-                                        : "text-gray-700 dark:text-gray-200"
-                                    )}
-                                  >
-                                    {link.name}
-                                    <ChevronDown className={cn(
-                                      "h-5 w-5 transition-transform duration-200",
-                                      openSubmenu === link.name ? "rotate-180" : ""
-                                    )} />
-                                  </Button>
-                                </CollapsibleTrigger>
-                                <CollapsibleContent className="pl-2 space-y-2 mt-2">
-                                  {examTypes.map((examType) => (
-                                    <Collapsible key={examType.name} open={openExamType === examType.name}>
-                                      <CollapsibleTrigger asChild>
-                                        <Button
-                                          variant="ghost"
-                                          onClick={() => setOpenExamType(openExamType === examType.name ? null : examType.name)}
-                                          className="flex w-full items-center justify-between p-2 text-md font-medium text-indigo-600 dark:text-indigo-400"
-                                        >
-                                          {examType.name}
-                                          <ChevronDown className={cn(
-                                            "h-4 w-4 transition-transform duration-200",
-                                            openExamType === examType.name ? "rotate-180" : ""
-                                          )} />
-                                        </Button>
-                                      </CollapsibleTrigger>
-                                      <CollapsibleContent className="pl-4 space-y-1 mt-1">
-                                        {examType.sections.map((section) => (
-                                          <Link
-                                            key={section.name}
-                                            to={section.path}
-                                            className="flex items-center gap-2 py-2 px-2 text-gray-600 dark:text-gray-400 hover:text-indigo dark:hover:text-indigo-300 rounded-md transition-colors"
-                                          >
-                                            {section.icon && <section.icon className="h-4 w-4" />}
-                                            {section.name}
-                                          </Link>
-                                        ))}
-                                      </CollapsibleContent>
-                                    </Collapsible>
-                                  ))}
-                                </CollapsibleContent>
-                              </Collapsible>
-                            ) : (
-                              <Link
-                                to={link.path}
-                                className={cn(
-                                  "block text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300",
-                                  location.pathname === link.path && "text-indigo dark:text-indigo-300"
-                                )}
-                              >
-                                {link.name}
-                              </Link>
-                            )}
+                            <Link
+                              to={link.path}
+                              className={cn(
+                                "block text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-300",
+                                location.pathname === link.path && "text-indigo-600 dark:text-indigo-300"
+                              )}
+                            >
+                              {link.name}
+                            </Link>
                           </div>
                         ))}
                       </nav>
@@ -312,7 +203,7 @@ const Navbar = () => {
                 <div className="hidden md:block">
                   <Link 
                     to="/login" 
-                    className="px-4 py-2 rounded-lg border border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                    className="px-4 py-2 rounded-lg border border-white text-white hover:bg-white/10 transition-colors"
                   >
                     Log In
                   </Link>
@@ -320,7 +211,7 @@ const Navbar = () => {
                 <div className="hidden md:block ml-2">
                   <Link 
                     to="/signup" 
-                    className="px-4 py-2 bg-indigo hover:bg-indigo/90 text-white rounded-lg transition-colors"
+                    className="px-4 py-2 bg-white hover:bg-white/90 text-indigo-600 rounded-lg transition-colors"
                   >
                     Sign Up
                   </Link>
@@ -328,84 +219,30 @@ const Navbar = () => {
                 
                 <Sheet>
                   <SheetTrigger asChild className="md:hidden">
-                    <Button variant="ghost" size="icon" className="text-gray-700 dark:text-gray-200">
+                    <Button variant="ghost" size="icon" className="text-white dark:text-white">
                       <UserProfileMenu isMobile={true} />
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-full sm:w-80 p-0">
+                  <SheetContent side="right" className="w-full sm:w-80 p-0 bg-gradient-to-br from-indigo-50 to-pink-50 dark:from-indigo-950 dark:to-pink-950">
                     <div className="flex flex-col h-full p-6">
                       <div className="flex items-center justify-between mb-8">
-                        <Link to="/" className="font-heading text-xl font-bold text-indigo">
-                          Neplia<span className="text-coral">.</span>
+                        <Link to="/" className="font-heading text-xl font-bold text-indigo-600 dark:text-indigo-400">
+                          Neplia<span className="text-pink-500 dark:text-pink-400">.</span>
                         </Link>
                       </div>
 
                       <nav className="flex-1 space-y-6">
                         {navLinks.map((link) => (
                           <div key={link.name} className="py-2">
-                            {link.name === 'Practice' ? (
-                              <Collapsible open={openSubmenu === link.name}>
-                                <CollapsibleTrigger asChild>
-                                  <Button
-                                    variant="ghost"
-                                    onClick={() => setOpenSubmenu(openSubmenu === link.name ? null : link.name)}
-                                    className={cn(
-                                      "flex w-full items-center justify-between p-2 text-lg font-medium",
-                                      link.highlight 
-                                        ? "text-indigo-600 dark:text-indigo-300 font-semibold" 
-                                        : "text-gray-700 dark:text-gray-200"
-                                    )}
-                                  >
-                                    {link.name}
-                                    <ChevronDown className={cn(
-                                      "h-5 w-5 transition-transform duration-200",
-                                      openSubmenu === link.name ? "rotate-180" : ""
-                                    )} />
-                                  </Button>
-                                </CollapsibleTrigger>
-                                <CollapsibleContent className="pl-2 space-y-2 mt-2">
-                                  {examTypes.map((examType) => (
-                                    <Collapsible key={examType.name} open={openExamType === examType.name}>
-                                      <CollapsibleTrigger asChild>
-                                        <Button
-                                          variant="ghost"
-                                          onClick={() => setOpenExamType(openExamType === examType.name ? null : examType.name)}
-                                          className="flex w-full items-center justify-between p-2 text-md font-medium text-indigo-600 dark:text-indigo-400"
-                                        >
-                                          {examType.name}
-                                          <ChevronDown className={cn(
-                                            "h-4 w-4 transition-transform duration-200",
-                                            openExamType === examType.name ? "rotate-180" : ""
-                                          )} />
-                                        </Button>
-                                      </CollapsibleTrigger>
-                                      <CollapsibleContent className="pl-4 space-y-1 mt-1">
-                                        {examType.sections.map((section) => (
-                                          <Link
-                                            key={section.name}
-                                            to={section.path}
-                                            className="flex items-center gap-2 py-2 px-2 text-gray-600 dark:text-gray-400 hover:text-indigo dark:hover:text-indigo-300 rounded-md transition-colors"
-                                          >
-                                            {section.icon && <section.icon className="h-4 w-4" />}
-                                            {section.name}
-                                          </Link>
-                                        ))}
-                                      </CollapsibleContent>
-                                    </Collapsible>
-                                  ))}
-                                </CollapsibleContent>
-                              </Collapsible>
-                            ) : (
-                              <Link
-                                to={link.path}
-                                className={cn(
-                                  "block text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo dark:hover:text-indigo-300",
-                                  location.pathname === link.path && "text-indigo dark:text-indigo-300"
-                                )}
-                              >
-                                {link.name}
-                              </Link>
-                            )}
+                            <Link
+                              to={link.path}
+                              className={cn(
+                                "block text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-300",
+                                location.pathname === link.path && "text-indigo-600 dark:text-indigo-300"
+                              )}
+                            >
+                              {link.name}
+                            </Link>
                           </div>
                         ))}
                       </nav>
@@ -413,13 +250,13 @@ const Navbar = () => {
                       <div className="mt-6 space-y-3">
                         <Link
                           to="/login"
-                          className="block w-full text-center px-4 py-3 rounded-lg border border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                          className="block w-full text-center px-4 py-3 rounded-lg border border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
                         >
                           Log In
                         </Link>
                         <Link
                           to="/signup"
-                          className="block w-full text-center px-4 py-2 bg-indigo hover:bg-indigo/90 text-white rounded-lg transition-colors"
+                          className="block w-full text-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg transition-colors"
                         >
                           Sign Up
                         </Link>

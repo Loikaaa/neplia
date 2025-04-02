@@ -1,6 +1,7 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import AdminQuickAccess from '@/components/admin/AdminQuickAccess';
 
 // Pages
 import Index from '@/pages/Index';
@@ -54,6 +55,7 @@ import MockTestPage from '@/pages/practice/MockTestPage';
 function App() {
   return (
     <Router>
+      <AdminQuickAccess />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/about" element={<About />} />
