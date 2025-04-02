@@ -4,7 +4,7 @@ import BlogCard from '@/components/blog/BlogCard';
 import { blogPosts, blogCategories, getTags, getFeaturedPosts } from '@/data/blogData';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { BookOpen, Search, TrendingUp, Filter, Calendar, Tag as TagIcon } from 'lucide-react';
+import { BookOpen, Search, Filter, Calendar, Tag as TagIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -25,7 +25,6 @@ const Blog = () => {
   const [activeTab, setActiveTab] = useState("all");
   
   const allTags = getTags();
-  const featuredPosts = getFeaturedPosts(3);
 
   useEffect(() => {
     let filtered = [...blogPosts];
@@ -162,33 +161,6 @@ const Blog = () => {
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                 Expert guides, tips and resources to help you succeed in your exams and educational journey.
               </p>
-            </div>
-          </div>
-
-          <div className="mb-16 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold flex items-center">
-                <TrendingUp className="mr-2 h-5 w-5 text-indigo" />
-                Featured Articles
-              </h2>
-              <Button variant="link" onClick={() => {
-                setSelectedCategory("all");
-                setSelectedTag(null);
-                setSortOption("newest");
-              }}>
-                View All
-              </Button>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {featuredPosts.map((post, index) => (
-                <BlogCard 
-                  key={post.id} 
-                  post={post} 
-                  variant={index === 0 ? "featured" : "default"}
-                  className={index === 0 ? "lg:col-span-2 lg:row-span-2" : ""}
-                />
-              ))}
             </div>
           </div>
 
