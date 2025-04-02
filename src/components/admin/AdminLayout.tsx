@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -9,7 +10,7 @@ import {
   LayoutDashboard, Users, FileText, BookOpen, Settings, Menu, 
   BarChart3, MessageSquare, FileImage, PenTool, Brain, Mail, Megaphone
 } from 'lucide-react';
-import NotificationBadge from './NotificationBadge';
+import { NotificationBadge } from './NotificationBadge';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
