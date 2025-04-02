@@ -1,3 +1,4 @@
+
 import { BlogPost, BlogCategory } from "@/types/blog";
 import { generateAdditionalBlogPosts } from "@/utils/blogGenerator";
 
@@ -727,3 +728,18 @@ To master SAT Math, follow this structured practice plan:
 - Light review of formulas and strategies
 - Continue with short, focused practice sessions
 - Rest
+    `,
+    author: {
+      name: "Alex Thompson",
+      title: "SAT Math Specialist",
+      avatar: "/images/avatars/alex.jpg"
+    },
+    coverImage: "https://images.unsplash.com/photo-1532012197267-da84d127e765",
+    publishedAt: "2023-09-12",
+    readingTime: "8 min read",
+    tags: ["SAT", "Mathematics", "Test Preparation", "Problem Solving"],
+    featured: true
+  }
+];
+
+// The rest of the file would continue here...
