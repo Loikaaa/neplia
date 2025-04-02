@@ -73,7 +73,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               >
                 <item.icon className="h-5 w-5" />
                 <span>{item.label}</span>
-                {item.notifications && <NotificationBadge count={item.notifications} />}
+                {item.notifications && <span className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">{item.notifications}</span>}
               </Link>
             ))}
           </nav>
@@ -130,7 +130,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 >
                   <item.icon className="h-5 w-5" />
                   <span>{item.label}</span>
-                  {item.notifications && <NotificationBadge count={item.notifications} />}
+                  {item.notifications && <span className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">{item.notifications}</span>}
                 </Link>
               ))}
             </nav>
