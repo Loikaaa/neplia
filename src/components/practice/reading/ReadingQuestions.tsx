@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ReadingQuestion } from '@/types/reading';
 import { FormLabel } from '@/components/ui/form';
+import { Label } from '@/components/ui/label';
 
 interface ReadingQuestionsProps {
   questions: ReadingQuestion[];

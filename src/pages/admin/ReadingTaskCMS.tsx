@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -29,8 +28,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { useToast } from "@/hooks/use-toast";
 import { ReadingTest, ReadingPassage, ReadingQuestion } from '@/types/reading';
 import { Textarea } from '@/components/ui/textarea';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
+import { Label } from '@/components/ui/label';
 
 const ReadingTaskCMS = () => {
   // Start with readingTestData and add any newly created tests
@@ -63,7 +61,9 @@ const ReadingTaskCMS = () => {
 
   useEffect(() => {
     // Save tests to localStorage when they change
-    localStorage.setItem('readingTests', JSON.stringify(readingTests));
+    if (readingTests.length > 0) {
+      localStorage.setItem('readingTests', JSON.stringify(readingTests));
+    }
   }, [readingTests]);
   
   const difficulties = [
@@ -93,6 +93,15 @@ const ReadingTaskCMS = () => {
   );
   
   const handleAddNewTask = () => {
+    if (!newTaskTitle.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Please enter a task title",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     // Create a new reading test with basic structure
     const newTest: ReadingTest = {
       id: `rt-${Date.now()}`,
@@ -111,17 +120,24 @@ const ReadingTaskCMS = () => {
       description: `New reading task "${newTaskTitle}" has been created.`,
     });
     
+    // Clear form and close dialog
     setNewTaskTitle("");
     setNewTaskDifficulty("medium");
     setIsAddTaskDialogOpen(false);
+    
+    // Immediately open the new test for editing
+    setCurrentTest({...newTest});
+    setEditMode(true);
   };
   
   const handleDeleteTask = (testId: string) => {
-    setReadingTests(prev => prev.filter(test => test.id !== testId));
-    toast({
-      title: "Task deleted",
-      description: "The reading task has been removed.",
-    });
+    if (confirm("Are you sure you want to delete this task? This action cannot be undone.")) {
+      setReadingTests(prev => prev.filter(test => test.id !== testId));
+      toast({
+        title: "Task deleted",
+        description: "The reading task has been removed.",
+      });
+    }
   };
 
   const handleEditTest = (test: ReadingTest) => {
@@ -148,6 +164,9 @@ const ReadingTaskCMS = () => {
       ...currentTest,
       passages: [...currentTest.passages, newPassage]
     });
+    
+    // Automatically expand the new passage for editing
+    setCurrentPassageIndex(currentTest.passages.length);
   };
 
   const handleUpdatePassage = (index: number, field: keyof ReadingPassage, value: any) => {
@@ -168,13 +187,24 @@ const ReadingTaskCMS = () => {
   const handleDeletePassage = (index: number) => {
     if (!currentTest) return;
     
-    const updatedPassages = [...currentTest.passages];
-    updatedPassages.splice(index, 1);
-
-    setCurrentTest({
-      ...currentTest,
-      passages: updatedPassages
-    });
+    if (confirm("Are you sure you want to delete this passage and all its questions?")) {
+      const updatedPassages = [...currentTest.passages];
+      const removedQuestions = updatedPassages[index].questions.length;
+      updatedPassages.splice(index, 1);
+  
+      setCurrentTest({
+        ...currentTest,
+        passages: updatedPassages,
+        totalQuestions: currentTest.totalQuestions - removedQuestions
+      });
+      
+      // Reset current passage index if needed
+      if (currentPassageIndex === index || updatedPassages.length === 0) {
+        setCurrentPassageIndex(null);
+      } else if (currentPassageIndex !== null && currentPassageIndex > index) {
+        setCurrentPassageIndex(currentPassageIndex - 1);
+      }
+    }
   };
 
   const handleAddQuestion = (passageIndex: number) => {
@@ -221,34 +251,54 @@ const ReadingTaskCMS = () => {
   const handleDeleteQuestion = (passageIndex: number, questionIndex: number) => {
     if (!currentTest) return;
     
-    const updatedPassages = [...currentTest.passages];
-    updatedPassages[passageIndex].questions.splice(questionIndex, 1);
-
-    // Update question numbers
-    updatedPassages[passageIndex].questions.forEach((question, idx) => {
-      question.number = idx + 1;
-    });
-
-    setCurrentTest({
-      ...currentTest,
-      passages: updatedPassages,
-      totalQuestions: currentTest.totalQuestions - 1
-    });
+    if (confirm("Are you sure you want to delete this question?")) {
+      const updatedPassages = [...currentTest.passages];
+      updatedPassages[passageIndex].questions.splice(questionIndex, 1);
+  
+      // Update question numbers
+      updatedPassages[passageIndex].questions.forEach((question, idx) => {
+        question.number = idx + 1;
+      });
+  
+      setCurrentTest({
+        ...currentTest,
+        passages: updatedPassages,
+        totalQuestions: currentTest.totalQuestions - 1
+      });
+    }
   };
 
   const handleSaveTest = () => {
     if (!currentTest) return;
 
-    setReadingTests(prev => prev.map(test => 
-      test.id === currentTest.id ? currentTest : test
-    ));
+    if (!currentTest.title.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Test title cannot be empty",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Check if this is an update or new addition
+    const testExists = readingTests.some(test => test.id === currentTest.id);
+    
+    if (testExists) {
+      setReadingTests(prev => prev.map(test => 
+        test.id === currentTest.id ? currentTest : test
+      ));
+    } else {
+      setReadingTests(prev => [...prev, currentTest]);
+    }
 
     toast({
       title: "Changes saved",
-      description: `Test "${currentTest.title}" has been updated.`,
+      description: `Test "${currentTest.title}" has been ${testExists ? 'updated' : 'created'}.`,
     });
-
-    setCurrentTest(null);
+    
+    // Keep the current test open for further editing
+    // But set the mode back to view
+    setEditMode(false);
   };
 
   const renderQuestionEditor = (passageIndex: number, questionIndex: number, question: ReadingQuestion) => {
@@ -269,7 +319,7 @@ const ReadingTaskCMS = () => {
         </CardHeader>
         <CardContent className="p-4 pt-0 space-y-3">
           <div>
-            <FormLabel>Question Text</FormLabel>
+            <Label>Question Text</Label>
             <Textarea 
               value={question.text}
               onChange={(e) => handleUpdateQuestion(passageIndex, questionIndex, 'text', e.target.value)}
@@ -278,10 +328,10 @@ const ReadingTaskCMS = () => {
           </div>
           
           <div>
-            <FormLabel>Question Type</FormLabel>
+            <Label>Question Type</Label>
             <Select 
               value={question.type}
-              onValueChange={(value) => handleUpdateQuestion(passageIndex, questionIndex, 'type', value)}
+              onValueChange={(value: any) => handleUpdateQuestion(passageIndex, questionIndex, 'type', value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select question type" />
@@ -297,7 +347,7 @@ const ReadingTaskCMS = () => {
           
           {question.type === 'multiple-choice' && (
             <div className="space-y-2">
-              <FormLabel>Options</FormLabel>
+              <Label>Options</Label>
               {question.options?.map((option, optionIdx) => (
                 <div key={option.value} className="flex gap-2 mb-2">
                   <Input 
@@ -349,7 +399,7 @@ const ReadingTaskCMS = () => {
           
           {question.type === 'fill-in-blank' && (
             <div>
-              <FormLabel>Max Words</FormLabel>
+              <Label>Max Words</Label>
               <Input 
                 type="number" 
                 value={question.maxWords || 1}
@@ -358,12 +408,81 @@ const ReadingTaskCMS = () => {
               />
             </div>
           )}
+
+          {(question.type === 'matching' || question.type === 'true-false') && (
+            <div className="space-y-2">
+              <Label>Options</Label>
+              {question.options?.map((option, optionIdx) => (
+                <div key={option.value} className="flex gap-2 mb-2">
+                  <Input 
+                    value={option.value}
+                    onChange={(e) => {
+                      const updatedOptions = [...(question.options || [])];
+                      updatedOptions[optionIdx] = { ...updatedOptions[optionIdx], value: e.target.value };
+                      handleUpdateQuestion(passageIndex, questionIndex, 'options', updatedOptions);
+                    }}
+                    className="w-16"
+                  />
+                  <Input 
+                    value={option.label}
+                    onChange={(e) => {
+                      const updatedOptions = [...(question.options || [])];
+                      updatedOptions[optionIdx] = { ...updatedOptions[optionIdx], label: e.target.value };
+                      handleUpdateQuestion(passageIndex, questionIndex, 'options', updatedOptions);
+                    }}
+                    className="flex-1"
+                  />
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="h-10 w-10 p-0"
+                    onClick={() => {
+                      const updatedOptions = [...(question.options || [])];
+                      updatedOptions.splice(optionIdx, 1);
+                      handleUpdateQuestion(passageIndex, questionIndex, 'options', updatedOptions);
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  const updatedOptions = [...(question.options || [])];
+                  if (question.type === 'true-false' && updatedOptions.length >= 2) return;
+                  
+                  if (question.type === 'true-false' && updatedOptions.length === 0) {
+                    updatedOptions.push({ value: "true", label: "True" });
+                    updatedOptions.push({ value: "false", label: "False" });
+                  } else {
+                    const newOptionValue = String.fromCharCode(65 + updatedOptions.length); // A, B, C, ...
+                    updatedOptions.push({ value: newOptionValue, label: `Option ${newOptionValue}` });
+                  }
+                  handleUpdateQuestion(passageIndex, questionIndex, 'options', updatedOptions);
+                }}
+              >
+                Add Option
+              </Button>
+            </div>
+          )}
           
           <div>
-            <FormLabel>Correct Answer</FormLabel>
+            <Label>Correct Answer</Label>
             <Input 
               value={question.correctAnswer}
               onChange={(e) => handleUpdateQuestion(passageIndex, questionIndex, 'correctAnswer', e.target.value)}
+            />
+          </div>
+
+          <div>
+            <Label>Instructions (Optional)</Label>
+            <Textarea 
+              value={question.instruction || ''}
+              onChange={(e) => handleUpdateQuestion(passageIndex, questionIndex, 'instruction', e.target.value)}
+              placeholder="Optional instructions for this question"
+              rows={2}
             />
           </div>
         </CardContent>
@@ -401,7 +520,7 @@ const ReadingTaskCMS = () => {
         <CardContent className="p-4 pt-0">
           <div className="space-y-4 mb-4">
             <div>
-              <FormLabel>Passage Title</FormLabel>
+              <Label>Passage Title</Label>
               <Input 
                 value={passage.title}
                 onChange={(e) => handleUpdatePassage(index, 'title', e.target.value)}
@@ -409,7 +528,7 @@ const ReadingTaskCMS = () => {
             </div>
             
             <div>
-              <FormLabel>Passage Text</FormLabel>
+              <Label>Passage Text</Label>
               <Textarea 
                 value={passage.text}
                 onChange={(e) => handleUpdatePassage(index, 'text', e.target.value)}
@@ -457,8 +576,9 @@ const ReadingTaskCMS = () => {
             <Button 
               variant="ghost" 
               onClick={() => {
-                if (confirm('Discard changes?')) {
+                if (!editMode || confirm('Discard unsaved changes?')) {
                   setCurrentTest(null);
+                  setCurrentPassageIndex(null);
                 }
               }}
             >
@@ -467,11 +587,17 @@ const ReadingTaskCMS = () => {
             <h2 className="text-2xl font-bold">{editMode ? "Edit" : "View"} Reading Test</h2>
           </div>
           
-          {editMode && (
-            <Button onClick={handleSaveTest}>
-              <Save className="h-4 w-4 mr-2" /> Save Changes
-            </Button>
-          )}
+          <div className="flex gap-2">
+            {editMode ? (
+              <Button onClick={handleSaveTest}>
+                <Save className="h-4 w-4 mr-2" /> Save Changes
+              </Button>
+            ) : (
+              <Button onClick={() => setEditMode(true)}>
+                <Edit className="h-4 w-4 mr-2" /> Edit Test
+              </Button>
+            )}
+          </div>
         </div>
         
         <div className="grid grid-cols-1 gap-4">
@@ -481,31 +607,35 @@ const ReadingTaskCMS = () => {
             </CardHeader>
             <CardContent className="p-4 pt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <FormLabel>Title</FormLabel>
+                <Label>Title</Label>
                 <Input 
                   value={currentTest.title}
                   onChange={(e) => setCurrentTest({...currentTest, title: e.target.value})}
                   disabled={!editMode}
+                  placeholder="Enter a title for this test"
                 />
               </div>
               
               <div>
-                <FormLabel>Duration (minutes)</FormLabel>
+                <Label>Duration (minutes)</Label>
                 <Input 
                   type="number"
                   value={currentTest.duration}
                   onChange={(e) => setCurrentTest({...currentTest, duration: Number(e.target.value)})}
                   disabled={!editMode}
+                  min={1}
+                  max={180}
                 />
               </div>
               
               <div className="md:col-span-2">
-                <FormLabel>Description</FormLabel>
+                <Label>Description</Label>
                 <Textarea 
                   value={currentTest.description}
                   onChange={(e) => setCurrentTest({...currentTest, description: e.target.value})}
                   disabled={!editMode}
                   rows={2}
+                  placeholder="Provide a description for this reading test"
                 />
               </div>
             </CardContent>
@@ -527,7 +657,7 @@ const ReadingTaskCMS = () => {
             
             {currentTest.passages.length === 0 ? (
               <p className="text-center py-6 text-muted-foreground">
-                No passages added yet. Click "Add Passage" to create one.
+                No passages added yet. {editMode ? "Click \"Add Passage\" to create one." : ""}
               </p>
             ) : (
               currentTest.passages.map((passage, index) => 
@@ -584,7 +714,7 @@ const ReadingTaskCMS = () => {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{statisticsData.academicTasks}</div>
-              <CustomProgress className="h-2 mt-2" value={statisticsData.academicTasks / statisticsData.totalTasks * 100} indicatorClassName="bg-indigo-600" />
+              <CustomProgress className="h-2 mt-2" value={statisticsData.academicTasks / (statisticsData.totalTasks || 1) * 100} indicatorClassName="bg-indigo-600" />
             </CardContent>
           </Card>
           
@@ -595,7 +725,7 @@ const ReadingTaskCMS = () => {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{statisticsData.generalTasks}</div>
-              <CustomProgress className="h-2 mt-2" value={statisticsData.generalTasks / statisticsData.totalTasks * 100} indicatorClassName="bg-blue-600" />
+              <CustomProgress className="h-2 mt-2" value={statisticsData.generalTasks / (statisticsData.totalTasks || 1) * 100} indicatorClassName="bg-blue-600" />
             </CardContent>
           </Card>
           
@@ -688,7 +818,7 @@ const ReadingTaskCMS = () => {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsAddTaskDialogOpen(false)}>Cancel</Button>
-                <Button onClick={handleAddNewTask} disabled={!newTaskTitle}>Create Task</Button>
+                <Button onClick={handleAddNewTask} disabled={!newTaskTitle.trim()}>Create Task</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
