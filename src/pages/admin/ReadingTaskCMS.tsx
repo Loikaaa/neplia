@@ -27,15 +27,17 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { CustomProgress } from '@/components/ui/custom-progress';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { ReadingTest } from '@/types/reading';
 
 const ReadingTaskCMS = () => {
-  // Extract passages to create a list of reading tests
-  const readingTests = [readingTestData];
+  // Start with readingTestData and add any newly created tests
+  const [readingTests, setReadingTests] = useState<ReadingTest[]>([readingTestData]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
   const [isAddTaskDialogOpen, setIsAddTaskDialogOpen] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDifficulty, setNewTaskDifficulty] = useState("medium");
+  const [newTaskType, setNewTaskType] = useState("academic");
   const { toast } = useToast();
   
   const difficulties = [
@@ -47,9 +49,9 @@ const ReadingTaskCMS = () => {
   
   // Mock statistics data for IELTS reading tasks
   const statisticsData = {
-    totalTasks: 15,
-    academicTasks: 9,
-    generalTasks: 6,
+    totalTasks: readingTests.length,
+    academicTasks: readingTests.filter(test => test.id.startsWith('rt')).length,
+    generalTasks: readingTests.filter(test => !test.id.startsWith('rt')).length,
     recentlyUpdated: 3,
     avgDifficulty: 6.8,
   };
@@ -59,7 +61,19 @@ const ReadingTaskCMS = () => {
   );
   
   const handleAddNewTask = () => {
-    // In a real app, this would save to backend/database
+    // Create a new reading test with basic structure
+    const newTest: ReadingTest = {
+      id: `rt-${Date.now()}`,
+      title: newTaskTitle,
+      description: `A new reading task with difficulty: ${newTaskDifficulty}`,
+      totalQuestions: 0,
+      duration: 60,
+      passages: []
+    };
+    
+    // Add the new test to the array
+    setReadingTests(prev => [...prev, newTest]);
+    
     toast({
       title: "Task created",
       description: `New reading task "${newTaskTitle}" has been created.`,
@@ -68,6 +82,14 @@ const ReadingTaskCMS = () => {
     setNewTaskTitle("");
     setNewTaskDifficulty("medium");
     setIsAddTaskDialogOpen(false);
+  };
+  
+  const handleDeleteTask = (testId: string) => {
+    setReadingTests(prev => prev.filter(test => test.id !== testId));
+    toast({
+      title: "Task deleted",
+      description: "The reading task has been removed.",
+    });
   };
   
   return (
@@ -187,7 +209,7 @@ const ReadingTaskCMS = () => {
                 </div>
                 <div className="grid gap-2">
                   <label htmlFor="task-type" className="text-sm font-medium">Task Type</label>
-                  <Select defaultValue="academic">
+                  <Select value={newTaskType} onValueChange={setNewTaskType}>
                     <SelectTrigger id="task-type">
                       <SelectValue placeholder="Select task type" />
                     </SelectTrigger>
@@ -236,8 +258,8 @@ const ReadingTaskCMS = () => {
                         </TableCell>
                       </TableRow>
                     ) : (
-                      filteredTests.map((test, index) => (
-                        <TableRow key={index}>
+                      filteredTests.map((test) => (
+                        <TableRow key={test.id}>
                           <TableCell className="font-medium">{test.title}</TableCell>
                           <TableCell>{test.id.startsWith('rt') ? 'Academic' : 'General'}</TableCell>
                           <TableCell>{test.passages.length}</TableCell>
@@ -255,7 +277,12 @@ const ReadingTaskCMS = () => {
                             <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 w-8 p-0"
+                              onClick={() => handleDeleteTask(test.id)}
+                            >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </TableCell>
@@ -282,28 +309,45 @@ const ReadingTaskCMS = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow>
-                      <TableCell className="font-medium">Technology and Innovation</TableCell>
-                      <TableCell>3</TableCell>
-                      <TableCell>40</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">7.0-8.0</span>
-                          <CustomProgress className="h-2 w-24" value={78} indicatorClassName="bg-indigo-600" />
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
+                    {filteredTests.filter(test => test.id.startsWith('rt')).length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center py-4 text-muted-foreground">
+                          No academic reading tasks found.
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredTests
+                        .filter(test => test.id.startsWith('rt'))
+                        .map((test) => (
+                          <TableRow key={test.id}>
+                            <TableCell className="font-medium">{test.title}</TableCell>
+                            <TableCell>{test.passages.length}</TableCell>
+                            <TableCell>{test.totalQuestions}</TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium">7.0-8.0</span>
+                                <CustomProgress className="h-2 w-24" value={78} indicatorClassName="bg-indigo-600" />
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-8 w-8 p-0"
+                                onClick={() => handleDeleteTask(test.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                    )}
                   </TableBody>
                 </Table>
               </div>
@@ -324,28 +368,45 @@ const ReadingTaskCMS = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow>
-                      <TableCell className="font-medium">Workplace Communication</TableCell>
-                      <TableCell>3</TableCell>
-                      <TableCell>38</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">5.5-6.5</span>
-                          <CustomProgress className="h-2 w-24" value={60} indicatorClassName="bg-blue-600" />
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
+                    {filteredTests.filter(test => !test.id.startsWith('rt')).length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center py-4 text-muted-foreground">
+                          No general training reading tasks found.
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredTests
+                        .filter(test => !test.id.startsWith('rt'))
+                        .map((test) => (
+                          <TableRow key={test.id}>
+                            <TableCell className="font-medium">{test.title}</TableCell>
+                            <TableCell>{test.passages.length}</TableCell>
+                            <TableCell>{test.totalQuestions}</TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium">5.5-6.5</span>
+                                <CustomProgress className="h-2 w-24" value={60} indicatorClassName="bg-blue-600" />
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-8 w-8 p-0"
+                                onClick={() => handleDeleteTask(test.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                    )}
                   </TableBody>
                 </Table>
               </div>
@@ -367,29 +428,46 @@ const ReadingTaskCMS = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow>
-                      <TableCell className="font-medium">IELTS Practice Test 1</TableCell>
-                      <TableCell>Academic</TableCell>
-                      <TableCell>3</TableCell>
-                      <TableCell>40</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium">6.0-7.0</span>
-                          <CustomProgress className="h-2 w-24" value={65} indicatorClassName="bg-green-600" />
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
+                    {filteredTests.filter(test => test.title.toLowerCase().includes("practice")).length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-4 text-muted-foreground">
+                          No practice tests found.
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredTests
+                        .filter(test => test.title.toLowerCase().includes("practice"))
+                        .map((test) => (
+                          <TableRow key={test.id}>
+                            <TableCell className="font-medium">{test.title}</TableCell>
+                            <TableCell>{test.id.startsWith('rt') ? 'Academic' : 'General'}</TableCell>
+                            <TableCell>{test.passages.length}</TableCell>
+                            <TableCell>{test.totalQuestions}</TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium">6.0-7.0</span>
+                                <CustomProgress className="h-2 w-24" value={65} indicatorClassName="bg-green-600" />
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-8 w-8 p-0"
+                                onClick={() => handleDeleteTask(test.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                    )}
                   </TableBody>
                 </Table>
               </div>
