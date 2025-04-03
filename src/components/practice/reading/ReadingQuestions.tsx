@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ReadingQuestion } from '@/types/reading';
+import { FormLabel } from '@/components/ui/form';
 
 interface ReadingQuestionsProps {
   questions: ReadingQuestion[];
@@ -47,7 +48,7 @@ export const ReadingQuestions: React.FC<ReadingQuestionsProps> = ({
                         value={option.value}
                         checked={userAnswers[question.id] === option.value}
                         onChange={() => onAnswerChange(question.id, option.value)}
-                        className="h-4 w-4 text-indigo border-gray-300 focus:ring-indigo"
+                        className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
                       />
                       <span className="text-gray-700 dark:text-gray-300">
                         {option.label}
@@ -64,7 +65,7 @@ export const ReadingQuestions: React.FC<ReadingQuestionsProps> = ({
                     value={userAnswers[question.id] || ''}
                     onChange={(e) => onAnswerChange(question.id, e.target.value)}
                     placeholder="Type your answer here..."
-                    className="w-full max-w-md px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo focus:border-indigo"
+                    className="w-full max-w-md px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
                   />
                   {question.maxWords && (
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -79,7 +80,7 @@ export const ReadingQuestions: React.FC<ReadingQuestionsProps> = ({
                   <select
                     value={userAnswers[question.id] || ''}
                     onChange={(e) => onAnswerChange(question.id, e.target.value)}
-                    className="w-full max-w-md px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo focus:border-indigo"
+                    className="w-full max-w-md px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
                   >
                     <option value="">Select an option</option>
                     {question.options.map((option) => (
@@ -104,7 +105,7 @@ export const ReadingQuestions: React.FC<ReadingQuestionsProps> = ({
                         value={option.value}
                         checked={userAnswers[question.id] === option.value}
                         onChange={() => onAnswerChange(question.id, option.value)}
-                        className="h-4 w-4 text-indigo border-gray-300 focus:ring-indigo"
+                        className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
                       />
                       <span className="text-gray-700 dark:text-gray-300">
                         {option.label}
