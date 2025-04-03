@@ -30,6 +30,7 @@ const saveProgress = (data: PerformanceData): Promise<boolean> => {
       // Add new progress data
       existingData.push({
         ...data,
+        id: `progress-${Date.now()}`, // Add a unique ID
         date: new Date().toISOString()
       });
       
@@ -159,22 +160,87 @@ export const getSpeakingSubmissions = (): Promise<any[]> => {
       // Filter speaking submissions
       const speakingSubmissions = progressData.filter((item: any) => item.section === 'speaking');
       
+      // Mock questions for demo
+      const mockQuestions = [
+        "Describe a time when you had to learn something quickly. What was it and why did you need to learn it fast?",
+        "Talk about your favorite book or movie. Why do you like it?",
+        "Describe your hometown and what you like about it.",
+        "What kind of technology do you use every day? How does it help you?"
+      ];
+      
       // Add mock response data if available
-      const submissionsWithResponses = speakingSubmissions.map((submission: any) => {
+      const submissionsWithResponses = speakingSubmissions.map((submission: any, index: number) => {
         return {
           ...submission,
+          id: submission.id || `submission-${Date.now()}-${index}`,
           userId: submission.userId,
+          question: mockQuestions[index % mockQuestions.length],
           responseAudio: 'https://example.com/mock-audio.mp3', // Mock audio URL
-          responseText: 'This is a mock transcription of the speaking response.',
+          responseText: 'This is a mock transcription of the speaking response. In a real implementation, this would be the actual transcript of the student\'s spoken response to the IELTS speaking prompt. The transcript would be analyzed by the instructor to evaluate fluency, vocabulary usage, grammatical accuracy, and pronunciation.',
           reviewed: submission.reviewed || false
         };
       });
+      
+      // If there are no submissions, add a mock one for demonstration
+      if (submissionsWithResponses.length === 0) {
+        submissionsWithResponses.push({
+          id: `demo-submission-${Date.now()}`,
+          userId: "STU-2023-789",
+          section: "speaking",
+          score: 0, // Will be set by the reviewer
+          date: new Date().toISOString(),
+          question: mockQuestions[0],
+          responseAudio: 'https://example.com/mock-audio.mp3',
+          responseText: 'This is a demo speaking response for the IELTS test. In a real scenario, this would contain the transcription of the student\'s answer to the speaking prompt. The instructor would use this transcript along with the audio recording to evaluate the student\'s speaking skills according to the IELTS band descriptors.',
+          reviewed: false
+        });
+      }
       
       // Simulate network delay
       setTimeout(() => resolve(submissionsWithResponses), 600);
     } catch (error) {
       console.error("Error fetching speaking submissions:", error);
       resolve([]);
+    }
+  });
+};
+
+// Save speaking review results
+export const saveSpeakingReview = (
+  submissionId: string,
+  scores: {fluency: number, vocabulary: number, grammar: number, pronunciation: number},
+  feedback: string
+): Promise<boolean> => {
+  return new Promise((resolve) => {
+    try {
+      // Get existing progress data
+      const progressDataString = localStorage.getItem('userProgressData');
+      const progressData = progressDataString ? JSON.parse(progressDataString) : [];
+      
+      // Update the submission with review data
+      const updatedData = progressData.map((item: any) => {
+        if (item.id === submissionId) {
+          return {
+            ...item,
+            reviewed: true,
+            reviewDate: new Date().toISOString(),
+            scores,
+            feedback,
+            // Calculate overall score (average of the 4 criteria)
+            overallScore: Object.values(scores).reduce((sum: number, score: number) => sum + score, 0) / 4
+          };
+        }
+        return item;
+      });
+      
+      // Save back to localStorage
+      localStorage.setItem('userProgressData', JSON.stringify(updatedData));
+      
+      // Simulate network delay
+      setTimeout(() => resolve(true), 800);
+    } catch (error) {
+      console.error("Error saving speaking review:", error);
+      resolve(false);
     }
   });
 };
@@ -227,9 +293,24 @@ export const useUserProgress = () => {
     }
   };
   
+  // Function to get demo login status
+  const isDemoLoggedIn = (): boolean => {
+    return localStorage.getItem('demoUserLoggedIn') === 'true';
+  };
+  
+  // Function to toggle demo login
+  const toggleDemoLogin = (): boolean => {
+    const currentStatus = isDemoLoggedIn();
+    localStorage.setItem('demoUserLoggedIn', (!currentStatus).toString());
+    return !currentStatus;
+  };
+  
   return {
     trackCompletion,
     getUserProgress,
-    getSpeakingSubmissions
+    getSpeakingSubmissions,
+    saveSpeakingReview,
+    isDemoLoggedIn,
+    toggleDemoLogin
   };
 };
