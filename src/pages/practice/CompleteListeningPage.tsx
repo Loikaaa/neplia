@@ -7,7 +7,7 @@ import ListeningHeader from '@/components/practice/listening/ListeningHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Headphones, Filter, Clock, BookOpen, CheckCircle, BarChart2, SortAscending, SortDescending, Search } from 'lucide-react';
+import { Headphones, Filter, Clock, BookOpen, CheckCircle, BarChart2, ArrowUpDown, ArrowDown, ArrowUp, Search } from 'lucide-react';
 import { listeningTestData } from '@/data/listeningTestData';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -134,6 +134,16 @@ const CompleteListeningPage = () => {
     }
   };
   
+  // Get the appropriate icon for the sort direction
+  const getSortIcon = (option: SortOption) => {
+    if (option === 'difficulty-asc' || option === 'oldest') {
+      return <ArrowUp className="h-4 w-4 mr-2" />;
+    } else if (option === 'difficulty-desc' || option === 'newest') {
+      return <ArrowDown className="h-4 w-4 mr-2" />;
+    }
+    return <ArrowUpDown className="h-4 w-4 mr-2" />;
+  };
+  
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
@@ -194,10 +204,7 @@ const CompleteListeningPage = () => {
                     
                     <Select value={sortOption} onValueChange={(value: SortOption) => setSortOption(value)}>
                       <SelectTrigger className="w-[180px]">
-                        {sortOption.includes('asc') ? 
-                          <SortAscending className="h-4 w-4 mr-2" /> : 
-                          <SortDescending className="h-4 w-4 mr-2" />
-                        }
+                        {getSortIcon(sortOption)}
                         <SelectValue placeholder="Sort" />
                       </SelectTrigger>
                       <SelectContent>
