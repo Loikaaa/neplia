@@ -2,8 +2,9 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ReadingQuestion } from '@/types/reading';
-import { FormLabel } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 interface ReadingQuestionsProps {
   questions: ReadingQuestion[];
@@ -38,35 +39,30 @@ export const ReadingQuestions: React.FC<ReadingQuestionsProps> = ({
               
               {question.type === 'multiple-choice' && question.options && (
                 <div className="ml-6 space-y-2">
-                  {question.options.map((option) => (
-                    <label 
-                      key={option.value} 
-                      className="flex items-center space-x-2 cursor-pointer"
-                    >
-                      <input
-                        type="radio"
-                        name={`question-${question.id}`}
-                        value={option.value}
-                        checked={userAnswers[question.id] === option.value}
-                        onChange={() => onAnswerChange(question.id, option.value)}
-                        className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
-                      />
-                      <span className="text-gray-700 dark:text-gray-300">
-                        {option.label}
-                      </span>
-                    </label>
-                  ))}
+                  <RadioGroup 
+                    value={userAnswers[question.id] || ""}
+                    onValueChange={(value) => onAnswerChange(question.id, value)}
+                  >
+                    {question.options.map((option) => (
+                      <div key={option.value} className="flex items-center space-x-2">
+                        <RadioGroupItem value={option.value} id={`question-${question.id}-${option.value}`} />
+                        <Label htmlFor={`question-${question.id}-${option.value}`} className="cursor-pointer">
+                          {option.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
                 </div>
               )}
               
               {question.type === 'fill-in-blank' && (
                 <div className="ml-6">
-                  <input
+                  <Input
                     type="text"
                     value={userAnswers[question.id] || ''}
                     onChange={(e) => onAnswerChange(question.id, e.target.value)}
                     placeholder="Type your answer here..."
-                    className="w-full max-w-md px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                    className="w-full max-w-md"
                   />
                   {question.maxWords && (
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -95,24 +91,19 @@ export const ReadingQuestions: React.FC<ReadingQuestionsProps> = ({
               
               {question.type === 'true-false' && question.options && (
                 <div className="ml-6 space-y-2">
-                  {question.options.map((option) => (
-                    <label 
-                      key={option.value} 
-                      className="flex items-center space-x-2 cursor-pointer"
-                    >
-                      <input
-                        type="radio"
-                        name={`question-${question.id}`}
-                        value={option.value}
-                        checked={userAnswers[question.id] === option.value}
-                        onChange={() => onAnswerChange(question.id, option.value)}
-                        className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
-                      />
-                      <span className="text-gray-700 dark:text-gray-300">
-                        {option.label}
-                      </span>
-                    </label>
-                  ))}
+                  <RadioGroup 
+                    value={userAnswers[question.id] || ""}
+                    onValueChange={(value) => onAnswerChange(question.id, value)}
+                  >
+                    {question.options.map((option) => (
+                      <div key={option.value} className="flex items-center space-x-2">
+                        <RadioGroupItem value={option.value} id={`question-${question.id}-${option.value}`} />
+                        <Label htmlFor={`question-${question.id}-${option.value}`} className="cursor-pointer">
+                          {option.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
                 </div>
               )}
             </div>
