@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { ListeningTest, TestType, DifficultyLevel } from '@/components/practice/listening/ListeningTest';
 import { ListeningInstructions } from '@/components/practice/listening/ListeningInstructions';
 import ListeningHeader from '@/components/practice/listening/ListeningHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Headphones, BookOpen } from 'lucide-react';
+import { Headphones, BookOpen, ArrowRight } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import {
   Select,
@@ -62,6 +63,16 @@ const ListeningPractice = () => {
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <ListeningHeader />
+        
+        {/* Add link to complete listening page */}
+        <div className="flex justify-end mb-4">
+          <Link to="/practice/listening/complete">
+            <Button variant="outline" className="flex items-center">
+              View All Listening Tests
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
         
         {!testStarted ? (
           <div className="space-y-8">
@@ -143,10 +154,15 @@ const ListeningPractice = () => {
                 </div>
               </CardContent>
               
-              <CardFooter>
+              <CardFooter className="flex justify-between">
+                <Link to="/practice/listening/complete">
+                  <Button variant="outline">
+                    Browse All Tests
+                  </Button>
+                </Link>
                 <Button 
                   onClick={handleStartTest} 
-                  className="w-full"
+                  className="bg-indigo hover:bg-indigo-600"
                 >
                   Start Listening Test
                 </Button>

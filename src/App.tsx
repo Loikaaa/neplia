@@ -48,6 +48,7 @@ import SatPage from '@/pages/exams/SatPage';
 import PracticePage from '@/pages/practice/PracticePage';
 import ReadingPractice from '@/pages/practice/ReadingPractice';
 import ListeningPractice from '@/pages/practice/ListeningPractice';
+import CompleteListeningPage from '@/pages/practice/CompleteListeningPage';
 import SpeakingPractice from '@/pages/practice/SpeakingPractice';
 import WritingPractice from '@/pages/practice/WritingPractice';
 import MockTestPage from '@/pages/practice/MockTestPage';
@@ -88,6 +89,7 @@ function App() {
         <Route path="/practice" element={<PracticePage />} />
         <Route path="/practice/reading" element={<ReadingPractice />} />
         <Route path="/practice/listening" element={<ListeningPractice />} />
+        <Route path="/practice/listening/complete" element={<CompleteListeningPage />} />
         <Route path="/practice/speaking" element={<SpeakingPractice />} />
         <Route path="/practice/writing" element={<WritingPractice />} />
         <Route path="/practice/mock-test" element={<MockTestPage />} />

@@ -15,6 +15,7 @@ import UserPreferences from '@/components/user/UserPreferences';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { mockTestData } from '@/data/mockTestData';
 import { useToast } from '@/hooks/use-toast';
+import ListeningSection from '@/components/dashboard/ListeningSection';
 
 const UserDashboard = () => {
   // Get user name from localStorage
@@ -297,6 +298,12 @@ const UserDashboard = () => {
             <div>
               <UserPreferences />
             </div>
+          </div>
+          
+          {/* Add ListeningSection */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-6">Listening Practice</h2>
+            <ListeningSection />
           </div>
           
           <h2 className="text-2xl font-bold mb-6">
