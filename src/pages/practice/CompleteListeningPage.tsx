@@ -36,6 +36,16 @@ const CompleteListeningPage = () => {
     });
   };
 
+  // Navigate to different tabs
+  const navigateToTab = (tabValue: string) => {
+    // Find the tab trigger element
+    const tabTrigger = document.querySelector(`[data-value="${tabValue}"]`) as HTMLElement;
+    if (tabTrigger) {
+      // Safely trigger a click event
+      tabTrigger.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    }
+  };
+
   // Mock list of available tests (in a real app, this would come from an API)
   const availableTests = [
     {
@@ -315,7 +325,7 @@ const CompleteListeningPage = () => {
                   <p className="text-gray-500 dark:text-gray-400 mb-6">
                     Complete a listening test to see your results here
                   </p>
-                  <Button onClick={() => document.querySelector('[data-value="practice"]')?.click()}>
+                  <Button onClick={() => navigateToTab('practice')}>
                     Browse Practice Tests
                   </Button>
                 </div>
@@ -338,7 +348,7 @@ const CompleteListeningPage = () => {
                   <p className="text-gray-500 dark:text-gray-400 mb-6">
                     Complete more listening tests to see detailed performance analytics
                   </p>
-                  <Button onClick={() => document.querySelector('[data-value="practice"]')?.click()}>
+                  <Button onClick={() => navigateToTab('practice')}>
                     Try a Practice Test
                   </Button>
                 </div>
