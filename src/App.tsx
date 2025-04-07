@@ -1,7 +1,6 @@
 
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import AdminQuickAccess from '@/components/admin/AdminQuickAccess';
 
 // Pages
 import Index from '@/pages/Index';
@@ -24,18 +23,6 @@ import Resources from '@/pages/Resources';
 import AllResources from '@/pages/AllResources';
 import CategoryDetail from '@/pages/CategoryDetail';
 
-// Admin Pages
-import Dashboard from '@/pages/admin/Dashboard';
-import Settings from '@/pages/admin/Settings';
-import ExamSectionPage from '@/pages/admin/ExamSectionPage';
-import UsersCMS from '@/pages/admin/UsersCMS';
-import ResourceManagement from '@/pages/admin/ResourceManagement';
-import ReadingTaskCMS from '@/pages/admin/ReadingTaskCMS';
-import WritingTaskCMS from '@/pages/admin/WritingTaskCMS';
-import BlogPostCMS from '@/pages/admin/BlogPostCMS';
-import Marketing from '@/pages/admin/Marketing';
-import SpeakingReviewPage from '@/pages/admin/SpeakingReviewPage';
-
 // Exam Pages
 import IeltsPage from '@/pages/exams/IeltsPage';
 import ToeflPage from '@/pages/exams/ToeflPage';
@@ -52,29 +39,13 @@ import CompleteListeningPage from '@/pages/practice/CompleteListeningPage';
 import SpeakingPractice from '@/pages/practice/SpeakingPractice';
 import WritingPractice from '@/pages/practice/WritingPractice';
 import MockTestPage from '@/pages/practice/MockTestPage';
-
-// AdminAccessWrapper component to conditionally show AdminQuickAccess
-const AdminAccessWrapper = ({ children }) => {
-  const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin');
-  
-  return (
-    <>
-      {isAdminRoute && <AdminQuickAccess />}
-      {children}
-    </>
-  );
-};
+import AdminRedirect from '@/components/admin/AdminRedirect';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={
-          <>
-            <Index />
-          </>
-        } />
+        <Route path="/" element={<Index />} />
         <Route path="/about" element={<About />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
@@ -110,17 +81,8 @@ function App() {
         <Route path="/practice/writing" element={<WritingPractice />} />
         <Route path="/practice/mock-test" element={<MockTestPage />} />
         
-        {/* Admin Routes */}
-        <Route path="/admin" element={<><AdminQuickAccess /><Dashboard /></>} />
-        <Route path="/admin/settings" element={<><AdminQuickAccess /><Settings /></>} />
-        <Route path="/admin/exam-sections" element={<><AdminQuickAccess /><ExamSectionPage /></>} />
-        <Route path="/admin/users" element={<><AdminQuickAccess /><UsersCMS /></>} />
-        <Route path="/admin/resources" element={<><AdminQuickAccess /><ResourceManagement /></>} />
-        <Route path="/admin/reading-tasks" element={<><AdminQuickAccess /><ReadingTaskCMS /></>} />
-        <Route path="/admin/writing-tasks" element={<><AdminQuickAccess /><WritingTaskCMS /></>} />
-        <Route path="/admin/blog-posts" element={<><AdminQuickAccess /><BlogPostCMS /></>} />
-        <Route path="/admin/marketing" element={<><AdminQuickAccess /><Marketing /></>} />
-        <Route path="/admin/speaking-review" element={<><AdminQuickAccess /><SpeakingReviewPage /></>} />
+        {/* Admin Redirect - This will redirect to your Laravel backend */}
+        <Route path="/admin/*" element={<AdminRedirect />} />
         
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
