@@ -117,8 +117,8 @@ const Navbar = () => {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300 sticky-header',
         scrolled 
-          ? 'py-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white shadow-lg' 
-          : 'py-4 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30'
+          ? 'py-2 bg-slate-800 text-white shadow-lg' 
+          : 'py-3 bg-slate-900 dark:bg-slate-900'
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -126,7 +126,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <span className="font-heading text-xl md:text-2xl font-bold text-white dark:text-white">
-                Neplia<span className="text-pink-300 dark:text-pink-300">.</span>
+                Neplia<span className="text-pink-400 dark:text-pink-400">.</span>
               </span>
             </Link>
           </div>
@@ -139,15 +139,121 @@ const Navbar = () => {
                     <Link 
                       to={link.path}
                       className={cn(
-                        navigationMenuTriggerStyle(),
-                        "text-white dark:text-white hover:text-pink-200 dark:hover:text-pink-200 font-medium transition-colors",
-                        location.pathname === link.path && "text-pink-200 dark:text-pink-200 bg-white/10 dark:bg-white/10"
+                        navigationMenuTriggerStyle({ variant: "solid" }),
+                        "text-white font-medium transition-colors",
+                        location.pathname === link.path && "bg-white/20 dark:bg-white/20"
                       )}
                     >
                       {link.name}
                     </Link>
                   </NavigationMenuItem>
                 ))}
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger 
+                    variant="solid" 
+                    className={cn(
+                      "text-white font-medium",
+                      location.pathname.startsWith("/exams") && "bg-white/20 dark:bg-white/20"
+                    )}
+                  >
+                    Exams
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-slate-800">
+                      {examTypes.map((exam) => (
+                        <li key={exam.name}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to={exam.path}
+                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white"
+                            >
+                              <div className="text-sm font-medium text-white">{exam.name}</div>
+                              <p className="line-clamp-2 text-sm leading-snug text-slate-300">
+                                {exam.sections?.length} practice sections available
+                              </p>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger 
+                    variant="solid" 
+                    className={cn(
+                      "text-white font-medium",
+                      location.pathname.startsWith("/practice") && "bg-white/20 dark:bg-white/20"
+                    )}
+                  >
+                    Practice
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-slate-800">
+                      <li className="row-span-3">
+                        <NavigationMenuLink asChild>
+                          <Link
+                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-indigo-500 to-indigo-700 p-6 no-underline outline-none focus:shadow-md"
+                            to="/practice"
+                          >
+                            <div className="mb-2 mt-4 text-lg font-medium text-white">
+                              Full Practice Tests
+                            </div>
+                            <p className="text-sm leading-tight text-white/90">
+                              Take comprehensive practice tests for all exam sections
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <Link to="/practice/reading" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
+                          <div className="flex items-center">
+                            <BookOpen className="h-4 w-4 mr-2 text-indigo-400" />
+                            <div className="text-sm font-medium text-white">Reading</div>
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-slate-300">
+                            Practice reading comprehension skills
+                          </p>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/practice/listening" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
+                          <div className="flex items-center">
+                            <Headphones className="h-4 w-4 mr-2 text-indigo-400" />
+                            <div className="text-sm font-medium text-white">Listening</div>
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-slate-300">
+                            Improve your listening comprehension
+                          </p>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/practice/writing" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
+                          <div className="flex items-center">
+                            <Edit className="h-4 w-4 mr-2 text-indigo-400" />
+                            <div className="text-sm font-medium text-white">Writing</div>
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-slate-300">
+                            Develop your writing skills
+                          </p>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/practice/speaking" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
+                          <div className="flex items-center">
+                            <MessageSquare className="h-4 w-4 mr-2 text-indigo-400" />
+                            <div className="text-sm font-medium text-white">Speaking</div>
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-slate-300">
+                            Practice your speaking skills
+                          </p>
+                        </Link>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -167,11 +273,11 @@ const Navbar = () => {
                       <UserProfileMenu isMobile={true} />
                     </div>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-full sm:w-80 p-0 bg-gradient-to-br from-indigo-50 to-pink-50 dark:from-indigo-950 dark:to-pink-950">
+                  <SheetContent side="right" className="w-full sm:w-80 p-0 bg-slate-800">
                     <div className="flex flex-col h-full p-6">
                       <div className="flex items-center justify-between mb-8">
-                        <Link to="/" className="font-heading text-xl font-bold text-indigo-600 dark:text-indigo-400">
-                          Neplia<span className="text-pink-500 dark:text-pink-400">.</span>
+                        <Link to="/" className="font-heading text-xl font-bold text-white">
+                          Neplia<span className="text-pink-400">.</span>
                         </Link>
                       </div>
 
@@ -181,14 +287,58 @@ const Navbar = () => {
                             <Link
                               to={link.path}
                               className={cn(
-                                "block text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-300",
-                                location.pathname === link.path && "text-indigo-600 dark:text-indigo-300"
+                                "block text-lg font-medium text-slate-300 hover:text-white",
+                                location.pathname === link.path && "text-white"
                               )}
                             >
                               {link.name}
                             </Link>
                           </div>
                         ))}
+                        <div className="py-2">
+                          <Collapsible>
+                            <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
+                              Exams
+                              <ChevronDown className="h-4 w-4" />
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="pl-4 mt-2 space-y-2">
+                              {examTypes.map(exam => (
+                                <Link
+                                  key={exam.name}
+                                  to={exam.path}
+                                  className="block py-1 text-slate-300 hover:text-white"
+                                >
+                                  {exam.name}
+                                </Link>
+                              ))}
+                            </CollapsibleContent>
+                          </Collapsible>
+                        </div>
+                        <div className="py-2">
+                          <Collapsible>
+                            <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
+                              Practice
+                              <ChevronDown className="h-4 w-4" />
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="pl-4 mt-2 space-y-2">
+                              <Link to="/practice" className="block py-1 text-slate-300 hover:text-white">
+                                All Practice Tests
+                              </Link>
+                              <Link to="/practice/reading" className="block py-1 text-slate-300 hover:text-white">
+                                Reading
+                              </Link>
+                              <Link to="/practice/listening" className="block py-1 text-slate-300 hover:text-white">
+                                Listening
+                              </Link>
+                              <Link to="/practice/writing" className="block py-1 text-slate-300 hover:text-white">
+                                Writing
+                              </Link>
+                              <Link to="/practice/speaking" className="block py-1 text-slate-300 hover:text-white">
+                                Speaking
+                              </Link>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        </div>
                       </nav>
                     </div>
                   </SheetContent>
@@ -223,11 +373,11 @@ const Navbar = () => {
                       <UserProfileMenu isMobile={true} />
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-full sm:w-80 p-0 bg-gradient-to-br from-indigo-50 to-pink-50 dark:from-indigo-950 dark:to-pink-950">
+                  <SheetContent side="right" className="w-full sm:w-80 p-0 bg-slate-800">
                     <div className="flex flex-col h-full p-6">
                       <div className="flex items-center justify-between mb-8">
-                        <Link to="/" className="font-heading text-xl font-bold text-indigo-600 dark:text-indigo-400">
-                          Neplia<span className="text-pink-500 dark:text-pink-400">.</span>
+                        <Link to="/" className="font-heading text-xl font-bold text-white">
+                          Neplia<span className="text-pink-400">.</span>
                         </Link>
                       </div>
 
@@ -237,26 +387,70 @@ const Navbar = () => {
                             <Link
                               to={link.path}
                               className={cn(
-                                "block text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-300",
-                                location.pathname === link.path && "text-indigo-600 dark:text-indigo-300"
+                                "block text-lg font-medium text-slate-300 hover:text-white",
+                                location.pathname === link.path && "text-white"
                               )}
                             >
                               {link.name}
                             </Link>
                           </div>
                         ))}
+                        <div className="py-2">
+                          <Collapsible>
+                            <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
+                              Exams
+                              <ChevronDown className="h-4 w-4" />
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="pl-4 mt-2 space-y-2">
+                              {examTypes.map(exam => (
+                                <Link
+                                  key={exam.name}
+                                  to={exam.path}
+                                  className="block py-1 text-slate-300 hover:text-white"
+                                >
+                                  {exam.name}
+                                </Link>
+                              ))}
+                            </CollapsibleContent>
+                          </Collapsible>
+                        </div>
+                        <div className="py-2">
+                          <Collapsible>
+                            <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
+                              Practice
+                              <ChevronDown className="h-4 w-4" />
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="pl-4 mt-2 space-y-2">
+                              <Link to="/practice" className="block py-1 text-slate-300 hover:text-white">
+                                All Practice Tests
+                              </Link>
+                              <Link to="/practice/reading" className="block py-1 text-slate-300 hover:text-white">
+                                Reading
+                              </Link>
+                              <Link to="/practice/listening" className="block py-1 text-slate-300 hover:text-white">
+                                Listening
+                              </Link>
+                              <Link to="/practice/writing" className="block py-1 text-slate-300 hover:text-white">
+                                Writing
+                              </Link>
+                              <Link to="/practice/speaking" className="block py-1 text-slate-300 hover:text-white">
+                                Speaking
+                              </Link>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        </div>
                       </nav>
 
                       <div className="mt-6 space-y-3">
                         <Link
                           to="/login"
-                          className="block w-full text-center px-4 py-3 rounded-lg border border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                          className="block w-full text-center px-4 py-3 rounded-lg border border-white text-white hover:bg-white/10 transition-colors"
                         >
                           Log In
                         </Link>
                         <Link
                           to="/signup"
-                          className="block w-full text-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg transition-colors"
+                          className="block w-full text-center px-4 py-2 bg-white hover:bg-white/90 text-indigo-600 rounded-lg transition-colors"
                         >
                           Sign Up
                         </Link>
