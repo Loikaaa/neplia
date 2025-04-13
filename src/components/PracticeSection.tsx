@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Headphones, BookOpen, Edit, MessageSquare, Quote, ArrowRight, Trophy, ChevronDown, ChevronRight } from 'lucide-react';
@@ -216,7 +217,7 @@ const PracticeSection = () => {
                           <NavigationMenuLink asChild>
                             <Link
                               className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-4 no-underline outline-none focus:shadow-md"
-                              to={exam.path}
+                              to={`/practice/${exam.name.toLowerCase()}`}
                             >
                               <div className="mb-2 mt-4 text-lg font-medium">
                                 {exam.name}
@@ -263,7 +264,7 @@ const PracticeSection = () => {
                           <NavigationMenuLink asChild>
                             <Link
                               className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-4 no-underline outline-none focus:shadow-md"
-                              to={exam.path}
+                              to={`/practice/${exam.name.toLowerCase()}`}
                             >
                               <div className="mb-2 mt-4 text-lg font-medium">
                                 {exam.name}
@@ -391,7 +392,7 @@ const PracticeSection = () => {
 
         <div className="flex justify-center mt-8">
           <Link 
-            to="/practice" 
+            to={`/practice/${examType}`}
             className="btn-primary inline-flex items-center text-lg px-8 py-3"
           >
             Explore All Practice Tests

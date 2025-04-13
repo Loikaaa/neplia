@@ -41,6 +41,14 @@ import WritingPractice from '@/pages/practice/WritingPractice';
 import MockTestPage from '@/pages/practice/MockTestPage';
 import AdminRedirect from '@/components/admin/AdminRedirect';
 
+// Import new exam-specific practice pages
+import IeltsPracticePage from '@/pages/practice/exam-specific/IeltsPracticePage';
+import ToeflPracticePage from '@/pages/practice/exam-specific/ToeflPracticePage';
+import PtePracticePage from '@/pages/practice/exam-specific/PtePracticePage';
+import GrePracticePage from '@/pages/practice/exam-specific/GrePracticePage';
+import GmatPracticePage from '@/pages/practice/exam-specific/GmatPracticePage';
+import SatPracticePage from '@/pages/practice/exam-specific/SatPracticePage';
+
 function App() {
   return (
     <Router>
@@ -72,7 +80,7 @@ function App() {
         <Route path="/exams/gmat" element={<GmatPage />} />
         <Route path="/exams/sat" element={<SatPage />} />
         
-        {/* Practice Routes */}
+        {/* Generic Practice Routes */}
         <Route path="/practice" element={<PracticePage />} />
         <Route path="/practice/reading" element={<ReadingPractice />} />
         <Route path="/practice/listening" element={<ListeningPractice />} />
@@ -80,6 +88,14 @@ function App() {
         <Route path="/practice/speaking" element={<SpeakingPractice />} />
         <Route path="/practice/writing" element={<WritingPractice />} />
         <Route path="/practice/mock-test" element={<MockTestPage />} />
+        
+        {/* Exam-Specific Practice Routes */}
+        <Route path="/practice/ielts" element={<IeltsPracticePage />} />
+        <Route path="/practice/toefl" element={<ToeflPracticePage />} />
+        <Route path="/practice/pte" element={<PtePracticePage />} />
+        <Route path="/practice/gre" element={<GrePracticePage />} />
+        <Route path="/practice/gmat" element={<GmatPracticePage />} />
+        <Route path="/practice/sat" element={<SatPracticePage />} />
         
         {/* Admin Redirect - This will redirect to your Laravel backend */}
         <Route path="/admin/*" element={<AdminRedirect />} />
