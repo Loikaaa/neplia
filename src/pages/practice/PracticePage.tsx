@@ -2,20 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { 
   BookOpen, 
   Headphones, 
   MessageSquare, 
   Edit, 
-  Calendar, 
-  Clock, 
-  CheckCircle2,
+  Calculator,
   Trophy
 } from 'lucide-react';
-import PracticeSection from '@/components/PracticeSection';
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -32,7 +27,6 @@ const examTitles: Record<string, string> = {
 };
 
 const PracticePage = () => {
-  const [selectedTab, setSelectedTab] = useState('module');
   const [examType, setExamType] = useState('ielts');
   const { toast } = useToast();
   const location = useLocation();
@@ -65,13 +59,6 @@ const PracticePage = () => {
       }
     }
   }, [location, navigate]);
-  
-  const startFullMockExam = () => {
-    toast({
-      title: "Mock Exam Scheduled",
-      description: `Your full ${examTitles[examType] || 'IELTS'} mock exam has been scheduled. Good luck!`,
-    });
-  };
 
   const getExamTitle = () => {
     return examTitles[examType] || 'IELTS';
