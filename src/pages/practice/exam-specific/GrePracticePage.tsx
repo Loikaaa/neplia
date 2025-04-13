@@ -74,7 +74,7 @@ const GrePracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/reading?exam=gre" className="w-full">
+                    <Link to="/practice/gre/verbal" className="w-full">
                       <Button className="w-full" variant="outline">Start Verbal Practice</Button>
                     </Link>
                   </CardFooter>
@@ -108,7 +108,7 @@ const GrePracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/reading?exam=gre&section=quantitative" className="w-full">
+                    <Link to="/practice/gre/quantitative" className="w-full">
                       <Button className="w-full" variant="outline">Start Quantitative Practice</Button>
                     </Link>
                   </CardFooter>
@@ -142,7 +142,7 @@ const GrePracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/writing?exam=gre" className="w-full">
+                    <Link to="/practice/gre/analytical" className="w-full">
                       <Button className="w-full" variant="outline">Start Writing Practice</Button>
                     </Link>
                   </CardFooter>
@@ -176,7 +176,7 @@ const GrePracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/mock-test?exam=gre&section=mixed" className="w-full">
+                    <Link to="/practice/gre/mixed" className="w-full">
                       <Button className="w-full" variant="outline">Start Integrated Practice</Button>
                     </Link>
                   </CardFooter>

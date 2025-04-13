@@ -10,7 +10,8 @@ import {
   Edit, 
   Calculator,
   Trophy,
-  ExternalLink
+  ExternalLink,
+  ArrowRight
 } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -69,32 +70,38 @@ const PracticePage = () => {
     {
       name: 'IELTS',
       path: '/practice/ielts',
-      color: 'bg-gradient-to-r from-indigo-500 to-indigo-700'
+      color: 'bg-gradient-to-r from-indigo-500 to-indigo-700',
+      sections: ['Reading', 'Listening', 'Writing', 'Speaking']
     },
     {
       name: 'TOEFL',
       path: '/practice/toefl',
-      color: 'bg-gradient-to-r from-blue-500 to-blue-700'
+      color: 'bg-gradient-to-r from-blue-500 to-blue-700',
+      sections: ['Reading', 'Listening', 'Writing', 'Speaking']
     },
     {
       name: 'PTE',
       path: '/practice/pte',
-      color: 'bg-gradient-to-r from-teal-600 to-teal-800'
+      color: 'bg-gradient-to-r from-teal-600 to-teal-800',
+      sections: ['Reading', 'Listening', 'Speaking & Writing']
     },
     {
       name: 'GRE',
       path: '/practice/gre',
-      color: 'bg-gradient-to-r from-purple-600 to-purple-800'
+      color: 'bg-gradient-to-r from-purple-600 to-purple-800',
+      sections: ['Verbal', 'Quantitative', 'Analytical Writing']
     },
     {
       name: 'GMAT',
       path: '/practice/gmat',
-      color: 'bg-gradient-to-r from-blue-700 to-blue-900'
+      color: 'bg-gradient-to-r from-blue-700 to-blue-900',
+      sections: ['Verbal', 'Quantitative', 'Integrated Reasoning', 'Analytical Writing']
     },
     {
       name: 'SAT',
       path: '/practice/sat',
-      color: 'bg-gradient-to-r from-red-600 to-red-800'
+      color: 'bg-gradient-to-r from-red-600 to-red-800',
+      sections: ['Reading & Writing', 'Math']
     }
   ];
 
@@ -102,33 +109,102 @@ const PracticePage = () => {
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <div className="space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{getExamTitle()} Practice Center</h1>
-            <p className="text-gray-500 dark:text-gray-400">
-              Prepare for your {getExamTitle()} exam with our comprehensive practice modules and full mock tests.
+          <div className="space-y-2 text-center">
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Exam Practice Center
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+              Prepare for your exams with our comprehensive practice modules and full mock tests.
             </p>
-            <div className="pt-6">
-              <div className="text-center mb-8">
-                <h2 className="text-xl md:text-2xl font-semibold mb-2">
-                  Select an exam to begin practicing:
-                </h2>
-                <div className="h-1 w-20 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto rounded-full"></div>
-              </div>
-              
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                {examTypes.map((exam) => (
-                  <Link key={exam.name} to={exam.path} className="transform transition-all duration-300 hover:scale-105">
-                    <Button 
-                      variant="outline"
-                      className={`w-full h-full py-6 flex flex-col items-center justify-center gap-2 shadow-md hover:shadow-lg ${exam.color} text-white border-0`}
-                    >
-                      <span className="font-bold text-lg md:text-xl">{exam.name}</span>
-                      <ExternalLink className="h-4 w-4 md:h-5 md:w-5 opacity-80" />
-                    </Button>
-                  </Link>
-                ))}
-              </div>
+            <div className="h-1 w-20 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto mt-2 rounded-full"></div>
+          </div>
+          
+          <div className="pt-6">
+            <div className="text-center mb-8">
+              <h2 className="text-xl md:text-2xl font-semibold mb-2">
+                Select an exam to begin practicing:
+              </h2>
             </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+              {examTypes.map((exam) => (
+                <Link key={exam.name} to={exam.path} className="transform transition-all duration-300 hover:scale-105">
+                  <div className={`${exam.color} rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all`}>
+                    <div className="p-5 md:p-6 text-white">
+                      <h3 className="font-bold text-lg md:text-xl mb-2">{exam.name}</h3>
+                      <div className="text-xs md:text-sm text-white/80 mb-3">
+                        {exam.sections.length} practice sections
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {exam.sections.slice(0, 2).map((section, idx) => (
+                          <span key={idx} className="inline-block bg-white/20 rounded-full px-2 py-0.5 text-xs">
+                            {section}
+                          </span>
+                        ))}
+                        {exam.sections.length > 2 && (
+                          <span className="inline-block bg-white/20 rounded-full px-2 py-0.5 text-xs">
+                            +{exam.sections.length - 2} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="bg-white/10 p-3 flex items-center justify-center">
+                      <span className="text-white text-sm flex items-center">
+                        Start Practice <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+          
+          <div className="mt-12 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-800">
+            <div className="text-center mb-6">
+              <h2 className="text-xl md:text-2xl font-semibold mb-2">
+                Practice by Skill
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto text-sm">
+                Focus on specific language skills across different exam formats
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Link to="/practice/reading" className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-all text-center border border-gray-100 dark:border-gray-700">
+                <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                  <BookOpen className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <h3 className="font-medium">Reading</h3>
+              </Link>
+              
+              <Link to="/practice/listening" className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-all text-center border border-gray-100 dark:border-gray-700">
+                <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-full w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                  <Headphones className="h-6 w-6 text-green-600 dark:text-green-400" />
+                </div>
+                <h3 className="font-medium">Listening</h3>
+              </Link>
+              
+              <Link to="/practice/speaking" className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-all text-center border border-gray-100 dark:border-gray-700">
+                <div className="bg-amber-100 dark:bg-amber-900/30 p-3 rounded-full w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                  <MessageSquare className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                </div>
+                <h3 className="font-medium">Speaking</h3>
+              </Link>
+              
+              <Link to="/practice/writing" className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-all text-center border border-gray-100 dark:border-gray-700">
+                <div className="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-full w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                  <Edit className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                </div>
+                <h3 className="font-medium">Writing</h3>
+              </Link>
+            </div>
+          </div>
+          
+          <div className="mt-8 text-center">
+            <Link to="/practice/mock-test" className="inline-flex items-center rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 text-white shadow-lg hover:opacity-90 transition-all">
+              <Trophy className="mr-2 h-5 w-5" />
+              Take a Full Mock Test
+            </Link>
           </div>
         </div>
       </div>

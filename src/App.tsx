@@ -41,7 +41,7 @@ import WritingPractice from '@/pages/practice/WritingPractice';
 import MockTestPage from '@/pages/practice/MockTestPage';
 import AdminRedirect from '@/components/admin/AdminRedirect';
 
-// Import new exam-specific practice pages
+// Import exam-specific practice pages
 import IeltsPracticePage from '@/pages/practice/exam-specific/IeltsPracticePage';
 import ToeflPracticePage from '@/pages/practice/exam-specific/ToeflPracticePage';
 import PtePracticePage from '@/pages/practice/exam-specific/PtePracticePage';
@@ -96,6 +96,17 @@ function App() {
         <Route path="/practice/gre" element={<GrePracticePage />} />
         <Route path="/practice/gmat" element={<GmatPracticePage />} />
         <Route path="/practice/sat" element={<SatPracticePage />} />
+        
+        {/* Exam-Specific Section Routes */}
+        {/* SAT Section Routes */}
+        <Route path="/practice/sat/reading" element={<ReadingPractice />} />
+        <Route path="/practice/sat/math" element={<ReadingPractice />} />
+        
+        {/* GRE Section Routes */}
+        <Route path="/practice/gre/verbal" element={<ReadingPractice />} />
+        <Route path="/practice/gre/quantitative" element={<ReadingPractice />} />
+        <Route path="/practice/gre/analytical" element={<WritingPractice />} />
+        <Route path="/practice/gre/mixed" element={<ReadingPractice />} />
         
         {/* Admin Redirect - This will redirect to your Laravel backend */}
         <Route path="/admin/*" element={<AdminRedirect />} />

@@ -76,7 +76,7 @@ const SatPracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/reading?exam=sat" className="w-full">
+                    <Link to="/practice/sat/reading" className="w-full">
                       <Button className="w-full bg-gradient-to-r from-red-600 to-red-800 hover:opacity-90 flex items-center justify-center gap-2">
                         Start Reading & Writing
                         <ArrowRight className="h-4 w-4" />
@@ -113,7 +113,7 @@ const SatPracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/reading?exam=sat&section=math" className="w-full">
+                    <Link to="/practice/sat/math" className="w-full">
                       <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:opacity-90 flex items-center justify-center gap-2">
                         Start Math Practice
                         <ArrowRight className="h-4 w-4" />

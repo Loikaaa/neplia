@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy, X } from 'lucide-react';
+import { ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy, X, Home, Info, LibraryBig, Phone } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import UserProfileMenu from './UserProfileMenu';
 import { Button } from "@/components/ui/button";
@@ -25,67 +24,75 @@ const examTypes = [
   {
     name: "IELTS",
     path: "/exams/ielts",
+    color: "bg-indigo-600",
     sections: [
-      { name: "Listening", path: "/practice/listening", icon: Headphones, description: "Improve your listening skills with our practice tests" },
-      { name: "Reading", path: "/practice/reading", icon: BookOpen, description: "Enhance your reading comprehension with timed exercises" },
-      { name: "Writing", path: "/practice/writing", icon: Edit, description: "Get AI-powered feedback on your writing tasks" },
-      { name: "Speaking", path: "/practice/speaking", icon: MessageSquare, description: "Practice your speaking skills with voice analysis tools" },
-      { name: "Mock Tests", path: "/practice/mock-test", icon: Trophy, description: "Take full-length IELTS mock tests under exam conditions" },
+      { name: "Reading", path: "/practice/ielts/reading", icon: BookOpen, description: "Enhance your reading comprehension with timed exercises" },
+      { name: "Listening", path: "/practice/ielts/listening", icon: Headphones, description: "Improve your listening skills with our practice tests" },
+      { name: "Writing", path: "/practice/ielts/writing", icon: Edit, description: "Get AI-powered feedback on your writing tasks" },
+      { name: "Speaking", path: "/practice/ielts/speaking", icon: MessageSquare, description: "Practice your speaking skills with voice analysis tools" },
+      { name: "Mock Tests", path: "/practice/mock-test?exam=ielts", icon: Trophy, description: "Take full-length IELTS mock tests under exam conditions" },
     ]
   },
   {
     name: "TOEFL",
     path: "/exams/toefl",
+    color: "bg-blue-600",
     sections: [
-      { name: "Listening", path: "/practice/listening?exam=toefl", icon: Headphones },
-      { name: "Reading", path: "/practice/reading?exam=toefl", icon: BookOpen },
-      { name: "Writing", path: "/practice/writing?exam=toefl", icon: Edit },
-      { name: "Speaking", path: "/practice/speaking?exam=toefl", icon: MessageSquare },
-    ]
-  },
-  {
-    name: "SAT",
-    path: "/exams/sat",
-    sections: [
-      { name: "Math", path: "/practice/sat/math", icon: BarChart3 },
-      { name: "English", path: "/practice/sat/english", icon: BookOpen },
+      { name: "Reading", path: "/practice/toefl/reading", icon: BookOpen, description: "Practice with TOEFL reading passages and questions" },
+      { name: "Listening", path: "/practice/toefl/listening", icon: Headphones, description: "Enhance your listening comprehension for lectures and conversations" },
+      { name: "Writing", path: "/practice/toefl/writing", icon: Edit, description: "Develop your integrated and independent writing skills" },
+      { name: "Speaking", path: "/practice/toefl/speaking", icon: MessageSquare, description: "Improve your spoken English with TOEFL speaking tasks" },
     ]
   },
   {
     name: "GRE",
     path: "/exams/gre",
+    color: "bg-purple-700",
     sections: [
-      { name: "Verbal", path: "/practice/gre/verbal", icon: BookOpen },
-      { name: "Quantitative", path: "/practice/gre/quantitative", icon: BarChart3 },
-      { name: "Analytical Writing", path: "/practice/gre/analytical", icon: Edit },
+      { name: "Verbal Reasoning", path: "/practice/gre/verbal", icon: BookOpen, description: "Improve your verbal reasoning skills for the GRE" },
+      { name: "Quantitative Reasoning", path: "/practice/gre/quantitative", icon: BarChart3, description: "Enhance your mathematical problem-solving abilities" },
+      { name: "Analytical Writing", path: "/practice/gre/analytical", icon: Edit, description: "Develop your analytical essay writing skills" },
     ]
   },
   {
     name: "GMAT",
     path: "/exams/gmat",
+    color: "bg-blue-800",
     sections: [
-      { name: "Verbal", path: "/practice/gmat/verbal", icon: BookOpen },
-      { name: "Quantitative", path: "/practice/gmat/quantitative", icon: BarChart3 },
-      { name: "Integrated Reasoning", path: "/practice/gmat/integrated", icon: BarChart3 },
-      { name: "Analytical Writing", path: "/practice/gmat/analytical", icon: Edit },
+      { name: "Verbal", path: "/practice/gmat/verbal", icon: BookOpen, description: "Practice critical reasoning, reading comprehension, and sentence correction" },
+      { name: "Quantitative", path: "/practice/gmat/quantitative", icon: BarChart3, description: "Enhance your problem-solving and data sufficiency skills" },
+      { name: "Integrated Reasoning", path: "/practice/gmat/integrated", icon: BarChart3, description: "Develop your ability to analyze data from multiple sources" },
+      { name: "Analytical Writing", path: "/practice/gmat/analytical", icon: Edit, description: "Improve your ability to analyze arguments and express ideas" },
+    ]
+  },
+  {
+    name: "SAT",
+    path: "/exams/sat",
+    color: "bg-red-700",
+    sections: [
+      { name: "Reading & Writing", path: "/practice/sat/reading", icon: BookOpen, description: "Enhance your reading and writing skills for the SAT" },
+      { name: "Math", path: "/practice/sat/math", icon: BarChart3, description: "Improve your mathematical problem-solving abilities" },
     ]
   },
   {
     name: "PTE",
     path: "/exams/pte",
+    color: "bg-teal-700",
     sections: [
-      { name: "Speaking & Writing", path: "/practice/speaking?exam=pte", icon: MessageSquare },
-      { name: "Reading", path: "/practice/reading?exam=pte", icon: BookOpen },
-      { name: "Listening", path: "/practice/listening?exam=pte", icon: Headphones },
+      { name: "Speaking & Writing", path: "/practice/pte/speaking", icon: MessageSquare, description: "Practice integrated speaking and writing tasks" },
+      { name: "Reading", path: "/practice/pte/reading", icon: BookOpen, description: "Enhance your reading comprehension skills" },
+      { name: "Listening", path: "/practice/pte/listening", icon: Headphones, description: "Improve your listening skills for academic contexts" },
     ]
   }
 ];
 
 const navLinks = [
-  { name: 'Home', path: '/' },
-  { name: 'Resources', path: '/resources' },
-  { name: 'Blog', path: '/blog' },
-  { name: 'About', path: '/about' },
+  { name: 'Home', path: '/', icon: Home },
+  { name: 'Practice', path: '/practice', icon: Trophy },
+  { name: 'Resources', path: '/resources', icon: LibraryBig },
+  { name: 'Blog', path: '/blog', icon: Edit },
+  { name: 'About', path: '/about', icon: Info },
+  { name: 'Contact', path: '/contact', icon: Phone },
 ];
 
 const Navbar = () => {
@@ -134,18 +141,95 @@ const Navbar = () => {
           <div className="hidden md:flex md:flex-1 md:justify-center">
             <NavigationMenu className="mx-auto">
               <NavigationMenuList className="gap-1">
-                {navLinks.map((link) => (
+                {navLinks.map((link, index) => (
                   <NavigationMenuItem key={link.name}>
-                    <Link 
-                      to={link.path}
-                      className={cn(
-                        navigationMenuTriggerStyle({ variant: "solid" }),
-                        "text-white font-medium transition-colors",
-                        location.pathname === link.path && "bg-white/20 dark:bg-white/20"
-                      )}
-                    >
-                      {link.name}
-                    </Link>
+                    {link.name === 'Practice' ? (
+                      <>
+                        <NavigationMenuTrigger 
+                          variant="solid" 
+                          className={cn(
+                            "text-white font-medium",
+                            location.pathname.startsWith("/practice") && "bg-white/20 dark:bg-white/20"
+                          )}
+                        >
+                          {link.name}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-slate-800">
+                            <li className="row-span-3">
+                              <NavigationMenuLink asChild>
+                                <Link
+                                  className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-indigo-500 to-indigo-700 p-6 no-underline outline-none focus:shadow-md"
+                                  to="/practice"
+                                >
+                                  <div className="mb-2 mt-4 text-lg font-medium text-white">
+                                    Full Practice Tests
+                                  </div>
+                                  <p className="text-sm leading-tight text-white/90">
+                                    Take comprehensive practice tests for all exam sections
+                                  </p>
+                                </Link>
+                              </NavigationMenuLink>
+                            </li>
+                            <li>
+                              <Link to="/practice/reading" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
+                                <div className="flex items-center">
+                                  <BookOpen className="h-4 w-4 mr-2 text-indigo-400" />
+                                  <div className="text-sm font-medium text-white">Reading</div>
+                                </div>
+                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
+                                  Practice reading comprehension skills
+                                </p>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link to="/practice/listening" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
+                                <div className="flex items-center">
+                                  <Headphones className="h-4 w-4 mr-2 text-indigo-400" />
+                                  <div className="text-sm font-medium text-white">Listening</div>
+                                </div>
+                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
+                                  Improve your listening comprehension
+                                </p>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link to="/practice/writing" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
+                                <div className="flex items-center">
+                                  <Edit className="h-4 w-4 mr-2 text-indigo-400" />
+                                  <div className="text-sm font-medium text-white">Writing</div>
+                                </div>
+                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
+                                  Develop your writing skills
+                                </p>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link to="/practice/speaking" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
+                                <div className="flex items-center">
+                                  <MessageSquare className="h-4 w-4 mr-2 text-indigo-400" />
+                                  <div className="text-sm font-medium text-white">Speaking</div>
+                                </div>
+                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
+                                  Practice your speaking skills
+                                </p>
+                              </Link>
+                            </li>
+                          </ul>
+                        </NavigationMenuContent>
+                      </>
+                    ) : (
+                      <Link 
+                        to={link.path}
+                        className={cn(
+                          navigationMenuTriggerStyle({ variant: "solid" }),
+                          "text-white font-medium transition-colors",
+                          location.pathname === link.path && "bg-white/20 dark:bg-white/20"
+                        )}
+                      >
+                        {link.name}
+                      </Link>
+                    )}
                   </NavigationMenuItem>
                 ))}
 
@@ -166,91 +250,19 @@ const Navbar = () => {
                           <NavigationMenuLink asChild>
                             <Link
                               to={exam.path}
-                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white"
+                              className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white`}
                             >
-                              <div className="text-sm font-medium text-white">{exam.name}</div>
-                              <p className="line-clamp-2 text-sm leading-snug text-slate-300">
+                              <div className="flex items-center">
+                                <div className={`h-2 w-2 rounded-full mr-2 ${exam.color}`}></div>
+                                <div className="text-sm font-medium text-white">{exam.name}</div>
+                              </div>
+                              <p className="line-clamp-2 text-xs leading-snug text-slate-300">
                                 {exam.sections?.length} practice sections available
                               </p>
                             </Link>
                           </NavigationMenuLink>
                         </li>
                       ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger 
-                    variant="solid" 
-                    className={cn(
-                      "text-white font-medium",
-                      location.pathname.startsWith("/practice") && "bg-white/20 dark:bg-white/20"
-                    )}
-                  >
-                    Practice
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-slate-800">
-                      <li className="row-span-3">
-                        <NavigationMenuLink asChild>
-                          <Link
-                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-indigo-500 to-indigo-700 p-6 no-underline outline-none focus:shadow-md"
-                            to="/practice"
-                          >
-                            <div className="mb-2 mt-4 text-lg font-medium text-white">
-                              Full Practice Tests
-                            </div>
-                            <p className="text-sm leading-tight text-white/90">
-                              Take comprehensive practice tests for all exam sections
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <Link to="/practice/reading" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                          <div className="flex items-center">
-                            <BookOpen className="h-4 w-4 mr-2 text-indigo-400" />
-                            <div className="text-sm font-medium text-white">Reading</div>
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                            Practice reading comprehension skills
-                          </p>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/practice/listening" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                          <div className="flex items-center">
-                            <Headphones className="h-4 w-4 mr-2 text-indigo-400" />
-                            <div className="text-sm font-medium text-white">Listening</div>
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                            Improve your listening comprehension
-                          </p>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/practice/writing" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                          <div className="flex items-center">
-                            <Edit className="h-4 w-4 mr-2 text-indigo-400" />
-                            <div className="text-sm font-medium text-white">Writing</div>
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                            Develop your writing skills
-                          </p>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/practice/speaking" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                          <div className="flex items-center">
-                            <MessageSquare className="h-4 w-4 mr-2 text-indigo-400" />
-                            <div className="text-sm font-medium text-white">Speaking</div>
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                            Practice your speaking skills
-                          </p>
-                        </Link>
-                      </li>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -283,17 +295,48 @@ const Navbar = () => {
 
                       <nav className="flex-1 space-y-6">
                         {navLinks.map((link) => (
-                          <div key={link.name} className="py-2">
-                            <Link
-                              to={link.path}
-                              className={cn(
-                                "block text-lg font-medium text-slate-300 hover:text-white",
-                                location.pathname === link.path && "text-white"
-                              )}
-                            >
-                              {link.name}
-                            </Link>
-                          </div>
+                          link.name === 'Practice' ? (
+                            <div key={link.name} className="py-2">
+                              <Collapsible>
+                                <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
+                                  Practice
+                                  <ChevronDown className="h-4 w-4" />
+                                </CollapsibleTrigger>
+                                <CollapsibleContent className="pl-4 mt-2 space-y-2">
+                                  <Link to="/practice" className="block py-1 text-slate-300 hover:text-white">
+                                    All Practice Tests
+                                  </Link>
+                                  <Link to="/practice/reading" className="block py-1 text-slate-300 hover:text-white">
+                                    Reading
+                                  </Link>
+                                  <Link to="/practice/listening" className="block py-1 text-slate-300 hover:text-white">
+                                    Listening
+                                  </Link>
+                                  <Link to="/practice/writing" className="block py-1 text-slate-300 hover:text-white">
+                                    Writing
+                                  </Link>
+                                  <Link to="/practice/speaking" className="block py-1 text-slate-300 hover:text-white">
+                                    Speaking
+                                  </Link>
+                                </CollapsibleContent>
+                              </Collapsible>
+                            </div>
+                          ) : (
+                            <div key={link.name} className="py-2">
+                              <Link
+                                to={link.path}
+                                className={cn(
+                                  "block text-lg font-medium text-slate-300 hover:text-white",
+                                  location.pathname === link.path && "text-white"
+                                )}
+                              >
+                                <div className="flex items-center">
+                                  <link.icon className="h-5 w-5 mr-2.5" />
+                                  {link.name}
+                                </div>
+                              </Link>
+                            </div>
+                          )
                         ))}
                         <div className="py-2">
                           <Collapsible>
@@ -311,31 +354,6 @@ const Navbar = () => {
                                   {exam.name}
                                 </Link>
                               ))}
-                            </CollapsibleContent>
-                          </Collapsible>
-                        </div>
-                        <div className="py-2">
-                          <Collapsible>
-                            <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
-                              Practice
-                              <ChevronDown className="h-4 w-4" />
-                            </CollapsibleTrigger>
-                            <CollapsibleContent className="pl-4 mt-2 space-y-2">
-                              <Link to="/practice" className="block py-1 text-slate-300 hover:text-white">
-                                All Practice Tests
-                              </Link>
-                              <Link to="/practice/reading" className="block py-1 text-slate-300 hover:text-white">
-                                Reading
-                              </Link>
-                              <Link to="/practice/listening" className="block py-1 text-slate-300 hover:text-white">
-                                Listening
-                              </Link>
-                              <Link to="/practice/writing" className="block py-1 text-slate-300 hover:text-white">
-                                Writing
-                              </Link>
-                              <Link to="/practice/speaking" className="block py-1 text-slate-300 hover:text-white">
-                                Speaking
-                              </Link>
                             </CollapsibleContent>
                           </Collapsible>
                         </div>
@@ -383,17 +401,48 @@ const Navbar = () => {
 
                       <nav className="flex-1 space-y-6">
                         {navLinks.map((link) => (
-                          <div key={link.name} className="py-2">
-                            <Link
-                              to={link.path}
-                              className={cn(
-                                "block text-lg font-medium text-slate-300 hover:text-white",
-                                location.pathname === link.path && "text-white"
-                              )}
-                            >
-                              {link.name}
-                            </Link>
-                          </div>
+                          link.name === 'Practice' ? (
+                            <div key={link.name} className="py-2">
+                              <Collapsible>
+                                <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
+                                  Practice
+                                  <ChevronDown className="h-4 w-4" />
+                                </CollapsibleTrigger>
+                                <CollapsibleContent className="pl-4 mt-2 space-y-2">
+                                  <Link to="/practice" className="block py-1 text-slate-300 hover:text-white">
+                                    All Practice Tests
+                                  </Link>
+                                  <Link to="/practice/reading" className="block py-1 text-slate-300 hover:text-white">
+                                    Reading
+                                  </Link>
+                                  <Link to="/practice/listening" className="block py-1 text-slate-300 hover:text-white">
+                                    Listening
+                                  </Link>
+                                  <Link to="/practice/writing" className="block py-1 text-slate-300 hover:text-white">
+                                    Writing
+                                  </Link>
+                                  <Link to="/practice/speaking" className="block py-1 text-slate-300 hover:text-white">
+                                    Speaking
+                                  </Link>
+                                </CollapsibleContent>
+                              </Collapsible>
+                            </div>
+                          ) : (
+                            <div key={link.name} className="py-2">
+                              <Link
+                                to={link.path}
+                                className={cn(
+                                  "block text-lg font-medium text-slate-300 hover:text-white",
+                                  location.pathname === link.path && "text-white"
+                                )}
+                              >
+                                <div className="flex items-center">
+                                  <link.icon className="h-5 w-5 mr-2.5" />
+                                  {link.name}
+                                </div>
+                              </Link>
+                            </div>
+                          )
                         ))}
                         <div className="py-2">
                           <Collapsible>
@@ -411,31 +460,6 @@ const Navbar = () => {
                                   {exam.name}
                                 </Link>
                               ))}
-                            </CollapsibleContent>
-                          </Collapsible>
-                        </div>
-                        <div className="py-2">
-                          <Collapsible>
-                            <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
-                              Practice
-                              <ChevronDown className="h-4 w-4" />
-                            </CollapsibleTrigger>
-                            <CollapsibleContent className="pl-4 mt-2 space-y-2">
-                              <Link to="/practice" className="block py-1 text-slate-300 hover:text-white">
-                                All Practice Tests
-                              </Link>
-                              <Link to="/practice/reading" className="block py-1 text-slate-300 hover:text-white">
-                                Reading
-                              </Link>
-                              <Link to="/practice/listening" className="block py-1 text-slate-300 hover:text-white">
-                                Listening
-                              </Link>
-                              <Link to="/practice/writing" className="block py-1 text-slate-300 hover:text-white">
-                                Writing
-                              </Link>
-                              <Link to="/practice/speaking" className="block py-1 text-slate-300 hover:text-white">
-                                Speaking
-                              </Link>
                             </CollapsibleContent>
                           </Collapsible>
                         </div>

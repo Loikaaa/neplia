@@ -1,295 +1,197 @@
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { readingTestData } from '@/data/readingTestData';
 import { ReadingQuestions } from './ReadingQuestions';
-import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
-import { useToast } from '@/hooks/use-toast';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Lock } from 'lucide-react';
-import { useUserProgress } from '@/services/userProgressService';
 
-export const ReadingTest = () => {
-  const [currentPassage, setCurrentPassage] = useState(0);
-  const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
-  const [testCompleted, setTestCompleted] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(60 * 60); // 60 minutes in seconds
-  const [score, setScore] = useState(0);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginDialog, setShowLoginDialog] = useState(false);
-  const [loginData, setLoginData] = useState({ email: '', password: '' });
-  
-  const { toast } = useToast();
-  const { trackCompletion } = useUserProgress();
-  const testData = readingTestData;
+interface ReadingTestProps {
+  examType?: string;
+  section?: string;
+}
 
-  // Check login status on component mount
-  useEffect(() => {
-    const loggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
-    setIsLoggedIn(loggedIn);
-  }, []);
+export const ReadingTest = ({ examType = 'ielts', section = 'reading' }: ReadingTestProps) => {
+  const [activeTab, setActiveTab] = useState('passage');
 
-  // Timer effect
-  useEffect(() => {
-    // Start the timer when the component mounts
-    const timer = setInterval(() => {
-      setTimeRemaining(prev => {
-        if (prev <= 0) {
-          clearInterval(timer);
-          handleTimeUp();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    
-    // Clean up the timer when the component unmounts
-    return () => clearInterval(timer);
-  }, []);
-
-  // Handle time up
-  const handleTimeUp = () => {
-    toast({
-      title: "Time's up!",
-      description: "Your reading test time has ended. Please submit your answers.",
-      variant: "destructive",
-    });
-    
-    // Auto-submit when time is up
-    submitTest();
-  };
-
-  const handleAnswerChange = (questionId: string, answer: string) => {
-    setUserAnswers(prev => ({
-      ...prev,
-      [questionId]: answer
-    }));
-  };
-
-  const calculateScore = () => {
-    // A simple scoring algorithm that gives a point for each answer
-    // In a real app, you would check against correct answers
-    const answeredQuestions = Object.keys(userAnswers).length;
-    const totalQuestions = testData.passages.reduce(
-      (total, passage) => total + passage.questions.length, 
-      0
-    );
-    
-    // Calculate percentage and convert to 0-100 scale
-    const percentageCorrect = (answeredQuestions / totalQuestions) * 100;
-    
-    // Add some randomness for demo purposes
-    const baseScore = Math.min(percentageCorrect + (Math.random() * 20 - 10), 100);
-    return Math.max(0, Math.round(baseScore));
-  };
-
-  const submitTest = async () => {
-    if (!isLoggedIn) {
-      setShowLoginDialog(true);
-      return;
+  // Sample passage for different exam types and sections
+  const getPassageContent = () => {
+    if (examType === 'gre' && section === 'verbal') {
+      return (
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold">The Transformation of Urban Spaces</h3>
+          <p>
+            The metamorphosis of urban spaces represents one of the most profound social and architectural shifts of the modern era. Cities, once designed primarily as centers of commerce and governance, have increasingly evolved into multifaceted ecosystems that serve diverse social, cultural, and environmental functions. This transformation reflects both changing attitudes about communal living and the inexorable pressure of population growth in metropolitan areas.
+          </p>
+          <p>
+            Urban planners now routinely incorporate biophilic elements—those that connect inhabitants with nature—recognizing the salutary effects of green spaces on mental health and community cohesion. The proliferation of urban gardens, living walls, and accessible parks represents a deliberate attempt to mitigate the psychological toll of concrete landscapes. These interventions are not merely aesthetic; research indicates that proximity to natural elements correlates with reduced stress levels, improved cognitive function, and enhanced social interactions among city dwellers.
+          </p>
+          <p>
+            Concurrently, the concept of mixed-use development has gained traction, challenging the traditional segregation of residential, commercial, and industrial zones. By integrating diverse functionalities within compact areas, contemporary urban design fosters walkability and reduces dependence on automotive transportation—a shift that addresses both environmental concerns and quality-of-life considerations. The resulting neighborhoods often exhibit a vitality absent in their more homogeneous counterparts, as the constant flow of people engaged in different activities generates a dynamic social atmosphere.
+          </p>
+          <p>
+            However, this urban renaissance has not proceeded without controversy. Critics argue that the revitalization of formerly neglected areas frequently catalyzes gentrification, displacing long-term residents as property values appreciate. This pattern raises fundamental questions about equity and access: Who benefits from urban transformation, and who bears its costs? The challenge for future urban development lies in balancing innovation with inclusion, ensuring that redesigned spaces remain accessible to diverse socioeconomic groups.
+          </p>
+        </div>
+      );
     }
-    
-    // Calculate score
-    const calculatedScore = calculateScore();
-    setScore(calculatedScore);
-    
-    // In a real app, you would send the answers to the server
-    setTestCompleted(true);
-    
-    // Track completion
-    await trackCompletion('reading', calculatedScore);
-    
-    toast({
-      title: "Test submitted",
-      description: "Your reading test has been submitted successfully.",
-    });
-  };
-  
-  const handleLogin = () => {
-    // In a real app, this would authenticate with a server
-    localStorage.setItem('demoUserLoggedIn', 'true');
-    setIsLoggedIn(true);
-    setShowLoginDialog(false);
-    
-    // Continue with test submission after login
-    submitTest();
-    
-    toast({
-      title: "Logged In",
-      description: "You have successfully logged in.",
-    });
-  };
-
-  // Format time as MM:SS
-  const formatTime = (totalSeconds: number) => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    else if (examType === 'gre' && section === 'quantitative') {
+      return (
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold">Quantitative Reasoning Practice Set</h3>
+          <p>
+            This practice set contains a series of mathematical problems covering various topics including arithmetic, algebra, geometry, and data analysis. Read each problem carefully and select the best answer from the options provided.
+          </p>
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p className="font-medium mb-2">Problem 1:</p>
+            <p>
+              If x² + y² = 25 and xy = 12, what is the value of (x + y)²?
+            </p>
+            <p className="mt-2 text-gray-500 dark:text-gray-400 text-sm">
+              Hint: Use the algebraic identity (x + y)² = x² + 2xy + y²
+            </p>
+          </div>
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p className="font-medium mb-2">Problem 2:</p>
+            <p>
+              In a certain sequence, each term after the first is found by multiplying the preceding term by 3 and then subtracting 2. If the first term is 5, what is the 4th term in the sequence?
+            </p>
+          </div>
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p className="font-medium mb-2">Problem 3:</p>
+            <p>
+              A circle has a circumference of 16π. What is the area of the circle?
+            </p>
+            <p className="mt-2 text-gray-500 dark:text-gray-400 text-sm">
+              Hint: Remember that the circumference of a circle is 2πr and the area is πr².
+            </p>
+          </div>
+        </div>
+      );
+    }
+    else if (examType === 'sat' && section === 'math') {
+      return (
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold">Math Section - No Calculator</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            For this section, you may not use a calculator. Solve each problem and select the best answer from the choices provided.
+          </p>
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p className="font-medium mb-2">Problem 1:</p>
+            <p>
+              If 3x + 5y = 15 and 2x - y = 7, what is the value of x?
+            </p>
+          </div>
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p className="font-medium mb-2">Problem 2:</p>
+            <p>
+              The function f is defined by f(x) = 2x² + 4x - 3. What is the value of f(2)?
+            </p>
+          </div>
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p className="font-medium mb-2">Problem 3:</p>
+            <p>
+              In the xy-plane, what is the y-coordinate of the midpoint of the line segment with endpoints (2, 7) and (8, 5)?
+            </p>
+          </div>
+          <h3 className="text-xl font-semibold mt-8">Math Section - Calculator</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            For this section, you may use a calculator. Solve each problem and select the best answer from the choices provided.
+          </p>
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p className="font-medium mb-2">Problem 4:</p>
+            <p>
+              The average (arithmetic mean) of 6 numbers is 8. If 5 of the numbers have an average of 6, what is the value of the sixth number?
+            </p>
+          </div>
+        </div>
+      );
+    }
+    else if (examType === 'sat' && section === 'reading') {
+      return (
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold">Reading & Writing Section</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+            This section tests your ability to comprehend written passages and analyze text.
+          </p>
+          <div className="border-l-4 border-red-500 pl-4 italic">
+            <p>
+              The following passage is adapted from a speech delivered by Marie Curie upon accepting her second Nobel Prize in 1911.
+            </p>
+          </div>
+          <p>
+            I am among those who think that science has great beauty. A scientist in the laboratory is not only a technician: she is also a child faced with natural phenomena which impress her like a fairy tale. We should not allow it to be believed that all scientific progress can be reduced to mechanisms, machines, gearings, even though such machinery also has its own beauty.
+          </p>
+          <p>
+            Neither do I believe that the spirit of adventure runs any risk of disappearing in our world. If I see anything vital around me, it is precisely that spirit of adventure, which seems indestructible and is akin to curiosity. Without curiosity, without the constant magical force of wonder, our work would surely appear futile.
+          </p>
+          <p>
+            But I do not believe that among the many benefits of science, the greatest is the lessons it imparts in objectivity. In laboratories we learn to weigh and measure with precision, to observe with acuity, and to think with clarity. These skills, once developed, extend beyond our scientific endeavors into how we perceive the world and interact with others. The scientific method teaches us to recognize our biases and to question our assumptions—a practice that, if embraced broadly, could elevate public discourse and decision-making.
+          </p>
+        </div>
+      );
+    }
+    else {
+      // Default IELTS/TOEFL reading passage
+      return (
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold">The History of Tea</h3>
+          <p>
+            Tea has played a significant role in human history for thousands of years. The story of tea begins in China, where according to legend, in 2737 BCE, the Chinese emperor Shen Nung was sitting beneath a tree while his servant boiled drinking water. Some leaves from the tree blew into the water, and Shen Nung, a renowned herbalist, decided to try the infusion that his servant had accidentally created. The tree was a Camellia sinensis, and the resulting drink was what we now call tea.
+          </p>
+          <p>
+            Containers for tea have been found in tombs dating from the Han dynasty (206 BCE – 220 CE) but it was during the Tang dynasty (618-906 CE) that tea became firmly established as the national drink of China. It became such a favorite that during the late eighth century a writer called Lu Yu wrote the first book entirely about tea, the Ch'a Ching, or Tea Classic. It was shortly after this that tea was first introduced to Japan, by Japanese monks who had travelled to China to study.
+          </p>
+          <p>
+            Tea drinking has become an integral part of Japanese culture, as seen in the development of the Tea Ceremony, which may be rooted in the rituals described in the Ch'a Ching. In the early 1600s, Dutch merchants brought the first tea shipments to Europe. It was initially advertised as a medicinal beverage, though it quickly became popular for its flavor and stimulating qualities, which were attributed to the caffeine content, though this was not scientifically identified until later.
+          </p>
+          <p>
+            The British East India Company began to import tea into Britain in 1669, and it became a fashionable drink among the aristocracy and wealthy. Tea drinking became a regular part of daily life for many ordinary families in the 18th century as prices fell due to reduced taxes and increased direct imports. It was around this time that the British began adding milk and sugar to their tea, a practice that was not common in China or Japan.
+          </p>
+          <p>
+            The demand for tea played a role in historical events, including the First Opium War and the Boston Tea Party, which was a significant catalyst for the American Revolution. Today, tea is the second most consumed beverage in the world after water, with an estimated 3 billion cups consumed every day.
+          </p>
+        </div>
+      );
+    }
   };
 
   return (
     <div className="space-y-6">
-      {/* Timer Bar */}
-      <Card className="mb-6">
-        <CardContent className="p-4">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium">Time Remaining</span>
-            <span className="text-sm font-medium text-rose-500 dark:text-rose-400 font-mono">
-              {formatTime(timeRemaining)}
-            </span>
-          </div>
-          <Progress value={(timeRemaining / (60 * 60)) * 100} className="h-2" />
-        </CardContent>
-      </Card>
-      
-      {/* Passage Navigation */}
-      <div className="flex mb-6 border-b dark:border-gray-700 overflow-x-auto">
-        {testData.passages.map((passage, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPassage(index)}
-            className={cn(
-              "py-2 px-4 font-medium text-sm border-b-2 transition-colors whitespace-nowrap",
-              currentPassage === index 
-                ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400" 
-                : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-            )}
-          >
-            Passage {index + 1}
-          </button>
-        ))}
-      </div>
-      
-      {/* Reading Passage and Questions */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Passage */}
-        <Card className="lg:sticky lg:top-24 h-fit">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-medium mb-4">{testData.passages[currentPassage].title}</h3>
-            <div className="prose dark:prose-invert max-w-none">
-              {testData.passages[currentPassage].text.split('\n').map((paragraph, idx) => (
-                <p key={idx} className="mb-4">
-                  {paragraph.trim()}
-                </p>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* Questions */}
-        <div>
-          <ReadingQuestions 
-            questions={testData.passages[currentPassage].questions}
-            userAnswers={userAnswers}
-            onAnswerChange={handleAnswerChange}
-          />
-        </div>
-      </div>
-      
-      {/* Navigation Buttons */}
-      <div className="flex justify-between mt-8">
-        <Button
-          variant="outline"
-          onClick={() => {
-            if (currentPassage > 0) {
-              setCurrentPassage(currentPassage - 1);
-            }
-          }}
-          disabled={currentPassage === 0}
+      <div className="flex space-x-2 mb-6">
+        <button
+          onClick={() => setActiveTab('passage')}
+          className={`px-4 py-2 rounded-md transition-colors ${
+            activeTab === 'passage'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700'
+          }`}
         >
-          Previous Passage
-        </Button>
-        
-        {currentPassage < testData.passages.length - 1 ? (
-          <Button
-            onClick={() => setCurrentPassage(currentPassage + 1)}
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            Next Passage
-          </Button>
+          Passage
+        </button>
+        <button
+          onClick={() => setActiveTab('questions')}
+          className={`px-4 py-2 rounded-md transition-colors ${
+            activeTab === 'questions'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700'
+          }`}
+        >
+          Questions
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+        {/* Passage Section */}
+        {activeTab === 'passage' ? (
+          <Card className="md:col-span-5 bg-white dark:bg-gray-900 shadow-md">
+            <CardContent className="p-6">
+              <div className="prose dark:prose-invert max-w-none">
+                {getPassageContent()}
+              </div>
+            </CardContent>
+          </Card>
         ) : (
-          <Button 
-            onClick={submitTest}
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            Submit Test
-          </Button>
+          <ReadingQuestions examType={examType} section={section} />
         )}
       </div>
-      
-      {testCompleted && (
-        <Card className="mt-8 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-medium text-green-800 dark:text-green-300 mb-2">
-              Test Completed!
-            </h3>
-            <p className="text-green-700 dark:text-green-400 mb-4">
-              Your reading test score: {score}/100
-            </p>
-            <Button className="bg-green-600 hover:bg-green-700">
-              View Detailed Results
-            </Button>
-          </CardContent>
-        </Card>
-      )}
-      
-      {/* Login Dialog */}
-      <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Sign In Required</DialogTitle>
-            <DialogDescription>
-              You need to sign in to submit your test and track your progress.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">Email</label>
-              <Input 
-                id="email"
-                type="email"
-                placeholder="your@email.com"
-                value={loginData.email}
-                onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">Password</label>
-              <Input 
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={loginData.password}
-                onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-              />
-            </div>
-            
-            <p className="text-sm text-muted-foreground">
-              This is a demo login. For testing, any email and password will work.
-            </p>
-          </div>
-          
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowLoginDialog(false)}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleLogin}
-              className="gap-2"
-              disabled={!loginData.email || !loginData.password}
-            >
-              <Lock className="h-4 w-4" />
-              Sign In
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
