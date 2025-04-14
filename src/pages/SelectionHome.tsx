@@ -189,6 +189,11 @@ const SelectionHome: React.FC = () => {
     navigate('/');
   };
 
+  const getCurrentExamName = () => {
+    const exam = examTypes.find(exam => exam.id === selectedExam);
+    return exam ? exam.name : 'Your Exam';
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-indigo-950/30 dark:to-purple-950/20 pt-16 pb-12">
