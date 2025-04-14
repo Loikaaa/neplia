@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 const destinations = [
   {
     country: "United States",
+    slug: "united-states",
     flag: "🇺🇸",
     students: "1M+",
     universities: "4,000+",
@@ -15,6 +16,7 @@ const destinations = [
   },
   {
     country: "United Kingdom",
+    slug: "united-kingdom",
     flag: "🇬🇧",
     students: "600K+",
     universities: "150+",
@@ -23,6 +25,7 @@ const destinations = [
   },
   {
     country: "Australia",
+    slug: "australia",
     flag: "🇦🇺",
     students: "500K+",
     universities: "43+",
@@ -31,6 +34,7 @@ const destinations = [
   },
   {
     country: "Canada",
+    slug: "canada",
     flag: "🇨🇦",
     students: "450K+",
     universities: "100+",
@@ -52,59 +56,61 @@ const PopularDestinations = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {destinations.map((destination, index) => (
-            <motion.div
+            <Link 
+              to={`/country/${destination.slug}`} 
               key={destination.country}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="block"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
-              <img
-                src={destination.image}
-                alt={destination.country}
-                className="w-full h-80 object-cover transform group-hover:scale-105 transition-transform duration-300"
-              />
-              <div className="absolute inset-0 z-20 p-6 flex flex-col justify-end text-white">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-3xl">{destination.flag}</span>
-                  <h3 className="text-2xl font-bold">{destination.country}</h3>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="flex items-center gap-2">
-                    <Users className="h-5 w-5 text-indigo-300" />
-                    <span>{destination.students} Students</span>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-10" />
+                <img
+                  src={destination.image}
+                  alt={destination.country}
+                  className="w-full h-80 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 z-20 p-6 flex flex-col justify-end text-white">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-3xl">{destination.flag}</span>
+                    <h3 className="text-2xl font-bold">{destination.country}</h3>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <GraduationCap className="h-5 w-5 text-indigo-300" />
-                    <span>{destination.universities} Universities</span>
+                  
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="flex items-center gap-2">
+                      <Users className="h-5 w-5 text-indigo-300" />
+                      <span>{destination.students} Students</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <GraduationCap className="h-5 w-5 text-indigo-300" />
+                      <span>{destination.universities} Universities</span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-200">Top Universities:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {destination.topUniversities.map((uni) => (
+                        <span
+                          key={uni}
+                          className="px-2 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm"
+                        >
+                          {uni}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 inline-flex items-center text-indigo-300 hover:text-indigo-200 group-hover:translate-x-2 transition-transform">
+                    <span>Learn more</span>
+                    <TrendingUp className="ml-2 h-4 w-4" />
                   </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-200">Top Universities:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {destination.topUniversities.map((uni) => (
-                      <span
-                        key={uni}
-                        className="px-2 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm"
-                      >
-                        {uni}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                
-                <Link
-                  to={`/country/${destination.country.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="mt-4 inline-flex items-center text-indigo-300 hover:text-indigo-200"
-                >
-                  <span>Learn more</span>
-                  <TrendingUp className="ml-2 h-4 w-4" />
-                </Link>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Link>
           ))}
         </div>
       </div>

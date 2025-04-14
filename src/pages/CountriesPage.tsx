@@ -1,13 +1,25 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import PopularDestinations from '@/components/abroad/PopularDestinations';
 import StudyStats from '@/components/abroad/StudyStats';
 import { motion } from 'framer-motion';
 import { Search, ArrowRight, CircleCheck, Info, BookOpen, Users, Globe } from 'lucide-react';
+import CountrySelector from '@/components/selection/CountrySelector';
 
 const CountriesPage = () => {
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleCountrySearch = () => {
+    if (selectedCountry) {
+      navigate(`/country/${selectedCountry}`);
+    }
+  };
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -20,17 +32,17 @@ const CountriesPage = () => {
               transition={{ duration: 0.5 }}
               className="text-center mb-12"
             >
-              <span className="inline-block px-4 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo dark:text-indigo-300 rounded-full text-sm font-medium mb-4">
+              <span className="inline-block px-4 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 rounded-full text-sm font-medium mb-4">
                 Study Abroad Guide
               </span>
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-                Your Journey to <span className="text-indigo">Global Education</span> Starts Here
+                Your Journey to <span className="text-indigo-600 dark:text-indigo-400">Global Education</span> Starts Here
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
                 Explore comprehensive guides, requirements, and insights for studying abroad in top destinations worldwide.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button size="lg" className="bg-indigo hover:bg-indigo/90 text-white">
+                <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white">
                   Get Started
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -64,13 +76,20 @@ const CountriesPage = () => {
               </p>
             </div>
             
-            <div className="relative max-w-xl mx-auto mb-12">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input 
-                type="text" 
-                placeholder="Search country requirements..." 
-                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo focus:border-indigo dark:focus:ring-indigo-400 dark:focus:border-indigo-400 outline-none transition"
+            <div className="max-w-xl mx-auto mb-12 space-y-4">
+              <CountrySelector 
+                selectedCountry={selectedCountry} 
+                onCountryChange={setSelectedCountry} 
               />
+              
+              <Button 
+                onClick={handleCountrySearch} 
+                disabled={!selectedCountry}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+              >
+                <Search className="mr-2 h-4 w-4" />
+                Search Requirements
+              </Button>
             </div>
           </div>
         </div>
@@ -113,7 +132,7 @@ const CountriesPage = () => {
                   className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700"
                 >
                   <div className="bg-indigo-50 dark:bg-indigo-900/30 h-12 w-12 rounded-lg flex items-center justify-center mb-4">
-                    <category.icon className="h-6 w-6 text-indigo" />
+                    <category.icon className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <h3 className="text-xl font-bold mb-2">{category.title}</h3>
                   <p className="text-gray-600 dark:text-gray-300">{category.description}</p>
@@ -123,7 +142,7 @@ const CountriesPage = () => {
             
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
               <div className="flex items-start mb-4">
-                <Info className="h-5 w-5 text-indigo mt-0.5 mr-3 flex-shrink-0" />
+                <Info className="h-5 w-5 text-indigo-600 dark:text-indigo-400 mt-0.5 mr-3 flex-shrink-0" />
                 <h3 className="text-xl font-bold">Important Notes</h3>
               </div>
               <div className="space-y-4 ml-8">
@@ -161,7 +180,7 @@ const CountriesPage = () => {
                 Get personalized guidance for your study abroad journey.
               </p>
               <Link to="/selection">
-                <Button size="lg" className="bg-indigo hover:bg-indigo/90 text-white rounded-lg px-6 py-6 h-auto">
+                <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 py-6 h-auto">
                   Start Your Application
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>

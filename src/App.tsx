@@ -49,6 +49,9 @@ import GrePracticePage from '@/pages/practice/exam-specific/GrePracticePage';
 import GmatPracticePage from '@/pages/practice/exam-specific/GmatPracticePage';
 import SatPracticePage from '@/pages/practice/exam-specific/SatPracticePage';
 
+// Country profile component
+import CountryProfile from '@/components/abroad/CountryProfile';
+
 function App() {
   return (
     <Router>
@@ -67,6 +70,7 @@ function App() {
         <Route path="/selection" element={<SelectionHome />} />
         <Route path="/countries" element={<CountriesPage />} />
         <Route path="/abroad" element={<CountriesPage />} />
+        <Route path="/country/:countrySlug" element={<CountryProfile />} />
         <Route path="/resources" element={<ResourcesHome />} />
         <Route path="/resources/:slug" element={<ResourceDetail />} />
         <Route path="/resources/all" element={<AllResources />} />
