@@ -186,7 +186,12 @@ const SelectionHome: React.FC = () => {
   };
 
   const handleSkip = () => {
-    navigate('/');
+    if (selectedExam) {
+      const redirectPath = getExamRedirectPath(selectedExam);
+      navigate(redirectPath);
+    } else {
+      navigate('/practice'); // Default to practice page if no exam selected
+    }
   };
 
   const getCurrentExamName = () => {
