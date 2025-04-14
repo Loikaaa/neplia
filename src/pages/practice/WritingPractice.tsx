@@ -153,7 +153,8 @@ const WritingPractice: React.FC = () => {
       overallBand,
       strengths,
       weaknesses,
-      suggestions
+      suggestions,
+      aiSuggestions: []
     };
   };
 
@@ -170,32 +171,22 @@ const WritingPractice: React.FC = () => {
     setFeedback(essayFeedback);
     setSubmitted(true);
     
-    const currentTask = getActiveTask();
-    if (currentTask) {
-      try {
-        await AIWritingAssistant({
-          essayText,
-          prompt: currentTask.instructions,
-          onFeedbackReceived: (aiFeedback) => {
-            setFeedback(prev => ({
-              ...prev!,
-              aiSuggestions: aiFeedback.split('\n'),
-            }));
-          }
-        });
-      } catch (error) {
-        toast({
-          title: "AI Feedback Error",
-          description: "Could not get AI feedback at this time. Your essay has been submitted successfully.",
-          variant: "default",
-        });
-      }
-    }
-
     toast({
       title: "Essay submitted successfully!",
       description: `Your overall band score: ${essayFeedback.overallBand.toFixed(1)}`,
       variant: "default",
+    });
+  };
+
+  const handleAIFeedbackReceived = (feedbackArray: string[]) => {
+    setFeedback(prev => {
+      if (prev) {
+        return {
+          ...prev,
+          aiSuggestions: feedbackArray,
+        };
+      }
+      return prev;
     });
   };
 
@@ -217,13 +208,6 @@ const WritingPractice: React.FC = () => {
   };
 
   const currentTask = getActiveTask();
-
-  const handleAISuggestion = (suggestion: string) => {
-    toast({
-      title: "AI Feedback Received",
-      description: suggestion,
-    });
-  };
 
   const renderTaskCards = (tasks: any[], category: 'academic' | 'essay') => {
     return (
@@ -518,12 +502,15 @@ const WritingPractice: React.FC = () => {
                 </div>
               </div>
               
-              <div>
-                <AIWritingAssistant 
-                  prompt={currentTask?.instructions} 
-                  onSuggestion={handleAISuggestion}
-                />
-              </div>
+              {submitted && (
+                <div className="mt-4">
+                  <AIWritingAssistant 
+                    essayText={essayText}
+                    prompt={currentTask.instructions}
+                    onFeedbackReceived={handleAIFeedbackReceived}
+                  />
+                </div>
+              )}
             </div>
             
             {submitted && !feedback && (
