@@ -11,7 +11,7 @@ const destinations = [
     students: "1M+",
     universities: "4,000+",
     topUniversities: ["Harvard", "MIT", "Stanford"],
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
+    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=1080&auto=format&fit=crop"
   },
   {
     country: "United Kingdom",
@@ -19,7 +19,7 @@ const destinations = [
     students: "600K+",
     universities: "150+",
     topUniversities: ["Oxford", "Cambridge", "Imperial"],
-    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1080&auto=format&fit=crop"
   },
   {
     country: "Australia",
@@ -27,7 +27,7 @@ const destinations = [
     students: "500K+",
     universities: "43+",
     topUniversities: ["Melbourne", "Sydney", "ANU"],
-    image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e"
+    image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1080&auto=format&fit=crop"
   },
   {
     country: "Canada",
@@ -35,7 +35,7 @@ const destinations = [
     students: "450K+",
     universities: "100+",
     topUniversities: ["Toronto", "UBC", "McGill"],
-    image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716"
+    image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?q=80&w=1080&auto=format&fit=crop"
   }
 ];
 

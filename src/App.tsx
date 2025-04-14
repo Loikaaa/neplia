@@ -66,6 +66,7 @@ function App() {
         <Route path="/cookies" element={<Cookies />} />
         <Route path="/selection" element={<SelectionHome />} />
         <Route path="/countries" element={<CountriesPage />} />
+        <Route path="/abroad" element={<CountriesPage />} />
         <Route path="/resources" element={<ResourcesHome />} />
         <Route path="/resources/:slug" element={<ResourceDetail />} />
         <Route path="/resources/all" element={<AllResources />} />
