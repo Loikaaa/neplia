@@ -85,9 +85,9 @@ const Index = () => {
             </p>
           </div>
           
-          {isMobile ? (
-            <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
-              {examTypes.map((exam) => (
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 max-w-5xl mx-auto">
+            {examTypes.map((exam) => (
+              isMobile ? (
                 <Link 
                   key={exam.name} 
                   to={exam.path}
@@ -106,11 +106,7 @@ const Index = () => {
                     </Button>
                   </div>
                 </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-5xl mx-auto">
-              {examTypes.map((exam) => (
+              ) : (
                 <Card 
                   key={exam.name} 
                   className="overflow-hidden border border-gray-200 dark:border-gray-800 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
@@ -127,9 +123,9 @@ const Index = () => {
                     </Link>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
-          )}
+              )
+            ))}
+          </div>
         </div>
       </section>
       
