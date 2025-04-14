@@ -1,6 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import UniversityCard from './UniversityCard';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 const usUniversities = [
   {
@@ -69,12 +74,58 @@ interface USAUniversitiesProps {
   isAdmin?: boolean;
 }
 
+interface University {
+  name: string;
+  image: string;
+  rank: string;
+  location: string;
+  tuition: string;
+  studentCount: string;
+  acceptanceRate: string;
+  programHighlights: string[];
+}
+
 const USAUniversities = ({ isAdmin = false }: USAUniversitiesProps) => {
-  const handleEdit = (universityName: string) => {
-    console.log(`Editing ${universityName}`);
-    // Here we would typically open a modal or navigate to an edit page
-    // For now, we'll just log the action
-    alert(`You are now editing ${universityName}. In a real application, this would open an edit form.`);
+  const [universities, setUniversities] = useState(usUniversities);
+  const [editingUniversity, setEditingUniversity] = useState<University | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [tempUniversityData, setTempUniversityData] = useState<University | null>(null);
+
+  const handleEdit = (university: University) => {
+    console.log(`Editing ${university.name}`);
+    setEditingUniversity(university);
+    setTempUniversityData({...university});
+    setIsDialogOpen(true);
+  };
+
+  const handleSaveChanges = () => {
+    if (tempUniversityData && editingUniversity) {
+      const updatedUniversities = universities.map(uni => 
+        uni.name === editingUniversity.name ? tempUniversityData : uni
+      );
+      setUniversities(updatedUniversities);
+      setIsDialogOpen(false);
+      setEditingUniversity(null);
+      setTempUniversityData(null);
+    }
+  };
+
+  const handleInputChange = (field: keyof University, value: string) => {
+    if (tempUniversityData) {
+      setTempUniversityData({
+        ...tempUniversityData,
+        [field]: value
+      });
+    }
+  };
+
+  const handleProgramChange = (value: string) => {
+    if (tempUniversityData) {
+      setTempUniversityData({
+        ...tempUniversityData,
+        programHighlights: value.split(',').map(item => item.trim())
+      });
+    }
   };
 
   return (
@@ -83,15 +134,104 @@ const USAUniversities = ({ isAdmin = false }: USAUniversitiesProps) => {
         Top Universities in the United States
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {usUniversities.map((university) => (
+        {universities.map((university) => (
           <UniversityCard
             key={university.name}
             {...university}
             isAdmin={isAdmin}
-            onEdit={() => handleEdit(university.name)}
+            onEdit={() => handleEdit(university)}
           />
         ))}
       </div>
+
+      {isAdmin && (
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="sm:max-w-[525px]">
+            <DialogHeader>
+              <DialogTitle>Edit University Information</DialogTitle>
+            </DialogHeader>
+            {tempUniversityData && (
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">Name</Label>
+                  <Input 
+                    id="name" 
+                    value={tempUniversityData.name} 
+                    onChange={(e) => handleInputChange('name', e.target.value)} 
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="image" className="text-right">Image URL</Label>
+                  <Input 
+                    id="image" 
+                    value={tempUniversityData.image} 
+                    onChange={(e) => handleInputChange('image', e.target.value)} 
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="rank" className="text-right">Rank</Label>
+                  <Input 
+                    id="rank" 
+                    value={tempUniversityData.rank} 
+                    onChange={(e) => handleInputChange('rank', e.target.value)} 
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="location" className="text-right">Location</Label>
+                  <Input 
+                    id="location" 
+                    value={tempUniversityData.location} 
+                    onChange={(e) => handleInputChange('location', e.target.value)} 
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="tuition" className="text-right">Tuition</Label>
+                  <Input 
+                    id="tuition" 
+                    value={tempUniversityData.tuition} 
+                    onChange={(e) => handleInputChange('tuition', e.target.value)} 
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="studentCount" className="text-right">Student Count</Label>
+                  <Input 
+                    id="studentCount" 
+                    value={tempUniversityData.studentCount} 
+                    onChange={(e) => handleInputChange('studentCount', e.target.value)} 
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="acceptanceRate" className="text-right">Acceptance Rate</Label>
+                  <Input 
+                    id="acceptanceRate" 
+                    value={tempUniversityData.acceptanceRate} 
+                    onChange={(e) => handleInputChange('acceptanceRate', e.target.value)} 
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="programs" className="text-right">Programs</Label>
+                  <Textarea 
+                    id="programs" 
+                    value={tempUniversityData.programHighlights.join(', ')} 
+                    onChange={(e) => handleProgramChange(e.target.value)} 
+                    className="col-span-3" 
+                  />
+                </div>
+              </div>
+            )}
+            <DialogFooter>
+              <Button type="submit" onClick={handleSaveChanges}>Save changes</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

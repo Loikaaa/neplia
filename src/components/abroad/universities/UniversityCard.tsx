@@ -47,8 +47,12 @@ const UniversityCard = ({
         <div className="relative h-48 overflow-hidden">
           <img 
             src={image} 
-            alt={name} 
+            alt={`${name} campus`}
             className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+            onError={(e) => {
+              // Fallback if image fails to load
+              e.currentTarget.src = "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=600&auto=format&fit=crop";
+            }}
           />
           <div className="absolute top-2 right-2">
             <Badge variant="secondary" className="bg-black/50 text-white">
