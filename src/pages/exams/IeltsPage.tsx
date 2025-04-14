@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -433,29 +432,29 @@ const IeltsPage = () => {
         </div>
       </section>
 
-      {/* Mobile-friendly CTA Section */}
+      {/* Updated CTA Section without authentication */}
       <section className={`py-10 md:py-16 ${isMobile ? 'bg-indigo' : 'bg-gradient-to-r from-indigo to-indigo-600'} text-white`}>
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className={`font-bold mb-4 ${isMobile ? 'text-2xl' : 'text-3xl'}`}>Ready to Ace Your IELTS?</h2>
             <p className={`opacity-90 mb-6 md:mb-8 max-w-2xl mx-auto ${isMobile ? 'text-base' : 'text-xl'}`}>
-              Join thousands of successful test-takers who achieved their target band scores with Neplia.
+              Start your IELTS preparation journey with our comprehensive practice materials.
             </p>
             
             {isMobile ? (
               <div className="space-y-3">
                 <Link to="/selection?exam=ielts-academic" className="block">
                   <Button size="lg" className="bg-white text-indigo hover:bg-gray-100 rounded-lg w-full py-5">
-                    Start Free Trial
+                    Start Practice Now
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 
                 <div className="flex flex-col space-y-2 mt-6">
                   {[
-                    { label: "Premium Resources", icon: Star },
-                    { label: "Expert Support", icon: Award },
-                    { label: "7-Day Free Trial", icon: Calendar }
+                    { label: "Practice Materials", icon: BookMarked },
+                    { label: "Mock Tests", icon: CheckCircle2 },
+                    { label: "Instant Feedback", icon: BarChart3 }
                   ].map((feature, index) => (
                     <div key={index} className="flex items-center justify-center">
                       <feature.icon className="h-4 w-4 mr-2 text-white opacity-90" />
@@ -468,15 +467,15 @@ const IeltsPage = () => {
               <>
                 <Link to="/selection?exam=ielts-academic">
                   <Button size="lg" className="bg-white text-indigo hover:bg-gray-100 rounded-lg px-6 py-6 h-auto">
-                    Start Free Trial
+                    Start Practice Now
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <div className="mt-8 flex items-center justify-center space-x-8">
                   {[
-                    { label: "Premium Resources", icon: CheckCircle2 },
-                    { label: "Expert Support", icon: Award },
-                    { label: "7-Day Free Trial", icon: Calendar }
+                    { label: "Practice Materials", icon: BookMarked },
+                    { label: "Mock Tests", icon: CheckCircle2 },
+                    { label: "Instant Feedback", icon: BarChart3 }
                   ].map((feature, index) => (
                     <div key={index} className="flex items-center">
                       <feature.icon className="h-5 w-5 mr-2 text-white opacity-90" />
