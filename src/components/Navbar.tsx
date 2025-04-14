@@ -89,8 +89,6 @@ const examTypes = [
 const navLinks = [
   { name: 'Home', path: '/', icon: Home },
   { name: 'Practice', path: '/practice', icon: Trophy },
-  { name: 'Resources', path: '/resources', icon: LibraryBig },
-  { name: 'Blog', path: '/blog', icon: Edit },
   { name: 'About', path: '/about', icon: Info },
   { name: 'Contact', path: '/contact', icon: Phone },
 ];
