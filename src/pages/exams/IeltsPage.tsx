@@ -25,41 +25,21 @@ const IeltsPage = () => {
                 IELTS Preparation
               </span>
               <h1 className={`font-bold tracking-tight mb-6 ${isMobile ? 'text-3xl' : 'text-4xl md:text-6xl'}`}>
-                Master the <span className="text-indigo">IELTS</span> with Confidence
+                Master <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">IELTS</span> with Confidence
               </h1>
               <p className={`text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8 ${isMobile ? 'text-base' : 'text-xl'}`}>
-                Comprehensive preparation for both Academic and General Training IELTS tests with tailored resources for your target score and country.
+                Comprehensive preparation with tailored resources for your target score and country.
               </p>
               
-              {isMobile ? (
-                <div className="flex flex-col items-center justify-center gap-3">
-                  <Link to="/selection?exam=ielts-academic" className="w-full">
-                    <Button size="lg" className="bg-indigo hover:bg-indigo/90 text-white rounded-lg w-full py-5">
-                      Start IELTS Academic
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </Link>
-                  <Link to="/selection?exam=ielts-general" className="w-full">
-                    <Button variant="outline" size="lg" className="rounded-lg w-full py-5">
-                      Start IELTS General
-                    </Button>
-                  </Link>
-                </div>
-              ) : (
-                <div className="flex flex-row items-center justify-center gap-4">
-                  <Link to="/selection?exam=ielts-academic">
-                    <Button size="lg" className="bg-indigo hover:bg-indigo/90 text-white rounded-lg px-6 py-6 h-auto">
-                      Start IELTS Academic
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </Link>
-                  <Link to="/selection?exam=ielts-general">
-                    <Button variant="outline" size="lg" className="rounded-lg px-6 py-6 h-auto">
-                      Start IELTS General
-                    </Button>
-                  </Link>
-                </div>
-              )}
+              <Link to="/practice/ielts" className="inline-block">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg px-8 py-6 h-auto text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  Start Your IELTS Journey
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
             </motion.div>
 
             <div className={`grid grid-cols-2 ${isMobile ? 'gap-3 mb-8' : 'md:grid-cols-4 gap-6 mb-12'} text-center`}>
