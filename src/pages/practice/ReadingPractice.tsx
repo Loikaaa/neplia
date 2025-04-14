@@ -4,13 +4,14 @@ import Layout from '@/components/Layout';
 import { ReadingTest } from '@/components/practice/reading/ReadingTest';
 import { ReadingInstructions } from '@/components/practice/reading/ReadingInstructions';
 import ReadingHeader from '@/components/practice/reading/ReadingHeader';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const ReadingPractice = () => {
   const [testStarted, setTestStarted] = useState(false);
   const [examType, setExamType] = useState('ielts');
   const [section, setSection] = useState('reading');
   const location = useLocation();
+  const navigate = useNavigate();
   
   useEffect(() => {
     // Extract exam type and section from URL
@@ -21,10 +22,12 @@ const ReadingPractice = () => {
     if (pathname.includes('/practice/')) {
       const pathParts = pathname.split('/');
       if (pathParts.length >= 3) {
-        setExamType(pathParts[2]); // e.g., "gre", "sat"
+        const newExamType = pathParts[2]; // e.g., "gre", "sat"
+        setExamType(newExamType);
       }
       if (pathParts.length >= 4) {
-        setSection(pathParts[3]); // e.g., "verbal", "math"
+        const newSection = pathParts[3]; // e.g., "verbal", "math"
+        setSection(newSection);
       }
     }
     
@@ -37,6 +40,18 @@ const ReadingPractice = () => {
     const sectionParam = params.get('section');
     if (sectionParam) {
       setSection(sectionParam);
+    }
+    
+    // Validate the exam and section combination
+    const isValidCombination = validateExamAndSection(
+      examType === 'ielts' && examParam ? examParam : examType, 
+      section === 'reading' && sectionParam ? sectionParam : section
+    );
+    
+    if (!isValidCombination) {
+      // If invalid combination, redirect to the practice home
+      navigate('/practice');
+      return;
     }
     
     // Set page title based on exam type and section
@@ -54,7 +69,23 @@ const ReadingPractice = () => {
     }
     
     document.title = title;
-  }, [location]);
+  }, [location, examType, section, navigate]);
+  
+  // Function to validate if the exam type and section combination is valid
+  const validateExamAndSection = (exam: string, sect: string) => {
+    // Define valid sections for each exam type
+    const validCombinations: Record<string, string[]> = {
+      'ielts': ['reading', 'listening', 'writing', 'speaking'],
+      'toefl': ['reading', 'listening', 'writing', 'speaking'],
+      'pte': ['reading', 'listening', 'speaking', 'writing'],
+      'gre': ['verbal', 'quantitative', 'analytical', 'mixed'],
+      'gmat': ['verbal', 'quantitative', 'integrated', 'analytical'],
+      'sat': ['reading', 'math']
+    };
+    
+    // Check if exam type has defined valid sections and if the given section is valid
+    return validCombinations[exam]?.includes(sect) || false;
+  };
   
   return (
     <Layout>

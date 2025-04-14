@@ -54,6 +54,20 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
     }
   };
 
+  const getSectionDescription = () => {
+    if (examType === 'gre' && section === 'verbal') {
+      return 'Complete the verbal reasoning questions to improve your critical reading and vocabulary skills.';
+    } else if (examType === 'gre' && section === 'quantitative') {
+      return 'Solve these quantitative reasoning problems to enhance your mathematical skills.';
+    } else if (examType === 'sat' && section === 'math') {
+      return 'Solve these math problems to improve your problem-solving skills for the SAT.';
+    } else if (examType === 'sat' && section === 'reading') {
+      return 'Complete the reading passages and questions to improve your comprehension skills for the SAT.';
+    } else {
+      return `Complete the reading passage and answer the questions that follow to improve your ${section} skills.`;
+    }
+  };
+
   return (
     <div className="space-y-4 mb-8">
       <Link 
@@ -67,7 +81,7 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
           {getTitleByExamAndSection()}
         </h1>
         <p className="text-gray-500 dark:text-gray-400">
-          Complete the reading passage and answer the questions that follow to improve your {section} skills.
+          {getSectionDescription()}
         </p>
       </div>
       <div className={`h-1 w-20 bg-gradient-to-r ${getHeaderGradient()} rounded-full`}></div>

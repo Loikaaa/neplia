@@ -98,6 +98,24 @@ function App() {
         <Route path="/practice/sat" element={<SatPracticePage />} />
         
         {/* Exam-Specific Section Routes */}
+        {/* IELTS Section Routes */}
+        <Route path="/practice/ielts/reading" element={<ReadingPractice />} />
+        <Route path="/practice/ielts/listening" element={<ListeningPractice />} />
+        <Route path="/practice/ielts/writing" element={<WritingPractice />} />
+        <Route path="/practice/ielts/speaking" element={<SpeakingPractice />} />
+        
+        {/* TOEFL Section Routes */}
+        <Route path="/practice/toefl/reading" element={<ReadingPractice />} />
+        <Route path="/practice/toefl/listening" element={<ListeningPractice />} />
+        <Route path="/practice/toefl/writing" element={<WritingPractice />} />
+        <Route path="/practice/toefl/speaking" element={<SpeakingPractice />} />
+        
+        {/* PTE Section Routes */}
+        <Route path="/practice/pte/reading" element={<ReadingPractice />} />
+        <Route path="/practice/pte/listening" element={<ListeningPractice />} />
+        <Route path="/practice/pte/speaking" element={<SpeakingPractice />} />
+        <Route path="/practice/pte/writing" element={<WritingPractice />} />
+        
         {/* SAT Section Routes */}
         <Route path="/practice/sat/reading" element={<ReadingPractice />} />
         <Route path="/practice/sat/math" element={<ReadingPractice />} />
@@ -107,6 +125,12 @@ function App() {
         <Route path="/practice/gre/quantitative" element={<ReadingPractice />} />
         <Route path="/practice/gre/analytical" element={<WritingPractice />} />
         <Route path="/practice/gre/mixed" element={<ReadingPractice />} />
+        
+        {/* GMAT Section Routes */}
+        <Route path="/practice/gmat/verbal" element={<ReadingPractice />} />
+        <Route path="/practice/gmat/quantitative" element={<ReadingPractice />} />
+        <Route path="/practice/gmat/integrated" element={<ReadingPractice />} />
+        <Route path="/practice/gmat/analytical" element={<WritingPractice />} />
         
         {/* Admin Redirect - This will redirect to your Laravel backend */}
         <Route path="/admin/*" element={<AdminRedirect />} />
