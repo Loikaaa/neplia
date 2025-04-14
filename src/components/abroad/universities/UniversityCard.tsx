@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Building2, GraduationCap, Users, Trophy, ExternalLink } from 'lucide-react';
+import { Building2, GraduationCap, Users, Trophy, ExternalLink, Edit } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface UniversityCardProps {
@@ -52,9 +52,20 @@ const UniversityCard = ({
           />
           <div className="absolute top-2 right-2">
             <Badge variant="secondary" className="bg-black/50 text-white">
-              Rank {rank}
+              {rank}
             </Badge>
           </div>
+          {isAdmin && (
+            <Button
+              variant="secondary"
+              size="sm"
+              className="absolute top-2 left-2 bg-white/90 hover:bg-white"
+              onClick={onEdit}
+            >
+              <Edit className="h-4 w-4 mr-1" />
+              Edit
+            </Button>
+          )}
         </div>
         
         <CardHeader>
@@ -69,18 +80,18 @@ const UniversityCard = ({
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4 text-indigo-500" />
-              <span className="text-sm">{studentCount} Students</span>
+              <span className="text-sm">{studentCount}</span>
             </div>
             <div className="flex items-center gap-2">
               <Trophy className="h-4 w-4 text-indigo-500" />
-              <span className="text-sm">{acceptanceRate} Acceptance</span>
+              <span className="text-sm">{acceptanceRate}</span>
             </div>
           </div>
           
           <div className="mb-4">
             <div className="flex items-center gap-2 mb-2">
               <GraduationCap className="h-4 w-4 text-indigo-500" />
-              <span className="font-medium">Tuition: {tuition}/year</span>
+              <span className="font-medium">{tuition}/year</span>
             </div>
           </div>
           
@@ -95,20 +106,11 @@ const UniversityCard = ({
             </div>
           </div>
           
-          <div className="mt-4 space-x-2">
+          <div className="mt-4">
             <Button variant="default" className="w-full">
               <ExternalLink className="mr-2 h-4 w-4" />
               Visit Website
             </Button>
-            {isAdmin && (
-              <Button 
-                variant="outline" 
-                onClick={onEdit} 
-                className="mt-2 w-full"
-              >
-                Edit University
-              </Button>
-            )}
           </div>
         </CardContent>
       </Card>

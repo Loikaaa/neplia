@@ -72,7 +72,9 @@ interface USAUniversitiesProps {
 const USAUniversities = ({ isAdmin = false }: USAUniversitiesProps) => {
   const handleEdit = (universityName: string) => {
     console.log(`Editing ${universityName}`);
-    // Admin edit functionality will be implemented here
+    // Here we would typically open a modal or navigate to an edit page
+    // For now, we'll just log the action
+    alert(`You are now editing ${universityName}. In a real application, this would open an edit form.`);
   };
 
   return (
