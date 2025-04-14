@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Youtube, Mail, Phone } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, Info, Globe } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Footer = () => {
@@ -41,140 +40,100 @@ const Footer = () => {
             </div>
           </div>
 
-          {isMobile ? (
-            // Mobile layout - Quick Links and IELTS Modules in a 2-column grid
-            <div className="grid grid-cols-2 gap-8">
-              {/* Quick Links */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
-                <ul className="space-y-3">
-                  <li>
-                    <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Practice Tests
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/resources" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Resources
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/blog" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Blog
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Pricing
-                    </Link>
-                  </li>
-                </ul>
-              </div>
+          {/* Quick Links with About and Contact */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                  Practice Tests
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-2">
+                  <Info className="h-4 w-4" />
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link to="/abroad" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-2">
+                  <Globe className="h-4 w-4" />
+                  Study Abroad
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-              {/* IELTS Modules */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
-                <ul className="space-y-3">
-                  <li>
-                    <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Listening
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Reading
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Writing
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Speaking
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Full Mock Tests
-                    </Link>
-                  </li>
-                </ul>
-              </div>
+          {isMobile ? (
+            // Mobile layout - IELTS Modules in a single column
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                    Listening
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                    Reading
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                    Writing
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                    Speaking
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                    Full Mock Tests
+                  </Link>
+                </li>
+              </ul>
             </div>
           ) : (
-            // Desktop layout - Separate columns
-            <>
-              {/* Quick Links */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
-                <ul className="space-y-3">
-                  <li>
-                    <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Practice Tests
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/resources" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Resources
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/blog" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Blog
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Pricing
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* IELTS Modules */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
-                <ul className="space-y-3">
-                  <li>
-                    <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Listening
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Reading
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Writing
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Speaking
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Full Mock Tests
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </>
+            // Desktop layout - IELTS Modules in a separate column
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                    Listening
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                    Reading
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                    Writing
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                    Speaking
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                    Full Mock Tests
+                  </Link>
+                </li>
+              </ul>
+            </div>
           )}
 
           {/* Contact */}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy, X, Home, Info, LibraryBig, Phone } from 'lucide-react';
+import { ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy, X, Book, Play, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import UserProfileMenu from './UserProfileMenu';
 import { Button } from "@/components/ui/button";
@@ -87,10 +87,9 @@ const examTypes = [
 ];
 
 const navLinks = [
-  { name: 'Home', path: '/', icon: Home },
-  { name: 'Practice', path: '/practice', icon: Trophy },
-  { name: 'About', path: '/about', icon: Info },
-  { name: 'Contact', path: '/contact', icon: Phone },
+  { name: 'Exams', path: '/exams', icon: Book },
+  { name: 'Practice', path: '/practice', icon: Play },
+  { name: 'Abroad Study', path: '/abroad', icon: Globe },
 ];
 
 const Navbar = () => {
@@ -139,7 +138,7 @@ const Navbar = () => {
           <div className="hidden md:flex md:flex-1 md:justify-center">
             <NavigationMenu className="mx-auto">
               <NavigationMenuList className="gap-1">
-                {navLinks.map((link, index) => (
+                {navLinks.map((link) => (
                   <NavigationMenuItem key={link.name}>
                     {link.name === 'Practice' ? (
                       <>
@@ -216,6 +215,40 @@ const Navbar = () => {
                           </ul>
                         </NavigationMenuContent>
                       </>
+                    ) : link.name === 'Exams' ? (
+                      <>
+                        <NavigationMenuTrigger 
+                          variant="solid" 
+                          className={cn(
+                            "text-white font-medium",
+                            location.pathname.startsWith("/exams") && "bg-white/20 dark:bg-white/20"
+                          )}
+                        >
+                          {link.name}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-slate-800">
+                            {examTypes.map((exam) => (
+                              <li key={exam.name}>
+                                <NavigationMenuLink asChild>
+                                  <Link
+                                    to={exam.path}
+                                    className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white`}
+                                  >
+                                    <div className="flex items-center">
+                                      <div className={`h-2 w-2 rounded-full mr-2 ${exam.color}`}></div>
+                                      <div className="text-sm font-medium text-white">{exam.name}</div>
+                                    </div>
+                                    <p className="line-clamp-2 text-xs leading-snug text-slate-300">
+                                      {exam.sections?.length} practice sections available
+                                    </p>
+                                  </Link>
+                                </NavigationMenuLink>
+                              </li>
+                            ))}
+                          </ul>
+                        </NavigationMenuContent>
+                      </>
                     ) : (
                       <Link 
                         to={link.path}
@@ -230,40 +263,6 @@ const Navbar = () => {
                     )}
                   </NavigationMenuItem>
                 ))}
-
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger 
-                    variant="solid" 
-                    className={cn(
-                      "text-white font-medium",
-                      location.pathname.startsWith("/exams") && "bg-white/20 dark:bg-white/20"
-                    )}
-                  >
-                    Exams
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-slate-800">
-                      {examTypes.map((exam) => (
-                        <li key={exam.name}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              to={exam.path}
-                              className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white`}
-                            >
-                              <div className="flex items-center">
-                                <div className={`h-2 w-2 rounded-full mr-2 ${exam.color}`}></div>
-                                <div className="text-sm font-medium text-white">{exam.name}</div>
-                              </div>
-                              <p className="line-clamp-2 text-xs leading-snug text-slate-300">
-                                {exam.sections?.length} practice sections available
-                              </p>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
