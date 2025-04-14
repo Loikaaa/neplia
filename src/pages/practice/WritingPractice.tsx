@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import { writingTaskData } from "@/data/writingTaskData";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { AIWritingAssistant } from '@/components/practice/writing/AIWritingAssistant';
 
 const WritingPractice: React.FC = () => {
   const { toast } = useToast();
@@ -35,7 +35,6 @@ const WritingPractice: React.FC = () => {
       return 0;
     }
     
-    // Split by whitespace and filter out empty strings
     const wordsArray = text.trim().split(/\s+/).filter(word => word.length > 0);
     return wordsArray.length;
   }, []);
@@ -71,7 +70,6 @@ const WritingPractice: React.FC = () => {
     const text = e.target.value;
     setEssayText(text);
     
-    // Calculate and set word count
     const count = countWords(text);
     setWordCount(count);
     
@@ -197,8 +195,13 @@ const WritingPractice: React.FC = () => {
 
   const currentTask = getActiveTask();
 
-  // Remove the useEffect for word counting since we're doing it directly in handleTextChange
-  
+  const handleAISuggestion = (suggestion: string) => {
+    toast({
+      title: "AI Feedback Received",
+      description: suggestion,
+    });
+  };
+
   const renderTaskCards = (tasks: any[], category: 'academic' | 'essay') => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
@@ -476,6 +479,13 @@ const WritingPractice: React.FC = () => {
                     <Send className="w-4 h-4" /> Submit
                   </Button>
                 </div>
+              </div>
+              
+              <div>
+                <AIWritingAssistant 
+                  prompt={currentTask?.instructions} 
+                  onSuggestion={handleAISuggestion}
+                />
               </div>
             </div>
             
