@@ -74,29 +74,32 @@ const Index = () => {
       <HeroSection />
       <FeatureSection />
       
-      <section className="py-16 px-4 md:px-0 bg-gradient-to-b from-white to-purple-50 dark:from-gray-900 dark:to-indigo-950/30">
+      <section className="py-12 px-4 md:px-0 bg-gradient-to-b from-white to-purple-50/50 dark:from-gray-900 dark:to-indigo-950/20">
         <div className="container mx-auto">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 inline-block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent relative">
+          <div className="mb-10 text-center">
+            <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 mb-4">
+              Choose Your Path
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
               Exam Practice
             </h2>
-            <p className="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-lg">
               Prepare for your exams with our comprehensive practice modules and tests
             </p>
           </div>
           
-          <div className="grid grid-cols-2 gap-3 sm:gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6 max-w-5xl mx-auto">
             {examTypes.map((exam) => (
               isMobile ? (
                 <Link 
                   key={exam.name} 
                   to={exam.path}
-                  className="transform transition-all duration-300 hover:scale-105"
+                  className="transform transition-all duration-300 hover:scale-102"
                 >
-                  <div className={`bg-gradient-to-r ${exam.gradient} rounded-xl p-4 h-full flex flex-col justify-between shadow-lg hover:shadow-xl transition-shadow`}>
+                  <div className={`bg-gradient-to-br ${exam.gradient} rounded-xl p-3 h-full flex flex-col justify-between shadow-lg hover:shadow-xl transition-shadow border border-white/10`}>
                     <div className="text-center mb-2">
-                      <span className="text-2xl mb-2">{exam.icon}</span>
-                      <h3 className="text-white font-bold text-lg mb-1">{exam.name}</h3>
+                      <span className="text-2xl mb-1 block">{exam.icon}</span>
+                      <h3 className="text-white font-bold text-base mb-0.5">{exam.name}</h3>
                     </div>
                     <Button 
                       variant="secondary" 
@@ -109,15 +112,20 @@ const Index = () => {
               ) : (
                 <Card 
                   key={exam.name} 
-                  className="overflow-hidden border border-gray-200 dark:border-gray-800 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  className="overflow-hidden border border-gray-100 dark:border-gray-800/50 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
                 >
-                  <CardHeader className={`bg-gradient-to-r ${exam.gradient} text-white p-5`}>
-                    <CardTitle className="text-xl md:text-2xl font-bold">{exam.name}</CardTitle>
-                    <CardDescription className="text-white/90 text-sm md:text-base">{exam.description}</CardDescription>
+                  <CardHeader className={`bg-gradient-to-br ${exam.gradient} text-white p-4`}>
+                    <CardTitle className="text-lg md:text-xl font-bold flex items-center gap-2">
+                      <span>{exam.icon}</span>
+                      {exam.name}
+                    </CardTitle>
+                    <CardDescription className="text-white/90 text-sm">
+                      {exam.description}
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent className="p-5">
+                  <CardContent className="p-4">
                     <Link to={exam.path} className="block w-full">
-                      <Button className={`w-full ${exam.color} text-white shadow-lg hover:shadow-xl transition-all`}>
+                      <Button className={`w-full ${exam.color} text-white shadow hover:shadow-md transition-all`}>
                         Start Practice
                       </Button>
                     </Link>
@@ -129,12 +137,19 @@ const Index = () => {
         </div>
       </section>
       
-      <section className="py-16 px-4 md:px-0 bg-gradient-to-b from-white to-purple-50 dark:from-gray-900 dark:to-indigo-950/30">
+      <section className="py-12 px-4 md:px-0 bg-gradient-to-b from-purple-50/50 to-white dark:from-indigo-950/20 dark:to-gray-900">
         <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Track Your Progress</h2>
-          <p className="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10">
-            Monitor your performance across all test sections and see your improvement over time.
-          </p>
+          <div className="mb-8 text-center">
+            <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 mb-4">
+              Track Progress
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-br from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              Your Learning Journey
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mt-2">
+              Monitor your performance across all test sections
+            </p>
+          </div>
           <div className="max-w-4xl mx-auto">
             <PerformanceTracker />
           </div>
