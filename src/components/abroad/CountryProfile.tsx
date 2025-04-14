@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, Check, Globe2, BookOpen, GraduationCap, Users, Briefcase, Award } from 'lucide-react';
@@ -7,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { useParams, Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-// This will eventually come from an API or database
 const countriesData = {
   "united-states": {
     name: "United States",
@@ -228,36 +226,40 @@ const CountryProfile = () => {
                 <TabsTrigger value="jobs">Job Prospects</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="universities" className="space-y-8">
-                <h2 className="text-2xl font-bold">Top Universities</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {country.topUniversities.map((uni, index) => (
-                    <motion.div 
-                      key={uni.name}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className="bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow"
-                    >
-                      <div className="h-40 overflow-hidden">
-                        <img 
-                          src={uni.image} 
-                          alt={uni.name} 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-bold text-lg">{uni.name}</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Rank: {uni.rank} in {country.name}</p>
-                        <p className="text-sm font-medium mt-2">Tuition: {uni.tuition}</p>
-                        <Button variant="outline" size="sm" className="mt-3 w-full">
-                          Learn More
-                        </Button>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+              <TabsContent value="universities">
+                {countrySlug === 'united-states' && <USAUniversities isAdmin={false} />}
+                {countrySlug !== 'united-states' && (
+                  <div className="space-y-8">
+                    <h2 className="text-2xl font-bold">Top Universities</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {country.topUniversities.map((uni, index) => (
+                        <motion.div 
+                          key={uni.name}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                          className="bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow"
+                        >
+                          <div className="h-40 overflow-hidden">
+                            <img 
+                              src={uni.image} 
+                              alt={uni.name} 
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="p-4">
+                            <h3 className="font-bold text-lg">{uni.name}</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">Rank: {uni.rank} in {country.name}</p>
+                            <p className="text-sm font-medium mt-2">Tuition: {uni.tuition}</p>
+                            <Button variant="outline" size="sm" className="mt-3 w-full">
+                              Learn More
+                            </Button>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </TabsContent>
               
               <TabsContent value="requirements" className="space-y-8">
