@@ -20,9 +20,9 @@ const countriesData = {
     timezone: "UTC-5 to UTC-10",
     livingCost: "$10,000 - $18,000 per year (varies by location)",
     topUniversities: [
-      { name: "Harvard University", rank: "#1", tuition: "$51,925/year", image: "https://images.unsplash.com/photo-1600325829439-800c9adba95f?q=80&w=600&auto=format&fit=crop" },
-      { name: "MIT", rank: "#2", tuition: "$53,790/year", image: "https://images.unsplash.com/photo-1581093588777-3bad49084695?q=80&w=600&auto=format&fit=crop" },
-      { name: "Stanford University", rank: "#3", tuition: "$56,169/year", image: "https://images.unsplash.com/photo-1531088009183-5ff5b7c95f91?q=80&w=600&auto=format&fit=crop" },
+      { name: "Harvard University", rank: "#1", tuition: "$51,925/year", image: "https://images.unsplash.com/photo-1536179247184-595913be67f3?q=80&w=600&auto=format&fit=crop" },
+      { name: "MIT", rank: "#2", tuition: "$53,790/year", image: "https://images.unsplash.com/photo-1564504503792-aa7d38110c49?q=80&w=600&auto=format&fit=crop" },
+      { name: "Stanford University", rank: "#3", tuition: "$56,169/year", image: "https://images.unsplash.com/photo-1608303580996-f839c470b3c6?q=80&w=600&auto=format&fit=crop" },
     ],
     requirements: {
       academic: ["High School Diploma or equivalent", "GPA of 3.0 or higher (for top universities)", "College entrance exams (SAT/ACT)"],
@@ -48,9 +48,9 @@ const countriesData = {
     timezone: "UTC+0",
     livingCost: "£12,000 - £15,000 per year (varies by location)",
     topUniversities: [
-      { name: "University of Oxford", rank: "#1", tuition: "£26,770-£37,510/year", image: "https://images.unsplash.com/photo-1580106815433-a5b1d1d53d85?q=80&w=600&auto=format&fit=crop" },
-      { name: "University of Cambridge", rank: "#2", tuition: "£22,227-£58,038/year", image: "https://images.unsplash.com/photo-1597127523723-2ede4ba16511?q=80&w=600&auto=format&fit=crop" },
-      { name: "Imperial College London", rank: "#3", tuition: "£34,500-£45,300/year", image: "https://images.unsplash.com/photo-1607013407627-6848efb2d68d?q=80&w=600&auto=format&fit=crop" },
+      { name: "University of Oxford", rank: "#1", tuition: "£26,770-£37,510/year", image: "https://images.unsplash.com/photo-1526933699907-ec3ab444245c?q=80&w=600&auto=format&fit=crop" },
+      { name: "University of Cambridge", rank: "#2", tuition: "£22,227-£58,038/year", image: "https://images.unsplash.com/photo-1605900906067-f32d5917b612?q=80&w=600&auto=format&fit=crop" },
+      { name: "Imperial College London", rank: "#3", tuition: "£34,500-£45,300/year", image: "https://images.unsplash.com/photo-1598726668937-75e7a19bbfe7?q=80&w=600&auto=format&fit=crop" },
     ],
     requirements: {
       academic: ["A-Levels or equivalent", "Strong academic record", "Personal statement"],
@@ -76,9 +76,9 @@ const countriesData = {
     timezone: "UTC+8 to UTC+11",
     livingCost: "AUD 20,000 - 25,000 per year (varies by location)",
     topUniversities: [
-      { name: "University of Melbourne", rank: "#1", tuition: "AUD 30,000-45,000/year", image: "https://images.unsplash.com/photo-1629619066127-00d42ba26050?q=80&w=600&auto=format&fit=crop" },
-      { name: "University of Sydney", rank: "#2", tuition: "AUD 38,000-48,000/year", image: "https://images.unsplash.com/photo-1527266237111-a4989d028b4b?q=80&w=600&auto=format&fit=crop" },
-      { name: "Australian National University", rank: "#3", tuition: "AUD 36,000-48,000/year", image: "https://images.unsplash.com/photo-1580974852861-c381510bc98a?q=80&w=600&auto=format&fit=crop" },
+      { name: "University of Melbourne", rank: "#1", tuition: "AUD 30,000-45,000/year", image: "https://images.unsplash.com/photo-1598326205084-eef9e0df7697?q=80&w=600&auto=format&fit=crop" },
+      { name: "University of Sydney", rank: "#2", tuition: "AUD 38,000-48,000/year", image: "https://images.unsplash.com/photo-1567624495519-0e7364dd3271?q=80&w=600&auto=format&fit=crop" },
+      { name: "Australian National University", rank: "#3", tuition: "AUD 36,000-48,000/year", image: "https://images.unsplash.com/photo-1598914809987-edf23cc45a55?q=80&w=600&auto=format&fit=crop" },
     ],
     requirements: {
       academic: ["Year 12 or equivalent", "Academic transcripts", "Statement of purpose"],

@@ -5,7 +5,7 @@ import UniversityCard from './UniversityCard';
 const usUniversities = [
   {
     name: "Harvard University",
-    image: "https://images.unsplash.com/photo-1600325829439-800c9adba95f?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1536179247184-595913be67f3?q=80&w=600&auto=format&fit=crop",
     rank: "#1",
     location: "Cambridge, Massachusetts",
     tuition: "$54,768",
@@ -15,7 +15,7 @@ const usUniversities = [
   },
   {
     name: "Massachusetts Institute of Technology",
-    image: "https://images.unsplash.com/photo-1581093588777-3bad49084695?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1564504503792-aa7d38110c49?q=80&w=600&auto=format&fit=crop",
     rank: "#2",
     location: "Cambridge, Massachusetts",
     tuition: "$55,878",
@@ -25,7 +25,7 @@ const usUniversities = [
   },
   {
     name: "Stanford University",
-    image: "https://images.unsplash.com/photo-1531088009183-5ff5b7c95f91?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1608303580996-f839c470b3c6?q=80&w=600&auto=format&fit=crop",
     rank: "#3",
     location: "Stanford, California",
     tuition: "$56,169",
@@ -35,7 +35,7 @@ const usUniversities = [
   },
   {
     name: "Yale University",
-    image: "https://images.unsplash.com/photo-1559135197-8a45ea74d367?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1582639590011-f5a8416d1101?q=80&w=600&auto=format&fit=crop",
     rank: "#4",
     location: "New Haven, Connecticut",
     tuition: "$57,700",
@@ -45,7 +45,7 @@ const usUniversities = [
   },
   {
     name: "Columbia University",
-    image: "https://images.unsplash.com/photo-1566159995201-1d55c0a423c6?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1569234817121-a2552baf4fd4?q=80&w=600&auto=format&fit=crop",
     rank: "#5",
     location: "New York City, New York",
     tuition: "$58,920",
@@ -55,7 +55,7 @@ const usUniversities = [
   },
   {
     name: "University of California Berkeley",
-    image: "https://images.unsplash.com/photo-1580377968103-84cadc052dc7?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1616431842618-895f67d4c810?q=80&w=600&auto=format&fit=crop",
     rank: "#6",
     location: "Berkeley, California",
     tuition: "$44,115",
