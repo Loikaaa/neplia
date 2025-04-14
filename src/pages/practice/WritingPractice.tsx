@@ -28,6 +28,7 @@ const WritingPractice: React.FC = () => {
     strengths: string[];
     weaknesses: string[];
     suggestions: string[];
+    aiSuggestions: string[];
   } | null>(null);
 
   const countWords = useCallback((text: string): number => {
@@ -156,7 +157,7 @@ const WritingPractice: React.FC = () => {
     };
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     let taskCategory: 'academic' | 'essay' = 'academic';
     const academicTask = writingTaskData.academic.find(task => task.id === activeTask);
     const essayTask = writingTaskData.essay.find(task => task.id === activeTask);
@@ -169,6 +170,28 @@ const WritingPractice: React.FC = () => {
     setFeedback(essayFeedback);
     setSubmitted(true);
     
+    const currentTask = getActiveTask();
+    if (currentTask) {
+      try {
+        await AIWritingAssistant({
+          essayText,
+          prompt: currentTask.instructions,
+          onFeedbackReceived: (aiFeedback) => {
+            setFeedback(prev => ({
+              ...prev!,
+              aiSuggestions: aiFeedback.split('\n'),
+            }));
+          }
+        });
+      } catch (error) {
+        toast({
+          title: "AI Feedback Error",
+          description: "Could not get AI feedback at this time. Your essay has been submitted successfully.",
+          variant: "default",
+        });
+      }
+    }
+
     toast({
       title: "Essay submitted successfully!",
       description: `Your overall band score: ${essayFeedback.overallBand.toFixed(1)}`,
@@ -267,7 +290,8 @@ const WritingPractice: React.FC = () => {
       overallBand,
       strengths,
       weaknesses,
-      suggestions
+      suggestions,
+      aiSuggestions
     } = feedback;
     
     const getBandDescription = (score: number) => {
@@ -363,6 +387,19 @@ const WritingPractice: React.FC = () => {
                   <li key={index}>{suggestion}</li>
                 ))}
               </ul>
+            </AccordionContent>
+          </AccordionItem>
+          
+          <AccordionItem value="ai-feedback">
+            <AccordionTrigger className="text-indigo-600 dark:text-indigo-400 font-medium">
+              AI Analysis
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-4 text-gray-700 dark:text-gray-300">
+                {aiSuggestions.map((suggestion, index) => (
+                  <p key={index} className="text-sm">{suggestion}</p>
+                ))}
+              </div>
             </AccordionContent>
           </AccordionItem>
           
