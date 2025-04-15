@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from '@/components/ui/input';
 import { Lock } from 'lucide-react';
 
-interface SpeakingPracticeProps {
+export interface SpeakingPracticeProps {
   examType?: string;
 }
 
