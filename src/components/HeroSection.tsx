@@ -31,10 +31,6 @@ const HeroSection = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-              <Link to="/signup" className="btn-primary w-full sm:w-auto flex items-center justify-center">
-                Start Free Trial
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
               <Link to="/practice" className="w-full sm:w-auto px-6 py-3 inline-flex items-center justify-center rounded-lg border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                 Explore Practice Tests
               </Link>
@@ -53,9 +49,9 @@ const HeroSection = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-cyan-500/10 rounded-2xl transform rotate-3 scale-105"></div>
               <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Student preparing for IELTS" 
-                  className="w-full h-auto"
+                  src="https://images.unsplash.com/photo-1518770660439-4636190af475" 
+                  alt="Technology and Learning Platform" 
+                  className="w-full h-auto object-cover"
                 />
                 
                 {/* Floating Stats Card */}
