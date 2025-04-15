@@ -10,7 +10,8 @@ const Footer = () => {
   return (
     <footer className="bg-gradient-to-b from-gray-50/50 to-gray-100/50 dark:from-gray-900 dark:to-gray-950 border-t border-gray-200/80 dark:border-gray-800/80">
       <div className="container mx-auto px-4 md:px-6 py-12 md:py-16">
-        <div className={`grid grid-cols-1 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-4'} gap-8 md:gap-12`}>
+        {/* Grid container with responsive classes */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {/* Exams Column */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
