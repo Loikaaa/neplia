@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
 // Pages
@@ -39,7 +39,6 @@ import CompleteListeningPage from '@/pages/practice/CompleteListeningPage';
 import SpeakingPractice, { SpeakingPracticeProps } from '@/pages/practice/SpeakingPractice';
 import WritingPractice from '@/pages/practice/WritingPractice';
 import MockTestPage from '@/pages/practice/MockTestPage';
-import AdminRedirect from '@/components/admin/AdminRedirect';
 
 // Import exam-specific practice pages
 import IeltsPracticePage from '@/pages/practice/exam-specific/IeltsPracticePage';
@@ -51,6 +50,21 @@ import SatPracticePage from '@/pages/practice/exam-specific/SatPracticePage';
 
 // Country profile component
 import CountryProfile from '@/components/abroad/CountryProfile';
+
+// Admin pages
+import { DemoAdminLogin } from '@/components/admin/DemoAdminLogin';
+import Dashboard from '@/pages/admin/Dashboard';
+import UsersCMS from '@/pages/admin/UsersCMS';
+import ResourceManagement from '@/pages/admin/ResourceManagement';
+import ExamSectionPage from '@/pages/admin/ExamSectionPage';
+import ReadingTaskCMS from '@/pages/admin/ReadingTaskCMS';
+import WritingTaskCMS from '@/pages/admin/WritingTaskCMS';
+import SpeakingReviewPage from '@/pages/admin/SpeakingReviewPage';
+import BlogPostCMS from '@/pages/admin/BlogPostCMS';
+import Marketing from '@/pages/admin/Marketing';
+import Settings from '@/pages/admin/Settings';
+import IeltsTaskManager from '@/pages/admin/IeltsTaskManager';
+import ListeningTaskCMS from '@/pages/admin/ListeningTaskCMS';
 
 function App() {
   return (
@@ -137,8 +151,22 @@ function App() {
         <Route path="/practice/gmat/integrated" element={<ReadingPractice />} />
         <Route path="/practice/gmat/analytical" element={<WritingPractice />} />
         
-        {/* Admin Redirect - This will redirect to your Laravel backend */}
-        <Route path="/admin/*" element={<AdminRedirect />} />
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<DemoAdminLogin />} />
+        
+        {/* Protected Admin Routes */}
+        <Route path="/admin" element={<AdminProtectedRoute><Dashboard /></AdminProtectedRoute>} />
+        <Route path="/admin/users" element={<AdminProtectedRoute><UsersCMS /></AdminProtectedRoute>} />
+        <Route path="/admin/resources" element={<AdminProtectedRoute><ResourceManagement /></AdminProtectedRoute>} />
+        <Route path="/admin/exam-sections" element={<AdminProtectedRoute><ExamSectionPage /></AdminProtectedRoute>} />
+        <Route path="/admin/reading-tasks" element={<AdminProtectedRoute><ReadingTaskCMS /></AdminProtectedRoute>} />
+        <Route path="/admin/writing-tasks" element={<AdminProtectedRoute><WritingTaskCMS /></AdminProtectedRoute>} />
+        <Route path="/admin/speaking-review" element={<AdminProtectedRoute><SpeakingReviewPage /></AdminProtectedRoute>} />
+        <Route path="/admin/blog-posts" element={<AdminProtectedRoute><BlogPostCMS /></AdminProtectedRoute>} />
+        <Route path="/admin/marketing" element={<AdminProtectedRoute><Marketing /></AdminProtectedRoute>} />
+        <Route path="/admin/settings" element={<AdminProtectedRoute><Settings /></AdminProtectedRoute>} />
+        <Route path="/admin/ielts-overview" element={<AdminProtectedRoute><IeltsTaskManager /></AdminProtectedRoute>} />
+        <Route path="/admin/listening-tasks" element={<AdminProtectedRoute><ListeningTaskCMS /></AdminProtectedRoute>} />
         
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
@@ -146,5 +174,16 @@ function App() {
     </Router>
   );
 }
+
+// Create a protected route component for admin routes
+const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isAuthenticated = sessionStorage.getItem('demoAdminLoggedIn') === 'true';
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/admin/login" />;
+  }
+  
+  return <>{children}</>;
+};
 
 export default App;

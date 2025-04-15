@@ -12,7 +12,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const isMobile = useIsMobile();
-  const isAdmin = true; // In a real app, this would be determined by authentication/role
+  const isAdmin = sessionStorage.getItem('demoAdminLoggedIn') === 'true';
   
   return (
     <ContentManagementProvider>

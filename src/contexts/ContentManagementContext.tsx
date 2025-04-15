@@ -13,6 +13,7 @@ export interface EditableSection {
 interface ContentManagementContextType {
   editableContent: EditableSection[];
   isEditMode: boolean;
+  hasUnsavedChanges: boolean;
   setEditMode: (mode: boolean) => void;
   updateContent: (sectionId: string, newContent: any) => void;
   getContentForSection: (pageId: string, sectionName: string) => any;
@@ -46,12 +47,34 @@ const initialContent: EditableSection[] = [
       ]
     },
     lastUpdated: new Date(),
+  },
+  {
+    id: 'writing-practice-header',
+    pageId: 'writing-practice',
+    sectionName: 'header',
+    content: {
+      title: 'IELTS Writing Practice',
+      description: 'Master the IELTS writing section with our comprehensive practice tools.'
+    },
+    lastUpdated: new Date(),
+  },
+  {
+    id: 'writing-practice-controls',
+    pageId: 'writing-practice',
+    sectionName: 'controls',
+    content: {
+      startButtonText: 'Start Test',
+      endButtonText: 'End Test'
+    },
+    lastUpdated: new Date(),
   }
 ];
 
 export const ContentManagementProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [editableContent, setEditableContent] = useState<EditableSection[]>(initialContent);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [originalContent, setOriginalContent] = useState<EditableSection[]>(initialContent);
 
   // In a real app, we'd fetch this from an API
   useEffect(() => {
@@ -61,12 +84,23 @@ export const ContentManagementProvider: React.FC<{ children: React.ReactNode }> 
       // const response = await fetch('/api/content');
       // const data = await response.json();
       // setEditableContent(data);
+      // setOriginalContent(JSON.parse(JSON.stringify(data)));
     };
 
     fetchContent();
   }, []);
 
   const setEditMode = (mode: boolean) => {
+    if (mode) {
+      // Entering edit mode - store original content for potential cancel
+      setOriginalContent(JSON.parse(JSON.stringify(editableContent)));
+      setHasUnsavedChanges(false);
+    } else {
+      // Exiting edit mode - save changes or revert back
+      // In a real app, this would save to the backend
+      // saveContentToBackend(editableContent);
+      setHasUnsavedChanges(false);
+    }
     setIsEditMode(mode);
   };
 
@@ -79,7 +113,9 @@ export const ContentManagementProvider: React.FC<{ children: React.ReactNode }> 
       )
     );
     
-    // In production, save to backend
+    setHasUnsavedChanges(true);
+    
+    // In production, we wouldn't save immediately but wait for the user to explicitly save
     // saveContentToBackend(sectionId, newContent);
   };
 
@@ -95,6 +131,7 @@ export const ContentManagementProvider: React.FC<{ children: React.ReactNode }> 
       value={{ 
         editableContent, 
         isEditMode, 
+        hasUnsavedChanges,
         setEditMode, 
         updateContent,
         getContentForSection
