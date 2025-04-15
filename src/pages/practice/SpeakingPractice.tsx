@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -15,7 +16,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from '@/components/ui/input';
 import { Lock } from 'lucide-react';
 
-const SpeakingPractice = ({ examType = 'ielts' }) => {
+interface SpeakingPracticeProps {
+  examType?: string;
+}
+
+const SpeakingPractice = ({ examType = 'ielts' }: SpeakingPracticeProps) => {
   const [testStarted, setTestStarted] = useState(false);
   const [selectedTask, setSelectedTask] = useState<SpeakingTask | null>(null);
   const [testCompleted, setTestCompleted] = useState(false);
@@ -23,14 +28,14 @@ const SpeakingPractice = ({ examType = 'ielts' }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
-  const [examType, setExamType] = useState(examType);
+  const [currentExamType, setCurrentExamType] = useState(examType);
 
   const { toast } = useToast();
   const { trackCompletion } = useUserProgress();
 
   useEffect(() => {
     const savedExam = examType || localStorage.getItem('selectedExam') || 'ielts';
-    setExamType(savedExam);
+    setCurrentExamType(savedExam);
   }, [examType]);
 
   useEffect(() => {
