@@ -1,8 +1,31 @@
-import React from 'react';
+
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import ListeningHeader from '@/components/practice/listening/ListeningHeader';
-import ListeningInstructions from '@/components/practice/listening/ListeningInstructions';
-import ListeningTest from '@/components/practice/listening/ListeningTest';
+import { ListeningInstructions } from '@/components/practice/listening/ListeningInstructions';
+import { ListeningTest } from '@/components/practice/listening/ListeningTest';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { ArrowRight, BookOpen, Headphones } from 'lucide-react';
+import { TestType, DifficultyLevel } from '@/components/practice/listening/ListeningTest';
+
+// Define test types for the UI
+const testTypes = [
+  { id: 'academic' as TestType, title: 'Academic', description: 'Focused on academic settings and topics', progress: 65 },
+  { id: 'general' as TestType, title: 'General Training', description: 'Everyday contexts and situations', progress: 45 },
+  { id: 'practice' as TestType, title: 'Practice Mode', description: 'Mixed questions with instant feedback', progress: 80 },
+];
+
+// Define difficulty levels for the selector
+const difficultyLevels = [
+  { value: 'beginner' as DifficultyLevel, label: 'Beginner (Band 4-5)' },
+  { value: 'intermediate' as DifficultyLevel, label: 'Intermediate (Band 5.5-6.5)' },
+  { value: 'advanced' as DifficultyLevel, label: 'Advanced (Band 7-9)' },
+];
 
 export interface ListeningPracticeProps {
   examType?: string;

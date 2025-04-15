@@ -1,8 +1,10 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import ReadingHeader from '@/components/practice/reading/ReadingHeader';
-import ReadingInstructions from '@/components/practice/reading/ReadingInstructions';
-import ReadingTest from '@/components/practice/reading/ReadingTest';
+import { ReadingInstructions } from '@/components/practice/reading/ReadingInstructions';
+import { ReadingTest } from '@/components/practice/reading/ReadingTest';
 
 export interface ReadingPracticeProps {
   examType?: string;
