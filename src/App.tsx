@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
@@ -115,11 +114,11 @@ function App() {
         <Route path="/practice/toefl/writing" element={<WritingPractice />} />
         <Route path="/practice/toefl/speaking" element={<SpeakingPractice />} />
         
-        {/* PTE Section Routes */}
-        <Route path="/practice/pte/reading" element={<ReadingPractice />} />
-        <Route path="/practice/pte/listening" element={<ListeningPractice />} />
-        <Route path="/practice/pte/speaking" element={<SpeakingPractice />} />
-        <Route path="/practice/pte/writing" element={<WritingPractice />} />
+        {/* PTE Section Routes - Updated */}
+        <Route path="/practice/pte/reading" element={<ReadingPractice examType="pte" />} />
+        <Route path="/practice/pte/listening" element={<ListeningPractice examType="pte" />} />
+        <Route path="/practice/pte/speaking" element={<SpeakingPractice examType="pte" />} />
+        <Route path="/practice/pte/writing" element={<WritingPractice examType="pte" />} />
         
         {/* SAT Section Routes */}
         <Route path="/practice/sat/reading" element={<ReadingPractice />} />

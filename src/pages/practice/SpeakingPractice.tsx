@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import SpeakingHeader from '@/components/practice/speaking/SpeakingHeader';
 import { SpeakingInstructions } from '@/components/practice/speaking/SpeakingInstructions';
@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from '@/components/ui/input';
 import { Lock } from 'lucide-react';
 
-const SpeakingPractice = () => {
+const SpeakingPractice = ({ examType = 'ielts' }) => {
   const [testStarted, setTestStarted] = useState(false);
   const [selectedTask, setSelectedTask] = useState<SpeakingTask | null>(null);
   const [testCompleted, setTestCompleted] = useState(false);
@@ -23,16 +23,22 @@ const SpeakingPractice = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
-  
+  const [examType, setExamType] = useState(examType);
+
   const { toast } = useToast();
   const { trackCompletion } = useUserProgress();
-  
+
+  useEffect(() => {
+    const savedExam = examType || localStorage.getItem('selectedExam') || 'ielts';
+    setExamType(savedExam);
+  }, [examType]);
+
   useEffect(() => {
     // Check login status
     const loggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
     setIsLoggedIn(loggedIn);
   }, []);
-  
+
   const handleTestFinish = async () => {
     // In a real app, this would fetch the final score from the server
     // For demo purposes, we'll simulate a score
@@ -53,13 +59,13 @@ const SpeakingPractice = () => {
       description: `Your final speaking score is ${roundedScore}. Admin has been notified of your submission.`,
     });
   };
-  
+
   const resetTest = () => {
     setTestCompleted(false);
     setSelectedTask(null);
     setFinalScore(null);
   };
-  
+
   const handleLogin = () => {
     // In a real app, this would authenticate with a server
     localStorage.setItem('demoUserLoggedIn', 'true');
@@ -71,7 +77,7 @@ const SpeakingPractice = () => {
       description: "You have successfully logged in.",
     });
   };
-  
+
   const handleStartTask = () => {
     if (!isLoggedIn) {
       setShowLoginDialog(true);
@@ -80,7 +86,7 @@ const SpeakingPractice = () => {
     
     setTestStarted(true);
   };
-  
+
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">

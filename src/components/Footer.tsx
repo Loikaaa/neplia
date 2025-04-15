@@ -11,37 +11,7 @@ const Footer = () => {
     <footer className="bg-gradient-to-b from-gray-50/50 to-gray-100/50 dark:from-gray-900 dark:to-gray-950 border-t border-gray-200/80 dark:border-gray-800/80">
       <div className="container mx-auto px-4 md:px-6 py-12 md:py-16">
         <div className={`grid grid-cols-1 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-4'} gap-8 md:gap-12`}>
-          {/* Brand */}
-          <div className="space-y-4">
-            <Link to="/" className="inline-block">
-              <span className="font-heading text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Neplia<span className="text-coral">.</span>
-              </span>
-            </Link>
-            <p className="text-gray-600 dark:text-gray-400">
-              Your ultimate platform for IELTS preparation. Study smarter, score higher.
-            </p>
-            <div className="flex space-x-4">
-              <a href="https://facebook.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
-                <Facebook className="h-5 w-5" />
-                <span className="sr-only">Facebook</span>
-              </a>
-              <a href="https://twitter.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
-                <Twitter className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
-              </a>
-              <a href="https://instagram.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
-                <Instagram className="h-5 w-5" />
-                <span className="sr-only">Instagram</span>
-              </a>
-              <a href="https://youtube.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
-                <Youtube className="h-5 w-5" />
-                <span className="sr-only">YouTube</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Quick Links with About and Contact */}
+          {/* Quick Links */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
             <ul className="space-y-3">
@@ -71,71 +41,59 @@ const Footer = () => {
             </ul>
           </div>
 
-          {isMobile ? (
-            // Mobile layout - IELTS Modules in a single column
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    Listening
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    Reading
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    Writing
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    Speaking
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    Full Mock Tests
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          ) : (
-            // Desktop layout - IELTS Modules in a separate column
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    Listening
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    Reading
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    Writing
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    Speaking
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    Full Mock Tests
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          )}
+          {/* Exams */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Exams</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link to="/practice/ielts" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                  IELTS
+                </Link>
+              </li>
+              <li>
+                <Link to="/practice/toefl" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                  TOEFL
+                </Link>
+              </li>
+              <li>
+                <Link to="/practice/pte" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                  PTE Academic
+                </Link>
+              </li>
+              <li>
+                <Link to="/practice/gre" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                  GRE
+                </Link>
+              </li>
+              <li>
+                <Link to="/practice/gmat" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                  GMAT
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Conditions */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Conditions</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link to="/terms" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/cookies" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                  Cookie Policy
+                </Link>
+              </li>
+            </ul>
+          </div>
 
           {/* Contact */}
           <div>
@@ -149,35 +107,44 @@ const Footer = () => {
                 <Phone className="h-5 w-5 mr-2 text-indigo-500 group-hover:text-indigo-600 transition-colors mt-0.5" />
                 <span className="text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-300 transition-colors">+1 (555) 123-4567</span>
               </li>
-              <li className="mt-4">
-                <Link 
-                  to="/contact" 
-                  className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm font-medium hover:from-indigo-600 hover:to-purple-600 transition-all duration-200"
-                >
-                  Send us a message
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+              <li>
+                <div className="flex space-x-4 mt-4">
+                  <a href="https://facebook.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
+                    <Facebook className="h-5 w-5" />
+                    <span className="sr-only">Facebook</span>
+                  </a>
+                  <a href="https://twitter.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
+                    <Twitter className="h-5 w-5" />
+                    <span className="sr-only">Twitter</span>
+                  </a>
+                  <a href="https://instagram.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
+                    <Instagram className="h-5 w-5" />
+                    <span className="sr-only">Instagram</span>
+                  </a>
+                  <a href="https://youtube.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
+                    <Youtube className="h-5 w-5" />
+                    <span className="sr-only">YouTube</span>
+                  </a>
+                </div>
               </li>
             </ul>
           </div>
         </div>
 
+        {/* Brand section moved to bottom */}
         <div className="mt-12 pt-8 border-t border-gray-200/80 dark:border-gray-800/80">
-          <div className={`flex ${isMobile ? 'flex-col space-y-4' : 'flex-row'} justify-between items-center`}>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+          <div className="flex flex-col items-center text-center space-y-4">
+            <Link to="/" className="inline-block">
+              <span className="font-heading text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Neplia<span className="text-coral">.</span>
+              </span>
+            </Link>
+            <p className="text-gray-600 dark:text-gray-400 max-w-md">
+              Your ultimate platform for IELTS preparation. Study smarter, score higher.
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               © {new Date().getFullYear()} Neplia.com. All rights reserved.
             </p>
-            <div className={`${isMobile ? 'flex flex-wrap justify-center gap-4' : 'flex space-x-6'}`}>
-              <Link to="/terms" className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 text-sm transition-colors">
-                Terms of Service
-              </Link>
-              <Link to="/privacy" className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 text-sm transition-colors">
-                Privacy Policy
-              </Link>
-              <Link to="/cookies" className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 text-sm transition-colors">
-                Cookie Policy
-              </Link>
-            </div>
           </div>
         </div>
       </div>
