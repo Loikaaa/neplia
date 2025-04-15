@@ -36,7 +36,7 @@ import PracticePage from '@/pages/practice/PracticePage';
 import ReadingPractice from '@/pages/practice/ReadingPractice';
 import ListeningPractice from '@/pages/practice/ListeningPractice';
 import CompleteListeningPage from '@/pages/practice/CompleteListeningPage';
-import SpeakingPractice from '@/pages/practice/SpeakingPractice';
+import SpeakingPractice, { SpeakingPracticeProps } from '@/pages/practice/SpeakingPractice';
 import WritingPractice from '@/pages/practice/WritingPractice';
 import MockTestPage from '@/pages/practice/MockTestPage';
 import AdminRedirect from '@/components/admin/AdminRedirect';
