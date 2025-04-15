@@ -19,15 +19,15 @@ const HeroSection = () => {
           <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left animate-fade-in">
             <div className="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-3 py-1 text-sm font-medium text-purple-600 dark:text-purple-300 mb-4">
               <span className="flex h-2 w-2 rounded-full bg-purple-600 mr-2"></span>
-              The Ultimate IELTS Platform
+              The Ultimate Language Proficiency Platform
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white">
-              Master <span className="highlight-text">IELTS</span> with Precision and Confidence
+              Master <span className="highlight-text">Language Exams</span> with Precision and Confidence
             </h1>
             
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto lg:mx-0">
-              Practice all IELTS modules with AI-powered feedback, track your progress, and achieve your target score faster than ever before.
+              Practice for IELTS, TOEFL, PTE, Cambridge, and more with AI-powered feedback, track your progress, and achieve your target scores faster than ever before.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
