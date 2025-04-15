@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, Info, Globe, ArrowRight } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, Info, Globe, BookOpen, Link as LinkIcon, FileText } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Footer = () => {
@@ -11,39 +11,12 @@ const Footer = () => {
     <footer className="bg-gradient-to-b from-gray-50/50 to-gray-100/50 dark:from-gray-900 dark:to-gray-950 border-t border-gray-200/80 dark:border-gray-800/80">
       <div className="container mx-auto px-4 md:px-6 py-12 md:py-16">
         <div className={`grid grid-cols-1 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-4'} gap-8 md:gap-12`}>
-          {/* Quick Links */}
+          {/* Exams Column */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Practice Tests
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-2">
-                  <Info className="h-4 w-4" />
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link to="/abroad" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-2">
-                  <Globe className="h-4 w-4" />
-                  Study Abroad
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Exams */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Exams</h3>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+              <BookOpen className="h-5 w-5 text-indigo-500" />
+              Exams
+            </h3>
             <ul className="space-y-3">
               <li>
                 <Link to="/practice/ielts" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
@@ -73,9 +46,45 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+              <LinkIcon className="h-5 w-5 text-indigo-500" />
+              Quick Links
+            </h3>
+            <ul className="space-y-3">
+              <li>
+                <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                  Practice Tests
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-2">
+                  <Info className="h-4 w-4" />
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link to="/abroad" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors flex items-center gap-2">
+                  <Globe className="h-4 w-4" />
+                  Study Abroad
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Conditions */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Conditions</h3>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+              <FileText className="h-5 w-5 text-indigo-500" />
+              Conditions
+            </h3>
             <ul className="space-y-3">
               <li>
                 <Link to="/terms" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
@@ -97,7 +106,10 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Contact Us</h3>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+              <Mail className="h-5 w-5 text-indigo-500" />
+              Contact Us
+            </h3>
             <ul className="space-y-3">
               <li className="flex items-start group">
                 <Mail className="h-5 w-5 mr-2 text-indigo-500 group-hover:text-indigo-600 transition-colors mt-0.5" />
@@ -131,7 +143,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Brand section moved to bottom */}
+        {/* Brand section */}
         <div className="mt-12 pt-8 border-t border-gray-200/80 dark:border-gray-800/80">
           <div className="flex flex-col items-center text-center space-y-4">
             <Link to="/" className="inline-block">

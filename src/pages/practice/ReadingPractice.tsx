@@ -94,13 +94,26 @@ const ReadingPractice: React.FC<ReadingPracticeProps> = ({ examType = 'ielts' })
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
-        <ReadingHeader examType={examTypeState} section={section} />
-        
-        {!testStarted ? (
-          <ReadingInstructions onStart={() => setTestStarted(true)} examType={examTypeState} section={section} />
-        ) : (
-          <ReadingTest examType={examTypeState} section={section} />
-        )}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 backdrop-blur-lg border border-gray-200 dark:border-gray-700">
+          <ReadingHeader examType={examTypeState} section={section} />
+          
+          {!testStarted ? (
+            <div className="mt-6 animate-fade-in">
+              <ReadingInstructions 
+                onStart={() => setTestStarted(true)} 
+                examType={examTypeState} 
+                section={section} 
+              />
+            </div>
+          ) : (
+            <div className="mt-6 animate-fade-in">
+              <ReadingTest 
+                examType={examTypeState} 
+                section={section} 
+              />
+            </div>
+          )}
+        </div>
       </div>
     </Layout>
   );
