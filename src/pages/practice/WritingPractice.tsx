@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import Layout from '@/components/Layout';
 import { useToast } from '@/hooks/use-toast';
@@ -7,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Clock, Edit } from 'lucide-react';
 import { writingTaskData } from '@/data/writingTaskData';
+import EditableSection from '@/components/admin/EditableSection';
 
 export interface WritingPracticeProps {
   examType?: string;
@@ -36,11 +38,16 @@ const WritingPractice: React.FC<WritingPracticeProps> = ({ examType = 'ielts' })
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">{examType.toUpperCase()} Writing Practice</h1>
-        <p className="mb-6">This is a simplified placeholder for the WritingPractice component.</p>
-        <Button onClick={() => setTestStarted(!testStarted)}>
-          {testStarted ? 'End Test' : 'Start Test'}
-        </Button>
+        <EditableSection pageId="writing-practice" sectionName="header" title content>
+          <h1 className="text-3xl font-bold mb-4">{examType.toUpperCase()} Writing Practice</h1>
+          <p className="mb-6">This is a simplified placeholder for the WritingPractice component.</p>
+        </EditableSection>
+        
+        <EditableSection pageId="writing-practice" sectionName="controls" content>
+          <Button onClick={() => setTestStarted(!testStarted)}>
+            {testStarted ? 'End Test' : 'Start Test'}
+          </Button>
+        </EditableSection>
       </div>
     </Layout>
   );
