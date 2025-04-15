@@ -7,13 +7,13 @@ const Footer = () => {
   const isMobile = useIsMobile();
   
   return (
-    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+    <footer className="bg-gradient-to-b from-gray-50/50 to-gray-100/50 dark:from-gray-900 dark:to-gray-950 border-t border-gray-200/80 dark:border-gray-800/80">
       <div className="container mx-auto px-4 md:px-6 py-12 md:py-16">
         <div className={`grid grid-cols-1 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-4'} gap-8 md:gap-12`}>
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="inline-block">
-              <span className="font-heading text-2xl font-bold text-indigo">
+              <span className="font-heading text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Neplia<span className="text-coral">.</span>
               </span>
             </Link>
@@ -21,19 +21,19 @@ const Footer = () => {
               Your ultimate platform for IELTS preparation. Study smarter, score higher.
             </p>
             <div className="flex space-x-4">
-              <a href="https://facebook.com/neplia" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+              <a href="https://facebook.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
                 <Facebook className="h-5 w-5" />
                 <span className="sr-only">Facebook</span>
               </a>
-              <a href="https://twitter.com/neplia" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+              <a href="https://twitter.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </a>
-              <a href="https://instagram.com/neplia" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+              <a href="https://instagram.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
                 <Instagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
               </a>
-              <a href="https://youtube.com/neplia" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+              <a href="https://youtube.com/neplia" className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
                 <Youtube className="h-5 w-5" />
                 <span className="sr-only">YouTube</span>
               </a>
@@ -140,39 +140,40 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Contact Us</h3>
             <ul className="space-y-3">
-              <li className="flex items-start">
-                <Mail className="h-5 w-5 mr-2 text-indigo mt-0.5" />
-                <span className="text-gray-600 dark:text-gray-400">support@neplia.com</span>
+              <li className="flex items-start group">
+                <Mail className="h-5 w-5 mr-2 text-indigo-500 group-hover:text-indigo-600 transition-colors mt-0.5" />
+                <span className="text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-300 transition-colors">support@neplia.com</span>
               </li>
-              <li className="flex items-start">
-                <Phone className="h-5 w-5 mr-2 text-indigo mt-0.5" />
-                <span className="text-gray-600 dark:text-gray-400">+1 (555) 123-4567</span>
+              <li className="flex items-start group">
+                <Phone className="h-5 w-5 mr-2 text-indigo-500 group-hover:text-indigo-600 transition-colors mt-0.5" />
+                <span className="text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-300 transition-colors">+1 (555) 123-4567</span>
               </li>
               <li className="mt-4">
-                <Link to="/contact" className="inline-flex items-center font-medium text-indigo hover:text-indigo-700 dark:hover:text-indigo-300">
+                <Link 
+                  to="/contact" 
+                  className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm font-medium hover:from-indigo-600 hover:to-purple-600 transition-all duration-200"
+                >
                   Send us a message
-                  <svg className="ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                  </svg>
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+        <div className="mt-12 pt-8 border-t border-gray-200/80 dark:border-gray-800/80">
           <div className={`flex ${isMobile ? 'flex-col space-y-4' : 'flex-row'} justify-between items-center`}>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
               © {new Date().getFullYear()} Neplia.com. All rights reserved.
             </p>
             <div className={`${isMobile ? 'flex flex-wrap justify-center gap-4' : 'flex space-x-6'}`}>
-              <Link to="/terms" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 text-sm">
+              <Link to="/terms" className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 text-sm transition-colors">
                 Terms of Service
               </Link>
-              <Link to="/privacy" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 text-sm">
+              <Link to="/privacy" className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 text-sm transition-colors">
                 Privacy Policy
               </Link>
-              <Link to="/cookies" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 text-sm">
+              <Link to="/cookies" className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 text-sm transition-colors">
                 Cookie Policy
               </Link>
             </div>
