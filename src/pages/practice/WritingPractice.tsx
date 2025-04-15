@@ -1,18 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
-import { Clock, CheckCircle, Edit, HelpCircle, BookOpen, BarChart2, Download, Send } from 'lucide-react';
-import { useToast } from "@/hooks/use-toast";
+import React from 'react';
 import Layout from '@/components/Layout';
-import { writingTaskData } from "@/data/writingTaskData";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
-import { AIWritingAssistant } from '@/components/practice/writing/AIWritingAssistant';
 
-const WritingPractice: React.FC = () => {
+export interface WritingPracticeProps {
+  examType?: string;
+}
+
+const WritingPractice: React.FC<WritingPracticeProps> = ({ examType = 'ielts' }) => {
   const { toast } = useToast();
   const [activeTask, setActiveTask] = useState<string | null>(null);
   const [essayText, setEssayText] = useState('');

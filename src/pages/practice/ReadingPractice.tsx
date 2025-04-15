@@ -1,14 +1,16 @@
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Layout from '@/components/Layout';
-import { ReadingTest } from '@/components/practice/reading/ReadingTest';
-import { ReadingInstructions } from '@/components/practice/reading/ReadingInstructions';
 import ReadingHeader from '@/components/practice/reading/ReadingHeader';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import ReadingInstructions from '@/components/practice/reading/ReadingInstructions';
+import ReadingTest from '@/components/practice/reading/ReadingTest';
 
-const ReadingPractice = () => {
+export interface ReadingPracticeProps {
+  examType?: string;
+}
+
+const ReadingPractice: React.FC<ReadingPracticeProps> = ({ examType = 'ielts' }) => {
   const [testStarted, setTestStarted] = useState(false);
-  const [examType, setExamType] = useState('ielts');
+  const [examTypeState, setExamType] = useState(examType);
   const [section, setSection] = useState('reading');
   const location = useLocation();
   const navigate = useNavigate();
@@ -44,7 +46,7 @@ const ReadingPractice = () => {
     
     // Validate the exam and section combination
     const isValidCombination = validateExamAndSection(
-      examType === 'ielts' && examParam ? examParam : examType, 
+      examTypeState === 'ielts' && examParam ? examParam : examTypeState, 
       section === 'reading' && sectionParam ? sectionParam : section
     );
     
@@ -56,20 +58,20 @@ const ReadingPractice = () => {
     
     // Set page title based on exam type and section
     let title = "Reading Practice";
-    if (examType === 'gre' && section === 'verbal') {
+    if (examTypeState === 'gre' && section === 'verbal') {
       title = "GRE Verbal Reasoning Practice";
-    } else if (examType === 'gre' && section === 'quantitative') {
+    } else if (examTypeState === 'gre' && section === 'quantitative') {
       title = "GRE Quantitative Reasoning Practice";
-    } else if (examType === 'sat' && section === 'math') {
+    } else if (examTypeState === 'sat' && section === 'math') {
       title = "SAT Math Practice";
-    } else if (examType === 'sat' && section === 'reading') {
+    } else if (examTypeState === 'sat' && section === 'reading') {
       title = "SAT Reading & Writing Practice";
     } else {
-      title = `${examType.toUpperCase()} Reading Practice`;
+      title = `${examTypeState.toUpperCase()} Reading Practice`;
     }
     
     document.title = title;
-  }, [location, examType, section, navigate]);
+  }, [location, examTypeState, section, navigate]);
   
   // Function to validate if the exam type and section combination is valid
   const validateExamAndSection = (exam: string, sect: string) => {
@@ -90,12 +92,12 @@ const ReadingPractice = () => {
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
-        <ReadingHeader examType={examType} section={section} />
+        <ReadingHeader examType={examTypeState} section={section} />
         
         {!testStarted ? (
-          <ReadingInstructions onStart={() => setTestStarted(true)} examType={examType} section={section} />
+          <ReadingInstructions onStart={() => setTestStarted(true)} examType={examTypeState} section={section} />
         ) : (
-          <ReadingTest examType={examType} section={section} />
+          <ReadingTest examType={examTypeState} section={section} />
         )}
       </div>
     </Layout>

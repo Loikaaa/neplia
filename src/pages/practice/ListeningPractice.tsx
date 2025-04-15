@@ -1,51 +1,14 @@
-
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import Layout from '@/components/Layout';
-import { ListeningTest, TestType, DifficultyLevel } from '@/components/practice/listening/ListeningTest';
-import { ListeningInstructions } from '@/components/practice/listening/ListeningInstructions';
 import ListeningHeader from '@/components/practice/listening/ListeningHeader';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Headphones, BookOpen, ArrowRight } from 'lucide-react';
-import { useToast } from "@/hooks/use-toast";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Progress } from '@/components/ui/progress';
+import ListeningInstructions from '@/components/practice/listening/ListeningInstructions';
+import ListeningTest from '@/components/practice/listening/ListeningTest';
 
-const testTypes = [
-  {
-    id: 'general' as TestType,
-    title: 'General Training',
-    description: 'For those taking IELTS for migration or work purposes',
-    progress: 70
-  },
-  {
-    id: 'academic' as TestType,
-    title: 'Academic',
-    description: 'For those taking IELTS for higher education or professional registration',
-    progress: 85
-  },
-  {
-    id: 'practice' as TestType,
-    title: 'Mini Practice',
-    description: 'A shorter practice session with immediate feedback',
-    progress: 100
-  }
-];
+export interface ListeningPracticeProps {
+  examType?: string;
+}
 
-const difficultyLevels = [
-  { value: 'beginner' as DifficultyLevel, label: 'Beginner (Band 4-5)' },
-  { value: 'intermediate' as DifficultyLevel, label: 'Intermediate (Band 5.5-6.5)' },
-  { value: 'advanced' as DifficultyLevel, label: 'Advanced (Band 7+)' }
-];
-
-const ListeningPractice = () => {
+const ListeningPractice: React.FC<ListeningPracticeProps> = ({ examType = 'ielts' }) => {
   const [testStarted, setTestStarted] = useState(false);
   const [selectedTestType, setSelectedTestType] = useState<TestType>('academic');
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('intermediate');
