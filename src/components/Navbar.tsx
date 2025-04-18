@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy, X, Book, Play, Globe, Timer, Menu } from 'lucide-react';
+import { ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy, Book, Play, Globe, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import UserProfileMenu from './UserProfileMenu';
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import TimeDisplay from './TimeDisplay';
 
 const examTypes = [
   {
@@ -236,9 +237,16 @@ const Navbar = () => {
             </Link>
 
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="text-white">
-                <Timer className="h-5 w-5 animate-pulse-slow" />
-              </Button>
+              <div className="hidden md:flex items-center gap-3">
+                <TimeDisplay />
+              </div>
+              {isUserActive ? (
+                <UserProfileMenu isMobile={true} />
+              ) : (
+                <Button variant="ghost" size="icon" className="text-white">
+                  <UserProfileMenu isMobile={true} />
+                </Button>
+              )}
             </div>
           </div>
 
