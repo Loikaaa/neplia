@@ -20,7 +20,18 @@ export default {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         heading: ['Poppins', 'sans-serif'],
-        playfair: ['Playfair Display', 'serif']
+        playfair: ['Playfair Display', 'serif'],
+        'times': ['"Times New Roman"', 'Times', 'serif'],
+        'mobile-heading': ['"Times New Roman"', 'Poppins', 'sans-serif'],
+        'mobile-body': ['"Times New Roman"', 'Inter', 'sans-serif']
+      },
+      fontSize: {
+        'mobile-xs': ['0.75rem', { lineHeight: '1rem' }],
+        'mobile-sm': ['0.875rem', { lineHeight: '1.25rem' }],
+        'mobile-base': ['1rem', { lineHeight: '1.5rem' }],
+        'mobile-lg': ['1.125rem', { lineHeight: '1.75rem' }],
+        'mobile-xl': ['1.25rem', { lineHeight: '1.75rem' }],
+        'mobile-2xl': ['1.5rem', { lineHeight: '2rem' }]
       },
       colors: {
         border: 'hsl(var(--border))',
