@@ -95,7 +95,6 @@ const navLinks = [
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
-  const [openExamType, setOpenExamType] = useState<string | null>(null);
   const location = useLocation();
   
   const isLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
@@ -119,158 +118,26 @@ const Navbar = () => {
   return (
     <header 
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 sticky-header',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 mobile-navbar',
         scrolled 
-          ? 'py-2 bg-slate-800 text-white shadow-lg' 
-          : 'py-3 bg-slate-900 dark:bg-slate-900'
+          ? 'py-2 bg-gradient-to-r from-purple-600/90 via-indigo-600/90 to-pink-600/90 shadow-lg' 
+          : 'py-3 bg-gradient-to-r from-purple-700/95 via-indigo-700/95 to-pink-700/95'
       )}
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center">
-              <span className="font-heading text-xl md:text-2xl font-bold text-white dark:text-white">
-                Neplia<span className="text-pink-400 dark:text-pink-400">.</span>
+            <Link to="/" className="flex items-center animate-fade-in">
+              <span className="font-mobile-heading text-xl md:text-2xl font-bold text-white tracking-wider">
+                Neplia<span className="text-pink-300">.</span>
               </span>
             </Link>
-          </div>
-
-          <div className="hidden md:flex md:flex-1 md:justify-center">
-            <NavigationMenu className="mx-auto">
-              <NavigationMenuList className="gap-1">
-                {navLinks.map((link) => (
-                  <NavigationMenuItem key={link.name}>
-                    {link.name === 'Practice' ? (
-                      <>
-                        <NavigationMenuTrigger 
-                          variant="solid" 
-                          className={cn(
-                            "text-white font-medium",
-                            location.pathname.startsWith("/practice") && "bg-white/20 dark:bg-white/20"
-                          )}
-                        >
-                          {link.name}
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-slate-800">
-                            <li className="row-span-3">
-                              <NavigationMenuLink asChild>
-                                <Link
-                                  className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-indigo-500 to-indigo-700 p-6 no-underline outline-none focus:shadow-md"
-                                  to="/practice"
-                                >
-                                  <div className="mb-2 mt-4 text-lg font-medium text-white">
-                                    Full Practice Tests
-                                  </div>
-                                  <p className="text-sm leading-tight text-white/90">
-                                    Take comprehensive practice tests for all exam sections
-                                  </p>
-                                </Link>
-                              </NavigationMenuLink>
-                            </li>
-                            <li>
-                              <Link to="/practice/reading" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                                <div className="flex items-center">
-                                  <BookOpen className="h-4 w-4 mr-2 text-indigo-400" />
-                                  <div className="text-sm font-medium text-white">Reading</div>
-                                </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                                  Practice reading comprehension skills
-                                </p>
-                              </Link>
-                            </li>
-                            <li>
-                              <Link to="/practice/listening" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                                <div className="flex items-center">
-                                  <Headphones className="h-4 w-4 mr-2 text-indigo-400" />
-                                  <div className="text-sm font-medium text-white">Listening</div>
-                                </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                                  Improve your listening comprehension
-                                </p>
-                              </Link>
-                            </li>
-                            <li>
-                              <Link to="/practice/writing" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                                <div className="flex items-center">
-                                  <Edit className="h-4 w-4 mr-2 text-indigo-400" />
-                                  <div className="text-sm font-medium text-white">Writing</div>
-                                </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                                  Develop your writing skills
-                                </p>
-                              </Link>
-                            </li>
-                            <li>
-                              <Link to="/practice/speaking" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                                <div className="flex items-center">
-                                  <MessageSquare className="h-4 w-4 mr-2 text-indigo-400" />
-                                  <div className="text-sm font-medium text-white">Speaking</div>
-                                </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                                  Practice your speaking skills
-                                </p>
-                              </Link>
-                            </li>
-                          </ul>
-                        </NavigationMenuContent>
-                      </>
-                    ) : link.name === 'Exams' ? (
-                      <>
-                        <NavigationMenuTrigger 
-                          variant="solid" 
-                          className={cn(
-                            "text-white font-medium",
-                            location.pathname.startsWith("/exams") && "bg-white/20 dark:bg-white/20"
-                          )}
-                        >
-                          {link.name}
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-slate-800">
-                            {examTypes.map((exam) => (
-                              <li key={exam.name}>
-                                <NavigationMenuLink asChild>
-                                  <Link
-                                    to={exam.path}
-                                    className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white`}
-                                  >
-                                    <div className="flex items-center">
-                                      <div className={`h-2 w-2 rounded-full mr-2 ${exam.color}`}></div>
-                                      <div className="text-sm font-medium text-white">{exam.name}</div>
-                                    </div>
-                                    <p className="line-clamp-2 text-xs leading-snug text-slate-300">
-                                      {exam.sections?.length} practice sections available
-                                    </p>
-                                  </Link>
-                                </NavigationMenuLink>
-                              </li>
-                            ))}
-                          </ul>
-                        </NavigationMenuContent>
-                      </>
-                    ) : (
-                      <Link 
-                        to={link.path}
-                        className={cn(
-                          navigationMenuTriggerStyle({ variant: "solid" }),
-                          "text-white font-medium transition-colors",
-                          location.pathname === link.path && "bg-white/20 dark:bg-white/20"
-                        )}
-                      >
-                        {link.name}
-                      </Link>
-                    )}
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
           </div>
 
           <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-3">
               <button className="p-2 rounded-full hover:bg-white/10 transition-colors">
-                <Search className="h-5 w-5 text-white dark:text-white" />
+                <Search className="h-5 w-5 text-white" />
               </button>
             </div>
 
@@ -278,11 +145,14 @@ const Navbar = () => {
               <div className="flex items-center gap-2">
                 <Sheet>
                   <SheetTrigger asChild className="md:hidden">
-                    <div>
+                    <div className="animate-pulse-slow">
                       <UserProfileMenu isMobile={true} />
                     </div>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-full sm:w-80 p-0 bg-slate-800">
+                  <SheetContent 
+                    side="right" 
+                    className="w-full sm:w-80 p-0 bg-gradient-to-b from-indigo-900 via-purple-900 to-pink-900 text-white"
+                  >
                     <div className="flex flex-col h-full p-6">
                       <div className="flex items-center justify-between mb-8">
                         <Link to="/" className="font-heading text-xl font-bold text-white">
@@ -368,7 +238,7 @@ const Navbar = () => {
                 <div className="hidden md:block">
                   <Link 
                     to="/login" 
-                    className="px-4 py-2 rounded-lg border border-white text-white hover:bg-white/10 transition-colors"
+                    className="px-4 py-2 rounded-lg border border-white/70 text-white hover:bg-white/10 transition-colors font-mobile-body"
                   >
                     Log In
                   </Link>
@@ -376,7 +246,7 @@ const Navbar = () => {
                 <div className="hidden md:block ml-2">
                   <Link 
                     to="/signup" 
-                    className="px-4 py-2 bg-white hover:bg-white/90 text-indigo-600 rounded-lg transition-colors"
+                    className="px-4 py-2 bg-white/90 hover:bg-white text-indigo-600 rounded-lg transition-colors font-mobile-body"
                   >
                     Sign Up
                   </Link>
@@ -384,11 +254,14 @@ const Navbar = () => {
                 
                 <Sheet>
                   <SheetTrigger asChild className="md:hidden">
-                    <Button variant="ghost" size="icon" className="text-white dark:text-white">
+                    <Button variant="ghost" size="icon" className="text-white">
                       <UserProfileMenu isMobile={true} />
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-full sm:w-80 p-0 bg-slate-800">
+                  <SheetContent 
+                    side="right" 
+                    className="w-full sm:w-80 p-0 bg-gradient-to-b from-indigo-900 via-purple-900 to-pink-900 text-white"
+                  >
                     <div className="flex flex-col h-full p-6">
                       <div className="flex items-center justify-between mb-8">
                         <Link to="/" className="font-heading text-xl font-bold text-white">
