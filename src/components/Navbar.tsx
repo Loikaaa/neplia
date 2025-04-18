@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy, Book, Play, Globe, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import UserProfileMenu from './UserProfileMenu';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { 
@@ -97,6 +98,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const location = useLocation();
+  const isMobile = useIsMobile();
   
   const isLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
   const isGuest = localStorage.getItem('userName') === 'Guest' && !isLoggedIn;
@@ -127,359 +129,198 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
-          {/* Mobile Layout */}
-          <div className="flex md:hidden items-center justify-between w-full">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent 
-                    side="right" 
-                    className="w-full sm:w-80 p-0 bg-gradient-to-b from-indigo-900 via-purple-900 to-pink-900 text-white"
-                  >
-                    <div className="flex flex-col h-full p-6">
-                      <div className="flex items-center justify-between mb-8">
-                        <Link to="/" className="font-heading text-xl font-bold text-white">
-                          Neplia<span className="text-pink-400">.</span>
-                        </Link>
-                      </div>
-
-                      <nav className="flex-1 space-y-6">
-                        {navLinks.map((link) => (
-                          link.name === 'Practice' ? (
-                            <div key={link.name} className="py-2">
-                              <Collapsible>
-                                <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
-                                  Practice
-                                  <ChevronDown className="h-4 w-4" />
-                                </CollapsibleTrigger>
-                                <CollapsibleContent className="pl-4 mt-2 space-y-2">
-                                  <Link to="/practice" className="block py-1 text-slate-300 hover:text-white">
-                                    All Practice Tests
-                                  </Link>
-                                  <Link to="/practice/reading" className="block py-1 text-slate-300 hover:text-white">
-                                    Reading
-                                  </Link>
-                                  <Link to="/practice/listening" className="block py-1 text-slate-300 hover:text-white">
-                                    Listening
-                                  </Link>
-                                  <Link to="/practice/writing" className="block py-1 text-slate-300 hover:text-white">
-                                    Writing
-                                  </Link>
-                                  <Link to="/practice/speaking" className="block py-1 text-slate-300 hover:text-white">
-                                    Speaking
-                                  </Link>
-                                </CollapsibleContent>
-                              </Collapsible>
-                            </div>
-                          ) : (
-                            <div key={link.name} className="py-2">
-                              <Link
-                                to={link.path}
-                                className={cn(
-                                  "block text-lg font-medium text-slate-300 hover:text-white",
-                                  location.pathname === link.path && "text-white"
-                                )}
-                              >
-                                <div className="flex items-center">
-                                  <link.icon className="h-5 w-5 mr-2.5" />
-                                  {link.name}
-                                </div>
-                              </Link>
-                            </div>
-                          )
-                        ))}
-                        <div className="py-2">
-                          <Collapsible>
-                            <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
-                              Exams
-                              <ChevronDown className="h-4 w-4" />
-                            </CollapsibleTrigger>
-                            <CollapsibleContent className="pl-4 mt-2 space-y-2">
-                              {examTypes.map(exam => (
-                                <Link
-                                  key={exam.name}
-                                  to={exam.path}
-                                  className="block py-1 text-slate-300 hover:text-white"
-                                >
-                                  {exam.name}
-                                </Link>
-                              ))}
-                            </CollapsibleContent>
-                          </Collapsible>
-                        </div>
-                      </nav>
-
-                      <div className="mt-6 space-y-3">
-                        <Link
-                          to="/login"
-                          className="block w-full text-center px-4 py-3 rounded-lg border border-white text-white hover:bg-white/10 transition-colors"
-                        >
-                          Log In
-                        </Link>
-                        <Link
-                          to="/signup"
-                          className="block w-full text-center px-4 py-2 bg-white hover:bg-white/90 text-indigo-600 rounded-lg transition-colors"
-                        >
-                          Sign Up
-                        </Link>
-                      </div>
+          {isMobile ? (
+            <div className="flex items-center justify-between w-full">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="text-white">
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent 
+                  side="right" 
+                  className="w-full sm:w-80 p-0 bg-gradient-to-b from-indigo-900 via-purple-900 to-pink-900 text-white"
+                >
+                  <div className="flex flex-col h-full p-6">
+                    <div className="flex items-center justify-between mb-8">
+                      <Link to="/" className="font-heading text-xl font-bold text-white">
+                        Neplia<span className="text-pink-400">.</span>
+                      </Link>
                     </div>
-                  </SheetContent>
-            </Sheet>
 
-            <Link to="/" className="flex items-center justify-center animate-fade-in">
-              <span className="font-mobile-heading text-xl font-bold text-white tracking-wider">
-                Neplia<span className="text-pink-300">.</span>
-              </span>
-            </Link>
+                    <nav className="flex-1 space-y-6">
+                      {navLinks.map((link) => (
+                        link.name === 'Practice' ? (
+                          <div key={link.name} className="py-2">
+                            <Collapsible>
+                              <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
+                                Practice
+                                <ChevronDown className="h-4 w-4" />
+                              </CollapsibleTrigger>
+                              <CollapsibleContent className="pl-4 mt-2 space-y-2">
+                                <Link to="/practice" className="block py-1 text-slate-300 hover:text-white">
+                                  All Practice Tests
+                                </Link>
+                                <Link to="/practice/reading" className="block py-1 text-slate-300 hover:text-white">
+                                  Reading
+                                </Link>
+                                <Link to="/practice/listening" className="block py-1 text-slate-300 hover:text-white">
+                                  Listening
+                                </Link>
+                                <Link to="/practice/writing" className="block py-1 text-slate-300 hover:text-white">
+                                  Writing
+                                </Link>
+                                <Link to="/practice/speaking" className="block py-1 text-slate-300 hover:text-white">
+                                  Speaking
+                                </Link>
+                              </CollapsibleContent>
+                            </Collapsible>
+                          </div>
+                        ) : (
+                          <div key={link.name} className="py-2">
+                            <Link
+                              to={link.path}
+                              className={cn(
+                                "block text-lg font-medium text-slate-300 hover:text-white",
+                                location.pathname === link.path && "text-white"
+                              )}
+                            >
+                              <div className="flex items-center">
+                                <link.icon className="h-5 w-5 mr-2.5" />
+                                {link.name}
+                              </div>
+                            </Link>
+                          </div>
+                        )
+                      ))}
+                      <div className="py-2">
+                        <Collapsible>
+                          <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
+                            Exams
+                            <ChevronDown className="h-4 w-4" />
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="pl-4 mt-2 space-y-2">
+                            {examTypes.map(exam => (
+                              <Link
+                                key={exam.name}
+                                to={exam.path}
+                                className="block py-1 text-slate-300 hover:text-white"
+                              >
+                                {exam.name}
+                              </Link>
+                            ))}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      </div>
+                    </nav>
 
-            <div className="flex items-center gap-2">
-              <div className="hidden md:flex items-center gap-3">
-                <TimeDisplay />
-              </div>
-              {isUserActive ? (
-                <UserProfileMenu isMobile={true} />
-              ) : (
-                <Button variant="ghost" size="icon" className="text-white">
+                    <div className="mt-6 space-y-3">
+                      <Link
+                        to="/login"
+                        className="block w-full text-center px-4 py-3 rounded-lg border border-white text-white hover:bg-white/10 transition-colors"
+                      >
+                        Log In
+                      </Link>
+                      <Link
+                        to="/signup"
+                        className="block w-full text-center px-4 py-2 bg-white hover:bg-white/90 text-indigo-600 rounded-lg transition-colors"
+                      >
+                        Sign Up
+                      </Link>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+
+              <Link to="/" className="flex items-center justify-center animate-fade-in">
+                <span className="font-mobile-heading text-xl font-bold text-white tracking-wider">
+                  Neplia<span className="text-pink-300">.</span>
+                </span>
+              </Link>
+
+              <div className="flex items-center gap-2">
+                {isUserActive ? (
                   <UserProfileMenu isMobile={true} />
-                </Button>
-              )}
+                ) : (
+                  <Button variant="ghost" size="icon" className="text-white">
+                    <UserProfileMenu isMobile={true} />
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
+          ) : (
+            <>
+              <div className="flex items-center gap-6">
+                <Link to="/" className="flex items-center animate-fade-in">
+                  <span className="font-mobile-heading text-xl md:text-2xl font-bold text-white tracking-wider">
+                    Neplia<span className="text-pink-300">.</span>
+                  </span>
+                </Link>
 
-          {/* Desktop Layout */}
-          <div className="hidden md:flex items-center">
-            <Link to="/" className="flex items-center animate-fade-in">
-              <span className="font-mobile-heading text-xl md:text-2xl font-bold text-white tracking-wider">
-                Neplia<span className="text-pink-300">.</span>
-              </span>
-            </Link>
-          </div>
+                <NavigationMenu className="hidden md:flex">
+                  <NavigationMenuList>
+                    {navLinks.map((link) => (
+                      <NavigationMenuItem key={link.name}>
+                        {link.name === 'Practice' ? (
+                          <>
+                            <NavigationMenuTrigger className="text-white hover:text-white/90">
+                              Practice
+                            </NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                              <div className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                                {examTypes.map((exam) => (
+                                  <Link key={exam.name} to={exam.path} className="block p-3 hover:bg-accent rounded-lg">
+                                    <h3 className="text-sm font-medium mb-1">{exam.name}</h3>
+                                    <p className="text-xs text-muted-foreground">
+                                      Practice {exam.name} sections and mock tests
+                                    </p>
+                                  </Link>
+                                ))}
+                              </div>
+                            </NavigationMenuContent>
+                          </>
+                        ) : (
+                          <Link to={link.path}>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                              <div className="flex items-center text-white hover:text-white/90">
+                                <link.icon className="h-4 w-4 mr-2" />
+                                {link.name}
+                              </div>
+                            </NavigationMenuLink>
+                          </Link>
+                        )}
+                      </NavigationMenuItem>
+                    ))}
+                  </NavigationMenuList>
+                </NavigationMenu>
+              </div>
 
-          <div className="hidden md:flex items-center gap-2">
-            <div className="hidden md:flex items-center gap-3">
-              <button className="p-2 rounded-full hover:bg-white/10 transition-colors">
-                <Search className="h-5 w-5 text-white" />
-              </button>
-            </div>
-
-            {isUserActive ? (
-              <div className="flex items-center gap-2">
-                <Sheet>
-                  <SheetTrigger asChild className="md:hidden">
-                    <div className="animate-pulse-slow">
-                      <UserProfileMenu isMobile={true} />
-                    </div>
-                  </SheetTrigger>
-                  <SheetContent 
-                    side="right" 
-                    className="w-full sm:w-80 p-0 bg-gradient-to-b from-indigo-900 via-purple-900 to-pink-900 text-white"
-                  >
-                    <div className="flex flex-col h-full p-6">
-                      <div className="flex items-center justify-between mb-8">
-                        <Link to="/" className="font-heading text-xl font-bold text-white">
-                          Neplia<span className="text-pink-400">.</span>
-                        </Link>
-                      </div>
-
-                      <nav className="flex-1 space-y-6">
-                        {navLinks.map((link) => (
-                          link.name === 'Practice' ? (
-                            <div key={link.name} className="py-2">
-                              <Collapsible>
-                                <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
-                                  Practice
-                                  <ChevronDown className="h-4 w-4" />
-                                </CollapsibleTrigger>
-                                <CollapsibleContent className="pl-4 mt-2 space-y-2">
-                                  <Link to="/practice" className="block py-1 text-slate-300 hover:text-white">
-                                    All Practice Tests
-                                  </Link>
-                                  <Link to="/practice/reading" className="block py-1 text-slate-300 hover:text-white">
-                                    Reading
-                                  </Link>
-                                  <Link to="/practice/listening" className="block py-1 text-slate-300 hover:text-white">
-                                    Listening
-                                  </Link>
-                                  <Link to="/practice/writing" className="block py-1 text-slate-300 hover:text-white">
-                                    Writing
-                                  </Link>
-                                  <Link to="/practice/speaking" className="block py-1 text-slate-300 hover:text-white">
-                                    Speaking
-                                  </Link>
-                                </CollapsibleContent>
-                              </Collapsible>
-                            </div>
-                          ) : (
-                            <div key={link.name} className="py-2">
-                              <Link
-                                to={link.path}
-                                className={cn(
-                                  "block text-lg font-medium text-slate-300 hover:text-white",
-                                  location.pathname === link.path && "text-white"
-                                )}
-                              >
-                                <div className="flex items-center">
-                                  <link.icon className="h-5 w-5 mr-2.5" />
-                                  {link.name}
-                                </div>
-                              </Link>
-                            </div>
-                          )
-                        ))}
-                        <div className="py-2">
-                          <Collapsible>
-                            <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
-                              Exams
-                              <ChevronDown className="h-4 w-4" />
-                            </CollapsibleTrigger>
-                            <CollapsibleContent className="pl-4 mt-2 space-y-2">
-                              {examTypes.map(exam => (
-                                <Link
-                                  key={exam.name}
-                                  to={exam.path}
-                                  className="block py-1 text-slate-300 hover:text-white"
-                                >
-                                  {exam.name}
-                                </Link>
-                              ))}
-                            </CollapsibleContent>
-                          </Collapsible>
-                        </div>
-                      </nav>
-                    </div>
-                  </SheetContent>
-                </Sheet>
-                
-                <div className="hidden md:block">
+              <div className="flex items-center gap-4">
+                <button className="p-2 rounded-full hover:bg-white/10 transition-colors">
+                  <Search className="h-5 w-5 text-white" />
+                </button>
+                <TimeDisplay />
+                {isUserActive ? (
                   <UserProfileMenu isMobile={false} />
-                </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Link 
+                      to="/login" 
+                      className="px-4 py-2 rounded-lg border border-white/70 text-white hover:bg-white/10 transition-colors font-mobile-body"
+                    >
+                      Log In
+                    </Link>
+                    <Link 
+                      to="/signup" 
+                      className="px-4 py-2 bg-white/90 hover:bg-white text-indigo-600 rounded-lg transition-colors font-mobile-body"
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <div className="hidden md:block">
-                  <Link 
-                    to="/login" 
-                    className="px-4 py-2 rounded-lg border border-white/70 text-white hover:bg-white/10 transition-colors font-mobile-body"
-                  >
-                    Log In
-                  </Link>
-                </div>
-                <div className="hidden md:block ml-2">
-                  <Link 
-                    to="/signup" 
-                    className="px-4 py-2 bg-white/90 hover:bg-white text-indigo-600 rounded-lg transition-colors font-mobile-body"
-                  >
-                    Sign Up
-                  </Link>
-                </div>
-                
-                <Sheet>
-                  <SheetTrigger asChild className="md:hidden">
-                    <Button variant="ghost" size="icon" className="text-white">
-                      <UserProfileMenu isMobile={true} />
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent 
-                    side="right" 
-                    className="w-full sm:w-80 p-0 bg-gradient-to-b from-indigo-900 via-purple-900 to-pink-900 text-white"
-                  >
-                    <div className="flex flex-col h-full p-6">
-                      <div className="flex items-center justify-between mb-8">
-                        <Link to="/" className="font-heading text-xl font-bold text-white">
-                          Neplia<span className="text-pink-400">.</span>
-                        </Link>
-                      </div>
-
-                      <nav className="flex-1 space-y-6">
-                        {navLinks.map((link) => (
-                          link.name === 'Practice' ? (
-                            <div key={link.name} className="py-2">
-                              <Collapsible>
-                                <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
-                                  Practice
-                                  <ChevronDown className="h-4 w-4" />
-                                </CollapsibleTrigger>
-                                <CollapsibleContent className="pl-4 mt-2 space-y-2">
-                                  <Link to="/practice" className="block py-1 text-slate-300 hover:text-white">
-                                    All Practice Tests
-                                  </Link>
-                                  <Link to="/practice/reading" className="block py-1 text-slate-300 hover:text-white">
-                                    Reading
-                                  </Link>
-                                  <Link to="/practice/listening" className="block py-1 text-slate-300 hover:text-white">
-                                    Listening
-                                  </Link>
-                                  <Link to="/practice/writing" className="block py-1 text-slate-300 hover:text-white">
-                                    Writing
-                                  </Link>
-                                  <Link to="/practice/speaking" className="block py-1 text-slate-300 hover:text-white">
-                                    Speaking
-                                  </Link>
-                                </CollapsibleContent>
-                              </Collapsible>
-                            </div>
-                          ) : (
-                            <div key={link.name} className="py-2">
-                              <Link
-                                to={link.path}
-                                className={cn(
-                                  "block text-lg font-medium text-slate-300 hover:text-white",
-                                  location.pathname === link.path && "text-white"
-                                )}
-                              >
-                                <div className="flex items-center">
-                                  <link.icon className="h-5 w-5 mr-2.5" />
-                                  {link.name}
-                                </div>
-                              </Link>
-                            </div>
-                          )
-                        ))}
-                        <div className="py-2">
-                          <Collapsible>
-                            <CollapsibleTrigger className="flex items-center justify-between w-full text-lg font-medium text-slate-300 hover:text-white">
-                              Exams
-                              <ChevronDown className="h-4 w-4" />
-                            </CollapsibleTrigger>
-                            <CollapsibleContent className="pl-4 mt-2 space-y-2">
-                              {examTypes.map(exam => (
-                                <Link
-                                  key={exam.name}
-                                  to={exam.path}
-                                  className="block py-1 text-slate-300 hover:text-white"
-                                >
-                                  {exam.name}
-                                </Link>
-                              ))}
-                            </CollapsibleContent>
-                          </Collapsible>
-                        </div>
-                      </nav>
-
-                      <div className="mt-6 space-y-3">
-                        <Link
-                          to="/login"
-                          className="block w-full text-center px-4 py-3 rounded-lg border border-white text-white hover:bg-white/10 transition-colors"
-                        >
-                          Log In
-                        </Link>
-                        <Link
-                          to="/signup"
-                          className="block w-full text-center px-4 py-2 bg-white hover:bg-white/90 text-indigo-600 rounded-lg transition-colors"
-                        >
-                          Sign Up
-                        </Link>
-                      </div>
-                    </div>
-                  </SheetContent>
-                </Sheet>
-              </div>
-            )}
-          </div>
+            </>
+          )}
         </div>
       </div>
     </header>
