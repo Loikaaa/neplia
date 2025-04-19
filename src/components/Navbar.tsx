@@ -232,20 +232,23 @@ const Navbar = () => {
                 </SheetContent>
               </Sheet>
 
-              <Link to="/" className="flex items-center justify-center animate-fade-in">
-                <span className="font-mobile-heading text-xl font-bold text-white tracking-wider">
-                  Neplia<span className="text-pink-300">.</span>
-                </span>
-              </Link>
+              <div className="flex items-center gap-3">
+                <TimeDisplay />
+                <Link to="/" className="flex items-center justify-center animate-fade-in">
+                  <span className="font-mobile-heading text-xl font-bold text-white tracking-wider">
+                    Neplia<span className="text-pink-300">.</span>
+                  </span>
+                </Link>
 
-              <div className="flex items-center gap-2">
-                {isUserActive ? (
-                  <UserProfileMenu isMobile={true} />
-                ) : (
-                  <Button variant="ghost" size="icon" className="text-white">
+                <div className="flex items-center gap-2">
+                  {isUserActive ? (
                     <UserProfileMenu isMobile={true} />
-                  </Button>
-                )}
+                  ) : (
+                    <Button variant="ghost" size="icon" className="text-white">
+                      <UserProfileMenu isMobile={true} />
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           ) : (
