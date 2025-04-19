@@ -2,36 +2,50 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import ListeningHeader from '@/components/practice/listening/ListeningHeader';
+import { ListeningTest, TestType, DifficultyLevel } from '@/components/practice/listening/ListeningTest';
 import { ListeningInstructions } from '@/components/practice/listening/ListeningInstructions';
-import { ListeningTest } from '@/components/practice/listening/ListeningTest';
+import ListeningHeader from '@/components/practice/listening/ListeningHeader';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
+import { Headphones, BookOpen, ArrowRight } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { ArrowRight, BookOpen, Headphones } from 'lucide-react';
-import { TestType, DifficultyLevel } from '@/components/practice/listening/ListeningTest';
 
-// Define test types for the UI
 const testTypes = [
-  { id: 'academic' as TestType, title: 'Academic', description: 'Focused on academic settings and topics', progress: 65 },
-  { id: 'general' as TestType, title: 'General Training', description: 'Everyday contexts and situations', progress: 45 },
-  { id: 'practice' as TestType, title: 'Practice Mode', description: 'Mixed questions with instant feedback', progress: 80 },
+  {
+    id: 'general' as TestType,
+    title: 'General Training',
+    description: 'For those taking IELTS for migration or work purposes',
+    progress: 70
+  },
+  {
+    id: 'academic' as TestType,
+    title: 'Academic',
+    description: 'For those taking IELTS for higher education or professional registration',
+    progress: 85
+  },
+  {
+    id: 'practice' as TestType,
+    title: 'Mini Practice',
+    description: 'A shorter practice session with immediate feedback',
+    progress: 100
+  }
 ];
 
-// Define difficulty levels for the selector
 const difficultyLevels = [
   { value: 'beginner' as DifficultyLevel, label: 'Beginner (Band 4-5)' },
   { value: 'intermediate' as DifficultyLevel, label: 'Intermediate (Band 5.5-6.5)' },
-  { value: 'advanced' as DifficultyLevel, label: 'Advanced (Band 7-9)' },
+  { value: 'advanced' as DifficultyLevel, label: 'Advanced (Band 7+)' }
 ];
 
-export interface ListeningPracticeProps {
-  examType?: string;
-}
-
-const ListeningPractice: React.FC<ListeningPracticeProps> = ({ examType = 'ielts' }) => {
+const ListeningPractice = () => {
   const [testStarted, setTestStarted] = useState(false);
   const [selectedTestType, setSelectedTestType] = useState<TestType>('academic');
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('intermediate');

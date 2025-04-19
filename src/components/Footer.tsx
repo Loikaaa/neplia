@@ -1,156 +1,222 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, Info, Globe, BookOpen, Link as LinkIcon, FileText } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Youtube, Mail, Phone } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Footer = () => {
   const isMobile = useIsMobile();
   
   return (
-    <footer className="bg-gradient-to-b from-gray-50/50 via-white/30 to-gray-100/50 dark:from-gray-900 dark:via-gray-900/50 dark:to-gray-950 border-t border-gray-200/80 dark:border-gray-800/80 backdrop-blur-sm">
+    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-4 md:px-6 py-12 md:py-16">
-        {/* Grid container with responsive design */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 md:gap-12">
-          {/* Exams Column */}
+        <div className={`grid grid-cols-1 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-4'} gap-8 md:gap-12`}>
+          {/* Brand */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 group">
-              <BookOpen className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400 transition-colors" />
-              <span className="border-b-2 border-transparent group-hover:border-indigo-500 transition-all">Exams</span>
-            </h3>
-            <ul className="space-y-3">
-              {[
-                { path: '/practice/ielts', text: 'IELTS' },
-                { path: '/practice/toefl', text: 'TOEFL' },
-                { path: '/practice/pte', text: 'PTE Academic' },
-                { path: '/practice/gre', text: 'GRE' },
-                { path: '/practice/gmat', text: 'GMAT' }
-              ].map((exam) => (
-                <li key={exam.path}>
-                  <Link 
-                    to={exam.path}
-                    className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors flex items-center gap-2 group"
-                  >
-                    <span className="h-1 w-1 rounded-full bg-gray-300 group-hover:bg-indigo-500 transition-colors"></span>
-                    {exam.text}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <Link to="/" className="inline-block">
+              <span className="font-heading text-2xl font-bold text-indigo">
+                Neplia<span className="text-coral">.</span>
+              </span>
+            </Link>
+            <p className="text-gray-600 dark:text-gray-400">
+              Your ultimate platform for IELTS preparation. Study smarter, score higher.
+            </p>
+            <div className="flex space-x-4">
+              <a href="https://facebook.com/neplia" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                <Facebook className="h-5 w-5" />
+                <span className="sr-only">Facebook</span>
+              </a>
+              <a href="https://twitter.com/neplia" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                <Twitter className="h-5 w-5" />
+                <span className="sr-only">Twitter</span>
+              </a>
+              <a href="https://instagram.com/neplia" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                <Instagram className="h-5 w-5" />
+                <span className="sr-only">Instagram</span>
+              </a>
+              <a href="https://youtube.com/neplia" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                <Youtube className="h-5 w-5" />
+                <span className="sr-only">YouTube</span>
+              </a>
+            </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 group">
-              <LinkIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400 transition-colors" />
-              <span className="border-b-2 border-transparent group-hover:border-indigo-500 transition-all">Quick Links</span>
-            </h3>
-            <ul className="space-y-3">
-              {[
-                { path: '/practice', text: 'Practice Tests', icon: BookOpen },
-                { path: '/about', text: 'About Us', icon: Info },
-                { path: '/contact', text: 'Contact', icon: Mail },
-                { path: '/abroad', text: 'Study Abroad', icon: Globe }
-              ].map((link) => (
-                <li key={link.path}>
-                  <Link 
-                    to={link.path}
-                    className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors flex items-center gap-2 group"
-                  >
-                    <span className="h-1 w-1 rounded-full bg-gray-300 group-hover:bg-indigo-500 transition-colors"></span>
-                    {link.text}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {isMobile ? (
+            // Mobile layout - Quick Links and IELTS Modules in a 2-column grid
+            <div className="grid grid-cols-2 gap-8">
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Practice Tests
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/resources" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Resources
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/blog" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Pricing
+                    </Link>
+                  </li>
+                </ul>
+              </div>
 
-          {/* Conditions */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 group">
-              <FileText className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400 transition-colors" />
-              <span className="border-b-2 border-transparent group-hover:border-indigo-500 transition-all">Conditions</span>
-            </h3>
-            <ul className="space-y-3">
-              {[
-                { path: '/terms', text: 'Terms of Service' },
-                { path: '/privacy', text: 'Privacy Policy' },
-                { path: '/cookies', text: 'Cookie Policy' }
-              ].map((policy) => (
-                <li key={policy.path}>
-                  <Link 
-                    to={policy.path}
-                    className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors flex items-center gap-2 group"
-                  >
-                    <span className="h-1 w-1 rounded-full bg-gray-300 group-hover:bg-indigo-500 transition-colors"></span>
-                    {policy.text}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+              {/* IELTS Modules */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Listening
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Reading
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Writing
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Speaking
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Full Mock Tests
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          ) : (
+            // Desktop layout - Separate columns
+            <>
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Practice Tests
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/resources" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Resources
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/blog" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Pricing
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* IELTS Modules */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Listening
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Reading
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Writing
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Speaking
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Full Mock Tests
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </>
+          )}
 
           {/* Contact */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 group">
-              <Mail className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400 transition-colors" />
-              <span className="border-b-2 border-transparent group-hover:border-indigo-500 transition-all">Contact Us</span>
-            </h3>
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Contact Us</h3>
             <ul className="space-y-3">
-              <li>
-                <a href="mailto:support@neplia.com" className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors flex items-center gap-2 group">
-                  <Mail className="h-4 w-4 text-indigo-500 group-hover:text-indigo-400 transition-colors" />
-                  support@neplia.com
-                </a>
+              <li className="flex items-start">
+                <Mail className="h-5 w-5 mr-2 text-indigo mt-0.5" />
+                <span className="text-gray-600 dark:text-gray-400">support@neplia.com</span>
               </li>
-              <li>
-                <a href="tel:+15551234567" className="text-gray-600 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors flex items-center gap-2 group">
-                  <Phone className="h-4 w-4 text-indigo-500 group-hover:text-indigo-400 transition-colors" />
-                  +1 (555) 123-4567
-                </a>
+              <li className="flex items-start">
+                <Phone className="h-5 w-5 mr-2 text-indigo mt-0.5" />
+                <span className="text-gray-600 dark:text-gray-400">+1 (555) 123-4567</span>
               </li>
-              <li>
-                <div className="flex items-center gap-4 mt-4">
-                  {[
-                    { icon: Facebook, href: 'https://facebook.com/neplia', label: 'Facebook' },
-                    { icon: Twitter, href: 'https://twitter.com/neplia', label: 'Twitter' },
-                    { icon: Instagram, href: 'https://instagram.com/neplia', label: 'Instagram' },
-                    { icon: Youtube, href: 'https://youtube.com/neplia', label: 'YouTube' }
-                  ].map((social) => (
-                    <a
-                      key={social.href}
-                      href={social.href}
-                      className="text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors transform hover:scale-110"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <social.icon className="h-5 w-5" />
-                      <span className="sr-only">{social.label}</span>
-                    </a>
-                  ))}
-                </div>
+              <li className="mt-4">
+                <Link to="/contact" className="inline-flex items-center font-medium text-indigo hover:text-indigo-700 dark:hover:text-indigo-300">
+                  Send us a message
+                  <svg className="ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                  </svg>
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Brand section */}
-        <div className="mt-12 pt-8 border-t border-gray-200/80 dark:border-gray-800/80">
-          <div className="flex flex-col items-center text-center space-y-4">
-            <Link 
-              to="/" 
-              className="inline-block group"
-            >
-              <span className="font-heading text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-indigo-600 transition-all duration-300">
-                Neplia<span className="text-coral">.</span>
-              </span>
-            </Link>
-            <p className="text-gray-600 dark:text-gray-400 max-w-md">
-              Your ultimate platform for IELTS preparation. Study smarter, score higher.
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+          <div className={`flex ${isMobile ? 'flex-col space-y-4' : 'flex-row'} justify-between items-center`}>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
               © {new Date().getFullYear()} Neplia.com. All rights reserved.
             </p>
+            <div className={`${isMobile ? 'flex flex-wrap justify-center gap-4' : 'flex space-x-6'}`}>
+              <Link to="/terms" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 text-sm">
+                Terms of Service
+              </Link>
+              <Link to="/privacy" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 text-sm">
+                Privacy Policy
+              </Link>
+              <Link to="/cookies" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 text-sm">
+                Cookie Policy
+              </Link>
+            </div>
           </div>
         </div>
       </div>

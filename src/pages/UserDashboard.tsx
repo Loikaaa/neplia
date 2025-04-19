@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -17,28 +18,6 @@ import { useToast } from '@/hooks/use-toast';
 import ListeningSection from '@/components/dashboard/ListeningSection';
 
 const UserDashboard = () => {
-  const [recentActivity, setRecentActivity] = useState([
-    {
-      type: 'practice',
-      title: 'IELTS Listening Practice',
-      timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 mins ago
-      score: '8/10',
-      section: 'listening'
-    },
-    {
-      type: 'exam',
-      title: 'Mock Test Completed',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-      score: '7.5',
-      section: 'full'
-    },
-    {
-      type: 'resource',
-      title: 'Writing Tips Guide',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-      section: 'writing'
-    }
-  ]);
   // Get user name from localStorage
   const userName = localStorage.getItem('userName') || 'User';
   const { toast } = useToast();
@@ -234,36 +213,20 @@ const UserDashboard = () => {
   // Get services based on selected exam
   const services = getExamSpecificServices();
 
-  useEffect(() => {
-    // Track page visit
-    const track = () => {
-      const existingVisits = JSON.parse(localStorage.getItem('pageVisits') || '[]');
-      existingVisits.push({
-        page: 'dashboard',
-        timestamp: new Date().toISOString()
-      });
-      localStorage.setItem('pageVisits', JSON.stringify(existingVisits.slice(-50))); // Keep last 50 visits
-    };
-    
-    track();
-  }, []);
-
   return (
     <Layout>
-      <div className="bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen pt-16 pb-12">
+      <div className="bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800 pt-12 pb-6">
         <div className="container px-4 md:px-6">
-          {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-            <div className="mb-4 md:mb-0">
-              <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Welcome, {userName}
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                {selectedExam ? `Your ${getExamName(selectedExam)} preparation dashboard` : 'Your learning journey'}
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome, {userName}</h1>
+              <p className="text-muted-foreground">
+                {selectedExam 
+                  ? `Your ${getExamName(selectedExam)} preparation dashboard ${selectedCountry ? `for ${getCountryName(selectedCountry)}` : ''}`
+                  : "Your personal exam preparation dashboard"}
               </p>
             </div>
             
-            {/* Exam Timer Component stays the same */}
             {timerActive && (
               <div className="mt-4 md:mt-0 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg px-4 py-2 flex items-center">
                 <Timer className="h-5 w-5 text-indigo mr-2" />
@@ -327,33 +290,28 @@ const UserDashboard = () => {
               </AlertDialog>
             )}
           </div>
-
-          {/* Main Grid Layout */}
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-            {/* Stats Section */}
             <div className="lg:col-span-2">
               <UserStats />
             </div>
-            
-            {/* User Preferences */}
             <div>
               <UserPreferences />
             </div>
           </div>
-
-          {/* Listening Practice Section */}
+          
+          {/* Add ListeningSection */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Continue Your Practice
-            </h2>
+            <h2 className="text-2xl font-bold mb-6">Listening Practice</h2>
             <ListeningSection />
           </div>
-
-          {/* Practice Areas Grid */}
-          <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            {selectedExam ? `${getExamName(selectedExam)} Practice & Resources` : "Services & Practice Areas"}
+          
+          <h2 className="text-2xl font-bold mb-6">
+            {selectedExam 
+              ? `${getExamName(selectedExam)} Practice & Resources` 
+              : "Services & Practice Areas"}
           </h2>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {services.map((service, index) => (
               <Link key={index} to={service.link} className="group">
@@ -378,8 +336,7 @@ const UserDashboard = () => {
               </Link>
             ))}
           </div>
-
-          {/* Progress and Activity Section */}
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
             <div className="lg:col-span-2">
               <UserCourseProgress />
@@ -388,8 +345,7 @@ const UserDashboard = () => {
               <RecentActivity />
             </div>
           </div>
-
-          {/* Premium Plans Section */}
+          
           {showPremiumPlans ? (
             <div className="mb-12" id="premium-plans">
               <div className="flex items-center justify-between mb-6">
@@ -420,8 +376,7 @@ const UserDashboard = () => {
               </Button>
             </div>
           )}
-
-          {/* Sheet Components */}
+          
           <Sheet>
             <SheetTrigger asChild>
               <Button className="hidden">View Premium Features</Button>

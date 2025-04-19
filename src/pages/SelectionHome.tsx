@@ -95,13 +95,18 @@ const examTypes = [
 const SelectionHome: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedExam, setSelectedExam] = useState('');
-  const [step, setStep] = useState(1); // Start directly at country selection
+  const [step, setStep] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+  const isLoggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
   const isMobile = useIsMobile();
 
   useEffect(() => {
+    if (isLoggedIn) {
+      setStep(1);
+    }
+    
     const queryParams = new URLSearchParams(location.search);
     const examParam = queryParams.get('exam');
     
@@ -109,10 +114,31 @@ const SelectionHome: React.FC = () => {
       const validExam = examTypes.find(exam => exam.id === examParam);
       if (validExam) {
         setSelectedExam(examParam);
-        setStep(1);
+        if (isLoggedIn) {
+          setStep(1);
+        } else {
+          setStep(0);
+        }
       }
     }
-  }, [location]);
+  }, [location, isLoggedIn]);
+
+  useEffect(() => {
+    const savedCountry = localStorage.getItem('selectedCountry');
+    const savedExam = localStorage.getItem('selectedExam');
+    
+    if (savedCountry) {
+      setSelectedCountry(savedCountry);
+      
+      if (!selectedExam && step === 1) {
+        setStep(2);
+      }
+    }
+    
+    if (savedExam && !selectedExam) {
+      setSelectedExam(savedExam);
+    }
+  }, [selectedExam, step]);
 
   const handleCountryChange = (country: string) => {
     setSelectedCountry(country);
@@ -157,7 +183,9 @@ const SelectionHome: React.FC = () => {
   };
 
   const handleNextStep = () => {
-    if (step === 1) {
+    if (step === 0) {
+      setStep(1);
+    } else if (step === 1) {
       if (!selectedCountry) {
         toast({
           title: "Please select a country",
@@ -186,17 +214,51 @@ const SelectionHome: React.FC = () => {
   };
 
   const handleSkip = () => {
-    if (selectedExam) {
-      const redirectPath = getExamRedirectPath(selectedExam);
-      navigate(redirectPath);
-    } else {
-      navigate('/practice'); // Default to practice page if no exam selected
-    }
+    navigate('/');
+  };
+
+  const handleContinueAsGuest = () => {
+    const tempCredentials = generateTempCredentials();
+    
+    localStorage.setItem('userName', 'Guest');
+    localStorage.setItem('guestUsername', tempCredentials.username);
+    localStorage.setItem('guestPassword', tempCredentials.password);
+    localStorage.setItem('guestExpiryDate', tempCredentials.expiryDate);
+    localStorage.removeItem('demoUserLoggedIn');
+    localStorage.removeItem('userEmail');
+    
+    const guestData = {
+      ...tempCredentials,
+      createdAt: new Date().toISOString(),
+      id: `guest-${Date.now()}`
+    };
+    saveGuestDataForAdmin(guestData);
+    
+    toast({
+      title: "Temporary Account Created",
+      description: `Username: ${tempCredentials.username} | Password: ${tempCredentials.password} | Valid for 1 month`,
+      duration: 10000,
+    });
+    
+    setStep(1);
   };
 
   const getCurrentExamName = () => {
-    const exam = examTypes.find(exam => exam.id === selectedExam);
-    return exam ? exam.name : 'Your Exam';
+    if (!selectedExam) return '';
+    const exam = examTypes.find(e => e.id === selectedExam);
+    return exam ? exam.name : '';
+  };
+
+  const renderStepIndicator = () => {
+    return (
+      <div className="flex items-center text-sm text-muted-foreground">
+        <span className={`h-6 w-6 rounded-full inline-flex items-center justify-center mr-2 ${step >= 0 ? "bg-indigo text-white" : "bg-gray-200 dark:bg-gray-700"}`}>1</span>
+        <span className="mr-2">→</span>
+        <span className={`h-6 w-6 rounded-full inline-flex items-center justify-center mr-2 ${step >= 1 ? "bg-indigo text-white" : "bg-gray-200 dark:bg-gray-700"}`}>2</span>
+        <span className="mr-2">→</span>
+        <span className={`h-6 w-6 rounded-full inline-flex items-center justify-center ${step >= 2 ? "bg-indigo text-white" : "bg-gray-200 dark:bg-gray-700"}`}>3</span>
+      </div>
+    );
   };
 
   return (
@@ -210,7 +272,9 @@ const SelectionHome: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {selectedExam ? `Prepare for ${getCurrentExamName()}` : 'Personalize Your Exam Proficiency Journey'}
+              {step === 0 ? 'Welcome to Neplia' : 
+               selectedExam ? `Prepare for ${getCurrentExamName()}` : 
+               'Personalize Your Exam Proficiency Journey'}
             </motion.h1>
             <motion.p 
               className="text-muted-foreground max-w-2xl mx-auto"
@@ -218,7 +282,8 @@ const SelectionHome: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              {selectedExam ? getExamDescription(selectedExam) : 
+              {step === 0 ? 'Sign in or create an account to personalize your exam preparation journey' :
+               selectedExam ? getExamDescription(selectedExam) :
                "Let's customize your experience to match your specific needs. We'll tailor our resources and practice tests to your target exam and destination."}
             </motion.p>
           </div>
@@ -231,27 +296,61 @@ const SelectionHome: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold flex items-center">
-                {step === 1 ? (
+                {step === 0 ? (
+                  <>
+                    <UserPlus className="h-5 w-5 mr-2 text-indigo" />
+                    Step 1: Authentication
+                  </>
+                ) : step === 1 ? (
                   <>
                     <Globe className="h-5 w-5 mr-2 text-indigo" />
-                    Step 1: Your Location
+                    Step 2: Your Location
                   </>
                 ) : (
                   <>
                     <Users className="h-5 w-5 mr-2 text-indigo" />
-                    Step 2: Target Exam
+                    Step 3: Target Exam
                   </>
                 )}
               </h2>
-              <div className="flex items-center text-sm text-muted-foreground">
-                <span className={`h-6 w-6 rounded-full inline-flex items-center justify-center mr-2 ${step >= 1 ? "bg-indigo text-white" : "bg-gray-200 dark:bg-gray-700"}`}>1</span>
-                <span className="mr-2">→</span>
-                <span className={`h-6 w-6 rounded-full inline-flex items-center justify-center ${step >= 2 ? "bg-indigo text-white" : "bg-gray-200 dark:bg-gray-700"}`}>2</span>
-              </div>
+              {renderStepIndicator()}
             </div>
 
             <div className="min-h-[300px]">
-              {step === 1 ? (
+              {step === 0 ? (
+                <div className="flex flex-col items-center justify-center space-y-6 py-8">
+                  <div className="text-center max-w-md">
+                    <h3 className="text-lg font-medium mb-2">Join Neplia to track your progress</h3>
+                    <p className="text-muted-foreground text-sm mb-6">
+                      Create an account to save your progress, access personalized recommendations, and get tailored study plans.
+                    </p>
+                    
+                    <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                      <Link to="/login" className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-indigo hover:bg-indigo/90 text-white rounded-lg transition-colors">
+                        <LogIn className="h-4 w-4" />
+                        Sign In
+                      </Link>
+                      <Link to="/signup" className="flex items-center justify-center gap-2 w-full px-4 py-3 border border-indigo text-indigo bg-white hover:bg-indigo-50 rounded-lg transition-colors">
+                        <UserPlus className="h-4 w-4" />
+                        Sign Up
+                      </Link>
+                    </div>
+                  </div>
+                  
+                  <div className="w-full max-w-md pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <p className="text-center text-sm text-muted-foreground mb-4">
+                      Want to explore first without an account?
+                    </p>
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={handleContinueAsGuest}
+                    >
+                      Continue as Guest
+                    </Button>
+                  </div>
+                </div>
+              ) : step === 1 ? (
                 <div className="space-y-6">
                   <div className="max-w-md mx-auto">
                     <CountrySelector 
@@ -287,9 +386,13 @@ const SelectionHome: React.FC = () => {
             </div>
 
             <div className="flex justify-between mt-8">
-              {step === 1 ? (
+              {step === 0 ? (
                 <Button variant="ghost" onClick={handleSkip}>
                   Skip for now
+                </Button>
+              ) : step === 1 ? (
+                <Button variant="outline" onClick={() => setStep(0)}>
+                  Back
                 </Button>
               ) : (
                 <Button variant="outline" onClick={() => setStep(1)}>
@@ -300,7 +403,7 @@ const SelectionHome: React.FC = () => {
                 onClick={handleNextStep} 
                 className="bg-gradient-to-r from-indigo to-purple-600 hover:from-indigo/90 hover:to-purple-600/90 text-white"
               >
-                {step === 2 ? "Start Practice" : "Continue"}
+                {step === 0 ? "Continue" : step === 2 ? "Start Practice" : "Continue"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>

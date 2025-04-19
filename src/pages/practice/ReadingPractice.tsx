@@ -1,18 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import ReadingHeader from '@/components/practice/reading/ReadingHeader';
-import { ReadingInstructions } from '@/components/practice/reading/ReadingInstructions';
 import { ReadingTest } from '@/components/practice/reading/ReadingTest';
+import { ReadingInstructions } from '@/components/practice/reading/ReadingInstructions';
+import ReadingHeader from '@/components/practice/reading/ReadingHeader';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-export interface ReadingPracticeProps {
-  examType?: string;
-}
-
-const ReadingPractice: React.FC<ReadingPracticeProps> = ({ examType = 'ielts' }) => {
+const ReadingPractice = () => {
   const [testStarted, setTestStarted] = useState(false);
-  const [examTypeState, setExamType] = useState(examType);
+  const [examType, setExamType] = useState('ielts');
   const [section, setSection] = useState('reading');
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,7 +44,7 @@ const ReadingPractice: React.FC<ReadingPracticeProps> = ({ examType = 'ielts' })
     
     // Validate the exam and section combination
     const isValidCombination = validateExamAndSection(
-      examTypeState === 'ielts' && examParam ? examParam : examTypeState, 
+      examType === 'ielts' && examParam ? examParam : examType, 
       section === 'reading' && sectionParam ? sectionParam : section
     );
     
@@ -60,20 +56,20 @@ const ReadingPractice: React.FC<ReadingPracticeProps> = ({ examType = 'ielts' })
     
     // Set page title based on exam type and section
     let title = "Reading Practice";
-    if (examTypeState === 'gre' && section === 'verbal') {
+    if (examType === 'gre' && section === 'verbal') {
       title = "GRE Verbal Reasoning Practice";
-    } else if (examTypeState === 'gre' && section === 'quantitative') {
+    } else if (examType === 'gre' && section === 'quantitative') {
       title = "GRE Quantitative Reasoning Practice";
-    } else if (examTypeState === 'sat' && section === 'math') {
+    } else if (examType === 'sat' && section === 'math') {
       title = "SAT Math Practice";
-    } else if (examTypeState === 'sat' && section === 'reading') {
+    } else if (examType === 'sat' && section === 'reading') {
       title = "SAT Reading & Writing Practice";
     } else {
-      title = `${examTypeState.toUpperCase()} Reading Practice`;
+      title = `${examType.toUpperCase()} Reading Practice`;
     }
     
     document.title = title;
-  }, [location, examTypeState, section, navigate]);
+  }, [location, examType, section, navigate]);
   
   // Function to validate if the exam type and section combination is valid
   const validateExamAndSection = (exam: string, sect: string) => {
@@ -94,26 +90,13 @@ const ReadingPractice: React.FC<ReadingPracticeProps> = ({ examType = 'ielts' })
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 backdrop-blur-lg border border-gray-200 dark:border-gray-700">
-          <ReadingHeader examType={examTypeState} section={section} />
-          
-          {!testStarted ? (
-            <div className="mt-6 animate-fade-in">
-              <ReadingInstructions 
-                onStart={() => setTestStarted(true)} 
-                examType={examTypeState} 
-                section={section} 
-              />
-            </div>
-          ) : (
-            <div className="mt-6 animate-fade-in">
-              <ReadingTest 
-                examType={examTypeState} 
-                section={section} 
-              />
-            </div>
-          )}
-        </div>
+        <ReadingHeader examType={examType} section={section} />
+        
+        {!testStarted ? (
+          <ReadingInstructions onStart={() => setTestStarted(true)} examType={examType} section={section} />
+        ) : (
+          <ReadingTest examType={examType} section={section} />
+        )}
       </div>
     </Layout>
   );
