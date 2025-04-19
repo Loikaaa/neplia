@@ -1,7 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
-const TimeDisplay = () => {
+interface TimeDisplayProps {
+  className?: string;
+}
+
+const TimeDisplay = ({ className }: TimeDisplayProps) => {
   const [time, setTime] = useState<string>(getCurrentTime());
 
   function getCurrentTime() {
@@ -22,7 +27,7 @@ const TimeDisplay = () => {
   }, []);
 
   return (
-    <div className="text-white text-sm font-mobile-body">
+    <div className={cn("text-white text-sm font-mobile-body", className)}>
       {time}
     </div>
   );
