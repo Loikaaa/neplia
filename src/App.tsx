@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -42,6 +43,7 @@ import CategoryDetail from './pages/CategoryDetail';
 import CountriesPage from './pages/CountriesPage';
 import { DemoAdminLogin } from './components/admin/DemoAdminLogin';
 import AdminDashboard from './pages/admin/Dashboard';
+import UsersCMS from './pages/admin/UsersCMS';
 
 import './App.css';
 
@@ -101,6 +103,7 @@ function App() {
             {/* Admin Routes */}
             <Route path="/admin/login" element={<DemoAdminLogin />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<UsersCMS />} />
             
             <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<Navigate to="/404" replace />} />
