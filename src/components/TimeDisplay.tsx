@@ -27,7 +27,13 @@ const TimeDisplay = ({ className }: TimeDisplayProps) => {
   }, []);
 
   return (
-    <div className={cn("text-white text-sm font-mobile-body", className)}>
+    <div 
+      className={cn(
+        "text-white text-xs font-mobile-body tracking-wider opacity-80", 
+        "rounded-full px-2 py-0.5 bg-black/30",
+        className
+      )}
+    >
       {time}
     </div>
   );
