@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy, Book, Play, Globe, Menu } from 'lucide-react';
+import { ChevronDown, BookOpen, Headphones, Edit, MessageSquare, BarChart3, Search, Trophy, Book, Play, Globe, Menu, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import UserProfileMenu from './UserProfileMenu';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -92,6 +92,7 @@ const navLinks = [
   { name: 'Exams', path: '/exams', icon: Book },
   { name: 'Practice', path: '/practice', icon: Play },
   { name: 'Abroad Study', path: '/abroad', icon: Globe },
+  { name: 'Admin', path: '/admin/login', icon: Settings },
 ];
 
 const Navbar = () => {

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -41,6 +40,8 @@ import AllResources from './pages/AllResources';
 import ResourceDetail from './pages/ResourceDetail';
 import CategoryDetail from './pages/CategoryDetail';
 import CountriesPage from './pages/CountriesPage';
+import { DemoAdminLogin } from './components/admin/DemoAdminLogin';
+import AdminDashboard from './pages/admin/Dashboard';
 
 import './App.css';
 
@@ -97,6 +98,10 @@ function App() {
             {/* Study Abroad */}
             <Route path="/abroad" element={<CountriesPage />} />
 
+            {/* Admin Routes */}
+            <Route path="/admin/login" element={<DemoAdminLogin />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            
             <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<Navigate to="/404" replace />} />
           </Routes>
