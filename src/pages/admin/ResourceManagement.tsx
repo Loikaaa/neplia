@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -234,7 +235,7 @@ const ResourceManagement = () => {
   };
   
   // Handle select change for category form
-  const handleCategorySelectChange = (name: string, value: string) => {
+  const handleCategorySelectChange = (name: string, value: 'book' | 'file' | 'video' | 'audio') => {
     setCategoryForm({ ...categoryForm, [name]: value });
   };
   
@@ -294,7 +295,7 @@ const ResourceManagement = () => {
   
   // Handle resources specific to a category
   const handleManageCategoryResources = (categoryId: string) => {
-    // Filter resources by category
+    // Fix: Use the category ID to set the search query
     setSearchQuery(categoryId);
     // Switch to All Resources tab
     document.getElementById('all-resources-tab')?.click();
@@ -302,10 +303,10 @@ const ResourceManagement = () => {
 
   // Filter resources based on search query
   const filteredResources = resources.filter(resource => 
-    (resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
     resource.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    resource.category.toLowerCase().includes(searchQuery.toLowerCase()))
+    resource.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const resourceTypes = ["Study Guide", "Practice Test", "Template Pack", "Flashcards", "Study Cards", "Video Tutorial", "Audio Lesson"];
@@ -328,7 +329,7 @@ const ResourceManagement = () => {
             setIsEditing(false);
             setCurrentResource(null);
             setSelectedFile(null);
-            // Switch to Upload Resource tab
+            // Fix: Ensure we're using the right tab ID
             document.getElementById('upload-tab')?.click();
           }}>
             <Plus className="mr-2 h-4 w-4" /> New Resource
@@ -579,8 +580,10 @@ const ResourceManagement = () => {
                           <BookOpen className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                         ) : category.icon === 'file' ? (
                           <FileText className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                        ) : category.icon === 'video' ? (
+                          <Video className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                         ) : (
-                          <Folder className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                          <Music className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                         )}
                       </div>
                       <span className="font-medium">{category.resourceCount} resources</span>
@@ -590,7 +593,7 @@ const ResourceManagement = () => {
                     <Button 
                       className="w-full" 
                       variant="default" 
-                      onClick={() => handleManageCategoryResources(category.name)}
+                      onClick={() => handleManageCategoryResources(category.id)}
                     >
                       Manage Resources
                     </Button>
