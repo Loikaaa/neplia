@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
 // Pages
@@ -84,7 +85,8 @@ function App() {
         <Route path="/resources/all" element={<AllResources />} />
         <Route path="/resources/categories" element={<Resources />} />
         <Route path="/resources/categories/:slug" element={<CategoryDetail />} />
-        {/* Add the new route for resource categories */}
+        {/* Add redirect for old category URLs to the new format */}
+        <Route path="/resources/category/:slug" element={<Navigate to={(location) => `/resources/categories/${location.pathname.split('/').pop()}`} />} />
         
         {/* Exam Routes */}
         <Route path="/exams/ielts" element={<IeltsPage />} />

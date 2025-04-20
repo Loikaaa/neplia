@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -8,10 +7,9 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Badge } from "@/components/ui/badge";
 
 const CategoryDetail = () => {
-  const { categoryId } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
 
-  // In a real app, this would fetch data from an API
   const getCategoryData = (id: string) => {
     const categories = [
       {
@@ -62,9 +60,7 @@ const CategoryDetail = () => {
   };
 
   const getResourcesByCategory = (categoryId: string) => {
-    // Mock resources data that would normally come from a backend
     const allResources = [
-      // Practice Tests
       {
         id: "reading-practice-test-1",
         title: "Reading Practice Test 1",
@@ -97,7 +93,6 @@ const CategoryDetail = () => {
         category: "practice-tests"
       },
       
-      // Video Tutorials
       {
         id: "reading-strategies-video",
         title: "Reading Strategies Video Course",
@@ -130,7 +125,6 @@ const CategoryDetail = () => {
         category: "video-tutorials"
       },
       
-      // Study Guides
       {
         id: "complete-study-guide",
         title: "Complete Study Guide",
@@ -153,7 +147,6 @@ const CategoryDetail = () => {
         category: "study-guides"
       },
       
-      // Vocabulary Lists
       {
         id: "academic-word-list",
         title: "Academic Word List - Complete Set",
@@ -176,7 +169,6 @@ const CategoryDetail = () => {
         category: "vocabulary-lists"
       },
       
-      // Lesson Plans
       {
         id: "4-week-intensive-plan",
         title: "4-Week Intensive Study Plan",
@@ -198,7 +190,6 @@ const CategoryDetail = () => {
         category: "lesson-plans"
       },
       
-      // Downloadable Worksheets
       {
         id: "vocabulary-builder",
         title: "Vocabulary Builder Worksheets",
@@ -225,8 +216,8 @@ const CategoryDetail = () => {
     return allResources.filter(resource => resource.category === categoryId);
   };
 
-  const category = getCategoryData(categoryId || '');
-  const resources = getResourcesByCategory(categoryId || '');
+  const category = getCategoryData(slug || '');
+  const resources = getResourcesByCategory(slug || '');
 
   if (!category) {
     return (
@@ -234,7 +225,7 @@ const CategoryDetail = () => {
         <div className="container mx-auto px-4 py-16 text-center">
           <h2 className="text-2xl font-bold mb-4">Category Not Found</h2>
           <p className="mb-6">The category you're looking for doesn't exist or has been removed.</p>
-          <Button onClick={() => navigate('/resources')}>
+          <Button onClick={() => navigate('/resources/categories')}>
             Back to Resources
           </Button>
         </div>
@@ -324,7 +315,7 @@ const CategoryDetail = () => {
         <Button 
           variant="ghost" 
           className="mb-6" 
-          onClick={() => navigate('/resources')}
+          onClick={() => navigate('/resources/categories')}
         >
           <ArrowLeft className="mr-2" size={16} /> Back to Resources
         </Button>
@@ -356,7 +347,7 @@ const CategoryDetail = () => {
           ) : (
             <div className="text-center py-10 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <p className="text-gray-600 dark:text-gray-400 mb-4">No resources available in this category yet.</p>
-              <Button onClick={() => navigate('/resources')}>
+              <Button onClick={() => navigate('/resources/categories')}>
                 Browse Other Categories
               </Button>
             </div>
