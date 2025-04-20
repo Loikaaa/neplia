@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -55,7 +54,6 @@ const ResourceManagement = () => {
   const [categoryFormOpen, setCategoryFormOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ResourceCategory | null>(null);
   
-  // State for category form - Fix the type to match ResourceCategory
   const [categoryForm, setCategoryForm] = useState<{
     id: string;
     name: string;
@@ -68,7 +66,6 @@ const ResourceManagement = () => {
     icon: 'book'
   });
 
-  // Sample categories
   const [categories, setCategories] = useState<ResourceCategory[]>([
     {
       id: 'ielts',
@@ -120,18 +117,15 @@ const ResourceManagement = () => {
     }
   ]);
 
-  // Handle input change for resource form
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle select change for resource form
   const handleSelectChange = (name: string, value: string) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle file change for resource form
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -143,7 +137,6 @@ const ResourceManagement = () => {
     }
   };
 
-  // Handle preview image change
   const handlePreviewImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFormData({ ...formData, previewImage: e.target.files[0] });
@@ -154,19 +147,19 @@ const ResourceManagement = () => {
     }
   };
 
-  // Handle resource form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Generate ID from title if not editing
     const resourceId = isEditing && currentResource ? currentResource : formData.title.toLowerCase().replace(/\s+/g, '-');
+    
+    const selectedCategory = categories.find(cat => cat.name === formData.category);
     
     const newResource: Resource = {
       id: resourceId,
       title: formData.title,
       description: formData.description,
       type: formData.type,
-      category: formData.category,
+      category: selectedCategory ? selectedCategory.id : formData.category,
       rating: 5.0,
       downloads: 0,
       badge: formData.badge,
@@ -180,13 +173,21 @@ const ResourceManagement = () => {
       });
     } else {
       setResources([...resources, newResource]);
+      
+      if (selectedCategory) {
+        setCategories(categories.map(cat => 
+          cat.id === selectedCategory.id 
+            ? { ...cat, resourceCount: cat.resourceCount + 1 }
+            : cat
+        ));
+      }
+      
       toast({
         title: "Resource created",
         description: `${formData.title} has been added to resources.`
       });
     }
     
-    // Reset form
     setFormData({
       title: '',
       description: '',
@@ -199,9 +200,9 @@ const ResourceManagement = () => {
     setSelectedFile(null);
     setIsEditing(false);
     setCurrentResource(null);
+    document.getElementById('all-resources-tab')?.click();
   };
 
-  // Handle editing a resource
   const handleEdit = (id: string) => {
     const resource = resources.find(r => r.id === id);
     if (resource) {
@@ -219,7 +220,6 @@ const ResourceManagement = () => {
     }
   };
 
-  // Handle deleting a resource
   const handleDelete = (id: string) => {
     setResources(resources.filter(r => r.id !== id));
     toast({
@@ -228,22 +228,18 @@ const ResourceManagement = () => {
     });
   };
   
-  // Handle input change for category form
   const handleCategoryInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setCategoryForm({ ...categoryForm, [name]: value });
   };
   
-  // Handle select change for category form
   const handleCategorySelectChange = (name: string, value: 'book' | 'file' | 'video' | 'audio') => {
     setCategoryForm({ ...categoryForm, [name]: value });
   };
   
-  // Handle category form submission
   const handleCategorySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Generate ID from name if not editing
     const categoryId = categoryForm.id || categoryForm.name.toLowerCase().replace(/\s+/g, '-');
     
     const newCategory: ResourceCategory = {
@@ -255,7 +251,6 @@ const ResourceManagement = () => {
     };
     
     if (selectedCategory) {
-      // Update existing category
       setCategories(categories.map(c => c.id === categoryId ? { ...c, ...newCategory } : c));
       toast({
         title: "Category updated",
@@ -263,7 +258,6 @@ const ResourceManagement = () => {
       });
       setSelectedCategory(null);
     } else {
-      // Create new category
       setCategories([...categories, newCategory]);
       toast({
         title: "Category created",
@@ -271,7 +265,6 @@ const ResourceManagement = () => {
       });
     }
     
-    // Reset form and close dialog
     setCategoryForm({
       id: '',
       name: '',
@@ -281,7 +274,6 @@ const ResourceManagement = () => {
     setCategoryFormOpen(false);
   };
   
-  // Handle editing a category
   const handleEditCategory = (category: ResourceCategory) => {
     setCategoryForm({
       id: category.id,
@@ -293,15 +285,11 @@ const ResourceManagement = () => {
     setCategoryFormOpen(true);
   };
   
-  // Handle resources specific to a category
   const handleManageCategoryResources = (categoryId: string) => {
-    // Fix: Use the category ID to set the search query
     setSearchQuery(categoryId);
-    // Switch to All Resources tab
     document.getElementById('all-resources-tab')?.click();
   };
 
-  // Filter resources based on search query
   const filteredResources = resources.filter(resource => 
     resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -329,7 +317,6 @@ const ResourceManagement = () => {
             setIsEditing(false);
             setCurrentResource(null);
             setSelectedFile(null);
-            // Fix: Ensure we're using the right tab ID
             document.getElementById('upload-tab')?.click();
           }}>
             <Plus className="mr-2 h-4 w-4" /> New Resource
@@ -632,7 +619,6 @@ const ResourceManagement = () => {
               </Card>
             </div>
 
-            {/* Category Dialog */}
             <Dialog open={categoryFormOpen} onOpenChange={setCategoryFormOpen}>
               <DialogContent>
                 <DialogHeader>
