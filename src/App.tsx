@@ -1,5 +1,4 @@
-
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './App.css';
 
 // Pages
@@ -63,6 +62,13 @@ import GrePracticePage from '@/pages/practice/exam-specific/GrePracticePage';
 import GmatPracticePage from '@/pages/practice/exam-specific/GmatPracticePage';
 import SatPracticePage from '@/pages/practice/exam-specific/SatPracticePage';
 
+// Create a wrapper component for the redirect
+const CategoryRedirect = () => {
+  const location = useLocation();
+  const slug = location.pathname.split('/').pop() || '';
+  return <Navigate to={`/resources/categories/${slug}`} replace />;
+};
+
 function App() {
   return (
     <Router>
@@ -86,7 +92,7 @@ function App() {
         <Route path="/resources/categories" element={<Resources />} />
         <Route path="/resources/categories/:slug" element={<CategoryDetail />} />
         {/* Add redirect for old category URLs to the new format */}
-        <Route path="/resources/category/:slug" element={<Navigate to={(location) => `/resources/categories/${location.pathname.split('/').pop()}`} />} />
+        <Route path="/resources/category/:slug" element={<CategoryRedirect />} />
         
         {/* Exam Routes */}
         <Route path="/exams/ielts" element={<IeltsPage />} />
