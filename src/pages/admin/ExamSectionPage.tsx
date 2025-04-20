@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -25,7 +26,10 @@ import {
   SortAsc,
   Settings,
   Save,
-  ArrowLeft
+  ArrowLeft,
+  BookOpen,
+  Headphones,
+  Mic
 } from 'lucide-react';
 import { 
   Dialog, 
