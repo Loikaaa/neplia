@@ -16,7 +16,7 @@ const CategoryCard = ({ title, description, icon, color, id }: CategoryCardProps
   const navigate = useNavigate();
   
   const handleCategoryClick = () => {
-    navigate(`/resources/category/${id}`);
+    navigate(`/resources/categories/${id}`);
   };
   
   return (

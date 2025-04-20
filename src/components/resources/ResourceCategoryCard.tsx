@@ -49,7 +49,7 @@ const ResourceCategoryCard: React.FC<ResourceCategoryCardProps> = ({ category })
         </div>
       </CardContent>
       <CardFooter>
-        <Link to={`/resources/category/${category.id}`} className="w-full">
+        <Link to={`/resources/categories/${category.id}`} className="w-full">
           <Button className="w-full flex justify-between items-center">
             Browse Resources
             <ArrowRight size={16} />

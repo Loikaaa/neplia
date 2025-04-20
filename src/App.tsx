@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
@@ -85,6 +84,7 @@ function App() {
         <Route path="/resources/all" element={<AllResources />} />
         <Route path="/resources/categories" element={<Resources />} />
         <Route path="/resources/categories/:slug" element={<CategoryDetail />} />
+        {/* Add the new route for resource categories */}
         
         {/* Exam Routes */}
         <Route path="/exams/ielts" element={<IeltsPage />} />
