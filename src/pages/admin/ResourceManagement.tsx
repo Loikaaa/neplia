@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,11 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { Upload, Trash2, Save, Plus, FileText, BookOpen, Edit, Folder, Video, Music } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import { Resource, ResourceFormData, ResourceCategory } from '@/types/resource';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ResourceCard from '@/components/admin/resources/ResourceCard';
+import CategoryCard from '@/components/admin/resources/CategoryCard';
 
 const ResourceManagement = () => {
   const [resources, setResources] = useState<Resource[]>([
@@ -21,7 +22,7 @@ const ResourceManagement = () => {
       title: 'IELTS Writing Task 2 Guide',
       description: 'Master the IELTS Writing Task 2 with our comprehensive guide featuring model answers and examiner tips.',
       type: 'Study Guide',
-      category: 'ielts', // Changed to match category ID
+      category: 'ielts',
       rating: 4.9,
       downloads: '24.5K',
       badge: 'Popular'
@@ -31,7 +32,7 @@ const ResourceManagement = () => {
       title: 'TOEFL Speaking Templates',
       description: 'Ready-to-use templates for all TOEFL speaking tasks with expert guidance on timing and delivery.',
       type: 'Template Pack',
-      category: 'toefl', // Changed to match category ID
+      category: 'toefl',
       rating: 4.8,
       downloads: '18.3K',
       badge: 'New'
@@ -54,6 +55,7 @@ const ResourceManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFormOpen, setCategoryFormOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ResourceCategory | null>(null);
+  const [activeTab, setActiveTab] = useState('all');
   
   const [categoryForm, setCategoryForm] = useState<{
     id: string;
@@ -118,6 +120,14 @@ const ResourceManagement = () => {
     }
   ]);
 
+  useEffect(() => {
+    // This will help us manually trigger tab selection when needed
+    const tabElement = document.getElementById(`${activeTab}-tab`);
+    if (tabElement) {
+      tabElement.click();
+    }
+  }, [activeTab]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -153,9 +163,8 @@ const ResourceManagement = () => {
     
     const resourceId = isEditing && currentResource ? currentResource : formData.title.toLowerCase().replace(/\s+/g, '-');
     
-    // Get the selected category object based on the category name selected in the form
+    // Find the category ID that corresponds to the selected category name
     const selectedCategoryObj = categories.find(cat => cat.name === formData.category);
-    
     const categoryId = selectedCategoryObj ? selectedCategoryObj.id : '';
     
     const newResource: Resource = {
@@ -163,7 +172,7 @@ const ResourceManagement = () => {
       title: formData.title,
       description: formData.description,
       type: formData.type,
-      category: categoryId, // Use the category ID, not the name
+      category: categoryId, // Use the category ID
       rating: 5.0,
       downloads: 0,
       badge: formData.badge,
@@ -206,7 +215,7 @@ const ResourceManagement = () => {
     setCurrentResource(null);
     
     // Switch to "All Resources" tab after submitting
-    document.getElementById('all-resources-tab')?.click();
+    setActiveTab('all');
   };
 
   const handleEdit = (id: string) => {
@@ -228,7 +237,7 @@ const ResourceManagement = () => {
       setCurrentResource(id);
       
       // Switch to the upload tab for editing
-      document.getElementById('upload-tab')?.click();
+      setActiveTab('upload');
     }
   };
 
@@ -313,7 +322,7 @@ const ResourceManagement = () => {
     setSearchQuery(categoryId);
     
     // Switch to the "All Resources" tab to show the filtered resources
-    document.getElementById('all-resources-tab')?.click();
+    setActiveTab('all');
   };
 
   const filteredResources = resources.filter(resource => 
@@ -325,39 +334,38 @@ const ResourceManagement = () => {
 
   const resourceTypes = ["Study Guide", "Practice Test", "Template Pack", "Flashcards", "Study Cards", "Video Tutorial", "Audio Lesson"];
   
+  const handleNewResource = () => {
+    setFormData({
+      title: '',
+      description: '',
+      type: '',
+      category: '',
+      badge: 'New',
+      file: null,
+      previewImage: null
+    });
+    setIsEditing(false);
+    setCurrentResource(null);
+    setSelectedFile(null);
+    setActiveTab('upload');
+  };
+
   return (
     <AdminLayout>
       <div className="container p-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Resource Management</h1>
-          <Button onClick={() => {
-            setFormData({
-              title: '',
-              description: '',
-              type: '',
-              category: '',
-              badge: 'New',
-              file: null,
-              previewImage: null
-            });
-            setIsEditing(false);
-            setCurrentResource(null);
-            setSelectedFile(null);
-            // Ensure we activate the upload tab when clicking "New Resource"
-            setTimeout(() => {
-              document.getElementById('upload-tab')?.click();
-            }, 0);
-          }}>
+          <Button onClick={handleNewResource}>
             <Plus className="mr-2 h-4 w-4" /> New Resource
           </Button>
         </div>
 
-        <Tabs defaultValue="all" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="mb-6">
-            <TabsTrigger id="all-resources-tab" value="all">All Resources</TabsTrigger>
+            <TabsTrigger id="all-tab" value="all">All Resources</TabsTrigger>
             <TabsTrigger id="upload-tab" value="upload">Upload Resource</TabsTrigger>
-            <TabsTrigger value="categories">Categories</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger id="categories-tab" value="categories">Categories</TabsTrigger>
+            <TabsTrigger id="analytics-tab" value="analytics">Analytics</TabsTrigger>
           </TabsList>
 
           <TabsContent value="all">
@@ -371,56 +379,28 @@ const ResourceManagement = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredResources.map((resource) => (
-                <Card key={resource.id} className="overflow-hidden hover:shadow-lg transition-all">
-                  <CardHeader className="pb-2">
-                    <div className="flex justify-between items-start">
-                      <CardTitle className="text-lg">{resource.title}</CardTitle>
-                      <Badge className={resource.badge === 'Premium' 
-                        ? 'bg-indigo-500 text-white' 
-                        : resource.badge === 'New' 
-                          ? 'bg-green-500 text-white' 
-                          : 'bg-amber-500 text-white'}>
-                        {resource.badge}
-                      </Badge>
-                    </div>
-                    <CardDescription>
-                      {resource.type} • {categories.find(cat => cat.id === resource.category)?.name || resource.category}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-                      {resource.description}
-                    </p>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <span className="mr-3">Downloads: {resource.downloads}</span>
-                      <span>Rating: {resource.rating}</span>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-between">
-                    <Button variant="outline" size="sm" onClick={() => handleEdit(resource.id)}>
-                      <Edit className="h-4 w-4 mr-2" /> Edit
-                    </Button>
-                    <Button variant="destructive" size="sm" onClick={() => handleDelete(resource.id)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
+              {filteredResources.map((resource) => {
+                // Find the category name for this resource
+                const category = categories.find(cat => cat.id === resource.category);
+                const categoryName = category ? category.name : resource.category;
+                
+                return (
+                  <ResourceCard 
+                    key={resource.id} 
+                    resource={resource} 
+                    categoryName={categoryName}
+                    onEdit={handleEdit} 
+                    onDelete={handleDelete} 
+                  />
+                );
+              })}
               
               {filteredResources.length === 0 && (
                 <div className="col-span-3 text-center py-12">
                   <FileText className="w-12 h-12 mx-auto text-gray-400" />
                   <h3 className="mt-4 text-lg font-medium">No resources found</h3>
                   <p className="mt-1 text-gray-500">Try adjusting your search or add a new resource.</p>
-                  <Button className="mt-4" onClick={() => {
-                    // Clear the search query when clicking "Add Resource"
-                    setSearchQuery('');
-                    // Navigate to the upload tab
-                    setTimeout(() => {
-                      document.getElementById('upload-tab')?.click();
-                    }, 0);
-                  }}>
+                  <Button className="mt-4" onClick={handleNewResource}>
                     <Plus className="mr-2 h-4 w-4" /> Add Resource
                   </Button>
                 </div>
@@ -593,44 +573,12 @@ const ResourceManagement = () => {
           <TabsContent value="categories">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {categories.map((category) => (
-                <Card key={category.id} className="hover:shadow-md transition-all">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{category.name}</CardTitle>
-                    <CardDescription>{category.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="p-2 bg-indigo-100 dark:bg-indigo-900 rounded-full">
-                        {category.icon === 'book' ? (
-                          <BookOpen className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                        ) : category.icon === 'file' ? (
-                          <FileText className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                        ) : category.icon === 'video' ? (
-                          <Video className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                        ) : (
-                          <Music className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                        )}
-                      </div>
-                      <span className="font-medium">{category.resourceCount} resources</span>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex flex-col space-y-2">
-                    <Button 
-                      className="w-full" 
-                      variant="default" 
-                      onClick={() => handleManageCategoryResources(category.id)}
-                    >
-                      Manage Resources
-                    </Button>
-                    <Button 
-                      className="w-full" 
-                      variant="outline"
-                      onClick={() => handleEditCategory(category)}
-                    >
-                      <Edit className="h-4 w-4 mr-2" /> Edit Category
-                    </Button>
-                  </CardFooter>
-                </Card>
+                <CategoryCard
+                  key={category.id}
+                  category={category}
+                  onEdit={handleEditCategory}
+                  onManageResources={handleManageCategoryResources}
+                />
               ))}
               
               <Card 
