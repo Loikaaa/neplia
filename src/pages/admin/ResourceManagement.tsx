@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,7 +21,7 @@ const ResourceManagement = () => {
       title: 'IELTS Writing Task 2 Guide',
       description: 'Master the IELTS Writing Task 2 with our comprehensive guide featuring model answers and examiner tips.',
       type: 'Study Guide',
-      category: 'IELTS',
+      category: 'ielts', // Changed to match category ID
       rating: 4.9,
       downloads: '24.5K',
       badge: 'Popular'
@@ -30,7 +31,7 @@ const ResourceManagement = () => {
       title: 'TOEFL Speaking Templates',
       description: 'Ready-to-use templates for all TOEFL speaking tasks with expert guidance on timing and delivery.',
       type: 'Template Pack',
-      category: 'TOEFL',
+      category: 'toefl', // Changed to match category ID
       rating: 4.8,
       downloads: '18.3K',
       badge: 'New'
@@ -152,14 +153,17 @@ const ResourceManagement = () => {
     
     const resourceId = isEditing && currentResource ? currentResource : formData.title.toLowerCase().replace(/\s+/g, '-');
     
-    const selectedCategory = categories.find(cat => cat.name === formData.category);
+    // Get the selected category object based on the category name selected in the form
+    const selectedCategoryObj = categories.find(cat => cat.name === formData.category);
+    
+    const categoryId = selectedCategoryObj ? selectedCategoryObj.id : '';
     
     const newResource: Resource = {
       id: resourceId,
       title: formData.title,
       description: formData.description,
       type: formData.type,
-      category: selectedCategory ? selectedCategory.id : formData.category,
+      category: categoryId, // Use the category ID, not the name
       rating: 5.0,
       downloads: 0,
       badge: formData.badge,
@@ -174,9 +178,9 @@ const ResourceManagement = () => {
     } else {
       setResources([...resources, newResource]);
       
-      if (selectedCategory) {
+      if (selectedCategoryObj) {
         setCategories(categories.map(cat => 
-          cat.id === selectedCategory.id 
+          cat.id === categoryId 
             ? { ...cat, resourceCount: cat.resourceCount + 1 }
             : cat
         ));
@@ -200,27 +204,46 @@ const ResourceManagement = () => {
     setSelectedFile(null);
     setIsEditing(false);
     setCurrentResource(null);
+    
+    // Switch to "All Resources" tab after submitting
     document.getElementById('all-resources-tab')?.click();
   };
 
   const handleEdit = (id: string) => {
     const resource = resources.find(r => r.id === id);
     if (resource) {
+      // Find the category name from the category ID
+      const categoryObj = categories.find(cat => cat.id === resource.category);
+      
       setFormData({
         title: resource.title,
         description: resource.description,
         type: resource.type,
-        category: resource.category || '',
+        category: categoryObj ? categoryObj.name : '',
         badge: resource.badge,
         file: null,
         previewImage: null
       });
       setIsEditing(true);
       setCurrentResource(id);
+      
+      // Switch to the upload tab for editing
+      document.getElementById('upload-tab')?.click();
     }
   };
 
   const handleDelete = (id: string) => {
+    const resourceToDelete = resources.find(r => r.id === id);
+    if (resourceToDelete) {
+      // Find the category and decrement the resource count
+      const categoryId = resourceToDelete.category;
+      setCategories(categories.map(cat => 
+        cat.id === categoryId 
+          ? { ...cat, resourceCount: Math.max(0, cat.resourceCount - 1) }
+          : cat
+      ));
+    }
+    
     setResources(resources.filter(r => r.id !== id));
     toast({
       title: "Resource deleted",
@@ -286,7 +309,10 @@ const ResourceManagement = () => {
   };
   
   const handleManageCategoryResources = (categoryId: string) => {
+    // Set the search query to filter by the category ID
     setSearchQuery(categoryId);
+    
+    // Switch to the "All Resources" tab to show the filtered resources
     document.getElementById('all-resources-tab')?.click();
   };
 
@@ -317,7 +343,10 @@ const ResourceManagement = () => {
             setIsEditing(false);
             setCurrentResource(null);
             setSelectedFile(null);
-            document.getElementById('upload-tab')?.click();
+            // Ensure we activate the upload tab when clicking "New Resource"
+            setTimeout(() => {
+              document.getElementById('upload-tab')?.click();
+            }, 0);
           }}>
             <Plus className="mr-2 h-4 w-4" /> New Resource
           </Button>
@@ -355,7 +384,9 @@ const ResourceManagement = () => {
                         {resource.badge}
                       </Badge>
                     </div>
-                    <CardDescription>{resource.type} • {resource.category}</CardDescription>
+                    <CardDescription>
+                      {resource.type} • {categories.find(cat => cat.id === resource.category)?.name || resource.category}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
@@ -382,7 +413,14 @@ const ResourceManagement = () => {
                   <FileText className="w-12 h-12 mx-auto text-gray-400" />
                   <h3 className="mt-4 text-lg font-medium">No resources found</h3>
                   <p className="mt-1 text-gray-500">Try adjusting your search or add a new resource.</p>
-                  <Button className="mt-4" onClick={() => document.getElementById('upload-tab')?.click()}>
+                  <Button className="mt-4" onClick={() => {
+                    // Clear the search query when clicking "Add Resource"
+                    setSearchQuery('');
+                    // Navigate to the upload tab
+                    setTimeout(() => {
+                      document.getElementById('upload-tab')?.click();
+                    }, 0);
+                  }}>
                     <Plus className="mr-2 h-4 w-4" /> Add Resource
                   </Button>
                 </div>
