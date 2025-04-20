@@ -23,6 +23,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const AdminHeader: React.FC = () => {
+  // Function to handle logout
+  const handleLogout = () => {
+    sessionStorage.removeItem('demoAdminLoggedIn');
+    window.location.href = '/admin'; // Redirect to login page
+  };
+
   return (
     <header className="border-b bg-white dark:bg-gray-950 p-4 flex items-center justify-between">
       <div className="flex items-center">
@@ -93,7 +99,7 @@ const AdminHeader: React.FC = () => {
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px]">
                   <li>
-                    <Link to="/admin/performance-analytics" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                    <Link to="/admin/dashboard" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                       <div className="text-sm font-medium leading-none">Performance Analytics</div>
                       <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                         View student performance data and analytics
@@ -101,7 +107,7 @@ const AdminHeader: React.FC = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/admin/progress-tracking" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                    <Link to="/admin/dashboard" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                       <div className="text-sm font-medium leading-none">Progress Tracking</div>
                       <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                         Monitor student progress over time
@@ -153,7 +159,7 @@ const AdminHeader: React.FC = () => {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

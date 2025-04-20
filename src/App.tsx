@@ -23,6 +23,21 @@ import Resources from '@/pages/Resources';
 import AllResources from '@/pages/AllResources';
 import CategoryDetail from '@/pages/CategoryDetail';
 
+// Admin Pages
+import AdminDashboard from '@/pages/admin/Dashboard';
+import AdminRedirect from '@/components/admin/AdminRedirect';
+import UsersCMS from '@/pages/admin/UsersCMS';
+import BlogPostCMS from '@/pages/admin/BlogPostCMS';
+import ResourceManagement from '@/pages/admin/ResourceManagement';
+import ExamSectionPage from '@/pages/admin/ExamSectionPage';
+import ReadingTaskCMS from '@/pages/admin/ReadingTaskCMS';
+import WritingTaskCMS from '@/pages/admin/WritingTaskCMS';
+import SpeakingReviewPage from '@/pages/admin/SpeakingReviewPage';
+import ListeningTaskCMS from '@/pages/admin/ListeningTaskCMS';
+import Marketing from '@/pages/admin/Marketing';
+import Settings from '@/pages/admin/Settings';
+import IeltsTaskManager from '@/pages/admin/IeltsTaskManager';
+
 // Exam Pages
 import IeltsPage from '@/pages/exams/IeltsPage';
 import ToeflPage from '@/pages/exams/ToeflPage';
@@ -39,7 +54,6 @@ import CompleteListeningPage from '@/pages/practice/CompleteListeningPage';
 import SpeakingPractice from '@/pages/practice/SpeakingPractice';
 import WritingPractice from '@/pages/practice/WritingPractice';
 import MockTestPage from '@/pages/practice/MockTestPage';
-import AdminRedirect from '@/components/admin/AdminRedirect';
 
 // Import exam-specific practice pages
 import IeltsPracticePage from '@/pages/practice/exam-specific/IeltsPracticePage';
@@ -132,8 +146,20 @@ function App() {
         <Route path="/practice/gmat/integrated" element={<ReadingPractice />} />
         <Route path="/practice/gmat/analytical" element={<WritingPractice />} />
         
-        {/* Admin Redirect - This will redirect to your Laravel backend */}
-        <Route path="/admin/*" element={<AdminRedirect />} />
+        {/* Admin Routes - Now properly nested */}
+        <Route path="/admin" element={<AdminRedirect />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/users" element={<UsersCMS />} />
+        <Route path="/admin/blog-posts" element={<BlogPostCMS />} />
+        <Route path="/admin/resources" element={<ResourceManagement />} />
+        <Route path="/admin/exam-sections" element={<ExamSectionPage />} />
+        <Route path="/admin/reading-tasks" element={<ReadingTaskCMS />} />
+        <Route path="/admin/writing-tasks" element={<WritingTaskCMS />} />
+        <Route path="/admin/speaking-review" element={<SpeakingReviewPage />} />
+        <Route path="/admin/listening-tasks" element={<ListeningTaskCMS />} />
+        <Route path="/admin/marketing" element={<Marketing />} />
+        <Route path="/admin/settings" element={<Settings />} />
+        <Route path="/admin/ielts-overview" element={<IeltsTaskManager />} />
         
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
