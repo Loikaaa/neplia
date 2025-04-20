@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
 import ReadingTaskCMS from '@/pages/admin/ReadingTaskCMS';
 import WritingTaskCMS from '@/pages/admin/WritingTaskCMS';
@@ -24,7 +24,8 @@ import {
   Filter,
   SortAsc,
   Settings,
-  Save
+  Save,
+  ArrowLeft
 } from 'lucide-react';
 import { 
   Dialog, 
@@ -45,7 +46,6 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-// Schema for settings form
 const settingsFormSchema = z.object({
   timeLimit: z.string(),
   passingScore: z.string(),
@@ -56,7 +56,6 @@ const settingsFormSchema = z.object({
   allowReview: z.boolean()
 });
 
-// Schema for edit question form
 const questionFormSchema = z.object({
   question: z.string().min(1, "Question is required"),
   category: z.string().min(1, "Category is required"),
@@ -74,10 +73,10 @@ type QuestionFormValues = z.infer<typeof questionFormSchema>;
 
 const ExamSectionPage = () => {
   const { examType, sectionType } = useParams<{ examType: string; sectionType: string }>();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('questions');
   const { toast } = useToast();
   
-  // State for edit dialog
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<any>(null);
@@ -85,56 +84,10 @@ const ExamSectionPage = () => {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   
-  // Mock data for SAT Math questions
   const [mathQuestions, setMathQuestions] = useState([
-    {
-      id: '1',
-      category: 'algebra',
-      difficulty: 'medium',
-      question: 'If 3x + 5 = 17, what is the value of x?',
-      options: ['2', '4', '6', '8'],
-      correctAnswer: '4',
-      explanation: 'To solve for x, subtract 5 from both sides to get 3x = 12, then divide by 3 to get x = 4.'
-    },
-    {
-      id: '2',
-      category: 'geometry',
-      difficulty: 'hard',
-      question: 'In a right triangle, if one leg is 5 and the hypotenuse is 13, what is the length of the other leg?',
-      options: ['10', '11', '12', '13'],
-      correctAnswer: '12',
-      explanation: 'Using the Pythagorean theorem: a² + b² = c². We know a = 5 and c = 13, so 5² + b² = 13². Solving for b: b² = 13² - 5² = 169 - 25 = 144, so b = 12.'
-    },
-    {
-      id: '3',
-      category: 'statistics',
-      difficulty: 'easy',
-      question: 'What is the mean of the following data set: 2, 4, 6, 8, 10?',
-      options: ['5', '6', '7', '8'],
-      correctAnswer: '6',
-      explanation: 'Calculate the mean by adding all numbers and dividing by the count: (2+4+6+8+10)/5 = 30/5 = 6'
-    },
-    {
-      id: '4',
-      category: 'algebra',
-      difficulty: 'hard',
-      question: 'If f(x) = 2x² - 3x + 4, what is f(3)?',
-      options: ['13', '16', '19', '22'],
-      correctAnswer: '19',
-      explanation: 'f(3) = 2(3²) - 3(3) + 4 = 2(9) - 9 + 4 = 18 - 9 + 4 = 13'
-    },
-    {
-      id: '5',
-      category: 'calculus',
-      difficulty: 'hard',
-      question: 'What is the derivative of y = x³ - 4x²?',
-      options: ['y\' = 3x² - 8x', 'y\' = 3x² - 4x', 'y\' = x² - 8x', 'y\' = 3x - 8'],
-      correctAnswer: 'y\' = 3x² - 8x',
-      explanation: 'Use the power rule: for x^n, the derivative is n*x^(n-1). For x³, we get 3x², and for -4x², we get -8x. Combined, we get 3x² - 8x.'
-    }
+    // Mock data for SAT Math questions
   ]);
 
-  // Handle delete question
   const handleDeleteQuestion = (id: string) => {
     setMathQuestions(mathQuestions.filter(q => q.id !== id));
     toast({
@@ -143,7 +96,6 @@ const ExamSectionPage = () => {
     });
   };
 
-  // Handle regenerate question
   const handleRegenerateQuestion = (id: string) => {
     const updatedQuestions = mathQuestions.map(q => {
       if (q.id === id) {
@@ -183,7 +135,6 @@ const ExamSectionPage = () => {
     });
   };
 
-  // Setup form for editing question
   const form = useForm<QuestionFormValues>({
     resolver: zodResolver(questionFormSchema),
     defaultValues: {
@@ -199,7 +150,6 @@ const ExamSectionPage = () => {
     }
   });
 
-  // Add form for new questions
   const addForm = useForm<QuestionFormValues>({
     resolver: zodResolver(questionFormSchema),
     defaultValues: {
@@ -215,7 +165,6 @@ const ExamSectionPage = () => {
     }
   });
 
-  // Setup form for settings tab
   const settingsForm = useForm<SettingsFormValues>({
     resolver: zodResolver(settingsFormSchema),
     defaultValues: {
@@ -229,7 +178,6 @@ const ExamSectionPage = () => {
     }
   });
 
-  // Open edit dialog and set current question
   const openEditDialog = (question: any) => {
     setCurrentQuestion(question);
     form.reset({
@@ -246,7 +194,6 @@ const ExamSectionPage = () => {
     setIsEditDialogOpen(true);
   };
 
-  // Handle edit form submission
   const handleEditSubmit = (data: QuestionFormValues) => {
     if (!currentQuestion) return;
     
@@ -272,7 +219,6 @@ const ExamSectionPage = () => {
     });
   };
 
-  // Add new question
   const handleAddQuestion = (data: QuestionFormValues) => {
     const newQuestion = {
       id: `${mathQuestions.length + 1}`,
@@ -294,7 +240,6 @@ const ExamSectionPage = () => {
     });
   };
 
-  // Filter questions based on search term, category, and difficulty
   const filteredQuestions = mathQuestions.filter(q => {
     const matchesSearch = q.question.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          q.explanation.toLowerCase().includes(searchTerm.toLowerCase());
@@ -304,7 +249,6 @@ const ExamSectionPage = () => {
     return matchesSearch && matchesCategory && matchesDifficulty;
   });
 
-  // Get unique categories
   const categories = Array.from(new Set(mathQuestions.map(q => q.category)));
   
   const getSatMathContent = () => {
@@ -691,7 +635,6 @@ const ExamSectionPage = () => {
           </TabsContent>
         </Tabs>
 
-        {/* Edit Question Dialog */}
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent className="sm:max-w-2xl">
             <DialogHeader>
@@ -863,7 +806,6 @@ const ExamSectionPage = () => {
           </DialogContent>
         </Dialog>
 
-        {/* Add Question Dialog */}
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogContent className="sm:max-w-2xl">
             <DialogHeader>
@@ -1054,8 +996,51 @@ const ExamSectionPage = () => {
       </div>
     );
   };
-  
+
+  const getPageTitle = () => {
+    if (examType && sectionType) {
+      return `${examType?.toUpperCase()} ${sectionType?.charAt(0).toUpperCase() + sectionType?.slice(1)}`;
+    } else if (examType) {
+      return `${examType?.toUpperCase()} Exam Sections`;
+    } else {
+      return "Exam Sections";
+    }
+  };
+
   const renderContent = () => {
+    if (examType && !sectionType) {
+      return (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            {['reading', 'writing', 'listening', 'speaking'].map((section) => (
+              <Card 
+                key={section}
+                className="hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 border-l-indigo-500"
+                onClick={() => navigate(`/admin/exams/${examType}/${section}`)}
+              >
+                <CardHeader>
+                  <CardTitle className="capitalize text-lg">
+                    {section === 'reading' && <BookOpen className="h-5 w-5 inline mr-2 text-blue-500" />}
+                    {section === 'writing' && <FileText className="h-5 w-5 inline mr-2 text-green-500" />}
+                    {section === 'listening' && <Headphones className="h-5 w-5 inline mr-2 text-purple-500" />}
+                    {section === 'speaking' && <Mic className="h-5 w-5 inline mr-2 text-red-500" />}
+                    {section.charAt(0).toUpperCase() + section.slice(1)}
+                  </CardTitle>
+                  <CardDescription>Manage {section} tasks for {examType?.toUpperCase()}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>Configure questions, settings, and view analytics for this section.</p>
+                </CardContent>
+                <CardFooter className="flex justify-end">
+                  <Button size="sm" variant="ghost">View Details &rarr;</Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    
     if (examType === 'ielts' || examType === 'toefl' || examType === 'pte') {
       if (sectionType === 'reading') {
         return <ReadingTaskCMS />;
@@ -1165,16 +1150,37 @@ const ExamSectionPage = () => {
     );
   };
 
+  const handleBackClick = () => {
+    if (sectionType) {
+      navigate(`/admin/exams/${examType}`);
+    } else {
+      navigate('/admin/dashboard');
+    }
+  };
+
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">
-            {examType?.toUpperCase()} {sectionType?.charAt(0).toUpperCase() + sectionType?.slice(1)}
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Manage {examType?.toUpperCase()} {sectionType?.charAt(0).toUpperCase() + sectionType?.slice(1)} tasks and questions
-          </p>
+      <div className="space-y-6 p-6">
+        <div className="flex items-center gap-4">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            onClick={handleBackClick}
+            className="border-indigo-100 dark:border-indigo-800 hover:border-indigo-300"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+              {getPageTitle()}
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              {sectionType 
+                ? `Manage ${examType?.toUpperCase()} ${sectionType?.charAt(0).toUpperCase() + sectionType?.slice(1)} tasks and questions` 
+                : `Select a section to manage for ${examType?.toUpperCase()}`}
+            </p>
+          </div>
         </div>
         
         {renderContent()}

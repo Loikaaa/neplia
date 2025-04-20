@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -128,6 +129,10 @@ const AdminDashboard = () => {
     navigate(path);
   };
 
+  const handleSectionClick = (examId: string, section: string) => {
+    navigate(`/admin/exams/${examId}/${section.toLowerCase()}`);
+  };
+
   return (
     <AdminLayout>
       <div className="container p-6">
@@ -170,6 +175,10 @@ const AdminDashboard = () => {
                           variant="outline" 
                           size="sm" 
                           className="w-full bg-white/50 dark:bg-gray-900/50 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSectionClick(exam.id, section);
+                          }}
                         >
                           {section}
                         </Button>

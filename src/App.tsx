@@ -146,7 +146,7 @@ function App() {
         <Route path="/practice/gmat/integrated" element={<ReadingPractice />} />
         <Route path="/practice/gmat/analytical" element={<WritingPractice />} />
         
-        {/* Admin Routes - Now properly nested */}
+        {/* Admin Routes - Updated with exam section routes */}
         <Route path="/admin" element={<AdminRedirect />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/users" element={<UsersCMS />} />
@@ -160,6 +160,10 @@ function App() {
         <Route path="/admin/marketing" element={<Marketing />} />
         <Route path="/admin/settings" element={<Settings />} />
         <Route path="/admin/ielts-overview" element={<IeltsTaskManager />} />
+        
+        {/* Add specific exam section routes */}
+        <Route path="/admin/exams/:examType" element={<ExamSectionPage />} />
+        <Route path="/admin/exams/:examType/:sectionType" element={<ExamSectionPage />} />
         
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
