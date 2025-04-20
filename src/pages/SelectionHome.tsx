@@ -182,6 +182,23 @@ const SelectionHome: React.FC = () => {
     return descriptionMap[examId] || "Let's customize your experience to match your specific needs. We'll tailor our resources and practice tests to your target exam and destination.";
   };
 
+  const getExamPracticePath = (examId: string) => {
+    const examMap: Record<string, string> = {
+      'ielts-academic': '/practice/ielts',
+      'ielts-general': '/practice/ielts',
+      'toefl': '/practice/toefl',
+      'pte': '/practice/pte',
+      'duolingo': '/practice/ielts',
+      'cambridge': '/practice/ielts',
+      'oet': '/practice/ielts',
+      'sat': '/practice/sat',
+      'gre': '/practice/gre',
+      'gmat': '/practice/gmat'
+    };
+    
+    return examMap[examId] || '/dashboard';
+  };
+
   const handleNextStep = () => {
     if (step === 0) {
       setStep(1);
@@ -208,7 +225,7 @@ const SelectionHome: React.FC = () => {
       localStorage.setItem('selectedCountry', selectedCountry);
       localStorage.setItem('selectedExam', selectedExam);
       
-      const redirectPath = getExamRedirectPath(selectedExam);
+      const redirectPath = getExamPracticePath(selectedExam);
       navigate(redirectPath);
     }
   };

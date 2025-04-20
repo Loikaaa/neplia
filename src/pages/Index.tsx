@@ -1,9 +1,7 @@
-
 import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
 import HeroSection from '@/components/HeroSection';
 import FeatureSection from '@/components/FeatureSection';
-import CTASection from '@/components/CTASection';
 import TestimonialSection from '@/components/TestimonialSection';
 import StatisticsSection from '@/components/StatisticsSection';
 import PerformanceTracker from '@/components/performance/PerformanceTracker';
@@ -118,7 +116,6 @@ const Index = () => {
       
       <StatisticsSection />
       <TestimonialSection />
-      <CTASection />
     </Layout>
   );
 };
