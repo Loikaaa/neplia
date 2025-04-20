@@ -10,12 +10,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Download, Trophy, BookOpen, FileText, Clock, Star } from 'lucide-react';
 
 // Resource category data
 const featuredResources = [
   {
+    id: "ielts-writing-task-2",
     title: "IELTS Writing Task 2 Guide",
     type: "Study Guide",
     rating: 4.9,
@@ -25,6 +26,7 @@ const featuredResources = [
     description: "Comprehensive guide to mastering IELTS Writing Task 2 with model answers and expert tips."
   },
   {
+    id: "toefl-speaking-templates",
     title: "TOEFL Speaking Templates",
     type: "Speaking Guide",
     rating: 4.7,
@@ -34,6 +36,7 @@ const featuredResources = [
     description: "Ready-to-use templates for all TOEFL speaking tasks to help structure your responses effectively."
   },
   {
+    id: "pte-reading-practice",
     title: "PTE Reading Practice Set",
     type: "Practice Test",
     rating: 4.8,
@@ -45,6 +48,12 @@ const featuredResources = [
 ];
 
 const Resources = () => {
+  const navigate = useNavigate();
+  
+  const handleGetResource = (resourceId: string) => {
+    navigate(`/resources/${resourceId}`);
+  };
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 md:py-12">
@@ -101,7 +110,10 @@ const Resources = () => {
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                         {resource.description}
                       </p>
-                      <Button className="w-full">
+                      <Button 
+                        className="w-full"
+                        onClick={() => handleGetResource(resource.id)}
+                      >
                         Get Resource
                       </Button>
                     </CardContent>

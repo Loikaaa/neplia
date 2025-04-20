@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './App.css';
 
@@ -21,6 +22,7 @@ import ResourceDetail from '@/pages/ResourceDetail';
 import Resources from '@/pages/Resources';
 import AllResources from '@/pages/AllResources';
 import CategoryDetail from '@/pages/CategoryDetail';
+import ResourceCategoryPage from '@/pages/ResourceCategoryPage';
 
 // Admin Pages
 import AdminDashboard from '@/pages/admin/Dashboard';
@@ -90,7 +92,7 @@ function App() {
         <Route path="/resources/:slug" element={<ResourceDetail />} />
         <Route path="/resources/all" element={<AllResources />} />
         <Route path="/resources/categories" element={<Resources />} />
-        <Route path="/resources/categories/:slug" element={<CategoryDetail />} />
+        <Route path="/resources/categories/:slug" element={<ResourceCategoryPage />} />
         {/* Add redirect for old category URLs to the new format */}
         <Route path="/resources/category/:slug" element={<CategoryRedirect />} />
         
