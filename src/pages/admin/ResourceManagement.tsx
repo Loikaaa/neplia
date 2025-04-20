@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -55,12 +54,17 @@ const ResourceManagement = () => {
   const [categoryFormOpen, setCategoryFormOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ResourceCategory | null>(null);
   
-  // State for category form
-  const [categoryForm, setCategoryForm] = useState({
+  // State for category form - Fix the type to match ResourceCategory
+  const [categoryForm, setCategoryForm] = useState<{
+    id: string;
+    name: string;
+    description: string;
+    icon: 'book' | 'file' | 'video' | 'audio';
+  }>({
     id: '',
     name: '',
     description: '',
-    icon: 'book' as const
+    icon: 'book'
   });
 
   // Sample categories
