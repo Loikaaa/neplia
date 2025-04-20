@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useNavigate } from 'react-router-dom';
 import { 
   FileText, 
   BookOpen, 
@@ -24,14 +25,15 @@ import PerformanceMetricsDetail from '@/components/admin/PerformanceMetricsDetai
 
 const AdminDashboard = () => {
   const [showDetailedMetrics, setShowDetailedMetrics] = useState(false);
+  const navigate = useNavigate();
 
   const examTypes = [
-    { id: 'ielts', name: 'IELTS', count: 42 },
-    { id: 'toefl', name: 'TOEFL', count: 36 },
-    { id: 'pte', name: 'PTE', count: 24 },
-    { id: 'sat', name: 'SAT', count: 18 },
-    { id: 'gre', name: 'GRE', count: 15 },
-    { id: 'gmat', name: 'GMAT', count: 12 },
+    { id: 'ielts', name: 'IELTS', count: 42, path: '/admin/exams/ielts' },
+    { id: 'toefl', name: 'TOEFL', count: 36, path: '/admin/exams/toefl' },
+    { id: 'pte', name: 'PTE', count: 24, path: '/admin/exams/pte' },
+    { id: 'sat', name: 'SAT', count: 18, path: '/admin/exams/sat' },
+    { id: 'gre', name: 'GRE', count: 15, path: '/admin/exams/gre' },
+    { id: 'gmat', name: 'GMAT', count: 12, path: '/admin/exams/gmat' },
   ];
 
   const stats = [
@@ -122,173 +124,56 @@ const AdminDashboard = () => {
     }
   ];
 
+  const handleExamTypeClick = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <p className="text-muted-foreground">
-          Welcome to the Neplia admin dashboard. Manage your exams, content, users, and settings from here.
-        </p>
-        
-        <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="exams">Exam Types</TabsTrigger>
-            <TabsTrigger value="content">Content</TabsTrigger>
-            <TabsTrigger value="performance">Performance</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="overview" className="space-y-6">
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold">Performance Metrics</h2>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setShowDetailedMetrics(!showDetailedMetrics)}
-                >
-                  {showDetailedMetrics ? 'Show Summary' : 'Show Details'}
-                </Button>
-              </div>
-              
-              {showDetailedMetrics ? (
-                <PerformanceMetricsDetail />
-              ) : (
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-                  {performanceMetrics.map((metric, index) => (
-                    <Card 
-                      key={index} 
-                      className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
-                      onClick={() => setShowDetailedMetrics(true)}
-                    >
-                      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                        <CardTitle className="text-lg font-medium">{metric.title}</CardTitle>
-                        {metric.icon}
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex items-baseline space-x-2">
-                          <div className="text-3xl font-bold">{metric.value}</div>
-                          <div className={`text-xs font-medium ${metric.trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
-                            {metric.change}
-                          </div>
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-1">{metric.description}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </div>
+      <div className="container p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">Admin Dashboard</h1>
+          <Button onClick={() => {}}>
+            <Plus className="mr-2 h-4 w-4" /> New Resource
+          </Button>
+        </div>
 
-            <h2 className="text-xl font-semibold mb-4">Content Summary</h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {stats.map((stat, index) => (
-                <Link to={stat.link} key={index}>
-                  <Card className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-lg font-medium">{stat.title}</CardTitle>
-                      {stat.icon}
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-bold">{stat.value}</div>
-                      <p className="text-xs text-muted-foreground">{stat.description}</p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+        <Tabs defaultValue="all" className="w-full">
+          <TabsList className="mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 p-1 rounded-xl">
+            <TabsTrigger value="all">All Resources</TabsTrigger>
+            <TabsTrigger value="upload">Upload Resource</TabsTrigger>
+            <TabsTrigger value="categories">Categories</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="all">
+            <div className="mb-6">
             </div>
-            
-            <div className="grid gap-6 md:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recent Activity</CardTitle>
-                  <CardDescription>Latest actions in the system</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center">
-                      <div className="h-2 w-2 rounded-full bg-green-500 mr-2"></div>
-                      <p className="text-sm">New IELTS writing task created</p>
-                      <span className="ml-auto text-xs text-muted-foreground">2 hours ago</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="h-2 w-2 rounded-full bg-blue-500 mr-2"></div>
-                      <p className="text-sm">TOEFL reading section updated</p>
-                      <span className="ml-auto text-xs text-muted-foreground">Yesterday</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="h-2 w-2 rounded-full bg-purple-500 mr-2"></div>
-                      <p className="text-sm">Blog post published</p>
-                      <span className="ml-auto text-xs text-muted-foreground">2 days ago</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="h-2 w-2 rounded-full bg-orange-500 mr-2"></div>
-                      <p className="text-sm">New user registered</p>
-                      <span className="ml-auto text-xs text-muted-foreground">3 days ago</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                  <CardDescription>Common administrative tasks</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Link to="/admin/exams/ielts/writing">
-                    <Button variant="outline" className="w-full justify-start">
-                      <FileText className="mr-2 h-4 w-4" />
-                      Create Writing Task
-                    </Button>
-                  </Link>
-                  <Link to="/admin/exams/ielts/reading">
-                    <Button variant="outline" className="w-full justify-start">
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      Create Reading Task
-                    </Button>
-                  </Link>
-                  <Link to="/admin/blog-posts">
-                    <Button variant="outline" className="w-full justify-start">
-                      <MessageSquare className="mr-2 h-4 w-4" />
-                      Create Blog Post
-                    </Button>
-                  </Link>
-                  <Link to="/admin/settings">
-                    <Button variant="outline" className="w-full justify-start">
-                      <SettingsIcon className="mr-2 h-4 w-4" />
-                      Update Site Settings
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="exams" className="space-y-6">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {examTypes.map((exam) => (
-                <Card key={exam.id}>
+                <Card 
+                  key={exam.id}
+                  className="hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-white to-indigo-50/50 dark:from-gray-900 dark:to-indigo-950/50 border border-indigo-100 dark:border-indigo-900"
+                  onClick={() => handleExamTypeClick(exam.path)}
+                >
                   <CardHeader>
-                    <CardTitle>{exam.name}</CardTitle>
+                    <CardTitle className="text-lg text-indigo-600 dark:text-indigo-400">{exam.name}</CardTitle>
                     <CardDescription>Manage {exam.name} exam content</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold mb-2">{exam.count}</div>
-                    <p className="text-sm text-muted-foreground mb-4">Total tasks and questions</p>
+                    <div className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-2">{exam.count}</div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Total tasks and questions</p>
                     <div className="grid grid-cols-2 gap-2">
-                      <Link to={`/admin/exams/${exam.id}/reading`}>
-                        <Button variant="outline" size="sm" className="w-full">Reading</Button>
-                      </Link>
-                      <Link to={`/admin/exams/${exam.id}/writing`}>
-                        <Button variant="outline" size="sm" className="w-full">Writing</Button>
-                      </Link>
-                      <Link to={`/admin/exams/${exam.id}/listening`}>
-                        <Button variant="outline" size="sm" className="w-full">Listening</Button>
-                      </Link>
-                      <Link to={`/admin/exams/${exam.id}/speaking`}>
-                        <Button variant="outline" size="sm" className="w-full">Speaking</Button>
-                      </Link>
+                      {['Reading', 'Writing', 'Listening', 'Speaking'].map((section) => (
+                        <Button 
+                          key={section}
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full bg-white/50 dark:bg-gray-900/50 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+                        >
+                          {section}
+                        </Button>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
@@ -312,51 +197,14 @@ const AdminDashboard = () => {
               </Card>
             </div>
           </TabsContent>
-          
-          <TabsContent value="content" className="space-y-6">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Blog Posts</CardTitle>
-                  <CardDescription>Manage your blog content</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold mb-2">12</div>
-                  <p className="text-sm text-muted-foreground mb-4">Published articles</p>
-                  <Link to="/admin/blog-posts">
-                    <Button className="w-full">Manage Blog Posts</Button>
-                  </Link>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Resources</CardTitle>
-                  <CardDescription>Manage learning resources</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold mb-2">35</div>
-                  <p className="text-sm text-muted-foreground mb-4">Available resources</p>
-                  <Button className="w-full">Manage Resources</Button>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Media Library</CardTitle>
-                  <CardDescription>Manage images and audio files</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold mb-2">124</div>
-                  <p className="text-sm text-muted-foreground mb-4">Media files</p>
-                  <Button className="w-full">Manage Media</Button>
-                </CardContent>
-              </Card>
-            </div>
+
+          <TabsContent value="upload">
+          </TabsContent>
+
+          <TabsContent value="categories">
           </TabsContent>
           
-          <TabsContent value="performance" className="space-y-6">
-            <PerformanceMetricsDetail />
+          <TabsContent value="analytics">
           </TabsContent>
         </Tabs>
       </div>

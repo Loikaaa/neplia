@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Bell } from 'lucide-react';
@@ -23,22 +22,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const AdminHeader: React.FC = () => {
-  // Function to handle logout
   const handleLogout = () => {
     sessionStorage.removeItem('demoAdminLoggedIn');
-    window.location.href = '/admin'; // Redirect to login page
+    window.location.href = '/admin';
   };
 
   return (
-    <header className="border-b bg-white dark:bg-gray-950 p-4 flex items-center justify-between">
+    <header className="border-b bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl p-4 sticky top-0 z-50 flex items-center justify-between">
       <div className="flex items-center">
-        <span className="text-lg font-semibold ml-2 lg:ml-0">
+        <span className="text-lg font-semibold ml-2 lg:ml-0 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           IELTS Admin Panel
         </span>
       </div>
       
-      <div className="flex items-center space-x-2">
-        <NavigationMenu>
+      <div className="flex items-center space-x-4">
+        <NavigationMenu className="hidden lg:block">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger>IELTS Sections</NavigationMenuTrigger>
@@ -122,8 +120,8 @@ const AdminHeader: React.FC = () => {
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Bell className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="relative">
+              <Bell className="h-5 w-5 text-gray-600 hover:text-indigo-600 transition-colors" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
@@ -146,7 +144,7 @@ const AdminHeader: React.FC = () => {
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Button variant="ghost" className="relative h-8 w-8 rounded-full ring-2 ring-indigo-600/20 hover:ring-indigo-600/40 transition-all">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/images/admin-avatar.jpg" alt="Admin" />
                 <AvatarFallback>AD</AvatarFallback>
