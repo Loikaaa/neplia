@@ -15,6 +15,12 @@ const SpeakingHeader: React.FC<SpeakingHeaderProps> = ({ examType = 'ielts' }) =
     switch(examType.toLowerCase()) {
       case 'toefl':
         return 'TOEFL Speaking Practice';
+      case 'toefl-pbt':
+        return 'TOEFL PBT Speaking Practice';
+      case 'toefl-essentials':
+        return 'TOEFL Essentials Speaking Practice';
+      case 'toefl-itp':
+        return 'TOEFL ITP Speaking Practice';
       case 'pte':
         return 'PTE Speaking Practice';
       case 'gre':
@@ -29,7 +35,13 @@ const SpeakingHeader: React.FC<SpeakingHeaderProps> = ({ examType = 'ielts' }) =
   const getExamDescription = () => {
     switch(examType.toLowerCase()) {
       case 'toefl':
-        return 'Practice your speaking skills with simulated TOEFL speaking tasks. You\'ll record responses to various prompts and receive feedback.';
+        return 'Practice your speaking skills with simulated TOEFL iBT speaking tasks. Complete 4 tasks in 16 minutes including independent and integrated speaking tasks.';
+      case 'toefl-pbt':
+        return 'Practice your speaking skills with simulated TOEFL PBT speaking tasks. Note: The PBT version does not have a speaking section, but we provide speaking practice to supplement your preparation.';
+      case 'toefl-essentials':
+        return 'Practice your speaking skills with simulated TOEFL Essentials speaking tasks, focusing on quick responses and adaptive difficulty.';
+      case 'toefl-itp':
+        return 'Practice your speaking skills with simulated TOEFL ITP speaking tasks for academic placement.';
       case 'pte':
         return 'Practice your speaking skills with simulated PTE speaking tasks, focusing on fluency and pronunciation.';
       case 'gre':
@@ -44,10 +56,25 @@ const SpeakingHeader: React.FC<SpeakingHeaderProps> = ({ examType = 'ielts' }) =
   const getExamDetails = () => {
     if (examType.toLowerCase() === 'toefl') {
       return [
-        { label: 'Test Duration', value: '17 minutes', bgClass: 'bg-indigo-50 dark:bg-indigo-950/30' },
-        { label: 'Question Types', value: 'Independent and Integrated Tasks', bgClass: 'bg-purple-50 dark:bg-purple-950/30' },
+        { label: 'Test Duration', value: '16 minutes', bgClass: 'bg-indigo-50 dark:bg-indigo-950/30' },
+        { label: 'Question Types', value: '4 Tasks - Independent & Integrated', bgClass: 'bg-purple-50 dark:bg-purple-950/30' },
         { label: 'Skills Tested', value: 'Pronunciation, Fluency, Clarity, Coherence', bgClass: 'bg-pink-50 dark:bg-pink-950/30' }
       ];
+    } else if (examType.toLowerCase().includes('toefl-')) {
+      // Different TOEFL variants
+      if (examType.toLowerCase() === 'toefl-essentials') {
+        return [
+          { label: 'Test Duration', value: '10 minutes', bgClass: 'bg-indigo-50 dark:bg-indigo-950/30' },
+          { label: 'Question Types', value: 'Adaptive Speaking Tasks', bgClass: 'bg-purple-50 dark:bg-purple-950/30' },
+          { label: 'Skills Tested', value: 'Pronunciation, Fluency, Vocabulary', bgClass: 'bg-pink-50 dark:bg-pink-950/30' }
+        ];
+      } else {
+        return [
+          { label: 'Test Duration', value: 'Varies by format', bgClass: 'bg-indigo-50 dark:bg-indigo-950/30' },
+          { label: 'Question Types', value: 'Supplemental Speaking Tasks', bgClass: 'bg-purple-50 dark:bg-purple-950/30' },
+          { label: 'Skills Tested', value: 'Pronunciation, Fluency, Clarity', bgClass: 'bg-pink-50 dark:bg-pink-950/30' }
+        ];
+      }
     } else if (examType.toLowerCase() === 'pte') {
       return [
         { label: 'Test Duration', value: 'Varies by section', bgClass: 'bg-indigo-50 dark:bg-indigo-950/30' },
