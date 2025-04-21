@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -72,7 +71,7 @@ const Index = () => {
   ];
 
   const handleStartPreparation = () => {
-    console.log('Start Preparation clicked');
+    console.log('Start Preparation clicked, navigating to /practice');
     navigate('/practice');
   };
 
@@ -221,17 +220,13 @@ const Index = () => {
           </div>
 
           <div className="mt-12 text-center">
-            <Link 
-              to="/practice" 
-              onClick={(e) => {
-                console.log('Link clicked');
-                handleStartPreparation();
-              }}
+            <Button 
+              onClick={handleStartPreparation}
               className="inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium shadow-lg hover:shadow-xl transition-all hover:opacity-90"
             >
               Start Your Preparation
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
+            </Button>
           </div>
         </div>
       </section>
