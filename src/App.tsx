@@ -142,9 +142,11 @@ function App() {
         <Route path="/practice/pte/speaking" element={<SpeakingPractice />} />
         <Route path="/practice/pte/writing" element={<WritingPractice />} />
         
-        {/* SAT Section Routes - Fixed to match the links in SatPage.tsx */}
+        {/* SAT Section Routes */}
         <Route path="/practice/sat/reading" element={<ReadingPractice />} />
         <Route path="/practice/sat/english" element={<ReadingPractice />} />
+        <Route path="/practice/sat/writing" element={<ReadingPractice />} />
+        <Route path="/practice/sat/vocabulary" element={<ReadingPractice />} />
         <Route path="/practice/sat/math" element={<ReadingPractice />} />
         
         {/* GRE Section Routes */}

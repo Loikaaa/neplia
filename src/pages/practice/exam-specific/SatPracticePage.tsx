@@ -11,7 +11,9 @@ import {
   Clock, 
   CheckCircle2,
   Trophy,
-  ArrowRight
+  ArrowRight,
+  FileText,
+  PenTool
 } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -76,10 +78,24 @@ const SatPracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/sat/reading" className="w-full">
-                      <Button className="w-full bg-gradient-to-r from-red-600 to-red-800 hover:opacity-90 flex items-center justify-center gap-2">
-                        Start Reading & Writing
-                        <ArrowRight className="h-4 w-4" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                      <Link to="/practice/sat/reading" className="w-full">
+                        <Button className="w-full bg-gradient-to-r from-red-600 to-red-800 hover:opacity-90 flex items-center justify-center gap-2">
+                          <FileText className="h-4 w-4" />
+                          Reading
+                        </Button>
+                      </Link>
+                      <Link to="/practice/sat/writing" className="w-full">
+                        <Button className="w-full bg-gradient-to-r from-red-700 to-red-900 hover:opacity-90 flex items-center justify-center gap-2">
+                          <PenTool className="h-4 w-4" />
+                          Writing
+                        </Button>
+                      </Link>
+                    </div>
+                    <Link to="/practice/sat/vocabulary" className="w-full mt-3 block">
+                      <Button variant="outline" className="w-full border-red-200 text-red-700 hover:bg-red-50 flex items-center justify-center gap-2">
+                        <BookOpen className="h-4 w-4" />
+                        Vocabulary
                       </Button>
                     </Link>
                   </CardFooter>
