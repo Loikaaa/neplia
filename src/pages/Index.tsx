@@ -11,6 +11,57 @@ import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { BookOpen, Headphones, Edit, MessageSquare, ArrowRight, ChevronRight } from 'lucide-react';
 
+const examTypes = [
+  {
+    name: 'IELTS',
+    description: 'International English Language Testing System',
+    path: '/practice/ielts',
+    color: 'bg-indigo hover:bg-indigo-600',
+    gradient: 'from-indigo-500 to-indigo-700',
+    icon: <BookOpen size={24} className="text-white" />
+  },
+  {
+    name: 'TOEFL',
+    description: 'Test of English as a Foreign Language',
+    path: '/practice/toefl',
+    color: 'bg-blue-600 hover:bg-blue-700',
+    gradient: 'from-blue-500 to-blue-700',
+    icon: <Headphones size={24} className="text-white" />
+  },
+  {
+    name: 'PTE',
+    description: 'Pearson Test of English',
+    path: '/practice/pte',
+    color: 'bg-teal-700 hover:bg-teal-800',
+    gradient: 'from-teal-600 to-teal-800',
+    icon: <Edit size={24} className="text-white" />
+  },
+  {
+    name: 'GRE',
+    description: 'Graduate Record Examination',
+    path: '/practice/gre',
+    color: 'bg-purple-700 hover:bg-purple-800',
+    gradient: 'from-purple-600 to-purple-800',
+    icon: <BookOpen size={24} className="text-white" />
+  },
+  {
+    name: 'GMAT',
+    description: 'Graduate Management Admission Test',
+    path: '/practice/gmat',
+    color: 'bg-blue-800 hover:bg-blue-900',
+    gradient: 'from-blue-700 to-blue-900',
+    icon: <BookOpen size={24} className="text-white" />
+  },
+  {
+    name: 'SAT',
+    description: 'Scholastic Assessment Test',
+    path: '/practice/sat',
+    color: 'bg-red-700 hover:bg-red-800',
+    gradient: 'from-red-600 to-red-800',
+    icon: <Edit size={24} className="text-white" />
+  }
+];
+
 const Index = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
@@ -18,57 +69,6 @@ const Index = () => {
   useEffect(() => {
     document.title = 'Neplia | Language Learning Platform';
   }, []);
-
-  const examTypes = [
-    {
-      name: 'IELTS',
-      description: 'International English Language Testing System',
-      path: '/practice/ielts',
-      color: 'bg-indigo hover:bg-indigo-600',
-      gradient: 'from-indigo-500 to-indigo-700',
-      icon: <BookOpen size={24} className="text-white" />
-    },
-    {
-      name: 'TOEFL',
-      description: 'Test of English as a Foreign Language',
-      path: '/practice/toefl',
-      color: 'bg-blue-600 hover:bg-blue-700',
-      gradient: 'from-blue-500 to-blue-700',
-      icon: <Headphones size={24} className="text-white" />
-    },
-    {
-      name: 'PTE',
-      description: 'Pearson Test of English',
-      path: '/practice/pte',
-      color: 'bg-teal-700 hover:bg-teal-800',
-      gradient: 'from-teal-600 to-teal-800',
-      icon: <Edit size={24} className="text-white" />
-    },
-    {
-      name: 'GRE',
-      description: 'Graduate Record Examination',
-      path: '/practice/gre',
-      color: 'bg-purple-700 hover:bg-purple-800',
-      gradient: 'from-purple-600 to-purple-800',
-      icon: <BookOpen size={24} className="text-white" />
-    },
-    {
-      name: 'GMAT',
-      description: 'Graduate Management Admission Test',
-      path: '/practice/gmat',
-      color: 'bg-blue-800 hover:bg-blue-900',
-      gradient: 'from-blue-700 to-blue-900',
-      icon: <BookOpen size={24} className="text-white" />
-    },
-    {
-      name: 'SAT',
-      description: 'Scholastic Assessment Test',
-      path: '/practice/sat',
-      color: 'bg-red-700 hover:bg-red-800',
-      gradient: 'from-red-600 to-red-800',
-      icon: <Edit size={24} className="text-white" />
-    }
-  ];
 
   const handleStartPreparation = () => {
     console.log('Start Preparation clicked, navigating to /practice');
