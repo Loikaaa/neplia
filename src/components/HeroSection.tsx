@@ -19,15 +19,15 @@ const HeroSection = () => {
           <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left animate-fade-in">
             <div className="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-3 py-1 text-sm font-medium text-purple-600 dark:text-purple-300 mb-4">
               <span className="flex h-2 w-2 rounded-full bg-purple-600 mr-2"></span>
-              The Ultimate IELTS Platform
+              The Ultimate Exams Platform
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white">
-              Master <span className="highlight-text">IELTS</span> with Precision and Confidence
+              Master <span className="highlight-text">IELTS, TOEFL, SAT, GRE, GMAT, PTE</span> and More with Precision and Confidence
             </h1>
             
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto lg:mx-0">
-              Practice all IELTS modules with AI-powered feedback, track your progress, and achieve your target score faster than ever before.
+              Practice all major language and academic exams with AI-powered feedback, progress tracking, and tailored practice to achieve your best score.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
@@ -42,7 +42,7 @@ const HeroSection = () => {
             
             <div className="pt-6">
               <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Trusted by over <span className="font-semibold text-gray-800 dark:text-gray-200">50,000+</span> students worldwide
+                Trusted by over <span className="font-semibold text-gray-800 dark:text-gray-200">50,000+</span> students for IELTS, TOEFL, PTE, SAT, GRE, GMAT and beyond
               </p>
             </div>
           </div>
@@ -54,7 +54,7 @@ const HeroSection = () => {
               <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Student preparing for IELTS with technology" 
+                  alt="Students preparing for exams with technology" 
                   className="w-full h-auto"
                 />
                 
@@ -62,7 +62,7 @@ const HeroSection = () => {
                 <div className="absolute bottom-4 left-4 right-4 glass-card p-4 rounded-xl flex items-center justify-between animate-float">
                   <div>
                     <h4 className="font-semibold text-gray-900 dark:text-white">Your Progress</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">On track for Band 7.5</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">On track for your target score</p>
                   </div>
                   <div className="flex space-x-1">
                     {[1, 2, 3, 4].map((i) => (
@@ -91,3 +91,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
