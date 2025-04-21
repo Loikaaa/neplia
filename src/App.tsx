@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './App.css';
 
@@ -141,8 +142,9 @@ function App() {
         <Route path="/practice/pte/speaking" element={<SpeakingPractice />} />
         <Route path="/practice/pte/writing" element={<WritingPractice />} />
         
-        {/* SAT Section Routes */}
+        {/* SAT Section Routes - Fixed to match the links in SatPage.tsx */}
         <Route path="/practice/sat/reading" element={<ReadingPractice />} />
+        <Route path="/practice/sat/english" element={<ReadingPractice />} />
         <Route path="/practice/sat/math" element={<ReadingPractice />} />
         
         {/* GRE Section Routes */}

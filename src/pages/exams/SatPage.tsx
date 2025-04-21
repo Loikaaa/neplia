@@ -124,7 +124,7 @@ const SatPage = () => {
                     icon: BookOpen
                   }
                 ],
-                link: "/practice/sat/english"
+                link: "/practice/sat/reading"
               }
             ].map((section, index) => (
               <motion.div
