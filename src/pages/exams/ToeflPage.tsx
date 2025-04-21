@@ -1,9 +1,10 @@
+
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookOpen, Headphones, MessageSquare, Edit, BarChart3, Calendar, CheckCircle2, Award, Shield, Laptop, Brain, Clock, FileText } from 'lucide-react';
+import { ArrowRight, BookOpen, Headphones, MessageSquare, Edit, BarChart3, Calendar, CheckCircle2, Award, Shield, Laptop, Brain, Clock, FileText, Trophy } from 'lucide-react'; // Added Trophy
 import { motion } from 'framer-motion';
 
 const ToeflPage = () => {
