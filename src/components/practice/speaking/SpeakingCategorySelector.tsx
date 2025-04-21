@@ -10,9 +10,10 @@ import { Button } from '@/components/ui/button';
 
 interface SpeakingCategorySelectorProps {
   onSelectTask: (task: SpeakingTask) => void;
+  examType?: string;
 }
 
-export const SpeakingCategorySelector: React.FC<SpeakingCategorySelectorProps> = ({ onSelectTask }) => {
+export const SpeakingCategorySelector: React.FC<SpeakingCategorySelectorProps> = ({ onSelectTask, examType = 'ielts' }) => {
   // Get unique categories
   const categories = Array.from(new Set(speakingTasksData.map(task => task.category))) as SpeakingCategory[];
   
@@ -37,14 +38,115 @@ export const SpeakingCategorySelector: React.FC<SpeakingCategorySelectorProps> =
     return `${mins}m${secs > 0 ? ` ${secs}s` : ''}`;
   };
   
+  const getExamSpecificTips = () => {
+    switch(examType.toLowerCase()) {
+      case 'toefl':
+        return [
+          {
+            title: "Independent Speaking Task (45 seconds)",
+            color: "green",
+            description: "Express your opinion on a familiar topic. Focus on clear organization with an introduction, body, and conclusion."
+          },
+          {
+            title: "Integrated Reading/Listening/Speaking Task (60 seconds)",
+            color: "indigo",
+            description: "Summarize information from both a reading passage and a related lecture. Take notes during preparation time."
+          },
+          {
+            title: "Integrated Listening/Speaking Task (60 seconds)",
+            color: "purple",
+            description: "Summarize information from a lecture or conversation. Focus on key points and supporting details."
+          }
+        ];
+      case 'pte':
+        return [
+          {
+            title: "Read Aloud (30-40 seconds)",
+            color: "green",
+            description: "Read a text aloud with proper pronunciation and intonation. Practice pacing yourself appropriately."
+          },
+          {
+            title: "Repeat Sentence (15-20 seconds)",
+            color: "indigo",
+            description: "Listen to and repeat a sentence exactly as you hear it. Focus on pronunciation and intonation."
+          },
+          {
+            title: "Describe Image (40 seconds)",
+            color: "purple",
+            description: "Describe an image in detail. Mention what the image shows and any relevant details or trends."
+          }
+        ];
+      case 'gre':
+      case 'gmat':
+        return [
+          {
+            title: "Analysis of an Issue (30 minutes)",
+            color: "green",
+            description: "Present your perspective on a topic. Structure your response logically with examples and reasoning."
+          },
+          {
+            title: "Analysis of an Argument (30 minutes)",
+            color: "indigo",
+            description: "Evaluate the logic of a given argument. Focus on identifying flaws and supporting your critique."
+          }
+        ];
+      default: // IELTS
+        return [
+          {
+            title: "Part 1: Introduction and Interview (4-5 minutes)",
+            color: "green",
+            description: "Speak confidently about familiar topics like work, study, hometown, and hobbies. Give detailed answers but avoid one-word responses or very long answers."
+          },
+          {
+            title: "Part 2: Individual Long Turn (3-4 minutes)",
+            color: "indigo",
+            description: "Use your preparation time wisely to make notes. Structure your talk with an introduction, main points, and conclusion. Keep speaking for the full 2 minutes."
+          },
+          {
+            title: "Part 3: Two-way Discussion (4-5 minutes)",
+            color: "purple",
+            description: "This part explores more abstract ideas related to your Part 2 topic. Develop your answers with examples and explanations. Use a variety of vocabulary and complex sentence structures."
+          }
+        ];
+    }
+  };
+  
+  const getPageTitle = () => {
+    switch(examType.toLowerCase()) {
+      case 'toefl':
+        return "Select TOEFL Speaking Practice Category";
+      case 'pte':
+        return "Select PTE Speaking Practice Category";
+      case 'gre':
+        return "Select GRE Speaking Practice Category";
+      case 'gmat':
+        return "Select GMAT Speaking Practice Category";
+      default:
+        return "Select IELTS Speaking Practice Category";
+    }
+  };
+  
+  const getPageDescription = () => {
+    switch(examType.toLowerCase()) {
+      case 'toefl':
+        return "Choose a topic category to focus your TOEFL speaking practice. Each category contains questions across different tasks.";
+      case 'pte':
+        return "Choose a topic category to focus your PTE speaking practice. Each category contains different speaking task types.";
+      case 'gre':
+      case 'gmat':
+        return `Choose a topic category to focus your ${examType.toUpperCase()} speaking practice. Each category contains analytical and issue-based tasks.`;
+      default:
+        return "Choose a topic category to focus your IELTS speaking practice. Each category contains questions across all three parts of the IELTS speaking test.";
+    }
+  };
+  
   return (
     <div className="space-y-6">
       <Card className="bg-gray-50 dark:bg-gray-800 p-6">
         <CardHeader className="p-0 pb-4">
-          <CardTitle className="text-xl">Select Speaking Practice Category</CardTitle>
+          <CardTitle className="text-xl">{getPageTitle()}</CardTitle>
           <CardDescription>
-            Choose a topic category to focus your IELTS speaking practice. Each category contains 
-            questions across all three parts of the IELTS speaking test.
+            {getPageDescription()}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
@@ -86,36 +188,35 @@ export const SpeakingCategorySelector: React.FC<SpeakingCategorySelectorProps> =
         </CardContent>
       </Card>
       
-      {/* Additional Tips Section */}
+      {/* Exam-specific Tips Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">IELTS Speaking Test Tips</CardTitle>
+          <CardTitle className="text-lg">{examType.toUpperCase()} Speaking Test Tips</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-md border border-green-100 dark:border-green-800">
-              <h4 className="font-medium text-green-800 dark:text-green-300">Part 1: Introduction and Interview (4-5 minutes)</h4>
-              <p className="text-sm text-green-700 dark:text-green-400 mt-1">
-                Speak confidently about familiar topics like work, study, hometown, and hobbies. 
-                Give detailed answers but avoid one-word responses or very long answers.
-              </p>
-            </div>
-            
-            <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-md border border-indigo-100 dark:border-indigo-800">
-              <h4 className="font-medium text-indigo-800 dark:text-indigo-300">Part 2: Individual Long Turn (3-4 minutes)</h4>
-              <p className="text-sm text-indigo-700 dark:text-indigo-400 mt-1">
-                Use your preparation time wisely to make notes. Structure your talk with an introduction, 
-                main points, and conclusion. Keep speaking for the full 2 minutes.
-              </p>
-            </div>
-            
-            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-md border border-purple-100 dark:border-purple-800">
-              <h4 className="font-medium text-purple-800 dark:text-purple-300">Part 3: Two-way Discussion (4-5 minutes)</h4>
-              <p className="text-sm text-purple-700 dark:text-purple-400 mt-1">
-                This part explores more abstract ideas related to your Part 2 topic. Develop your answers 
-                with examples and explanations. Use a variety of vocabulary and complex sentence structures.
-              </p>
-            </div>
+            {getExamSpecificTips().map((tip, index) => {
+              const bgClass = tip.color === 'green' ? 'bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-800' :
+                             tip.color === 'indigo' ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-100 dark:border-indigo-800' :
+                             'bg-purple-50 dark:bg-purple-900/20 border-purple-100 dark:border-purple-800';
+              
+              const textClass = tip.color === 'green' ? 'text-green-800 dark:text-green-300' :
+                               tip.color === 'indigo' ? 'text-indigo-800 dark:text-indigo-300' :
+                               'text-purple-800 dark:text-purple-300';
+              
+              const descClass = tip.color === 'green' ? 'text-green-700 dark:text-green-400' :
+                                tip.color === 'indigo' ? 'text-indigo-700 dark:text-indigo-400' :
+                                'text-purple-700 dark:text-purple-400';
+              
+              return (
+                <div key={index} className={`${bgClass} p-4 rounded-md border`}>
+                  <h4 className={`font-medium ${textClass}`}>{tip.title}</h4>
+                  <p className={`text-sm ${descClass} mt-1`}>
+                    {tip.description}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </CardContent>
       </Card>

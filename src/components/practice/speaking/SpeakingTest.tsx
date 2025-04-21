@@ -11,9 +11,10 @@ import { generateSpeakingQuestions, evaluateSpeakingSubmission } from '@/service
 interface SpeakingTestProps {
   task: SpeakingTask;
   onFinish: () => void;
+  examType?: string;
 }
 
-export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) => {
+export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish, examType = 'ielts' }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [isPreparing, setIsPreparing] = useState(false);
@@ -289,10 +290,37 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
   };
   
   const getPart = () => {
+    if (examType.toLowerCase() === 'toefl') {
+      return `Task ${currentQuestion.part || 1}`;
+    } else if (examType.toLowerCase() === 'pte') {
+      const partMap: {[key: number]: string} = {
+        1: 'Read Aloud',
+        2: 'Repeat Sentence',
+        3: 'Describe Image'
+      };
+      return partMap[currentQuestion.part || 1] || `Task ${currentQuestion.part || 1}`;
+    } else if (['gre', 'gmat'].includes(examType.toLowerCase())) {
+      return currentQuestion.part === 1 ? 'Analysis of an Issue' : 'Analysis of an Argument';
+    }
+    
     return `Part ${currentQuestion.part}`;
   };
   
   const getPartDescription = () => {
+    if (examType.toLowerCase() === 'toefl') {
+      const descMap: {[key: number]: string} = {
+        1: 'Independent Speaking Task',
+        2: 'Integrated Reading/Listening Task',
+        3: 'Integrated Listening Task',
+        4: 'Integrated Listening/Speaking Task'
+      };
+      return descMap[currentQuestion.part || 1] || '';
+    } else if (examType.toLowerCase() === 'pte') {
+      return '';  // PTE part names are self-descriptive
+    } else if (['gre', 'gmat'].includes(examType.toLowerCase())) {
+      return '';  // GRE/GMAT part names are self-descriptive
+    }
+    
     switch (currentQuestion.part) {
       case 1:
         return "Introduction and Interview";
@@ -314,7 +342,7 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
               <div className="flex justify-between items-center mb-2">
                 <div>
                   <span className="bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 px-2 py-1 rounded text-sm font-medium">
-                    {getPart()} - {getPartDescription()}
+                    {getPart()}{getPartDescription() ? ` - ${getPartDescription()}` : ''}
                   </span>
                 </div>
                 <div className="text-right">
@@ -476,7 +504,7 @@ export const SpeakingTest: React.FC<SpeakingTestProps> = ({ task, onFinish }) =>
         <Card className="mt-8 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800">
           <CardContent className="p-6">
             <h3 className="text-xl font-medium text-green-800 dark:text-green-300 mb-2">
-              Speaking Test Completed!
+              {examType.toUpperCase()} Speaking Test Completed!
             </h3>
             <p className="text-green-700 dark:text-green-400 mb-4">
               You have completed all speaking questions. You can now review your recordings and submit your test.

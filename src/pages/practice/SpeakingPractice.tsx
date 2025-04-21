@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import SpeakingHeader from '@/components/practice/speaking/SpeakingHeader';
 import { SpeakingInstructions } from '@/components/practice/speaking/SpeakingInstructions';
@@ -23,15 +24,35 @@ const SpeakingPractice = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const [examType, setExamType] = useState('ielts');
   
   const { toast } = useToast();
   const { trackCompletion } = useUserProgress();
+  const location = useLocation();
   
   useEffect(() => {
+    // Scroll to top when the component mounts
+    window.scrollTo(0, 0);
+    
     // Check login status
     const loggedIn = localStorage.getItem('demoUserLoggedIn') === 'true';
     setIsLoggedIn(loggedIn);
-  }, []);
+    
+    // Get exam type from URL or localStorage
+    const queryParams = new URLSearchParams(location.search);
+    const examParam = queryParams.get('exam');
+    
+    if (examParam) {
+      setExamType(examParam.toLowerCase());
+      // Also save to localStorage for persistence
+      localStorage.setItem('selectedExam', examParam.toLowerCase());
+    } else {
+      const savedExam = localStorage.getItem('selectedExam');
+      if (savedExam) {
+        setExamType(savedExam.split('-')[0]);
+      }
+    }
+  }, [location]);
   
   const handleTestFinish = async () => {
     // In a real app, this would fetch the final score from the server
@@ -84,7 +105,7 @@ const SpeakingPractice = () => {
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
-        <SpeakingHeader />
+        <SpeakingHeader examType={examType} />
         
         {testCompleted && finalScore ? (
           <Card className="mb-8 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/20 overflow-hidden">
@@ -114,17 +135,18 @@ const SpeakingPractice = () => {
         ) : !testStarted ? (
           <>
             {!selectedTask ? (
-              <SpeakingCategorySelector onSelectTask={(task) => setSelectedTask(task)} />
+              <SpeakingCategorySelector onSelectTask={(task) => setSelectedTask(task)} examType={examType} />
             ) : (
               <SpeakingInstructions 
                 task={selectedTask}
                 onStart={handleStartTask} 
                 onBack={() => setSelectedTask(null)}
+                examType={examType}
               />
             )}
           </>
         ) : (
-          <SpeakingTest task={selectedTask!} onFinish={handleTestFinish} />
+          <SpeakingTest task={selectedTask!} onFinish={handleTestFinish} examType={examType} />
         )}
       </div>
       
