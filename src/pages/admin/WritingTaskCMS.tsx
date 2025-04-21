@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,9 +12,21 @@ import { toast } from "@/components/ui/use-toast";
 import { Search, Plus, Edit, Save, Trash2, Filter } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+type WritingTask = {
+  id: string;
+  title: string;
+  description: string;
+  instructions: string;
+  imageUrl: string;
+  timeLimit: number;
+  minWords: number;
+  category: string;
+  examType?: string;
+};
+
 const WritingTaskCMS = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [editingTask, setEditingTask] = useState<any>(null);
+  const [editingTask, setEditingTask] = useState<WritingTask | null>(null);
   const [academicTasks, setAcademicTasks] = useState(writingTaskData.academic);
   const [essayTasks, setEssayTasks] = useState(writingTaskData.essay);
   const [tab, setTab] = useState("academic");
@@ -47,7 +58,7 @@ const WritingTaskCMS = () => {
     return matchesSearch && matchesExamType;
   });
   
-  const handleEdit = (task: any) => {
+  const handleEdit = (task: WritingTask) => {
     setEditingTask({ 
       ...task,
       examType: task.examType || selectedExamType 

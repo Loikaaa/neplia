@@ -1,4 +1,3 @@
-
 type WritingTask = {
   id: string;
   title: string;
@@ -8,6 +7,7 @@ type WritingTask = {
   timeLimit: number;
   minWords: number;
   category: string;
+  examType?: string;
 };
 
 type WritingTaskData = {
@@ -25,7 +25,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Bar Chart'
+      category: 'Bar Chart',
+      examType: 'ielts'
     },
     {
       id: 'academic-2',
@@ -35,7 +36,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1558442074-3c19857bc1dc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Process'
+      category: 'Process',
+      examType: 'ielts'
     },
     {
       id: 'academic-3',
@@ -45,7 +47,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Line Graph'
+      category: 'Line Graph',
+      examType: 'ielts'
     },
     {
       id: 'academic-4',
@@ -55,7 +58,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1494059980473-813e73ee784b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Pie Chart'
+      category: 'Pie Chart',
+      examType: 'ielts'
     },
     {
       id: 'academic-5',
@@ -65,7 +69,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Table'
+      category: 'Table',
+      examType: 'ielts'
     },
     {
       id: 'academic-6',
@@ -75,7 +80,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1569336415962-a4bd9f69c07b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Map'
+      category: 'Map',
+      examType: 'ielts'
     },
     {
       id: 'academic-7',
@@ -85,7 +91,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Multiple Charts'
+      category: 'Multiple Charts',
+      examType: 'ielts'
     },
     {
       id: 'academic-8',
@@ -95,7 +102,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1643187975306-e6801f4648ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Flow Chart'
+      category: 'Flow Chart',
+      examType: 'ielts'
     },
     {
       id: 'academic-9',
@@ -105,7 +113,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1553335720-7f6cb1e1a8b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Bar Chart'
+      category: 'Bar Chart',
+      examType: 'ielts'
     },
     {
       id: 'academic-10',
@@ -115,7 +124,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1534937048125-855b2f1412b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Diagram'
+      category: 'Diagram',
+      examType: 'ielts'
     },
     {
       id: 'academic-11',
@@ -125,7 +135,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1618307842633-1274896ad184?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Population Pyramid'
+      category: 'Population Pyramid',
+      examType: 'ielts'
     },
     {
       id: 'academic-12',
@@ -135,7 +146,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1567793706285-b63d95a17bf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Scientific Process'
+      category: 'Scientific Process',
+      examType: 'ielts'
     },
     {
       id: 'academic-13',
@@ -145,7 +157,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Scatter Plot'
+      category: 'Scatter Plot',
+      examType: 'ielts'
     },
     {
       id: 'academic-14',
@@ -155,7 +168,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1556656793-08538906a9f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Area Chart'
+      category: 'Area Chart',
+      examType: 'ielts'
     },
     {
       id: 'academic-15',
@@ -165,7 +179,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1635682406513-64a0d83ccc1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Combined Chart'
+      category: 'Combined Chart',
+      examType: 'ielts'
     },
     {
       id: 'academic-16',
@@ -175,7 +190,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Bubble Chart'
+      category: 'Bubble Chart',
+      examType: 'ielts'
     },
     {
       id: 'academic-17',
@@ -185,7 +201,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1639816330537-709c9d0eadb9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Polar Chart'
+      category: 'Polar Chart',
+      examType: 'ielts'
     },
     {
       id: 'academic-18',
@@ -195,7 +212,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Radar Chart'
+      category: 'Radar Chart',
+      examType: 'ielts'
     },
     {
       id: 'academic-19',
@@ -205,7 +223,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Gantt Chart'
+      category: 'Gantt Chart',
+      examType: 'ielts'
     },
     {
       id: 'academic-20',
@@ -215,7 +234,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 20,
       minWords: 150,
-      category: 'Tree Map'
+      category: 'Tree Map',
+      examType: 'ielts'
     }
   ],
   essay: [
@@ -227,7 +247,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Technology'
+      category: 'Technology',
+      examType: 'ielts'
     },
     {
       id: 'essay-2',
@@ -237,7 +258,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Education'
+      category: 'Education',
+      examType: 'ielts'
     },
     {
       id: 'essay-3',
@@ -247,7 +269,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Environment'
+      category: 'Environment',
+      examType: 'ielts'
     },
     {
       id: 'essay-4',
@@ -257,7 +280,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1494059980473-813e73ee784b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Work & Career'
+      category: 'Work & Career',
+      examType: 'ielts'
     },
     {
       id: 'essay-5',
@@ -267,7 +291,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Urbanization'
+      category: 'Urbanization',
+      examType: 'ielts'
     },
     {
       id: 'essay-6',
@@ -277,7 +302,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Arts & Culture'
+      category: 'Arts & Culture',
+      examType: 'ielts'
     },
     {
       id: 'essay-7',
@@ -287,7 +313,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1505576399279-565b52d4ac71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Health'
+      category: 'Health',
+      examType: 'ielts'
     },
     {
       id: 'essay-8',
@@ -297,7 +324,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1501446529957-6226bd447c46?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Tourism'
+      category: 'Tourism',
+      examType: 'ielts'
     },
     {
       id: 'essay-9',
@@ -307,7 +335,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1485291571150-772bcfc10da5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Transportation'
+      category: 'Transportation',
+      examType: 'ielts'
     },
     {
       id: 'essay-10',
@@ -317,7 +346,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1507668077129-56e32842fceb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Science'
+      category: 'Science',
+      examType: 'ielts'
     },
     {
       id: 'essay-11',
@@ -327,7 +357,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1526376043067-5af36c35cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Globalization'
+      category: 'Globalization',
+      examType: 'ielts'
     },
     {
       id: 'essay-12',
@@ -337,7 +368,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1478071735433-3eef23d9ad86?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Family'
+      category: 'Family',
+      examType: 'ielts'
     },
     {
       id: 'essay-13',
@@ -347,7 +379,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Crime'
+      category: 'Crime',
+      examType: 'ielts'
     },
     {
       id: 'essay-14',
@@ -357,7 +390,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Space'
+      category: 'Space',
+      examType: 'ielts'
     },
     {
       id: 'essay-15',
@@ -367,7 +401,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1530210124550-912dc1381cb8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Genetics'
+      category: 'Genetics',
+      examType: 'ielts'
     },
     {
       id: 'essay-16',
@@ -377,7 +412,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Media'
+      category: 'Media',
+      examType: 'ielts'
     },
     {
       id: 'essay-17',
@@ -387,7 +423,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Technology'
+      category: 'Technology',
+      examType: 'ielts'
     },
     {
       id: 'essay-18',
@@ -397,7 +434,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Animal Rights'
+      category: 'Animal Rights',
+      examType: 'ielts'
     },
     {
       id: 'essay-19',
@@ -407,7 +445,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Energy'
+      category: 'Energy',
+      examType: 'ielts'
     },
     {
       id: 'essay-20',
@@ -417,7 +456,8 @@ export const writingTaskData: WritingTaskData = {
       imageUrl: 'https://images.unsplash.com/photo-1519677584237-752f8853252e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       timeLimit: 40,
       minWords: 250,
-      category: 'Culture'
+      category: 'Culture',
+      examType: 'ielts'
     }
   ]
 };
