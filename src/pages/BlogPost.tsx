@@ -1,8 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { blogPosts, getRelatedPosts } from '@/data/blogData';
+import BlogCard from '@/components/blog/BlogCard';
 import { Button } from '@/components/ui/button';
 import { 
   Calendar, 
@@ -29,17 +29,17 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { BlogPost as BlogPostType } from '@/types/blog';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPostType | undefined>(blogPosts.find(p => p.slug === slug));
-  const [relatedPosts, setRelatedPosts] = useState<BlogPostType[]>([]);
+  const [post, setPost] = useState(blogPosts.find(p => p.slug === slug));
+  const [relatedPosts, setRelatedPosts] = useState<typeof blogPosts>([]);
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [readingProgress, setReadingProgress] = useState(0);
   const [activeCommentTab, setActiveCommentTab] = useState("newest");
   
+  // Scroll progress tracking for reading progress bar
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -65,6 +65,7 @@ const BlogPost = () => {
     }
   }, [slug]);
 
+  // Social share handling
   const handleShare = (platform: string) => {
     const url = window.location.href;
     const title = post?.title || 'Neplia Blog Post';
@@ -106,10 +107,12 @@ const BlogPost = () => {
     );
   }
 
+  // Ensure we have a valid image URL, fallback to a free source image if needed
   const coverImage = post.coverImage && post.coverImage.startsWith('http') 
     ? post.coverImage 
     : `https://images.unsplash.com/photo-1523633589114-88eaf4b4f1a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80`;
 
+  // Ensure author avatar, fallback to a placeholder
   const authorAvatar = post.author.avatar && post.author.avatar.startsWith('http')
     ? post.author.avatar
     : `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80`;
@@ -128,6 +131,7 @@ const BlogPost = () => {
     }
   };
 
+  // Custom renderer for markdown elements to apply styling
   const customRenderers = {
     h1: (props: any) => <h1 className="text-3xl font-bold text-indigo-600 mt-8 mb-4 animate-fade-in" {...props} />,
     h2: (props: any) => <h2 className="text-2xl font-bold text-indigo mt-6 mb-3 animate-fade-in" {...props} />,
@@ -149,12 +153,13 @@ const BlogPost = () => {
     ),
     img: (props: any) => (
       <div className="my-6 animate-fade-in">
-        <img className="rounded-lg shadow-md w-full" {...props} />
+        <img className="rounded-lg shadow-md w-full" alt={props.alt || ""} {...props} />
         {props.alt && <p className="text-center text-sm text-gray-500 mt-2">{props.alt}</p>}
       </div>
     ),
   };
 
+  // Comments data - would be integrated with backend in a real implementation
   const comments = [
     {
       id: 1,
@@ -190,6 +195,7 @@ const BlogPost = () => {
 
   return (
     <Layout>
+      {/* Reading Progress Bar */}
       <div 
         className="fixed top-0 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700 z-50"
         style={{ marginTop: '64px' }}
@@ -202,14 +208,17 @@ const BlogPost = () => {
       
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center text-sm text-muted-foreground mb-8 animate-fade-in">
-            <Link to="/" className="hover:text-indigo transition-colors">Home</Link>
-            <ChevronRight className="h-4 w-4 mx-2" />
-            <Link to="/blog" className="hover:text-indigo transition-colors">Blog</Link>
-            <ChevronRight className="h-4 w-4 mx-2" />
-            <span className="text-foreground font-medium truncate">{post.title}</span>
+          {/* Breadcrumb Navigation */}
+          <div className="mb-6 animate-fade-in">
+            <Link to="/blog" className="text-gray-500 hover:text-indigo-600 transition-colors inline-flex items-center">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Blog
+            </Link>
+            <ChevronRight className="mx-2 text-gray-400 inline-flex items-center" />
+            <span className="text-gray-600 dark:text-gray-300">Article</span>
           </div>
           
+          {/* Cover Image with Gradient Overlay */}
           <div className="relative rounded-2xl overflow-hidden mb-8 shadow-xl group animate-fade-in">
             <AspectRatio ratio={21 / 9}>
               <img 
@@ -220,328 +229,150 @@ const BlogPost = () => {
             </AspectRatio>
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
             
-            <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full">
-              <div className="inline-block bg-indigo text-white text-sm font-medium px-4 py-1.5 rounded-full shadow-lg mb-4 transform hover:translate-y-1 transition-transform">
-                {post.category}
-              </div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white drop-shadow-md">{post.title}</h1>
-              
-              <div className="flex flex-wrap items-center gap-6 text-white/90">
+            {/* Post Title and Metadata */}
+            <div className="absolute bottom-0 left-0 p-6 w-full">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-md">{post.title}</h1>
+              <div className="flex items-center text-gray-200 space-x-4 text-sm drop-shadow">
                 <div className="flex items-center">
-                  <Calendar className="w-4 h-4 mr-1" />
-                  <span>{new Date(post.publishedAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}</span>
+                  <Calendar className="mr-2 h-4 w-4" />
+                  <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
                 </div>
                 <div className="flex items-center">
-                  <Clock className="w-4 h-4 mr-1" />
-                  <span>{post.readingTime}</span>
+                  <Clock className="mr-2 h-4 w-4" />
+                  <span>{post.readingTime} min read</span>
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="hidden lg:flex flex-col fixed left-8 top-1/2 transform -translate-y-1/2 gap-4 z-10 animate-fade-in">
-            <button 
-              onClick={toggleLike}
-              className={cn(
-                "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
-                isLiked ? "bg-coral text-white" : "bg-white dark:bg-gray-800 hover:bg-coral/10"
-              )}
-              title="Like this article"
-            >
-              <Heart className={cn("h-5 w-5", isLiked && "fill-current")} />
-            </button>
-            <button 
-              onClick={toggleBookmark}
-              className={cn(
-                "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-md",
-                isBookmarked ? "bg-indigo text-white" : "bg-white dark:bg-gray-800 hover:bg-indigo/10"
-              )}
-              title="Save to reading list"
-            >
-              <Bookmark className={cn("h-5 w-5", isBookmarked && "fill-current")} />
-            </button>
-            
-            <button 
-              onClick={() => handleShare('copy')}
-              className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 shadow-md"
-              title="Copy link"
-            >
-              <Copy className="h-5 w-5" />
-            </button>
-            <button 
-              onClick={() => handleShare('twitter')}
-              className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center hover:bg-blue-50 dark:hover:bg-blue-900/20 text-[#1DA1F2] transition-all duration-300 shadow-md"
-              title="Share on Twitter"
-            >
-              <Twitter className="h-5 w-5" />
-            </button>
-            <button 
-              onClick={() => handleShare('facebook')}
-              className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center hover:bg-blue-50 dark:hover:bg-blue-900/20 text-[#4267B2] transition-all duration-300 shadow-md"
-              title="Share on Facebook"
-            >
-              <Facebook className="h-5 w-5" />
-            </button>
-            <button 
-              onClick={() => handleShare('linkedin')}
-              className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center hover:bg-blue-50 dark:hover:bg-blue-900/20 text-[#0077B5] transition-all duration-300 shadow-md"
-              title="Share on LinkedIn"
-            >
-              <Linkedin className="h-5 w-5" />
-            </button>
-          </div>
-          
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="lg:w-2/3">
-              <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-indigo-50/80 to-purple-50/80 dark:from-indigo-950/30 dark:to-purple-950/30 rounded-xl mb-8 shadow-md border border-indigo-100/50 dark:border-indigo-900/20 hover:shadow-lg transition-shadow duration-300 animate-fade-in">
-                <Avatar className="h-16 w-16 ring-4 ring-white dark:ring-gray-800 shadow-md">
-                  {authorAvatar ? (
-                    <AvatarImage src={authorAvatar} alt={post.author.name} className="object-cover" />
-                  ) : (
-                    <AvatarFallback>
-                      <User className="h-6 w-6 text-gray-500" />
-                    </AvatarFallback>
-                  )}
-                </Avatar>
-                <div>
-                  <div className="font-bold text-lg">{post.author.name}</div>
-                  <div className="text-sm text-muted-foreground">{post.author.title}</div>
-                </div>
-              </div>
-              
-              <div className="flex lg:hidden items-center justify-center gap-3 mb-8 animate-fade-in">
-                <button 
-                  onClick={toggleLike}
-                  className={cn(
-                    "flex items-center gap-1 px-4 py-2 rounded-full text-sm transition-all duration-300",
-                    isLiked ? "bg-coral/10 text-coral" : "bg-gray-100 dark:bg-gray-800"
-                  )}
-                >
-                  <Heart className={cn("h-4 w-4", isLiked && "fill-current")} />
-                  <span>Like</span>
-                </button>
-                <button 
-                  onClick={toggleBookmark}
-                  className={cn(
-                    "flex items-center gap-1 px-4 py-2 rounded-full text-sm transition-all duration-300",
-                    isBookmarked ? "bg-indigo/10 text-indigo" : "bg-gray-100 dark:bg-gray-800"
-                  )}
-                >
-                  <Bookmark className={cn("h-4 w-4", isBookmarked && "fill-current")} />
-                  <span>Save</span>
-                </button>
-                <button 
-                  onClick={() => handleShare('copy')}
-                  className="flex items-center gap-1 px-4 py-2 rounded-full text-sm bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"
-                >
-                  <Share2 className="h-4 w-4" />
-                  <span>Share</span>
-                </button>
-              </div>
-              
-              <div className="prose prose-lg dark:prose-invert max-w-none mb-12 prose-headings:font-heading prose-img:rounded-xl prose-img:shadow-lg">
-                <ReactMarkdown components={customRenderers}>{post.content}</ReactMarkdown>
-                
-                <div className="lg:hidden mt-12 bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm animate-fade-in">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center">
-                    <Tag className="w-5 h-5 mr-2 text-indigo" />
-                    Tags
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.map(tag => (
-                      <Link key={tag} to={`/blog?tag=${tag}`}>
-                        <Badge variant="outline" className="bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer border-indigo/30 text-indigo">
-                          {tag}
-                        </Badge>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="mt-16 animate-fade-in" style={{ animationDelay: '0.5s' }}>
-                  <h3 className="text-2xl font-bold mb-6 flex items-center">
-                    <MessageSquare className="w-6 h-6 mr-2 text-indigo" />
-                    Discussion ({comments.length})
-                  </h3>
-                  
-                  <Tabs defaultValue="newest" value={activeCommentTab} onValueChange={setActiveCommentTab} className="mb-6">
-                    <TabsList className="bg-gray-100 dark:bg-gray-800">
-                      <TabsTrigger value="newest">Newest</TabsTrigger>
-                      <TabsTrigger value="popular">Most Popular</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
-                  
-                  <div className="space-y-6">
-                    {comments
-                      .sort((a, b) => activeCommentTab === "newest" 
-                        ? new Date(b.date).getTime() - new Date(a.date).getTime()
-                        : b.likes - a.likes
-                      )
-                      .map(comment => (
-                        <div key={comment.id} className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                          <div className="flex items-start gap-3">
-                            <Avatar className="h-10 w-10">
-                              <AvatarImage src={comment.user.avatar} alt={comment.user.name} />
-                              <AvatarFallback>
-                                {comment.user.name.charAt(0)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1">
-                              <div className="flex justify-between">
-                                <h4 className="font-medium">{comment.user.name}</h4>
-                                <span className="text-xs text-gray-500">
-                                  {new Date(comment.date).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric'
-                                  })}
-                                </span>
-                              </div>
-                              <p className="mt-1 text-gray-700 dark:text-gray-300">{comment.text}</p>
-                              <div className="mt-2 flex items-center gap-4">
-                                <button className="text-xs flex items-center gap-1 text-gray-500 hover:text-indigo">
-                                  <Heart className="h-3 w-3" />
-                                  <span>{comment.likes}</span>
-                                </button>
-                                <button className="text-xs text-gray-500 hover:text-indigo">Reply</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                  
-                  <div className="mt-8 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg">
-                    <h4 className="font-medium mb-3">Add a comment</h4>
-                    <textarea 
-                      className="w-full p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 min-h-[120px]"
-                      placeholder="Share your thoughts..."
-                    ></textarea>
-                    <div className="mt-3 flex justify-end">
-                      <Button>Post Comment</Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="lg:w-1/3">
-              <div className="sticky top-24 space-y-8">
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 animate-fade-in">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center font-serif">
-                    <BookOpen className="w-5 h-5 mr-2 text-indigo" />
-                    Contents
-                  </h3>
-                  <nav className="space-y-1">
-                    <a href="#" className="block py-2 px-3 rounded-md bg-indigo-50 dark:bg-indigo-900/30 text-indigo font-medium font-serif">
-                      Introduction
-                    </a>
-                    <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-serif">
-                      Quantitative Aptitude: Strategic Approach
-                    </a>
-                    <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-serif">
-                      Reasoning: Systematic Problem-Solving
-                    </a>
-                    <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-serif">
-                      Exam Day Execution Strategy
-                    </a>
-                    <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-serif">
-                      Preparation Timeline
-                    </a>
-                  </nav>
-                </div>
-                
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 animate-fade-in">
-                  <div className="bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-sm">
-                    <h3 className="text-lg font-semibold mb-4 flex items-center">
-                      <Tag className="w-5 h-5 mr-2 text-indigo" />
-                      Tags
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map(tag => (
-                        <Link key={tag} to={`/blog?tag=${tag}`}>
-                          <Badge variant="outline" className="bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer border-indigo/30 text-indigo">
-                            {tag}
-                          </Badge>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {relatedPosts.length > 0 && (
-                    <div className="bg-gradient-to-r from-gray-50 to-purple-50 dark:from-gray-900 dark:to-purple-950/30 p-6 rounded-xl shadow-sm mt-6">
-                      <h3 className="text-lg font-semibold mb-4 border-l-4 border-indigo pl-3">
-                        Related Articles
-                      </h3>
-                      <div className="space-y-4">
-                        {relatedPosts.map((relatedPost, idx) => (
-                          <Link key={relatedPost.id} to={`/blog/${relatedPost.slug}`} className="block group">
-                            <div className="flex gap-3 p-3 rounded-lg hover:bg-white/60 dark:hover:bg-gray-800/60 transition-colors">
-                              <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded-md">
-                                <img 
-                                  src={relatedPost.coverImage || "https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"} 
-                                  alt={relatedPost.title} 
-                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                />
-                              </div>
-                              <div className="flex-grow">
-                                <h4 className="font-medium line-clamp-2 group-hover:text-indigo transition-colors">{relatedPost.title}</h4>
-                                <div className="flex items-center text-xs text-muted-foreground mt-1">
-                                  <Calendar className="w-3 h-3 mr-1" />
-                                  <span>{new Date(relatedPost.publishedAt).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric'
-                                  })}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-6 rounded-xl shadow-lg overflow-hidden mt-6">
-                    <div className="relative">
-                      <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
-                      <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-white/10 rounded-full"></div>
-                      
-                      <h3 className="text-xl font-bold text-white mb-3">Subscribe to Our Newsletter</h3>
-                      <p className="text-white/80 text-sm mb-4">Get the latest exam tips and resources delivered to your inbox weekly.</p>
-                      
-                      <input
-                        type="email"
-                        placeholder="Your email address"
-                        className="w-full px-4 py-2 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder:text-white/60 mb-3"
-                      />
-                      <Button className="w-full bg-white text-indigo hover:bg-white/90">Subscribe</Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {/* Author Info */}
+          <div className="flex items-center mb-6 animate-fade-in">
+            <Avatar className="mr-4">
+              <AvatarImage src={authorAvatar} alt={post.author.name} />
+              <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div>
+              <div className="font-semibold text-gray-800 dark:text-gray-200">{post.author.name}</div>
+              <div className="text-gray-500 dark:text-gray-400 text-sm">{post.author.title}</div>
             </div>
           </div>
+
+          {/* Tags */}
+          <div className="mb-6 flex flex-wrap gap-2 animate-fade-in">
+            {post.tags.map(tag => (
+              <Badge key={tag} variant="secondary" className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo border-indigo">
+                <Tag className="w-3 h-3 mr-1" />
+                {tag}
+              </Badge>
+            ))}
+          </div>
           
-          <Separator className="my-12" />
-          
-          <div className="text-center bg-gradient-to-r from-indigo-50/70 to-purple-50/70 dark:from-indigo-950/40 dark:to-purple-950/40 p-10 rounded-2xl shadow-lg transform hover:scale-[1.01] transition-transform duration-300">
-            <div className="inline-flex items-center justify-center p-4 bg-indigo/10 dark:bg-indigo/20 rounded-full mb-6">
-              <Calendar className="h-8 w-8 text-indigo" />
-            </div>
-            <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-indigo to-purple bg-clip-text text-transparent">Ready to Explore More?</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">
-              Continue your IELTS journey with our premium practice tests and resources.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-indigo hover:bg-indigo-600">View All Articles</Button>
-              <Button variant="outline" className="border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-950/30">
-                Try Practice Tests
+          {/* Blog Post Content */}
+          <div className="blog-content mb-8">
+            <ReactMarkdown components={customRenderers}>{post.content}</ReactMarkdown>
+          </div>
+
+          {/* Separator */}
+          <Separator className="my-8" />
+
+          {/* Like, Bookmark, Share Section */}
+          <div className="flex justify-between items-center mb-8 animate-fade-in">
+            <div className="flex space-x-4">
+              <Button variant="ghost" className="gap-2" onClick={toggleLike}>
+                <Heart className={cn("h-5 w-5", isLiked ? "text-red-500" : "text-gray-500")} fill={isLiked ? "red" : "none"} />
+                {isLiked ? "Liked" : "Like"}
               </Button>
+              <Button variant="ghost" className="gap-2" onClick={toggleBookmark}>
+                <Bookmark className={cn("h-5 w-5", isBookmarked ? "text-blue-500" : "text-gray-500")} fill={isBookmarked ? "currentColor" : "none"} />
+                {isBookmarked ? "Saved" : "Save"}
+              </Button>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Share2 className="h-5 w-5 text-gray-500" />
+              <Button variant="ghost" size="icon" onClick={() => handleShare('copy')}>
+                <Copy className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => handleShare('twitter')}>
+                <Twitter className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => handleShare('facebook')}>
+                <Facebook className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => handleShare('linkedin')}>
+                <Linkedin className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Related Posts Section */}
+          {relatedPosts.length > 0 && (
+            <div className="mb-10 animate-fade-in">
+              <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-indigo to-purple bg-clip-text text-transparent">
+                Related Articles
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {relatedPosts.map(relatedPost => (
+                  <BlogCard key={relatedPost.id} post={relatedPost} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Comments Section */}
+          <div className="mb-10 animate-fade-in">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold bg-gradient-to-r from-indigo to-purple bg-clip-text text-transparent">
+                Comments (3)
+              </h3>
+              <Tabs defaultValue="newest" value={activeCommentTab} onValueChange={setActiveCommentTab}>
+                <TabsList className="bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
+                  <TabsTrigger value="newest" className="data-[state=active]:bg-indigo data-[state=active]:text-white">Newest</TabsTrigger>
+                  <TabsTrigger value="popular" className="data-[state=active]:bg-indigo data-[state=active]:text-white">Popular</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            
+            {comments.map(comment => (
+              <div key={comment.id} className="mb-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="flex items-start space-x-3">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={comment.user.avatar} alt={comment.user.name} />
+                    <AvatarFallback>{comment.user.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{comment.user.name}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      {new Date(comment.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
+                  </div>
+                </div>
+                <p className="mt-2 text-gray-700 dark:text-gray-300">{comment.text}</p>
+                <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                  <Heart className="inline-flex w-4 h-4 mr-1 align-text-top" />
+                  {comment.likes} Likes
+                </div>
+              </div>
+            ))}
+
+            {/* Comment Form - Placeholder */}
+            <div className="mt-6">
+              <h4 className="text-lg font-semibold mb-3 bg-gradient-to-r from-indigo to-purple bg-clip-text text-transparent">Leave a Comment</h4>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                Your email address will not be published. Required fields are marked *
+              </p>
+              <div className="mb-4">
+                <label htmlFor="comment" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Comment *</label>
+                <textarea id="comment" rows={4} className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300" defaultValue={""} />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name *</label>
+                <input type="text" id="name" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300" />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email *</label>
+                <input type="email" id="email" className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300" />
+              </div>
+              <Button className="bg-indigo hover:bg-indigo-700 text-white">Post Comment</Button>
             </div>
           </div>
         </div>
