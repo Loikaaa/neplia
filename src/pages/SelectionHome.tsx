@@ -163,15 +163,15 @@ const SelectionHome: React.FC = () => {
       return `/exams/toefl${toeflType ? "?type=" + toeflType : ""}`;
     }
     const examMap: Record<string, string> = {
-      'ielts-academic': '/practice/ielts',
-      'ielts-general': '/practice/ielts',
-      'pte': '/practice/pte',
+      'ielts-academic': '/exams/ielts',
+      'ielts-general': '/exams/ielts',
+      'pte': '/exams/pte',
       'duolingo': '/practice/ielts',
       'cambridge': '/practice/ielts',
       'oet': '/practice/ielts',
-      'sat': '/practice/sat',
-      'gre': '/practice/gre',
-      'gmat': '/practice/gmat'
+      'sat': '/exams/sat',
+      'gre': '/exams/gre',
+      'gmat': '/exams/gmat'
     };
     return examMap[examId] || '/practice';
   };
