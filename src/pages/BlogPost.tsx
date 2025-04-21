@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -467,9 +468,8 @@ const BlogPost = () => {
                   <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-serif">
                     Preparation Timeline
                   </a>
-                  {/* All sidebar widgets (tags, related, newsletter) moved below in the sticky container */}
+                  {/* Sidebar widgets (tags, related, newsletter) */}
                   <div className="hidden lg:block bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 animate-fade-in mt-6">
-                    {/* Tags, Related Articles, Newsletter can go here */}
                     {/* Tags Section - Desktop */}
                     <div className="bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-md animate-fade-in">
                       <h3 className="text-lg font-semibold mb-4 flex items-center">
@@ -553,4 +553,20 @@ const BlogPost = () => {
               <Calendar className="h-8 w-8 text-indigo" />
             </div>
             <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-indigo to-purple bg-clip-text text-transparent">Ready to Explore More?</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx
+            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">
+              Continue your IELTS journey with our premium practice tests and resources.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button className="bg-indigo hover:bg-indigo-600">View All Articles</Button>
+              <Button variant="outline" className="border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-950/30">
+                Try Practice Tests
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default BlogPost;
