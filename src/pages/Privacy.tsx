@@ -10,7 +10,6 @@ const Privacy = () => {
   const isMobile = useIsMobile();
   
   useEffect(() => {
-    // Scroll to top when component mounts
     window.scrollTo(0, 0);
   }, []);
 
@@ -46,7 +45,7 @@ const Privacy = () => {
               transition={{ duration: 0.5 }}
               className="text-center mb-10"
             >
-              <h1 className={`font-bold mb-4 ${isMobile ? 'text-3xl' : 'text-5xl'} bg-gradient-to-r from-indigo-600 via-cyan-600 to-purple-600 bg-clip-text text-transparent`}>
+              <h1 className={`font-bold mb-4 ${isMobile ? 'text-3xl' : 'text-5xl'} bg-gradient-to-r from-indigo-600 via-cyan-600 to-purple-600 bg-clip-text text-transparent section-title`}>
                 Privacy Policy
               </h1>
               <div className="flex items-center justify-center space-x-1 text-sm text-gray-500 dark:text-gray-400">
@@ -57,7 +56,7 @@ const Privacy = () => {
             </motion.div>
             
             <motion.div 
-              className="mb-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-xl p-6 border border-gray-100 dark:border-gray-800 shadow-sm"
+              className="mb-8 policy-section"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 }}
@@ -90,15 +89,15 @@ const Privacy = () => {
                   initial="hidden"
                   animate="show"
                 >
-                  <motion.div variants={item}>
-                    <h2 className="flex items-center gap-2 text-xl font-semibold mt-6 mb-4 text-cyan-700 dark:text-cyan-400">
+                  <motion.div variants={item} className="policy-section">
+                    <h2 className="policy-heading">
                       <span className="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-400 text-sm font-bold">1</span>
                       Information We Collect
                     </h2>
-                    <p className="pl-10">
+                    <p className="pl-10 text-gray-700 dark:text-gray-300">
                       We collect information that you provide directly to us when you:
                     </p>
-                    <ul className="list-disc ml-16 mt-2 mb-4 space-y-2">
+                    <ul className="list-disc ml-16 mt-2 mb-4 space-y-2 text-gray-700 dark:text-gray-300">
                       <li>Create an account or user profile</li>
                       <li>Purchase a subscription</li>
                       <li>Participate in assessments, tests, or surveys</li>
@@ -107,15 +106,15 @@ const Privacy = () => {
                     </ul>
                   </motion.div>
                   
-                  <motion.div variants={item}>
-                    <h2 className="flex items-center gap-2 text-xl font-semibold mt-8 mb-4 text-cyan-700 dark:text-cyan-400">
+                  <motion.div variants={item} className="policy-section">
+                    <h2 className="policy-heading">
                       <span className="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-400 text-sm font-bold">2</span>
                       How We Use Your Information
                     </h2>
-                    <p className="pl-10">
+                    <p className="pl-10 text-gray-700 dark:text-gray-300">
                       We use the information we collect to:
                     </p>
-                    <ul className="list-disc ml-16 mt-2 mb-4 space-y-2">
+                    <ul className="list-disc ml-16 mt-2 mb-4 space-y-2 text-gray-700 dark:text-gray-300">
                       <li>Provide, maintain, and improve our services</li>
                       <li>Process transactions and send related information</li>
                       <li>Send you technical notices, updates, and support messages</li>
@@ -125,72 +124,72 @@ const Privacy = () => {
                     </ul>
                   </motion.div>
                   
-                  <motion.div variants={item}>
-                    <h2 className="flex items-center gap-2 text-xl font-semibold mt-8 mb-4 text-cyan-700 dark:text-cyan-400">
+                  <motion.div variants={item} className="policy-section">
+                    <h2 className="policy-heading">
                       <span className="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-400 text-sm font-bold">3</span>
                       Information Sharing and Disclosure
                     </h2>
-                    <p className="pl-10">
+                    <p className="pl-10 text-gray-700 dark:text-gray-300">
                       We may share your information with:
                     </p>
-                    <ul className="list-disc ml-16 mt-2 mb-4 space-y-2">
+                    <ul className="list-disc ml-16 mt-2 mb-4 space-y-2 text-gray-700 dark:text-gray-300">
                       <li>Service providers who perform services on our behalf</li>
                       <li>Third-party partners with whom we offer co-branded services</li>
                       <li>Law enforcement or other parties as required by law</li>
                     </ul>
                   </motion.div>
                   
-                  <motion.div variants={item}>
-                    <h2 className="flex items-center gap-2 text-xl font-semibold mt-8 mb-4 text-cyan-700 dark:text-cyan-400">
+                  <motion.div variants={item} className="policy-section">
+                    <h2 className="policy-heading">
                       <span className="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-400 text-sm font-bold">4</span>
                       Data Security
                     </h2>
-                    <p className="pl-10">
+                    <p className="pl-10 text-gray-700 dark:text-gray-300">
                       We implement appropriate security measures to protect the security of your personal information. 
                       However, please be aware that no security measures are perfect or impenetrable, and we cannot 
                       guarantee the security of your data transmitted to our site.
                     </p>
                   </motion.div>
                   
-                  <motion.div variants={item}>
-                    <h2 className="flex items-center gap-2 text-xl font-semibold mt-8 mb-4 text-cyan-700 dark:text-cyan-400">
+                  <motion.div variants={item} className="policy-section">
+                    <h2 className="policy-heading">
                       <span className="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-400 text-sm font-bold">5</span>
                       Your Choices
                     </h2>
-                    <p className="pl-10">
+                    <p className="pl-10 text-gray-700 dark:text-gray-300">
                       You can access and update certain information about yourself by logging into your account. 
                       You can also opt out of receiving promotional emails from us by following the instructions in those emails.
                     </p>
                   </motion.div>
                   
-                  <motion.div variants={item}>
-                    <h2 className="flex items-center gap-2 text-xl font-semibold mt-8 mb-4 text-cyan-700 dark:text-cyan-400">
+                  <motion.div variants={item} className="policy-section">
+                    <h2 className="policy-heading">
                       <span className="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-400 text-sm font-bold">6</span>
                       International Data Transfers
                     </h2>
-                    <p className="pl-10">
+                    <p className="pl-10 text-gray-700 dark:text-gray-300">
                       We may transfer information that we collect about you to affiliated entities, or to other third parties across 
                       borders and from your country or jurisdiction to other countries or jurisdictions around the world.
                     </p>
                   </motion.div>
                   
-                  <motion.div variants={item}>
-                    <h2 className="flex items-center gap-2 text-xl font-semibold mt-8 mb-4 text-cyan-700 dark:text-cyan-400">
+                  <motion.div variants={item} className="policy-section">
+                    <h2 className="policy-heading">
                       <span className="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-400 text-sm font-bold">7</span>
                       Changes to this Privacy Policy
                     </h2>
-                    <p className="pl-10">
+                    <p className="pl-10 text-gray-700 dark:text-gray-300">
                       We may change this Privacy Policy from time to time. If we make changes, we will notify you by revising the 
                       date at the top of the policy and, in some cases, we may provide you with additional notice.
                     </p>
                   </motion.div>
                   
-                  <motion.div variants={item}>
-                    <h2 className="flex items-center gap-2 text-xl font-semibold mt-8 mb-4 text-cyan-700 dark:text-cyan-400">
+                  <motion.div variants={item} className="policy-section">
+                    <h2 className="policy-heading">
                       <span className="flex items-center justify-center w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-400 text-sm font-bold">8</span>
                       Contact Us
                     </h2>
-                    <p className="pl-10">
+                    <p className="pl-10 text-gray-700 dark:text-gray-300">
                       If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:privacy@neplia.com" className="text-cyan-600 hover:text-cyan-800 dark:text-cyan-400 dark:hover:text-cyan-300 hover:underline">privacy@neplia.com</a>
                     </p>
                   </motion.div>

@@ -47,14 +47,14 @@ const HeroSection = () => {
             </div>
           </div>
           
-          {/* Hero Image/Illustration */}
+          {/* Hero Image/Illustration - Updated with new image */}
           <div className="w-full lg:w-1/2 animate-scale-in">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-cyan-500/10 rounded-2xl transform rotate-3 scale-105"></div>
               <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Student preparing for IELTS" 
+                  src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Student preparing for IELTS with technology" 
                   className="w-full h-auto"
                 />
                 

@@ -23,6 +23,7 @@ import Resources from '@/pages/Resources';
 import AllResources from '@/pages/AllResources';
 import CategoryDetail from '@/pages/CategoryDetail';
 import ResourceCategoryPage from '@/pages/ResourceCategoryPage';
+import Pricing from '@/pages/Pricing';
 
 // Admin Pages
 import AdminDashboard from '@/pages/admin/Dashboard';
@@ -86,6 +87,7 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/cookies" element={<Cookies />} />
+        <Route path="/pricing" element={<Pricing />} />
         <Route path="/selection" element={<SelectionHome />} />
         <Route path="/countries" element={<CountriesPage />} />
         <Route path="/resources" element={<ResourcesHome />} />
