@@ -1,11 +1,11 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { readingTestData } from '@/data/readingTestData';
 
 interface ReadingQuestionsProps {
   examType?: string;
@@ -14,6 +14,11 @@ interface ReadingQuestionsProps {
 
 export const ReadingQuestions = ({ examType = 'ielts', section = 'reading' }: ReadingQuestionsProps) => {
   const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [questions, setQuestions] = useState<any[]>([]);
+  
+  useEffect(() => {
+    setQuestions(getQuestionsByExamAndSection());
+  }, [examType, section]);
   
   const handleRadioChange = (questionId: string, value: string) => {
     setAnswers({
@@ -43,7 +48,184 @@ export const ReadingQuestions = ({ examType = 'ielts', section = 'reading' }: Re
   
   // Function to get questions based on exam type and section
   const getQuestionsByExamAndSection = () => {
-    if (examType === 'gre' && section === 'verbal') {
+    if (examType.includes('toefl')) {
+      const toeflType = examType.split('-')[1] || 'ibt';
+      
+      if (toeflType === 'pbt') {
+        return [
+          {
+            id: 'toefl-pbt-q1',
+            type: 'radio',
+            text: 'According to the passage, what was the main reason for the urban development pattern described?',
+            options: [
+              { value: 'a', label: 'Government planning policies' },
+              { value: 'b', label: 'Population growth and industrialization' },
+              { value: 'c', label: 'Cultural preferences for urban living' },
+              { value: 'd', label: 'Limited geographical space' }
+            ]
+          },
+          {
+            id: 'toefl-pbt-q2',
+            type: 'radio',
+            text: 'The author\'s primary purpose in this passage is to:',
+            options: [
+              { value: 'a', label: 'Explain historical developments in urban planning' },
+              { value: 'b', label: 'Compare different approaches to city design' },
+              { value: 'c', label: 'Argue for specific urban development policies' },
+              { value: 'd', label: 'Criticize modern urban living conditions' }
+            ]
+          },
+          {
+            id: 'toefl-pbt-q3',
+            type: 'fill',
+            text: 'According to the passage, the concept of garden cities was developed by _________.',
+          },
+          {
+            id: 'toefl-pbt-q4',
+            type: 'radio',
+            text: 'What characterized urban conditions during the Industrial Revolution?',
+            options: [
+              { value: 'a', label: 'Efficient public transportation' },
+              { value: 'b', label: 'Extensive green spaces' },
+              { value: 'c', label: 'Overcrowding and poor sanitation' },
+              { value: 'd', label: 'Abundant affordable housing' }
+            ]
+          },
+          {
+            id: 'toefl-pbt-q5',
+            type: 'checkbox',
+            text: 'According to the passage, which factors influence modern urban planning? Select ALL that apply.',
+            options: [
+              { value: 'a', label: 'Economic viability' },
+              { value: 'b', label: 'Environmental sustainability' },
+              { value: 'c', label: 'Social inclusivity' },
+              { value: 'd', label: 'Military defense' }
+            ]
+          }
+        ];
+      } else if (toeflType === 'essentials') {
+        return [
+          {
+            id: 'toefl-essentials-q1',
+            type: 'radio',
+            text: 'The main idea of the passage is:',
+            options: [
+              { value: 'a', label: 'Urban planning has changed dramatically over time' },
+              { value: 'b', label: 'Modern cities are better than ancient ones' },
+              { value: 'c', label: 'City planning should focus on economic factors only' },
+              { value: 'd', label: 'Urban design is primarily concerned with aesthetics' }
+            ]
+          },
+          {
+            id: 'toefl-essentials-q2',
+            type: 'radio',
+            text: 'The word "paradigms" in paragraph 3 is closest in meaning to:',
+            options: [
+              { value: 'a', label: 'problems' },
+              { value: 'b', label: 'models or frameworks' },
+              { value: 'c', label: 'historical periods' },
+              { value: 'd', label: 'legal regulations' }
+            ]
+          },
+          {
+            id: 'toefl-essentials-q3',
+            type: 'checkbox',
+            text: 'Which factors are mentioned as influencing early settlement design? Select ALL that apply.',
+            options: [
+              { value: 'a', label: 'Defense' },
+              { value: 'b', label: 'Water access' },
+              { value: 'c', label: 'Religious practices' },
+              { value: 'd', label: 'Entertainment venues' }
+            ]
+          }
+        ];
+      } else if (toeflType === 'itp') {
+        return [
+          {
+            id: 'toefl-itp-q1',
+            type: 'radio',
+            text: 'What does the passage mainly discuss?',
+            options: [
+              { value: 'a', label: 'The development of urban planning throughout history' },
+              { value: 'b', label: 'The failure of modern urban design' },
+              { value: 'c', label: 'The relationship between architecture and religion' },
+              { value: 'd', label: 'Technological innovations in city infrastructure' }
+            ]
+          },
+          {
+            id: 'toefl-itp-q2',
+            type: 'radio',
+            text: 'According to the passage, what was Ebenezer Howard known for?',
+            options: [
+              { value: 'a', label: 'Designing industrial factories' },
+              { value: 'b', label: 'Creating the Garden City concept' },
+              { value: 'c', label: 'Building ancient city defenses' },
+              { value: 'd', label: 'Inventing new transportation systems' }
+            ]
+          },
+          {
+            id: 'toefl-itp-q3',
+            type: 'radio',
+            text: 'Based on the passage, what can be inferred about modern urban planning?',
+            options: [
+              { value: 'a', label: 'It focuses exclusively on economic growth' },
+              { value: 'b', label: 'It ignores historical lessons from the past' },
+              { value: 'c', label: 'It attempts to balance multiple competing priorities' },
+              { value: 'd', label: 'It is primarily concerned with building taller buildings' }
+            ]
+          }
+        ];
+      } else {
+        // Default TOEFL iBT
+        return [
+          {
+            id: 'toefl-ibt-q1',
+            type: 'radio',
+            text: 'Which of the following best expresses the main idea of the passage?',
+            options: [
+              { value: 'a', label: 'Urban planning has evolved to address changing societal needs and values' },
+              { value: 'b', label: 'Ancient cities were better designed than modern cities' },
+              { value: 'c', label: 'The Industrial Revolution was the only significant influence on city design' },
+              { value: 'd', label: 'Modern urban planners focus exclusively on sustainability' }
+            ]
+          },
+          {
+            id: 'toefl-ibt-q2',
+            type: 'checkbox',
+            text: 'According to the passage, which of the following characterized cities during the Industrial Revolution? Select 2 answers.',
+            options: [
+              { value: 'a', label: 'Careful planning for public health' },
+              { value: 'b', label: 'Overcrowded living conditions' },
+              { value: 'c', label: 'Extensive park systems' },
+              { value: 'd', label: 'Poor sanitation' }
+            ]
+          },
+          {
+            id: 'toefl-ibt-q3',
+            type: 'radio',
+            text: 'In paragraph 2, the author mentions Ebenezer Howard to:',
+            options: [
+              { value: 'a', label: 'Criticize early urban planning theories' },
+              { value: 'b', label: 'Provide an example of a visionary urban reformer' },
+              { value: 'c', label: 'Compare ancient and modern city designers' },
+              { value: 'd', label: 'Illustrate the failures of the Garden City model' }
+            ]
+          },
+          {
+            id: 'toefl-ibt-q4',
+            type: 'radio',
+            text: 'According to the passage, modern urban planners must consider:',
+            options: [
+              { value: 'a', label: 'Only aesthetic factors' },
+              { value: 'b', label: 'Primarily economic concerns' },
+              { value: 'c', label: 'Multiple factors including sustainability and social inclusion' },
+              { value: 'd', label: 'Exclusively transportation issues' }
+            ]
+          }
+        ];
+      }
+    }
+    else if (examType === 'gre' && section === 'verbal') {
       return [
         {
           id: 'gre-verbal-1',
@@ -196,51 +378,34 @@ export const ReadingQuestions = ({ examType = 'ielts', section = 'reading' }: Re
       ];
     }
     else {
-      // Default IELTS/TOEFL reading questions
-      return [
-        {
-          id: 'q1',
-          type: 'radio',
-          text: 'According to the passage, who is credited with discovering tea?',
-          options: [
-            { value: 'a', label: 'Lu Yu' },
-            { value: 'b', label: 'Shen Nung' },
-            { value: 'c', label: 'Japanese monks' },
-            { value: 'd', label: 'Dutch merchants' }
-          ]
-        },
-        {
-          id: 'q2',
-          type: 'radio',
-          text: 'When was tea first introduced to Japan?',
-          options: [
-            { value: 'a', label: 'During the Han dynasty' },
-            { value: 'b', label: 'During the Tang dynasty' },
-            { value: 'c', label: 'In the early 1600s' },
-            { value: 'd', label: 'In 1669' }
-          ]
-        },
-        {
-          id: 'q3',
-          type: 'checkbox',
-          text: 'Which historical events were influenced by the demand for tea? Select ALL that apply.',
-          options: [
-            { value: 'a', label: 'The First Opium War' },
-            { value: 'b', label: 'The Boston Tea Party' },
-            { value: 'c', label: 'The writing of the Ch\'a Ching' },
-            { value: 'd', label: 'The development of the Japanese Tea Ceremony' }
-          ]
-        },
-        {
-          id: 'q4',
-          type: 'fill',
-          text: 'Tea was initially advertised in Europe as a __________ beverage.',
+      return readingTestData.passages[0].questions.map(q => {
+        if (q.type === 'multiple-choice') {
+          return {
+            id: q.id,
+            type: 'radio',
+            text: q.text,
+            options: q.options.map(opt => ({ value: opt.value, label: opt.label }))
+          };
+        } else if (q.type === 'true-false') {
+          return {
+            id: q.id,
+            type: 'radio',
+            text: q.text,
+            options: [
+              { value: 'true', label: 'True' },
+              { value: 'false', label: 'False' }
+            ]
+          };
+        } else {
+          return {
+            id: q.id,
+            type: 'fill',
+            text: q.text
+          };
         }
-      ];
+      });
     }
   };
-
-  const questions = getQuestionsByExamAndSection();
 
   const handleSubmit = () => {
     console.log('Submitted answers:', answers);
@@ -248,10 +413,14 @@ export const ReadingQuestions = ({ examType = 'ielts', section = 'reading' }: Re
   };
 
   const getButtonColor = () => {
-    switch (examType) {
-      case 'gre': return 'bg-purple-600 hover:bg-purple-700';
-      case 'sat': return 'bg-red-600 hover:bg-red-700';
-      default: return 'bg-indigo-600 hover:bg-indigo-700';
+    if (examType.includes('toefl')) {
+      return 'bg-teal-600 hover:bg-teal-700';
+    } else if (examType === 'gre') {
+      return 'bg-purple-600 hover:bg-purple-700';
+    } else if (examType === 'sat') {
+      return 'bg-red-600 hover:bg-red-700';
+    } else {
+      return 'bg-indigo-600 hover:bg-indigo-700';
     }
   };
 

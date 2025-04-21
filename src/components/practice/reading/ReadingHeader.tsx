@@ -11,11 +11,12 @@ interface ReadingHeaderProps {
 const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeaderProps) => {
   const getTitleByExamAndSection = () => {
     if (examType.includes('toefl')) {
-      if (examType === 'toefl-pbt') {
+      const toeflType = examType.split('-')[1] || 'ibt';
+      if (toeflType === 'pbt') {
         return 'TOEFL PBT Reading';
-      } else if (examType === 'toefl-essentials') {
+      } else if (toeflType === 'essentials') {
         return 'TOEFL Essentials Reading';
-      } else if (examType === 'toefl-itp') {
+      } else if (toeflType === 'itp') {
         return 'TOEFL ITP Reading';
       } else {
         return 'TOEFL iBT Reading';
@@ -37,7 +38,8 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
 
   const getBackLink = () => {
     if (examType.includes('toefl')) {
-      return '/practice/toefl';
+      const toeflType = examType.split('-')[1] || 'ibt';
+      return `/exams/toefl?type=${toeflType}`;
     } else if (examType === 'gre') {
       return '/practice/gre';
     } else if (examType === 'sat') {
@@ -49,7 +51,7 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
 
   const getHeaderGradient = () => {
     if (examType.includes('toefl')) {
-      return 'from-blue-600 to-blue-800';
+      return 'from-teal-600 to-teal-800';
     } else if (examType === 'ielts') {
       return 'from-indigo-600 to-indigo-800';
     } else if (examType === 'pte') {
@@ -67,11 +69,12 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
 
   const getSectionDescription = () => {
     if (examType.includes('toefl')) {
-      if (examType === 'toefl-pbt') {
+      const toeflType = examType.split('-')[1] || 'ibt';
+      if (toeflType === 'pbt') {
         return 'Complete the reading passages and answer the questions to improve your TOEFL PBT reading skills (50 questions, 55 minutes).';
-      } else if (examType === 'toefl-essentials') {
+      } else if (toeflType === 'essentials') {
         return 'Complete the adaptive reading passages and questions to improve your TOEFL Essentials reading skills.';
-      } else if (examType === 'toefl-itp') {
+      } else if (toeflType === 'itp') {
         return 'Complete the reading comprehension passages to improve your TOEFL ITP reading skills.';
       } else {
         return 'Complete the reading passages and answer the questions to improve your TOEFL iBT reading skills (20 questions, 35 minutes).';
@@ -89,13 +92,22 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
     }
   };
 
+  const getExamDisplayName = () => {
+    if (examType.includes('toefl')) {
+      const toeflType = examType.split('-')[1] || 'ibt';
+      return `TOEFL ${toeflType.toUpperCase()}`;
+    } else {
+      return examType.toUpperCase();
+    }
+  };
+
   return (
     <div className="space-y-4 mb-8">
       <Link 
         to={getBackLink()} 
         className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
       >
-        <ArrowLeft className="h-4 w-4 mr-1" /> Back to {examType.includes('toefl') ? 'TOEFL' : examType.toUpperCase()} Practice
+        <ArrowLeft className="h-4 w-4 mr-1" /> Back to {getExamDisplayName()} Practice
       </Link>
       <div className="space-y-2">
         <h1 className={`text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r ${getHeaderGradient()} bg-clip-text text-transparent`}>

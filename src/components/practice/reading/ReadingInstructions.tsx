@@ -12,7 +12,73 @@ interface ReadingInstructionsProps {
 
 export const ReadingInstructions = ({ onStart, examType = 'ielts', section = 'reading' }: ReadingInstructionsProps) => {
   const getInstructionsByExamAndSection = () => {
-    if (examType === 'gre' && section === 'verbal') {
+    if (examType.includes('toefl')) {
+      const toeflType = examType.split('-')[1] || 'ibt';
+      
+      if (toeflType === 'pbt') {
+        return {
+          title: 'TOEFL PBT Reading Practice',
+          time: '55 minutes',
+          questions: '50 questions',
+          icon: <BookOpen className="h-8 w-8 text-teal-600" />,
+          description: 'This test assesses your ability to understand academic texts, including grammar and vocabulary. You will read passages and answer various question types.',
+          instructions: [
+            'Read each passage carefully before answering the questions',
+            'Answer all questions based only on the information in the passages',
+            'Manage your time wisely - approximately 65 seconds per question',
+            'Pay attention to grammar and structure questions in this PBT format'
+          ],
+          buttonColor: 'bg-gradient-to-r from-teal-600 to-teal-800'
+        };
+      } else if (toeflType === 'essentials') {
+        return {
+          title: 'TOEFL Essentials Reading Practice',
+          time: 'Adaptive',
+          questions: 'Multiple short passages',
+          icon: <BookOpen className="h-8 w-8 text-teal-600" />,
+          description: 'This adaptive test assesses your reading skills through shorter passages and a variety of question formats.',
+          instructions: [
+            'The difficulty adapts based on your performance',
+            'Read each passage carefully before answering questions',
+            'Focus on main ideas, details, and vocabulary in context',
+            'Expect a mix of academic and general interest topics'
+          ],
+          buttonColor: 'bg-gradient-to-r from-teal-600 to-teal-800'
+        };
+      } else if (toeflType === 'itp') {
+        return {
+          title: 'TOEFL ITP Reading Practice',
+          time: '60 minutes',
+          questions: 'Multiple passage-based questions',
+          icon: <BookOpen className="h-8 w-8 text-teal-600" />,
+          description: 'This institutional testing format evaluates your reading comprehension skills with academic passages designed for school placement.',
+          instructions: [
+            'Focus on understanding main ideas and supporting details',
+            'Look for specific facts and information in each passage',
+            'Practice identifying inferences and author\'s purpose',
+            'Pay attention to vocabulary in context questions'
+          ],
+          buttonColor: 'bg-gradient-to-r from-teal-600 to-teal-800'
+        };
+      } else {
+        // Default TOEFL iBT
+        return {
+          title: 'TOEFL iBT Reading Practice',
+          time: '35 minutes',
+          questions: '20 questions',
+          icon: <BookOpen className="h-8 w-8 text-teal-600" />,
+          description: 'This test assesses your ability to understand academic texts in a university environment. You will read passages and answer various question types.',
+          instructions: [
+            'Read each passage carefully before answering the questions',
+            'Look for main ideas, details, inferences, and rhetorical functions',
+            'Manage your time wisely - approximately 105 seconds per question',
+            'Review your answers if time permits'
+          ],
+          buttonColor: 'bg-gradient-to-r from-teal-600 to-teal-800'
+        };
+      }
+    }
+    else if (examType === 'gre' && section === 'verbal') {
       return {
         title: 'GRE Verbal Reasoning Practice',
         time: '30 minutes',
