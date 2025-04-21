@@ -142,18 +142,18 @@ function App() {
         <Route path="/practice/pte/speaking" element={<SpeakingPractice />} />
         <Route path="/practice/pte/writing" element={<WritingPractice />} />
         
+        {/* GRE Section Routes */}
+        <Route path="/practice/gre/verbal" element={<ReadingPractice />} />
+        <Route path="/practice/gre/quantitative" element={<ReadingPractice />} />
+        <Route path="/practice/gre/analytical" element={<WritingPractice />} />
+        <Route path="/practice/gre/mixed" element={<ReadingPractice />} />
+        
         {/* SAT Section Routes */}
         <Route path="/practice/sat/reading" element={<ReadingPractice />} />
         <Route path="/practice/sat/english" element={<ReadingPractice />} />
         <Route path="/practice/sat/writing" element={<ReadingPractice />} />
         <Route path="/practice/sat/vocabulary" element={<ReadingPractice />} />
         <Route path="/practice/sat/math" element={<ReadingPractice />} />
-        
-        {/* GRE Section Routes */}
-        <Route path="/practice/gre/verbal" element={<ReadingPractice />} />
-        <Route path="/practice/gre/quantitative" element={<ReadingPractice />} />
-        <Route path="/practice/gre/analytical" element={<WritingPractice />} />
-        <Route path="/practice/gre/mixed" element={<ReadingPractice />} />
         
         {/* GMAT Section Routes */}
         <Route path="/practice/gmat/verbal" element={<ReadingPractice />} />

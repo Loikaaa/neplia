@@ -46,7 +46,7 @@ const GrePage = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Link to="/practice/gre" className="w-full">
+                <Link to="/practice/gre/verbal" className="w-full">
                   <Button className="w-full bg-purple-600 hover:bg-purple-700">
                     Start Verbal Practice
                   </Button>
@@ -81,7 +81,7 @@ const GrePage = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Link to="/practice/gre" className="w-full">
+                <Link to="/practice/gre/quantitative" className="w-full">
                   <Button className="w-full bg-blue-600 hover:bg-blue-700">
                     Start Quantitative Practice
                   </Button>
@@ -116,7 +116,7 @@ const GrePage = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Link to="/practice/gre" className="w-full">
+                <Link to="/practice/gre/analytical" className="w-full">
                   <Button className="w-full bg-green-600 hover:bg-green-700">
                     Start Writing Practice
                   </Button>
