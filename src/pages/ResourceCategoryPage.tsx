@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -37,11 +36,9 @@ const ResourceCategoryPage = () => {
   const [resources, setResources] = useState<ResourceData[]>([]);
 
   useEffect(() => {
-    // Simulate loading data
     setLoading(true);
     
     const fetchData = async () => {
-      // In a real app, you would fetch this data from an API
       const categoryData = getCategoryData(slug || '');
       const resourcesData = getResourcesByCategory(slug || '');
       
@@ -104,7 +101,6 @@ const ResourceCategoryPage = () => {
 
   const getResourcesByCategory = (categoryId: string) => {
     const allResources = [
-      // Practice Tests
       {
         id: "reading-practice-test-1",
         title: "Reading Practice Test 1",
@@ -137,7 +133,6 @@ const ResourceCategoryPage = () => {
         category: "practice-tests"
       },
       
-      // Video Tutorials
       {
         id: "reading-strategies-video",
         title: "Reading Strategies Video Course",
@@ -170,7 +165,6 @@ const ResourceCategoryPage = () => {
         category: "video-tutorials"
       },
       
-      // Study Guides
       {
         id: "complete-study-guide",
         title: "Complete Study Guide",
@@ -193,7 +187,6 @@ const ResourceCategoryPage = () => {
         category: "study-guides"
       },
       
-      // Vocabulary Lists
       {
         id: "academic-word-list",
         title: "Academic Word List - Complete Set",
@@ -216,7 +209,6 @@ const ResourceCategoryPage = () => {
         category: "vocabulary-lists"
       },
       
-      // Lesson Plans
       {
         id: "4-week-intensive-plan",
         title: "4-Week Intensive Study Plan",
@@ -238,7 +230,6 @@ const ResourceCategoryPage = () => {
         category: "lesson-plans"
       },
       
-      // Downloadable Worksheets
       {
         id: "vocabulary-builder",
         title: "Vocabulary Builder Worksheets",
@@ -266,14 +257,30 @@ const ResourceCategoryPage = () => {
   };
 
   const handleResourceDownload = (resourceId: string) => {
-    // In a real app, you would initiate a download or redirect to a download page
     toast({
       title: "Download started",
       description: "Your resource is being prepared for download.",
     });
     
-    // For demonstration, navigate to the resource detail page
     navigate(`/resources/${resourceId}`);
+  };
+
+  const sectionTitles: Record<string, string> = {
+    'practice-tests': 'Practice Tests',
+    'video-tutorials': 'Video Tutorials',
+    'study-guides': 'Study Guides',
+    'vocabulary-lists': 'Vocabulary Lists',
+    'lesson-plans': 'Lesson Plans',
+    'downloadable-worksheets': 'Downloadable Worksheets',
+  };
+
+  const sectionDescriptions: Record<string, string> = {
+    'practice-tests': 'Full-length mock tests, listening, reading, and more to help you prepare and evaluate your progress.',
+    'video-tutorials': 'Expert video guides, strategy sessions, and sample walkthroughs with clear, visual explanations.',
+    'study-guides': 'Detailed, exam-targeted study plans and key strategy guides to boost your readiness.',
+    'vocabulary-lists': 'Carefully curated word lists organized by theme and difficulty. Expand your academic and test vocabulary.',
+    'lesson-plans': 'Custom study schedules and learning plans to structure your preparation for the best results.',
+    'downloadable-worksheets': 'Printable exercises and answer keys for focused, offline exam practice.'
   };
 
   if (loading) {
@@ -325,19 +332,19 @@ const ResourceCategoryPage = () => {
   
     return (
       <Card 
-        className="h-full hover:shadow-md transition-all cursor-pointer" 
+        className="h-full shadow-lg hover:shadow-xl border-t-4 transition-all cursor-pointer"
+        style={{
+          borderTopColor: category?.color || '#8B5CF6',
+          background: 'linear-gradient(109.6deg, rgba(223,234,247,.27) 11.2%, rgba(244,248,252,.27) 91.1%)'
+        }}
       >
         <CardHeader className="pb-3">
           <div className="flex justify-between items-start">
             <div className="flex-1">
               <CardTitle className="mb-1 text-xl">{resource.title}</CardTitle>
               <div className="flex flex-wrap items-center gap-2 mb-2">
-                <Badge variant="outline" className="bg-gray-100 text-gray-700 hover:bg-gray-100">
-                  {resource.type}
-                </Badge>
-                <Badge variant="outline" className="bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20">
-                  {resource.level}
-                </Badge>
+                <Badge variant="outline" className="bg-gray-100 text-gray-700 hover:bg-gray-100">{resource.type}</Badge>
+                <Badge variant="outline" className="bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20">{resource.level}</Badge>
                 {resource.isNew && (
                   <Badge className="bg-pink-500 text-white hover:bg-pink-600">New</Badge>
                 )}
@@ -356,15 +363,15 @@ const ResourceCategoryPage = () => {
           <div className="flex items-center gap-1 text-amber-500">
             {[...Array(5)].map((_, i) => (
               <svg 
-                key={i} 
+                key={i}
                 xmlns="http://www.w3.org/2000/svg" 
-                width="16" 
-                height="16" 
-                viewBox="0 0 24 24" 
-                fill={i < resource.popularity ? "currentColor" : "none"} 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill={i < resource.popularity ? "currentColor" : "none"}
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
                 strokeLinejoin="round"
               >
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -375,8 +382,8 @@ const ResourceCategoryPage = () => {
         </CardContent>
         <CardFooter>
           <Button 
-            variant="outline" 
-            className="w-full gap-2"
+            variant="outline"
+            className="w-full gap-2 shadow hover:bg-indigo-600 hover:text-white transition-colors"
             onClick={() => handleResourceDownload(resource.id)}
           >
             <Download size={16} /> Download Resource
@@ -396,11 +403,10 @@ const ResourceCategoryPage = () => {
         >
           <ArrowLeft className="mr-2" size={16} /> Back to Resources
         </Button>
-        
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-10">
           <div className="flex items-center gap-4 mb-4">
             <div 
-              className="rounded-full p-4" 
+              className="rounded-full p-4"
               style={{ backgroundColor: `${category.color}20`, color: category.color }}
             >
               {category.icon}
@@ -411,12 +417,11 @@ const ResourceCategoryPage = () => {
             {category.description}
           </p>
         </div>
-        
-        <div className="mb-10">
-          <h2 className="text-2xl font-bold mb-6">Available Resources</h2>
-          
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold mb-1">{sectionTitles[category.id] || category.title}</h2>
+          <p className="text-gray-600 dark:text-gray-400 text-md mb-6">{sectionDescriptions[category.id]}</p>
           {resources.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
               {resources.map((resource, index) => (
                 <ResourceCard key={index} resource={resource} />
               ))}
@@ -429,7 +434,7 @@ const ResourceCategoryPage = () => {
               </Button>
             </div>
           )}
-        </div>
+        </section>
       </div>
     </Layout>
   );

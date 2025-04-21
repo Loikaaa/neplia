@@ -1,8 +1,16 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Youtube, Mail, Phone } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+
+const examLinks = [
+  { name: "IELTS", path: "/exams/ielts" },
+  { name: "TOEFL", path: "/exams/toefl" },
+  { name: "GRE", path: "/exams/gre" },
+  { name: "GMAT", path: "/exams/gmat" },
+  { name: "SAT", path: "/exams/sat" },
+  { name: "PTE", path: "/exams/pte" },
+];
 
 const Footer = () => {
   const isMobile = useIsMobile();
@@ -42,7 +50,6 @@ const Footer = () => {
           </div>
 
           {isMobile ? (
-            // Mobile layout - Quick Links and IELTS Modules in a 2-column grid
             <div className="grid grid-cols-2 gap-8">
               {/* Quick Links */}
               <div>
@@ -69,47 +76,32 @@ const Footer = () => {
                     </Link>
                   </li>
                   <li>
+                    <Link to="/contact" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
                     <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
                       Pricing
                     </Link>
                   </li>
                 </ul>
               </div>
-
-              {/* IELTS Modules */}
+              {/* Exams */}
               <div>
-                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Exams</h3>
                 <ul className="space-y-3">
-                  <li>
-                    <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Listening
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Reading
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Writing
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Speaking
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Full Mock Tests
-                    </Link>
-                  </li>
+                  {examLinks.map((exam) => (
+                    <li key={exam.name}>
+                      <Link to={exam.path} className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                        {exam.name}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
           ) : (
-            // Desktop layout - Separate columns
             <>
               {/* Quick Links */}
               <div>
@@ -136,42 +128,28 @@ const Footer = () => {
                     </Link>
                   </li>
                   <li>
+                    <Link to="/contact" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
                     <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
                       Pricing
                     </Link>
                   </li>
                 </ul>
               </div>
-
-              {/* IELTS Modules */}
+              {/* Exams */}
               <div>
-                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">IELTS Modules</h3>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Exams</h3>
                 <ul className="space-y-3">
-                  <li>
-                    <Link to="/practice/listening" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Listening
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/reading" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Reading
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/writing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Writing
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/speaking" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Speaking
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/practice/mock-tests" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                      Full Mock Tests
-                    </Link>
-                  </li>
+                  {examLinks.map((exam) => (
+                    <li key={exam.name}>
+                      <Link to={exam.path} className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                        {exam.name}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </>

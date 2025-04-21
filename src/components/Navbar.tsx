@@ -88,11 +88,9 @@ const examTypes = [
 
 const navLinks = [
   { name: 'Home', path: '/', icon: Home },
-  { name: 'Practice', path: '/practice', icon: Trophy },
   { name: 'Resources', path: '/resources', icon: LibraryBig },
-  { name: 'Blog', path: '/blog', icon: Edit },
   { name: 'About', path: '/about', icon: Info },
-  { name: 'Contact', path: '/contact', icon: Phone },
+  // Practice, Blog, Contact removed from primary nav, moved to footer instead
 ];
 
 const Navbar = () => {
@@ -143,96 +141,18 @@ const Navbar = () => {
               <NavigationMenuList className="gap-1">
                 {navLinks.map((link, index) => (
                   <NavigationMenuItem key={link.name}>
-                    {link.name === 'Practice' ? (
-                      <>
-                        <NavigationMenuTrigger 
-                          variant="solid" 
-                          className={cn(
-                            "text-white font-medium",
-                            location.pathname.startsWith("/practice") && "bg-white/20 dark:bg-white/20"
-                          )}
-                        >
-                          {link.name}
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-slate-800">
-                            <li className="row-span-3">
-                              <NavigationMenuLink asChild>
-                                <Link
-                                  className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-indigo-500 to-indigo-700 p-6 no-underline outline-none focus:shadow-md"
-                                  to="/practice"
-                                >
-                                  <div className="mb-2 mt-4 text-lg font-medium text-white">
-                                    Full Practice Tests
-                                  </div>
-                                  <p className="text-sm leading-tight text-white/90">
-                                    Take comprehensive practice tests for all exam sections
-                                  </p>
-                                </Link>
-                              </NavigationMenuLink>
-                            </li>
-                            <li>
-                              <Link to="/practice/reading" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                                <div className="flex items-center">
-                                  <BookOpen className="h-4 w-4 mr-2 text-indigo-400" />
-                                  <div className="text-sm font-medium text-white">Reading</div>
-                                </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                                  Practice reading comprehension skills
-                                </p>
-                              </Link>
-                            </li>
-                            <li>
-                              <Link to="/practice/listening" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                                <div className="flex items-center">
-                                  <Headphones className="h-4 w-4 mr-2 text-indigo-400" />
-                                  <div className="text-sm font-medium text-white">Listening</div>
-                                </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                                  Improve your listening comprehension
-                                </p>
-                              </Link>
-                            </li>
-                            <li>
-                              <Link to="/practice/writing" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                                <div className="flex items-center">
-                                  <Edit className="h-4 w-4 mr-2 text-indigo-400" />
-                                  <div className="text-sm font-medium text-white">Writing</div>
-                                </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                                  Develop your writing skills
-                                </p>
-                              </Link>
-                            </li>
-                            <li>
-                              <Link to="/practice/speaking" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-700 hover:text-white focus:bg-slate-700 focus:text-white">
-                                <div className="flex items-center">
-                                  <MessageSquare className="h-4 w-4 mr-2 text-indigo-400" />
-                                  <div className="text-sm font-medium text-white">Speaking</div>
-                                </div>
-                                <p className="line-clamp-2 text-sm leading-snug text-slate-300">
-                                  Practice your speaking skills
-                                </p>
-                              </Link>
-                            </li>
-                          </ul>
-                        </NavigationMenuContent>
-                      </>
-                    ) : (
-                      <Link 
-                        to={link.path}
-                        className={cn(
-                          navigationMenuTriggerStyle({ variant: "solid" }),
-                          "text-white font-medium transition-colors",
-                          location.pathname === link.path && "bg-white/20 dark:bg-white/20"
-                        )}
-                      >
-                        {link.name}
-                      </Link>
-                    )}
+                    <Link 
+                      to={link.path}
+                      className={cn(
+                        navigationMenuTriggerStyle({ variant: "solid" }),
+                        "text-white font-medium transition-colors",
+                        location.pathname === link.path && "bg-white/20 dark:bg-white/20"
+                      )}
+                    >
+                      {link.name}
+                    </Link>
                   </NavigationMenuItem>
                 ))}
-
                 <NavigationMenuItem>
                   <NavigationMenuTrigger 
                     variant="solid" 
