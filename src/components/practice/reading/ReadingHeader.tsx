@@ -39,7 +39,7 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
   const getBackLink = () => {
     if (examType.includes('toefl')) {
       const toeflType = examType.split('-')[1] || 'ibt';
-      return `/exams/toefl?type=${toeflType}`;
+      return `/practice/toefl?type=${toeflType}`;
     } else if (examType === 'gre') {
       return '/practice/gre';
     } else if (examType === 'sat') {

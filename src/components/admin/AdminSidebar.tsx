@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { adminRoleDefinitions, AdminRole } from '@/types/adminRoles';
 import { AdminNavItem } from '@/types/adminNavigation';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 
 interface AdminSidebarProps {
   navItems: AdminNavItem[];
@@ -16,9 +17,17 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   currentAdminRole 
 }) => {
   const location = useLocation();
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
 
   const isLinkActive = (path: string) => {
     return location.pathname === path;
+  };
+
+  const toggleSubItems = (label: string) => {
+    setExpandedItems(prev => ({
+      ...prev,
+      [label]: !prev[label]
+    }));
   };
 
   const getAdminRoleBadgeColor = (role: AdminRole) => {
@@ -62,23 +71,66 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       <ScrollArea className="flex-1 py-2">
         <nav className="space-y-1 px-4">
           {navItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                isLinkActive(item.href)
-                  ? "bg-indigo-600 text-white"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100"
-              }`}
-            >
-              <item.icon className="h-5 w-5" />
-              <span>{item.label}</span>
-              {item.notifications && (
-                <span className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
-                  {item.notifications}
-                </span>
+            <div key={item.href}>
+              {item.subItems ? (
+                <div className="mb-1">
+                  <button
+                    onClick={() => toggleSubItems(item.label)}
+                    className={`flex items-center justify-between w-full rounded-md px-3 py-2 text-sm font-medium 
+                      ${location.pathname.startsWith(item.href)
+                        ? "bg-indigo-600 text-white"
+                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                      }`}
+                  >
+                    <span className="flex items-center gap-3">
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.label}</span>
+                    </span>
+                    {expandedItems[item.label] ? (
+                      <ChevronDown className="h-4 w-4" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4" />
+                    )}
+                  </button>
+                  
+                  {expandedItems[item.label] && item.subItems && (
+                    <div className="mt-1 pl-4 space-y-1">
+                      {item.subItems.map((subItem) => (
+                        <Link
+                          key={subItem.href}
+                          to={subItem.href}
+                          className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                            isLinkActive(subItem.href)
+                              ? "bg-indigo-600 text-white"
+                              : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                          }`}
+                        >
+                          <subItem.icon className="h-4 w-4" />
+                          <span>{subItem.label}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  to={item.href}
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                    isLinkActive(item.href)
+                      ? "bg-indigo-600 text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                  }`}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span>{item.label}</span>
+                  {item.notifications && (
+                    <span className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
+                      {item.notifications}
+                    </span>
+                  )}
+                </Link>
               )}
-            </Link>
+            </div>
           ))}
         </nav>
       </ScrollArea>

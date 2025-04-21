@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './App.css';
 
@@ -171,7 +170,14 @@ function App() {
         <Route path="/admin/listening-tasks" element={<ListeningTaskCMS />} />
         <Route path="/admin/marketing" element={<Marketing />} />
         <Route path="/admin/settings" element={<Settings />} />
+        
+        {/* Exam-specific admin task managers */}
         <Route path="/admin/ielts-overview" element={<IeltsTaskManager />} />
+        <Route path="/admin/toefl-overview" element={<IeltsTaskManager />} /> {/* Reusing IeltsTaskManager temporarily, would create specific ones in a real app */}
+        <Route path="/admin/gre-overview" element={<IeltsTaskManager />} />
+        <Route path="/admin/gmat-overview" element={<IeltsTaskManager />} />
+        <Route path="/admin/sat-overview" element={<IeltsTaskManager />} />
+        <Route path="/admin/pte-overview" element={<IeltsTaskManager />} />
         
         {/* Add specific exam section routes */}
         <Route path="/admin/exams/:examType" element={<ExamSectionPage />} />

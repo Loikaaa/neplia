@@ -7,9 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { writingTaskData } from "@/data/writingTaskData";
 import { toast } from "@/components/ui/use-toast";
-import { Search, Plus, Edit, Save, Trash2 } from "lucide-react";
+import { Search, Plus, Edit, Save, Trash2, Filter } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const WritingTaskCMS = () => {
@@ -19,17 +20,38 @@ const WritingTaskCMS = () => {
   const [essayTasks, setEssayTasks] = useState(writingTaskData.essay);
   const [tab, setTab] = useState("academic");
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedExamType, setSelectedExamType] = useState("ielts");
+  
+  const examTypes = [
+    { value: "ielts", label: "IELTS" },
+    { value: "toefl-ibt", label: "TOEFL iBT" },
+    { value: "toefl-pbt", label: "TOEFL PBT" }, 
+    { value: "toefl-essentials", label: "TOEFL Essentials" },
+    { value: "toefl-itp", label: "TOEFL ITP" },
+    { value: "pte", label: "PTE Academic" },
+    { value: "gre", label: "GRE" },
+    { value: "gmat", label: "GMAT" },
+    { value: "sat", label: "SAT" }
+  ];
   
   const tasks = tab === "academic" ? academicTasks : essayTasks;
   
-  const filteredTasks = tasks.filter(task => 
-    task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    task.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    task.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredTasks = tasks.filter(task => {
+    const matchesSearch = 
+      task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      task.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesExamType = !task.examType || task.examType === selectedExamType;
+    
+    return matchesSearch && matchesExamType;
+  });
   
   const handleEdit = (task: any) => {
-    setEditingTask({ ...task });
+    setEditingTask({ 
+      ...task,
+      examType: task.examType || selectedExamType 
+    });
     setIsEditing(true);
   };
 
@@ -38,6 +60,13 @@ const WritingTaskCMS = () => {
     setEditingTask(prev => ({
       ...prev,
       [name]: name === "minWords" || name === "timeLimit" ? parseInt(value) : value
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setEditingTask(prev => ({
+      ...prev,
+      [name]: value
     }));
   };
 
@@ -62,7 +91,7 @@ const WritingTaskCMS = () => {
   };
 
   const handleAddNew = () => {
-    const newId = `${tab}-${tasks.length + 1}`;
+    const newId = `${tab}-${selectedExamType}-${tasks.length + 1}`;
     const newTask = {
       id: newId,
       title: "New Task",
@@ -71,7 +100,8 @@ const WritingTaskCMS = () => {
       imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
       timeLimit: tab === "academic" ? 20 : 40,
       minWords: tab === "academic" ? 150 : 250,
-      category: "New Category"
+      category: "New Category",
+      examType: selectedExamType
     };
     
     if (tab === "academic") {
@@ -132,6 +162,22 @@ const WritingTaskCMS = () => {
                 />
               </div>
               
+              <div className="flex items-center gap-2">
+                <Filter className="h-4 w-4 text-muted-foreground" />
+                <Select value={selectedExamType} onValueChange={setSelectedExamType}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Filter by exam" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {examTypes.map(exam => (
+                      <SelectItem key={exam.value} value={exam.value}>
+                        {exam.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
               <Button onClick={handleAddNew} className="gap-2">
                 <Plus className="h-4 w-4" /> Add New Task
               </Button>
@@ -152,6 +198,21 @@ const WritingTaskCMS = () => {
                       <div className="space-y-2">
                         <Label htmlFor="category">Category</Label>
                         <Input id="category" name="category" value={editingTask.category} onChange={handleChange} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="examType">Exam Type</Label>
+                        <Select name="examType" value={editingTask.examType} onValueChange={(value) => handleSelectChange("examType", value)}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select exam type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {examTypes.map(exam => (
+                              <SelectItem key={exam.value} value={exam.value}>
+                                {exam.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="timeLimit">Time Limit (minutes)</Label>
@@ -191,7 +252,12 @@ const WritingTaskCMS = () => {
                           <Card key={task.id} className="overflow-hidden">
                             <CardHeader className="pb-2">
                               <CardTitle className="text-lg">{task.title}</CardTitle>
-                              <CardDescription>{task.category}</CardDescription>
+                              <CardDescription>
+                                {task.category}
+                                {task.examType && <span className="ml-2 text-xs px-2 py-0.5 bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300 rounded-full">
+                                  {examTypes.find(e => e.value === task.examType)?.label || task.examType}
+                                </span>}
+                              </CardDescription>
                             </CardHeader>
                             <CardContent className="pb-2">
                               <div className="flex justify-between text-sm mb-2">
@@ -234,6 +300,21 @@ const WritingTaskCMS = () => {
                         <Input id="category" name="category" value={editingTask.category} onChange={handleChange} />
                       </div>
                       <div className="space-y-2">
+                        <Label htmlFor="examType">Exam Type</Label>
+                        <Select name="examType" value={editingTask.examType} onValueChange={(value) => handleSelectChange("examType", value)}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select exam type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {examTypes.map(exam => (
+                              <SelectItem key={exam.value} value={exam.value}>
+                                {exam.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
                         <Label htmlFor="timeLimit">Time Limit (minutes)</Label>
                         <Input id="timeLimit" name="timeLimit" type="number" value={editingTask.timeLimit} onChange={handleChange} />
                       </div>
@@ -271,7 +352,12 @@ const WritingTaskCMS = () => {
                           <Card key={task.id} className="overflow-hidden">
                             <CardHeader className="pb-2">
                               <CardTitle className="text-lg">{task.title}</CardTitle>
-                              <CardDescription>{task.category}</CardDescription>
+                              <CardDescription>
+                                {task.category}
+                                {task.examType && <span className="ml-2 text-xs px-2 py-0.5 bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300 rounded-full">
+                                  {examTypes.find(e => e.value === task.examType)?.label || task.examType}
+                                </span>}
+                              </CardDescription>
                             </CardHeader>
                             <CardContent className="pb-2">
                               <div className="flex justify-between text-sm mb-2">

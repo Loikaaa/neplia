@@ -8,7 +8,8 @@ import { AdminRole } from '@/types/adminRoles';
 import { AdminNavItem } from '@/types/adminNavigation';
 import { 
   LayoutDashboard, Users, FileText, BookOpen, Settings,
-  BarChart3, MessageSquare, FileImage, PenTool, Brain, Megaphone
+  BarChart3, MessageSquare, FileImage, PenTool, Brain, Megaphone,
+  GraduationCap, BookOpen as BookIcon
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -24,7 +25,20 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, roles: ['super_admin', 'admin', 'manager', 'teacher', 'instructor', 'marketing'] },
     { href: '/admin/users', label: 'Users', icon: Users, roles: ['super_admin', 'admin', 'manager'] },
     { href: '/admin/resources', label: 'Resources', icon: FileImage, roles: ['super_admin', 'admin', 'teacher'] },
-    { href: '/admin/exam-sections', label: 'Exam Sections', icon: FileText, roles: ['super_admin', 'admin', 'teacher'] },
+    { 
+      href: '/admin/exam-sections', 
+      label: 'Exam Management', 
+      icon: GraduationCap, 
+      roles: ['super_admin', 'admin', 'teacher'],
+      subItems: [
+        { href: '/admin/ielts-overview', label: 'IELTS Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { href: '/admin/toefl-overview', label: 'TOEFL Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { href: '/admin/gre-overview', label: 'GRE Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { href: '/admin/gmat-overview', label: 'GMAT Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { href: '/admin/sat-overview', label: 'SAT Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { href: '/admin/pte-overview', label: 'PTE Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+      ] 
+    },
     { href: '/admin/reading-tasks', label: 'Reading Tasks', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
     { href: '/admin/writing-tasks', label: 'Writing Tasks', icon: PenTool, roles: ['super_admin', 'admin', 'teacher', 'instructor'] },
     { href: '/admin/speaking-review', label: 'Speaking Review', icon: MessageSquare, roles: ['super_admin', 'admin', 'instructor'], notifications: 5 },

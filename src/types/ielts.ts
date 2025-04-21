@@ -1,6 +1,8 @@
 
-// Common types for all IELTS test sections
+// Common types for all exam test sections
 export type IeltsSection = 'listening' | 'reading' | 'writing' | 'speaking';
+export type ToeflSection = 'listening' | 'reading' | 'writing' | 'speaking';
+export type ToeflType = 'ibt' | 'pbt' | 'essentials' | 'itp';
 export type QuestionType = 'multiple-choice' | 'fill-in-blank' | 'matching' | 'true-false' | 'essay' | 'speaking-prompt';
 
 export interface IeltsOption {
@@ -44,6 +46,11 @@ export interface IeltsTask {
   updatedAt: string;
 }
 
+// TOEFL specific types
+export interface ToeflTask extends IeltsTask {
+  toeflType: ToeflType;
+}
+
 // Admin section
 export interface AdminIeltsTaskForm {
   title: string;
@@ -54,4 +61,8 @@ export interface AdminIeltsTaskForm {
   audioUrl?: string;
   questions?: IeltsQuestion[];
   prompt?: string;
+}
+
+export interface AdminToeflTaskForm extends AdminIeltsTaskForm {
+  toeflType: ToeflType;
 }
