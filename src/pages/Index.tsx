@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
 import HeroSection from '@/components/HeroSection';
@@ -129,7 +128,7 @@ const Index = () => {
           </div>
 
           <div className="mt-12 text-center">
-            <Link to="/practice" className="inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium shadow-lg hover:shadow-xl transition-all hover:opacity-90">
+            <Link to="/selection" className="inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium shadow-lg hover:shadow-xl transition-all hover:opacity-90">
               Start Your Preparation
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
