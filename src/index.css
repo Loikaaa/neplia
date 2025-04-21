@@ -1,108 +1,124 @@
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
- 
-@layer base {
-  :root {
-    --background: 280 20% 98%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 355 100% 97%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 321 70% 69%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 262 83% 58%;
-    --radius: 0.75rem;
-    
-    --indigo: 262 83% 58%;
-    --coral: 321 70% 69%;
-  }
- 
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 355 100% 97%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 321 70% 55%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 262 83% 58%;
-    
-    --indigo: 262 83% 58%;
-    --coral: 321 70% 55%;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&display=swap');
+body {
+  font-family: 'Times New Roman', Times, serif !important;
 }
- 
-@layer base {
-  * {
-    @apply border-border;
+
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
   }
-  body {
-    @apply bg-background text-foreground;
+  to {
+    transform: rotate(360deg);
   }
 }
 
-.gradient-text {
-  @apply bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent;
-}
-
-.gradient-bg {
-  @apply bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600;
-}
-
-.card-gradient {
-  @apply bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-indigo-950/30;
-}
-
-.glass-card {
-  @apply bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm border border-white/20 dark:border-gray-700/20 rounded-xl shadow-lg;
-}
-
-.glass-button {
-  @apply bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white rounded-lg transition-all shadow-md hover:shadow-lg;
-}
-
-.animated-gradient-bg {
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-}
-
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
   }
 }
 
-.scrolled {
-  @apply bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white shadow-lg;
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.sticky {
+  position: sticky;
+  z-index: 10;
+}
+
+.sticky-header {
+  backdrop-filter: blur(10px);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 50;
+}
+
+.sticky-header.scrolled {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.dark .sticky-header.scrolled {
+  background-color: rgba(24, 24, 27, 0.95);
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .card {
+    padding: 1em;
+  }
+  
+  h1 {
+    font-size: 1.75rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  h3 {
+    font-size: 1.25rem !important;
+  }
+  
+  .hidden-mobile {
+    display: none !important;
+  }
+  
+  .mobile-pt-smaller {
+    padding-top: 0.5rem !important;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+  }
+  
+  .mobile-center {
+    text-align: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+  
+  .mobile-smaller-text {
+    font-size: 0.875rem !important; 
+  }
+  
+  .mobile-smaller-padding {
+    padding: 0.75rem !important;
+  }
 }

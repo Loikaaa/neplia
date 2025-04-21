@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <section className="relative overflow-hidden pt-12 md:pt-20 lg:pt-24 pb-16 md:pb-24">
+    <section className="relative overflow-hidden pt-12 md:pt-20 lg:pt-24 pb-16 md:pb-24 font-serif">
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-[30%] -right-[20%] h-[600px] w-[600px] rounded-full bg-purple-500/10 blur-3xl"></div>
@@ -21,15 +20,15 @@ const HeroSection = () => {
               <span className="flex h-2 w-2 rounded-full bg-purple-600 mr-2"></span>
               The Ultimate IELTS Platform
             </div>
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white">
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white font-serif">
               Master <span className="highlight-text">IELTS</span> with Precision and Confidence
             </h1>
-            
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto lg:mx-0">
+
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto lg:mx-0 font-serif">
               Practice all IELTS modules with AI-powered feedback, track your progress, and achieve your target score faster than ever before.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
               <Link to="/signup" className="btn-primary w-full sm:w-auto flex items-center justify-center">
                 Start Free Trial
@@ -39,25 +38,24 @@ const HeroSection = () => {
                 Explore Practice Tests
               </Link>
             </div>
-            
+
             <div className="pt-6">
               <p className="text-gray-500 dark:text-gray-400 text-sm">
                 Trusted by over <span className="font-semibold text-gray-800 dark:text-gray-200">50,000+</span> students worldwide
               </p>
             </div>
           </div>
-          
+
           {/* Hero Image/Illustration */}
           <div className="w-full lg:w-1/2 animate-scale-in">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-cyan-500/10 rounded-2xl transform rotate-3 scale-105"></div>
               <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Student preparing for IELTS" 
+                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                  alt="Beautiful student learning" 
                   className="w-full h-auto"
                 />
-                
                 {/* Floating Stats Card */}
                 <div className="absolute bottom-4 left-4 right-4 glass-card p-4 rounded-xl flex items-center justify-between animate-float">
                   <div>
@@ -78,7 +76,7 @@ const HeroSection = () => {
                   </div>
                 </div>
               </div>
-              
+
               {/* Decorative Elements */}
               <div className="absolute -bottom-6 -right-6 h-12 w-12 rounded-full bg-pink-500 animate-pulse-slow"></div>
               <div className="absolute -top-6 -left-6 h-12 w-12 rounded-full bg-cyan-500 animate-pulse-slow"></div>

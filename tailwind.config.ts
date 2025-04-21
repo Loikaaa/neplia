@@ -19,8 +19,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-				heading: ['Poppins', 'sans-serif'],
+				sans: ["'Times New Roman'", "Times", "serif"],
+				serif: ["'Times New Roman'", "Times", "serif"],
+				heading: ["'Times New Roman'", "Times", "serif"],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

@@ -84,7 +84,7 @@ const FeatureAnimation = ({ children, delay }) => {
 
 const FeatureSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 overflow-hidden">
+    <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 overflow-hidden font-serif">
       <div className="container mx-auto px-4 md:px-6 relative">
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute -top-24 -left-24 w-64 h-64 bg-purple-200 dark:bg-purple-900/20 rounded-full opacity-30 blur-3xl"></div>
@@ -107,28 +107,26 @@ const FeatureSection = () => {
             </div>
           </FeatureAnimation>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16">
             {examFeatures.map((exam, index) => (
               <FeatureAnimation key={index} delay={index * 0.1}>
                 <Link to={exam.path} className="block">
-                  <div className="relative group overflow-hidden rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl">
+                  <div className="relative group overflow-hidden rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl border border-indigo-300 dark:border-indigo-800 bg-white dark:bg-indigo-950/40">
                     <div className="absolute inset-0 w-full h-full">
                       <img 
                         src={exam.image} 
                         alt={exam.title} 
-                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 blur-sm brightness-90"
                       />
-                      <div className={`absolute inset-0 bg-gradient-to-b ${exam.color} opacity-80`}></div>
+                      <div className={`absolute inset-0 bg-gradient-to-b ${exam.color} opacity-90 mix-blend-multiply`}></div>
                     </div>
-                    
                     <div className="relative p-8 text-white h-full flex flex-col justify-between">
                       <div>
                         <div className="flex items-center mb-4">
                           <span className="text-3xl mr-3">{exam.icon}</span>
-                          <h3 className="text-2xl font-bold">{exam.title}</h3>
+                          <h3 className="text-2xl font-bold font-serif">{exam.title}</h3>
                         </div>
-                        <p className="text-white/90 mb-6">{exam.description}</p>
-                        
+                        <p className="text-white/90 mb-6 font-serif">{exam.description}</p>
                         <div className="space-y-2">
                           <p className="font-semibold flex items-center">
                             <Award className="h-4 w-4 mr-2" />
@@ -136,19 +134,21 @@ const FeatureSection = () => {
                           </p>
                           <div className="flex flex-wrap gap-2">
                             {exam.skills.map((skill, i) => (
-                              <span key={i} className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium backdrop-blur-sm">
+                              <span key={i} className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium backdrop-blur-sm font-serif">
                                 {skill}
                               </span>
                             ))}
                           </div>
                         </div>
                       </div>
-                      
                       <Button 
-                        className="mt-8 bg-white text-gray-900 hover:bg-white/90 self-start"
+                        className="mt-8 bg-white text-indigo-700 hover:bg-indigo-50 transition-colors shadow-lg font-serif"
+                        asChild
                       >
-                        Start Preparation
-                        <ArrowRight className="ml-2 h-4 w-4" />
+                        <Link to={exam.path}>
+                          Start Preparation
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Link>
                       </Button>
                     </div>
                   </div>

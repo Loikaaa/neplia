@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -448,97 +447,100 @@ const BlogPost = () => {
             <div className="lg:w-1/3 space-y-8">
               {/* Table of Contents */}
               <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 animate-fade-in sticky top-24">
-                <h3 className="text-lg font-semibold mb-4 flex items-center">
+                <h3 className="text-lg font-semibold mb-4 flex items-center font-serif">
                   <BookOpen className="w-5 h-5 mr-2 text-indigo" />
                   Contents
                 </h3>
                 <nav className="space-y-1">
-                  <a href="#" className="block py-2 px-3 rounded-md bg-indigo-50 dark:bg-indigo-900/30 text-indigo font-medium">
+                  <a href="#" className="block py-2 px-3 rounded-md bg-indigo-50 dark:bg-indigo-900/30 text-indigo font-medium font-serif">
                     Introduction
                   </a>
-                  <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                  <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-serif">
                     Quantitative Aptitude: Strategic Approach
                   </a>
-                  <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                  <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-serif">
                     Reasoning: Systematic Problem-Solving
                   </a>
-                  <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                  <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-serif">
                     Exam Day Execution Strategy
                   </a>
-                  <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                  <a href="#" className="block py-2 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-serif">
                     Preparation Timeline
                   </a>
-                </nav>
-              </div>
-              
-              {/* Tags Section - Desktop */}
-              <div className="hidden lg:block bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 animate-fade-in">
-                <h3 className="text-lg font-semibold mb-4 flex items-center">
-                  <Tag className="w-5 h-5 mr-2 text-indigo" />
-                  Tags
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.map(tag => (
-                    <Link key={tag} to={`/blog?tag=${tag}`}>
-                      <Badge variant="outline" className="bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer border-indigo/30 text-indigo">
-                        {tag}
-                      </Badge>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Related Posts */}
-              {relatedPosts.length > 0 && (
-                <div className="bg-gradient-to-r from-gray-50 to-purple-50 dark:from-gray-900 dark:to-purple-950/30 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                  <h3 className="text-lg font-semibold mb-4 border-l-4 border-indigo pl-3">
-                    Related Articles
-                  </h3>
-                  <div className="space-y-4">
-                    {relatedPosts.map((post, idx) => (
-                      <Link key={post.id} to={`/blog/${post.slug}`} className="block group">
-                        <div className="flex gap-3 p-3 rounded-lg hover:bg-white/60 dark:hover:bg-gray-800/60 transition-colors animate-fade-in" style={{ animationDelay: `${0.1 * (idx + 1)}s` }}>
-                          <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded-md">
-                            <img 
-                              src={post.coverImage || "https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"} 
-                              alt={post.title} 
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                            />
-                          </div>
-                          <div className="flex-grow">
-                            <h4 className="font-medium line-clamp-2 group-hover:text-indigo transition-colors">{post.title}</h4>
-                            <div className="flex items-center text-xs text-muted-foreground mt-1">
-                              <Calendar className="w-3 h-3 mr-1" />
-                              <span>{new Date(post.publishedAt).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric'
-                              })}</span>
-                            </div>
-                          </div>
+                  {/* All sidebar widgets (tags, related, newsletter) moved below in the sticky container */}
+                  <div className="hidden lg:block bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 animate-fade-in mt-6">
+                    {/* Tags, Related Articles, Newsletter can go here */}
+                    {/* Tags Section - Desktop */}
+                    <div className="bg-gradient-to-r from-gray-50 to-indigo-50 dark:from-gray-900 dark:to-indigo-950/30 p-6 rounded-xl shadow-md animate-fade-in">
+                      <h3 className="text-lg font-semibold mb-4 flex items-center">
+                        <Tag className="w-5 h-5 mr-2 text-indigo" />
+                        Tags
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {post.tags.map(tag => (
+                          <Link key={tag} to={`/blog?tag=${tag}`}>
+                            <Badge variant="outline" className="bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer border-indigo/30 text-indigo">
+                              {tag}
+                            </Badge>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Related Posts */}
+                    {relatedPosts.length > 0 && (
+                      <div className="bg-gradient-to-r from-gray-50 to-purple-50 dark:from-gray-900 dark:to-purple-950/30 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                        <h3 className="text-lg font-semibold mb-4 border-l-4 border-indigo pl-3">
+                          Related Articles
+                        </h3>
+                        <div className="space-y-4">
+                          {relatedPosts.map((post, idx) => (
+                            <Link key={post.id} to={`/blog/${post.slug}`} className="block group">
+                              <div className="flex gap-3 p-3 rounded-lg hover:bg-white/60 dark:hover:bg-gray-800/60 transition-colors animate-fade-in" style={{ animationDelay: `${0.1 * (idx + 1)}s` }}>
+                                <div className="flex-shrink-0 w-20 h-20 overflow-hidden rounded-md">
+                                  <img 
+                                    src={post.coverImage || "https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"} 
+                                    alt={post.title} 
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                  />
+                                </div>
+                                <div className="flex-grow">
+                                  <h4 className="font-medium line-clamp-2 group-hover:text-indigo transition-colors">{post.title}</h4>
+                                  <div className="flex items-center text-xs text-muted-foreground mt-1">
+                                    <Calendar className="w-3 h-3 mr-1" />
+                                    <span>{new Date(post.publishedAt).toLocaleDateString('en-US', {
+                                      year: 'numeric',
+                                      month: 'short',
+                                      day: 'numeric'
+                                    })}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </Link>
+                          ))}
                         </div>
-                      </Link>
-                    ))}
+                      </div>
+                    )}
+                    
+                    {/* Newsletter signup */}
+                    <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-6 rounded-xl shadow-lg overflow-hidden animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                      <div className="relative">
+                        <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
+                        <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-white/10 rounded-full"></div>
+                        
+                        <h3 className="text-xl font-bold text-white mb-3">Subscribe to Our Newsletter</h3>
+                        <p className="text-white/80 text-sm mb-4">Get the latest exam tips and resources delivered to your inbox weekly.</p>
+                        
+                        <input
+                          type="email"
+                          placeholder="Your email address"
+                          className="w-full px-4 py-2 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder:text-white/60 mb-3"
+                        />
+                        <Button className="w-full bg-white text-indigo hover:bg-white/90">Subscribe</Button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              )}
-              
-              {/* Newsletter signup */}
-              <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-6 rounded-xl shadow-lg overflow-hidden animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                <div className="relative">
-                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
-                  <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-white/10 rounded-full"></div>
-                  
-                  <h3 className="text-xl font-bold text-white mb-3">Subscribe to Our Newsletter</h3>
-                  <p className="text-white/80 text-sm mb-4">Get the latest exam tips and resources delivered to your inbox weekly.</p>
-                  
-                  <input
-                    type="email"
-                    placeholder="Your email address"
-                    className="w-full px-4 py-2 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder:text-white/60 mb-3"
-                  />
-                  <Button className="w-full bg-white text-indigo hover:bg-white/90">Subscribe</Button>
-                </div>
+                </nav>
               </div>
             </div>
           </div>
@@ -551,17 +553,4 @@ const BlogPost = () => {
               <Calendar className="h-8 w-8 text-indigo" />
             </div>
             <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-indigo to-purple bg-clip-text text-transparent">Ready to Explore More?</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">
-              Dive deeper into our extensive collection of expert guides and resources to accelerate your exam preparation journey.
-            </p>
-            <Button asChild size="lg" className="bg-gradient-to-r from-indigo to-purple hover:from-indigo-600 hover:to-purple-600 shadow-md hover:shadow-lg">
-              <Link to="/blog">Discover More Articles</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-    </Layout>
-  );
-};
-
-export default BlogPost;
+            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx
