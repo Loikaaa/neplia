@@ -10,7 +10,17 @@ interface ReadingHeaderProps {
 
 const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeaderProps) => {
   const getTitleByExamAndSection = () => {
-    if (examType === 'gre' && section === 'verbal') {
+    if (examType.includes('toefl')) {
+      if (examType === 'toefl-pbt') {
+        return 'TOEFL PBT Reading';
+      } else if (examType === 'toefl-essentials') {
+        return 'TOEFL Essentials Reading';
+      } else if (examType === 'toefl-itp') {
+        return 'TOEFL ITP Reading';
+      } else {
+        return 'TOEFL iBT Reading';
+      }
+    } else if (examType === 'gre' && section === 'verbal') {
       return 'GRE Verbal Reasoning';
     } else if (examType === 'gre' && section === 'quantitative') {
       return 'GRE Quantitative Reasoning';
@@ -26,7 +36,9 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
   };
 
   const getBackLink = () => {
-    if (examType === 'gre') {
+    if (examType.includes('toefl')) {
+      return '/practice/toefl';
+    } else if (examType === 'gre') {
       return '/practice/gre';
     } else if (examType === 'sat') {
       return '/practice/sat';
@@ -36,26 +48,35 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
   };
 
   const getHeaderGradient = () => {
-    switch (examType) {
-      case 'ielts':
-        return 'from-indigo-600 to-indigo-800';
-      case 'toefl':
-        return 'from-blue-600 to-blue-800';
-      case 'pte':
-        return 'from-teal-600 to-teal-800';
-      case 'gre':
-        return 'from-purple-600 to-purple-800';
-      case 'gmat':
-        return 'from-blue-700 to-blue-900';
-      case 'sat':
-        return 'from-red-600 to-red-800';
-      default:
-        return 'from-indigo-600 to-purple-600';
+    if (examType.includes('toefl')) {
+      return 'from-blue-600 to-blue-800';
+    } else if (examType === 'ielts') {
+      return 'from-indigo-600 to-indigo-800';
+    } else if (examType === 'pte') {
+      return 'from-teal-600 to-teal-800';
+    } else if (examType === 'gre') {
+      return 'from-purple-600 to-purple-800';
+    } else if (examType === 'gmat') {
+      return 'from-blue-700 to-blue-900';
+    } else if (examType === 'sat') {
+      return 'from-red-600 to-red-800';
+    } else {
+      return 'from-indigo-600 to-purple-600';
     }
   };
 
   const getSectionDescription = () => {
-    if (examType === 'gre' && section === 'verbal') {
+    if (examType.includes('toefl')) {
+      if (examType === 'toefl-pbt') {
+        return 'Complete the reading passages and answer the questions to improve your TOEFL PBT reading skills (50 questions, 55 minutes).';
+      } else if (examType === 'toefl-essentials') {
+        return 'Complete the adaptive reading passages and questions to improve your TOEFL Essentials reading skills.';
+      } else if (examType === 'toefl-itp') {
+        return 'Complete the reading comprehension passages to improve your TOEFL ITP reading skills.';
+      } else {
+        return 'Complete the reading passages and answer the questions to improve your TOEFL iBT reading skills (20 questions, 35 minutes).';
+      }
+    } else if (examType === 'gre' && section === 'verbal') {
       return 'Complete the verbal reasoning questions to improve your critical reading and vocabulary skills.';
     } else if (examType === 'gre' && section === 'quantitative') {
       return 'Solve these quantitative reasoning problems to enhance your mathematical skills.';
@@ -74,7 +95,7 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
         to={getBackLink()} 
         className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
       >
-        <ArrowLeft className="h-4 w-4 mr-1" /> Back to {examType.toUpperCase()} Practice
+        <ArrowLeft className="h-4 w-4 mr-1" /> Back to {examType.includes('toefl') ? 'TOEFL' : examType.toUpperCase()} Practice
       </Link>
       <div className="space-y-2">
         <h1 className={`text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r ${getHeaderGradient()} bg-clip-text text-transparent`}>
