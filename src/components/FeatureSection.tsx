@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Headphones, BookOpen, Edit, MessageSquare, BarChart3, Calendar, ArrowRight, CheckCircle, Globe, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -58,15 +59,6 @@ const additionalFeatures = [
     color: "bg-gradient-to-br from-orange-500 to-orange-700 text-white",
     delay: 0.6
   }
-];
-
-const benefitsList = [
-  "24/7 access to all practice materials",
-  "Personalized feedback on every test",
-  "Real exam-like environment",
-  "Detailed performance analytics",
-  "Regular content updates",
-  "Mobile compatibility for on-the-go learning"
 ];
 
 const FeatureAnimation = ({ children, delay }) => {
@@ -169,48 +161,6 @@ const FeatureSection = () => {
                 </div>
               </FeatureAnimation>
             ))}
-          </div>
-
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 md:p-12 shadow-xl">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <FeatureAnimation delay={0.2}>
-                <div className="text-white">
-                  <h3 className="text-2xl md:text-3xl font-bold mb-4">Why Choose Our Exam Preparation Platform?</h3>
-                  <p className="text-indigo-100 mb-6">Join thousands of successful test-takers who have achieved their target scores with our comprehensive preparation system.</p>
-                  
-                  <ul className="space-y-3">
-                    {benefitsList.map((benefit, index) => (
-                      <li key={index} className="flex items-start">
-                        <CheckCircle className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
-                        <span>{benefit}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button className="mt-8 bg-white text-indigo-600 hover:bg-indigo-50">
-                    Start Your Preparation
-                    <ArrowRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </div>
-              </FeatureAnimation>
-              
-              <FeatureAnimation delay={0.4}>
-                <div className="relative h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80" 
-                    alt="Students studying" 
-                    className="w-full h-full object-cover rounded-xl"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-gray-900/90 p-4 rounded-lg backdrop-blur-sm">
-                    <p className="text-gray-900 dark:text-white font-medium">
-                      "I improved my IELTS score from 6.5 to 8.0 in just 6 weeks using this platform!"
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">— Sarah, IELTS 8.0</p>
-                  </div>
-                </div>
-              </FeatureAnimation>
-            </div>
           </div>
         </div>
       </div>
