@@ -11,10 +11,13 @@ import {
   Calculator,
   Trophy,
   ExternalLink,
-  ArrowRight
+  ArrowRight,
+  AlertTriangle
 } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from '@/hooks/use-mobile';
+import { usePracticeLimit } from '@/hooks/use-practice-limit';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const examTitles: Record<string, string> = {
   'ielts': 'IELTS',
@@ -34,6 +37,7 @@ const PracticePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { canPractice, practiceCount, practicesLeft } = usePracticeLimit();
   
   useEffect(() => {
     const savedExam = localStorage.getItem('selectedExam');
@@ -118,6 +122,40 @@ const PracticePage = () => {
             </p>
             <div className="h-1 w-20 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto mt-2 rounded-full"></div>
           </div>
+          
+          {!canPractice() && (
+            <Alert className="bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-400 mb-8">
+              <AlertTriangle className="h-5 w-5" />
+              <AlertTitle>Practice Limit Reached</AlertTitle>
+              <AlertDescription>
+                You've used all {practiceCount} of your free daily practice attempts. Upgrade to premium for unlimited practice or wait 24 hours for your limit to reset.
+              </AlertDescription>
+              <div className="mt-4">
+                <Link to="/pricing">
+                  <Button className="bg-gradient-to-r from-amber-600 to-amber-700 text-white hover:from-amber-700 hover:to-amber-800">
+                    Upgrade to Premium
+                  </Button>
+                </Link>
+              </div>
+            </Alert>
+          )}
+          
+          {canPractice() && practicesLeft < 3 && (
+            <Alert className="bg-indigo-50 border-indigo-200 text-indigo-800 dark:bg-indigo-900/20 dark:border-indigo-800 dark:text-indigo-300 mb-8">
+              <AlertTriangle className="h-5 w-5" />
+              <AlertTitle>Practice Limit Warning</AlertTitle>
+              <AlertDescription>
+                You have {practicesLeft} free practice {practicesLeft === 1 ? 'attempt' : 'attempts'} remaining today. Upgrade to premium for unlimited practice.
+              </AlertDescription>
+              <div className="mt-4">
+                <Link to="/pricing">
+                  <Button variant="outline" className="border-indigo text-indigo hover:bg-indigo-50 dark:hover:bg-indigo-950">
+                    View Premium Options
+                  </Button>
+                </Link>
+              </div>
+            </Alert>
+          )}
           
           <div className="pt-6">
             <div className="text-center mb-8">

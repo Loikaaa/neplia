@@ -1,102 +1,94 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import { ReadingTest } from '@/components/practice/reading/ReadingTest';
-import { ReadingInstructions } from '@/components/practice/reading/ReadingInstructions';
-import ReadingHeader from '@/components/practice/reading/ReadingHeader';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
+import { usePracticeLimit } from '@/hooks/use-practice-limit';
 
 const ReadingPractice = () => {
-  const [testStarted, setTestStarted] = useState(false);
   const [examType, setExamType] = useState('ielts');
-  const [section, setSection] = useState('reading');
-  const location = useLocation();
+  const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { canPractice, incrementPracticeCount } = usePracticeLimit();
   
   useEffect(() => {
-    // Extract exam type and section from URL
-    const pathname = location.pathname;
-    const params = new URLSearchParams(location.search);
+    document.title = 'Reading Practice | Neplia';
     
-    // Check if we have an exam-specific path like /practice/gre/verbal
-    if (pathname.includes('/practice/')) {
-      const pathParts = pathname.split('/');
-      if (pathParts.length >= 3) {
-        const newExamType = pathParts[2]; // e.g., "gre", "sat"
-        setExamType(newExamType);
-      }
-      if (pathParts.length >= 4) {
-        const newSection = pathParts[3]; // e.g., "verbal", "math"
-        setSection(newSection);
-      }
-    }
+    const queryParams = new URLSearchParams(location.search);
+    const examParam = queryParams.get('exam');
     
-    // Check for query params (fallback)
-    const examParam = params.get('exam');
     if (examParam) {
       setExamType(examParam);
+    } else {
+      const savedExam = localStorage.getItem('selectedExam');
+      if (savedExam) {
+        let baseExamType = savedExam.split('-')[0];
+        if (savedExam.startsWith('ielts')) {
+          baseExamType = 'ielts';
+        }
+        setExamType(baseExamType);
+      }
     }
-    
-    const sectionParam = params.get('section');
-    if (sectionParam) {
-      setSection(sectionParam);
-    }
-    
-    // Validate the exam and section combination
-    const isValidCombination = validateExamAndSection(
-      examType === 'ielts' && examParam ? examParam : examType, 
-      section === 'reading' && sectionParam ? sectionParam : section
-    );
-    
-    if (!isValidCombination) {
-      // If invalid combination, redirect to the practice home
-      navigate('/practice');
+  }, [location]);
+
+  const handleStartPractice = () => {
+    if (!canPractice()) {
+      toast({
+        title: "Practice Limit Reached",
+        description: "You've reached your daily free practice limit. Please upgrade to premium or wait 24 hours.",
+        variant: "destructive"
+      });
+      navigate("/pricing");
       return;
     }
     
-    // Set page title based on exam type and section
-    let title = "Reading Practice";
-    if (examType === 'gre' && section === 'verbal') {
-      title = "GRE Verbal Reasoning Practice";
-    } else if (examType === 'gre' && section === 'quantitative') {
-      title = "GRE Quantitative Reasoning Practice";
-    } else if (examType === 'sat' && section === 'math') {
-      title = "SAT Math Practice";
-    } else if (examType === 'sat' && section === 'reading') {
-      title = "SAT Reading & Writing Practice";
+    const success = incrementPracticeCount();
+    if (success) {
+      // This would normally start the practice
+      toast({
+        title: "Practice Started",
+        description: "Your reading practice has started successfully.",
+      });
+      // This is just a placeholder - you would normally navigate to the actual practice page or load practice content
     } else {
-      title = `${examType.toUpperCase()} Reading Practice`;
+      navigate("/pricing");
     }
-    
-    document.title = title;
-  }, [location, examType, section, navigate]);
-  
-  // Function to validate if the exam type and section combination is valid
-  const validateExamAndSection = (exam: string, sect: string) => {
-    // Define valid sections for each exam type
-    const validCombinations: Record<string, string[]> = {
-      'ielts': ['reading', 'listening', 'writing', 'speaking'],
-      'toefl': ['reading', 'listening', 'writing', 'speaking'],
-      'pte': ['reading', 'listening', 'speaking', 'writing'],
-      'gre': ['verbal', 'quantitative', 'analytical', 'mixed'],
-      'gmat': ['verbal', 'quantitative', 'integrated', 'analytical'],
-      'sat': ['reading', 'math']
-    };
-    
-    // Check if exam type has defined valid sections and if the given section is valid
-    return validCombinations[exam]?.includes(sect) || false;
   };
-  
+
   return (
     <Layout>
-      <div className="container max-w-6xl mx-auto px-4 py-8">
-        <ReadingHeader examType={examType} section={section} />
+      <div className="container max-w-5xl mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            Reading Practice
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
+            Enhance your reading comprehension with various text types and question formats.
+          </p>
+        </div>
         
-        {!testStarted ? (
-          <ReadingInstructions onStart={() => setTestStarted(true)} examType={examType} section={section} />
-        ) : (
-          <ReadingTest examType={examType} section={section} />
-        )}
+        <div className="grid gap-8 mb-16">
+          <Card className="overflow-hidden">
+            <div className="p-6 md:p-8">
+              <h2 className="text-2xl font-bold mb-4">Available Reading Practice</h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Click the button below to start your reading practice session. You'll have access to various texts and question types.
+              </p>
+              
+              <div className="flex justify-center">
+                <Button 
+                  onClick={handleStartPractice}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg"
+                >
+                  Start Reading Practice
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
     </Layout>
   );
