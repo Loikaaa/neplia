@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -111,10 +110,18 @@ const practiceOptions = [
 
 const SelectionHome: React.FC = () => {
   const [selectedExam, setSelectedExam] = useState('');
+  const [selectedToeflType, setSelectedToeflType] = useState('ibt');
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  
+
+  const toeflTypes = [
+    { value: 'ibt', label: '🖥️ TOEFL iBT (Most Popular)' },
+    { value: 'pbt', label: '📝 TOEFL PBT (Legacy Paper Test)' },
+    { value: 'essentials', label: '⚡ TOEFL Essentials (Shortened Adaptive Test)' },
+    { value: 'itp', label: '🏫 TOEFL ITP (For School Placement)' },
+  ];
+
   useEffect(() => {
     document.title = 'Select Exam | Neplia';
     
@@ -132,18 +139,32 @@ const SelectionHome: React.FC = () => {
         setSelectedExam(examParam);
       }
     }
+    
+    const savedToeflType = localStorage.getItem('selectedToeflType');
+    if (savedToeflType) setSelectedToeflType(savedToeflType);
   }, [location]);
 
   const handleExamChange = (exam: string) => {
     setSelectedExam(exam);
     localStorage.setItem('selectedExam', exam);
+    if (exam !== "toefl") {
+      localStorage.removeItem('selectedToeflType');
+    }
   };
 
-  const getExamPracticePath = (examId: string) => {
+  const handleToeflTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedToeflType(value);
+    localStorage.setItem('selectedToeflType', value);
+  };
+
+  const getExamPracticePath = (examId: string, toeflType?: string) => {
+    if (examId === "toefl") {
+      return `/exams/toefl${toeflType ? "?type=" + toeflType : ""}`;
+    }
     const examMap: Record<string, string> = {
       'ielts-academic': '/practice/ielts',
       'ielts-general': '/practice/ielts',
-      'toefl': '/practice/toefl',
       'pte': '/practice/pte',
       'duolingo': '/practice/ielts',
       'cambridge': '/practice/ielts',
@@ -152,7 +173,6 @@ const SelectionHome: React.FC = () => {
       'gre': '/practice/gre',
       'gmat': '/practice/gmat'
     };
-    
     return examMap[examId] || '/practice';
   };
 
@@ -165,8 +185,7 @@ const SelectionHome: React.FC = () => {
       });
       return;
     }
-    
-    const redirectPath = getExamPracticePath(selectedExam);
+    const redirectPath = getExamPracticePath(selectedExam, selectedExam === "toefl" ? selectedToeflType : undefined);
     navigate(redirectPath);
   };
 
@@ -210,7 +229,26 @@ const SelectionHome: React.FC = () => {
               selectedExam={selectedExam} 
               onExamChange={handleExamChange} 
             />
-
+            {selectedExam === "toefl" && (
+              <div className="max-w-xs mx-auto mt-6">
+                <label htmlFor="toefl-type" className="block mb-1 font-medium text-gray-700 dark:text-gray-200">
+                  Which TOEFL exam are you preparing for?
+                </label>
+                <select
+                  id="toefl-type"
+                  className="block w-full py-2 px-3 border border-gray-300 rounded shadow-sm bg-white dark:bg-gray-900 dark:border-gray-600"
+                  value={selectedToeflType}
+                  onChange={handleToeflTypeChange}
+                >
+                  {toeflTypes.map(({ value, label }) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </select>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Select to start a full test or practice individual sections.
+                </div>
+              </div>
+            )}
             <div className="flex justify-center mt-8">
               <Button 
                 onClick={handleStartPractice} 
