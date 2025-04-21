@@ -11,11 +11,12 @@ const examLinks = [
   { name: "SAT", path: "/exams/sat" },
   { name: "PTE", path: "/exams/pte" },
 ];
+
 const Footer = () => {
   const isMobile = useIsMobile();
   
   return (
-    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 font-serif">
+    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-4 md:px-6 py-12 md:py-16">
         <div className={`grid grid-cols-1 ${isMobile ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-4'} gap-8 md:gap-12`}>
           {/* Brand */}
@@ -47,40 +48,113 @@ const Footer = () => {
               </a>
             </div>
           </div>
-          {/* Make Quick Links: Practice, Blog, Contact */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Practice Tests
-                </Link>
-              </li>
-              <li>
-                <Link to="/blog" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                  Contact
-                </Link>
-              </li>
-            </ul>
-          </div>
-          {/* Exams Section */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Exams</h3>
-            <ul className="space-y-3">
-              {examLinks.map((exam) => (
-                <li key={exam.name}>
-                  <Link to={exam.path} className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
-                    {exam.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+
+          {isMobile ? (
+            <div className="grid grid-cols-2 gap-8">
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Practice Tests
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/resources" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Resources
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/blog" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Pricing
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              {/* Exams */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Exams</h3>
+                <ul className="space-y-3">
+                  {examLinks.map((exam) => (
+                    <li key={exam.name}>
+                      <Link to={exam.path} className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                        {exam.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/practice" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Practice Tests
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/resources" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Resources
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/blog" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/pricing" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Pricing
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              {/* Exams */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Exams</h3>
+                <ul className="space-y-3">
+                  {examLinks.map((exam) => (
+                    <li key={exam.name}>
+                      <Link to={exam.path} className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                        {exam.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+
           {/* Contact */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Contact Us</h3>
@@ -127,4 +201,5 @@ const Footer = () => {
     </footer>
   );
 };
+
 export default Footer;
