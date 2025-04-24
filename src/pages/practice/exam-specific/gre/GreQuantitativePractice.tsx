@@ -1,20 +1,24 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { ReadingQuestions } from '@/components/practice/reading/ReadingQuestions';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ReadingHeader } from '@/components/practice/reading/ReadingHeader';
+import ReadingHeader from '@/components/practice/reading/ReadingHeader';
 import { ReadingInstructions } from '@/components/practice/reading/ReadingInstructions';
 import { Calculator } from 'lucide-react';
 
 const GreQuantitativePractice = () => {
+  const handleStart = () => {
+    // Handle starting the practice
+    console.log("Starting quantitative practice");
+  };
+
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <ReadingHeader 
-          title="GRE Quantitative Reasoning Practice" 
-          description="Develop your mathematical problem-solving skills with GRE-style quantitative questions"
+          examType="gre"
+          section="quantitative"
         />
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-8">
@@ -64,8 +68,8 @@ const GreQuantitativePractice = () => {
               </TabsList>
               <TabsContent value="instructions">
                 <ReadingInstructions 
-                  examType="gre" 
-                  instructions="Quantitative Reasoning questions test your ability to solve problems using mathematical concepts and methods. Each section contains a mix of problem-solving and quantitative comparison questions."
+                  examType="gre"
+                  onStart={handleStart}
                 />
               </TabsContent>
               <TabsContent value="timer" className="flex justify-center py-10">

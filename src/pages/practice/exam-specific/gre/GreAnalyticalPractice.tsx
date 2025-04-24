@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { ReadingHeader } from '@/components/practice/reading/ReadingHeader';
+import ReadingHeader from '@/components/practice/reading/ReadingHeader';
 import { ReadingInstructions } from '@/components/practice/reading/ReadingInstructions';
 import { Clock, Save, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -28,12 +28,17 @@ const GreAnalyticalPractice = () => {
     });
   };
   
+  const handleStart = () => {
+    // Handle starting the practice
+    console.log("Starting analytical writing practice");
+  };
+  
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <ReadingHeader 
-          title="GRE Analytical Writing Practice" 
-          description="Develop your analytical writing skills for the GRE exam"
+          examType="gre"
+          section="analytical"
         />
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-8">
@@ -95,8 +100,8 @@ const GreAnalyticalPractice = () => {
               </TabsList>
               <TabsContent value="instructions">
                 <ReadingInstructions 
-                  examType="gre" 
-                  instructions="The Analytical Writing measure tests your critical thinking and analytical writing skills. It assesses your ability to articulate and support complex ideas, analyze arguments, and sustain a focused and coherent discussion."
+                  examType="gre"
+                  onStart={handleStart}
                 />
               </TabsContent>
               <TabsContent value="tips">

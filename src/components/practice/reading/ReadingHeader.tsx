@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -6,10 +5,21 @@ import { Link } from 'react-router-dom';
 interface ReadingHeaderProps {
   examType?: string;
   section?: string;
+  title?: string;
+  description?: string;
 }
 
-const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeaderProps) => {
+const ReadingHeader = ({ 
+  examType = 'ielts', 
+  section = 'reading',
+  title,
+  description
+}: ReadingHeaderProps) => {
   const getTitleByExamAndSection = () => {
+    if (title) {
+      return title;
+    }
+    
     if (examType.includes('toefl')) {
       const toeflType = examType.split('-')[1] || 'ibt';
       if (toeflType === 'pbt') {
@@ -27,6 +37,8 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
       return 'GRE Quantitative Reasoning';
     } else if (examType === 'gre' && section === 'mixed') {
       return 'GRE Integrated Practice';
+    } else if (examType === 'gre' && section === 'analytical') {
+      return 'GRE Analytical Writing';
     } else if (examType === 'sat' && section === 'math') {
       return 'SAT Math';
     } else if (examType === 'sat' && section === 'reading') {
@@ -68,6 +80,10 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
   };
 
   const getSectionDescription = () => {
+    if (description) {
+      return description;
+    }
+    
     if (examType.includes('toefl')) {
       const toeflType = examType.split('-')[1] || 'ibt';
       if (toeflType === 'pbt') {
@@ -83,6 +99,8 @@ const ReadingHeader = ({ examType = 'ielts', section = 'reading' }: ReadingHeade
       return 'Complete the verbal reasoning questions to improve your critical reading and vocabulary skills.';
     } else if (examType === 'gre' && section === 'quantitative') {
       return 'Solve these quantitative reasoning problems to enhance your mathematical skills.';
+    } else if (examType === 'gre' && section === 'analytical') {
+      return 'Develop your analytical writing skills for the GRE exam with these practice prompts.';
     } else if (examType === 'sat' && section === 'math') {
       return 'Solve these math problems to improve your problem-solving skills for the SAT.';
     } else if (examType === 'sat' && section === 'reading') {

@@ -4,17 +4,22 @@ import Layout from '@/components/Layout';
 import { ReadingQuestions } from '@/components/practice/reading/ReadingQuestions';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ReadingHeader } from '@/components/practice/reading/ReadingHeader';
+import ReadingHeader from '@/components/practice/reading/ReadingHeader';
 import { ReadingInstructions } from '@/components/practice/reading/ReadingInstructions';
 import { BrainCircuit, BookOpen, Calculator } from 'lucide-react';
 
 const GreMixedPractice = () => {
+  const handleStart = () => {
+    // Handle starting the practice
+    console.log("Starting mixed practice");
+  };
+
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <ReadingHeader 
-          title="GRE Integrated Practice" 
-          description="Comprehensive GRE practice with mixed question types"
+          examType="gre"
+          section="mixed"
         />
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-8">
@@ -73,8 +78,8 @@ const GreMixedPractice = () => {
               </TabsList>
               <TabsContent value="instructions">
                 <ReadingInstructions 
-                  examType="gre" 
-                  instructions="This integrated practice session combines all three GRE test areas. Work through each section carefully, managing your time as you would in the actual exam. The entire practice session is designed to take approximately 60 minutes."
+                  examType="gre"
+                  onStart={handleStart}
                 />
               </TabsContent>
               <TabsContent value="timer" className="flex justify-center py-10">

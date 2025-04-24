@@ -1,19 +1,23 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { ReadingQuestions } from '@/components/practice/reading/ReadingQuestions';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ReadingHeader } from '@/components/practice/reading/ReadingHeader';
+import ReadingHeader from '@/components/practice/reading/ReadingHeader';
 import { ReadingInstructions } from '@/components/practice/reading/ReadingInstructions';
 
 const GreVerbalPractice = () => {
+  const handleStart = () => {
+    // Handle starting the practice
+    console.log("Starting verbal practice");
+  };
+
   return (
     <Layout>
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <ReadingHeader 
-          title="GRE Verbal Reasoning Practice" 
-          description="Improve your verbal reasoning skills with GRE-style practice questions"
+          examType="gre"
+          section="verbal"
         />
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-8">
@@ -75,8 +79,8 @@ const GreVerbalPractice = () => {
               </TabsList>
               <TabsContent value="instructions">
                 <ReadingInstructions 
-                  examType="gre" 
-                  instructions="Each verbal reasoning question in the GRE examines your ability to analyze written material and identify relationships among component parts of sentences. Answer each question based on the information provided in the passage."
+                  examType="gre"
+                  onStart={handleStart}
                 />
               </TabsContent>
               <TabsContent value="timer" className="flex justify-center py-10">
