@@ -65,6 +65,12 @@ import GrePracticePage from '@/pages/practice/exam-specific/GrePracticePage';
 import GmatPracticePage from '@/pages/practice/exam-specific/GmatPracticePage';
 import SatPracticePage from '@/pages/practice/exam-specific/SatPracticePage';
 
+// Create GRE-specific practice components
+import GreVerbalPractice from '@/pages/practice/exam-specific/gre/GreVerbalPractice';
+import GreQuantitativePractice from '@/pages/practice/exam-specific/gre/GreQuantitativePractice';
+import GreAnalyticalPractice from '@/pages/practice/exam-specific/gre/GreAnalyticalPractice';
+import GreMixedPractice from '@/pages/practice/exam-specific/gre/GreMixedPractice';
+
 // Create a wrapper component for the redirect
 const CategoryRedirect = () => {
   const location = useLocation();
@@ -142,11 +148,11 @@ function App() {
         <Route path="/practice/pte/speaking" element={<SpeakingPractice />} />
         <Route path="/practice/pte/writing" element={<WritingPractice />} />
         
-        {/* GRE Section Routes */}
-        <Route path="/practice/gre/verbal" element={<ReadingPractice />} />
-        <Route path="/practice/gre/quantitative" element={<ReadingPractice />} />
-        <Route path="/practice/gre/analytical" element={<WritingPractice />} />
-        <Route path="/practice/gre/mixed" element={<ReadingPractice />} />
+        {/* GRE Section Routes - Updated with dedicated components */}
+        <Route path="/practice/gre/verbal" element={<GreVerbalPractice />} />
+        <Route path="/practice/gre/quantitative" element={<GreQuantitativePractice />} />
+        <Route path="/practice/gre/analytical" element={<GreAnalyticalPractice />} />
+        <Route path="/practice/gre/mixed" element={<GreMixedPractice />} />
         
         {/* SAT Section Routes */}
         <Route path="/practice/sat/reading" element={<ReadingPractice />} />
