@@ -24,6 +24,8 @@ import AllResources from '@/pages/AllResources';
 import CategoryDetail from '@/pages/CategoryDetail';
 import ResourceCategoryPage from '@/pages/ResourceCategoryPage';
 import Pricing from '@/pages/Pricing';
+import Business from '@/pages/Business';
+import BusinessDetail from '@/pages/BusinessDetail';
 
 // Admin Pages
 import AdminDashboard from '@/pages/admin/Dashboard';
@@ -103,6 +105,10 @@ function App() {
         <Route path="/resources/categories/:slug" element={<ResourceCategoryPage />} />
         {/* Add redirect for old category URLs to the new format */}
         <Route path="/resources/category/:slug" element={<CategoryRedirect />} />
+        
+        {/* Business Routes */}
+        <Route path="/business" element={<Business />} />
+        <Route path="/business/:id" element={<BusinessDetail />} />
         
         {/* Exam Routes */}
         <Route path="/exams/ielts" element={<IeltsPage />} />
