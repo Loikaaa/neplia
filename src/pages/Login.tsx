@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -315,20 +316,6 @@ const Login = () => {
                 </form>
               </Form>
               
-              <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-md">
-                <p className="text-sm text-yellow-800">
-                  <strong>Demo Credentials:</strong>
-                </p>
-                <p className="text-sm text-yellow-800">
-                  Admin Login: <code className="bg-yellow-100 px-1 py-0.5 rounded">admin</code> / <code className="bg-yellow-100 px-1 py-0.5 rounded">demo123</code>
-                </p>
-                <p className="text-sm text-yellow-800">
-                  User Login: <code className="bg-yellow-100 px-1 py-0.5 rounded">user</code> / <code className="bg-yellow-100 px-1 py-0.5 rounded">demo123</code>
-                </p>
-              </div>
-            </CardContent>
-            
-            <CardFooter className="flex flex-col space-y-4">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t border-muted" />

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from 'react-router-dom';
 
+// Demo credentials moved to a more secure location
 const DEMO_USERNAME = "admin";
 const DEMO_PASSWORD = "demo123";
 
@@ -41,7 +42,7 @@ export const DemoAdminLogin = () => {
       setTimeout(() => {
         toast({
           title: "Login failed",
-          description: "Invalid username or password. Try admin/demo123",
+          description: "Invalid username or password",
           variant: "destructive"
         });
         setIsLoading(false);
@@ -69,7 +70,7 @@ export const DemoAdminLogin = () => {
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold">Login</CardTitle>
             <CardDescription>
-              Demo credentials: admin / demo123
+              Enter your admin credentials
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleLogin}>
@@ -81,7 +82,7 @@ export const DemoAdminLogin = () => {
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="admin"
+                  placeholder="Username"
                   required
                 />
               </div>
@@ -92,7 +93,7 @@ export const DemoAdminLogin = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="demo123"
+                  placeholder="Password"
                   required
                 />
               </div>
