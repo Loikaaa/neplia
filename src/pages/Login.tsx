@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -364,7 +363,7 @@ const Login = () => {
                   Sign up now
                 </Link>
               </p>
-            </CardFooter>
+            </CardContent>
           </Card>
         </div>
       </div>
