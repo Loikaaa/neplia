@@ -18,7 +18,7 @@ const Layout = ({ children }: LayoutProps) => {
       <main className={`flex-grow ${isMobile ? 'pt-16 px-3 pb-20' : 'pt-20 pb-4'}`}>
         {children}
       </main>
-      <Footer />
+      <Footer className={isMobile ? 'mb-16' : ''} />
       <BottomNavigation />
     </div>
   );
