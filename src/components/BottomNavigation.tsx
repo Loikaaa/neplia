@@ -8,7 +8,7 @@ const bottomNavItems = [
   { name: 'Home', path: '/', icon: Home },
   { name: 'Practice', path: '/practice', icon: BookOpen },
   { name: 'Tests', path: '/practice/mock-test', icon: Trophy },
-  { name: 'Chat', path: '/resources', icon: MessageSquare },
+  { name: 'Chat', path: '/chat', icon: MessageSquare },
   { name: 'Profile', path: '/dashboard', icon: User },
 ];
 

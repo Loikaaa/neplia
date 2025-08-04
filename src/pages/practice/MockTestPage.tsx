@@ -174,14 +174,14 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ examType }) => {
   
   return (
     <Layout>
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+      <div className="container max-w-4xl mx-auto px-4 py-8">
         <div className="space-y-6">
           {!isCompleted ? (
             <>
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tight">{getPageTitle()}</h1>
-                <p className="text-gray-500 dark:text-gray-400">
-                  Complete a full {examType ? examType.toUpperCase() : 'IELTS'} test under timed conditions to simulate the real exam experience.
+              <div className="text-center space-y-2">
+                <h1 className="text-2xl md:text-3xl font-bold">{getPageTitle()}</h1>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Take a comprehensive {examType ? examType.toUpperCase() : 'IELTS'} practice test under timed conditions.
                 </p>
               </div>
               

@@ -5,17 +5,21 @@ import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from '@/components/ui/sheet';
-import { Headphones, BookOpen, Edit, MessageSquare, BarChart3, Calendar, Crown, Clock, Award, PlusCircle, Timer } from 'lucide-react';
+import { Headphones, BookOpen, Edit, MessageSquare, BarChart3, Calendar, Crown, Clock, Award, PlusCircle, Timer, Trophy, Star } from 'lucide-react';
 import UserStats from '@/components/user/UserStats';
 import UserCourseProgress from '@/components/user/UserCourseProgress';
 import RecentActivity from '@/components/user/RecentActivity';
 import UpcomingTests from '@/components/user/UpcomingTests';
 import PremiumPlans from '@/components/user/PremiumPlans';
 import UserPreferences from '@/components/user/UserPreferences';
+import ProfileStats from '@/components/user/ProfileStats';
+import AchievementsBadges from '@/components/user/AchievementsBadges';
+import StudyPlan from '@/components/user/StudyPlan';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { mockTestData } from '@/data/mockTestData';
 import { useToast } from '@/hooks/use-toast';
 import ListeningSection from '@/components/dashboard/ListeningSection';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const UserDashboard = () => {
   // Get user name from localStorage
@@ -291,60 +295,53 @@ const UserDashboard = () => {
             )}
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-            <div className="lg:col-span-2">
-              <UserStats />
-            </div>
-            <div>
-              <UserPreferences />
-            </div>
-          </div>
           
-          {/* Add ListeningSection */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">Listening Practice</h2>
-            <ListeningSection />
-          </div>
-          
-          <h2 className="text-2xl font-bold mb-6">
-            {selectedExam 
-              ? `${getExamName(selectedExam)} Practice & Resources` 
-              : "Services & Practice Areas"}
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {services.map((service, index) => (
-              <Link key={index} to={service.link} className="group">
-                <Card className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden">
-                  <CardHeader>
-                    <div className={`rounded-full p-3 w-12 h-12 flex items-center justify-center mb-2 ${service.color} transition-transform group-hover:scale-110`}>
-                      <service.icon className="h-6 w-6" />
-                    </div>
-                    <CardTitle className="text-xl">{service.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-sm">
-                      {service.description}
-                    </CardDescription>
-                  </CardContent>
-                  <CardFooter>
-                    <Button variant="ghost" className="text-indigo dark:text-indigo-300 p-0">
-                      Start Practice <PlusCircle className="ml-2 h-4 w-4" />
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </Link>
-            ))}
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-            <div className="lg:col-span-2">
-              <UserCourseProgress />
-            </div>
-            <div>
-              <RecentActivity />
-            </div>
-          </div>
+          {/* Enhanced Profile Tabs */}
+          <Tabs defaultValue="overview" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="stats">Statistics</TabsTrigger>
+              <TabsTrigger value="achievements">Achievements</TabsTrigger>
+              <TabsTrigger value="study-plan">Study Plan</TabsTrigger>
+              <TabsTrigger value="progress">Progress</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="overview" className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <UserStats />
+                </div>
+                <div>
+                  <UserPreferences />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <UserCourseProgress />
+                </div>
+                <div>
+                  <RecentActivity />
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="stats">
+              <ProfileStats />
+            </TabsContent>
+            
+            <TabsContent value="achievements">
+              <AchievementsBadges />
+            </TabsContent>
+            
+            <TabsContent value="study-plan">
+              <StudyPlan />
+            </TabsContent>
+            
+            <TabsContent value="progress">
+              <ListeningSection />
+            </TabsContent>
+          </Tabs>
           
           {showPremiumPlans ? (
             <div className="mb-12" id="premium-plans">
