@@ -80,6 +80,11 @@ const Footer = ({ className = '' }: FooterProps) => {
                     </Link>
                   </li>
                   <li>
+                    <Link to="/team" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Our Team
+                    </Link>
+                  </li>
+                  <li>
                     <Link to="/contact" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
                       Contact
                     </Link>
@@ -129,6 +134,11 @@ const Footer = ({ className = '' }: FooterProps) => {
                   <li>
                     <Link to="/about" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
                       About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/team" className="text-gray-600 hover:text-indigo dark:text-gray-400 dark:hover:text-indigo-300 transition-colors">
+                      Our Team
                     </Link>
                   </li>
                   <li>

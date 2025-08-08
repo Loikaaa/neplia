@@ -26,7 +26,7 @@ import ResourceCategoryPage from '@/pages/ResourceCategoryPage';
 import Pricing from '@/pages/Pricing';
 import Business from '@/pages/Business';
 import BusinessDetail from '@/pages/BusinessDetail';
-
+import Team from '@/pages/Team';
 // Admin Pages
 import AdminDashboard from '@/pages/admin/Dashboard';
 import AdminRedirect from '@/components/admin/AdminRedirect';
@@ -86,6 +86,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/about" element={<About />} />
+        <Route path="/team" element={<Team />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/contact" element={<Contact />} />
