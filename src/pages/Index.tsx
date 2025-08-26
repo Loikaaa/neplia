@@ -73,19 +73,24 @@ const Index = () => {
     <Layout>
       <HeroSection />
       
-      {/* Quick Start Section */}
-      <section className="py-12 px-4 md:px-0 bg-white dark:bg-gray-900">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3">Start Your IELTS Journey</h2>
-            <p className="text-muted-foreground">Choose your path to IELTS success</p>
+      {/* Start Your Journey Section */}
+      <section className="py-12 px-4 md:px-0 bg-gradient-to-b from-white to-purple-50 dark:from-gray-900 dark:to-indigo-950/30">
+        <div className="container mx-auto">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3 inline-block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent relative section-title">
+              Start Your Journey
+            </h2>
+            <p className="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Choose your exam and begin practicing with our specialized modules
+            </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="text-center hover:shadow-lg transition-all duration-300 group">
+          {/* Quick Action Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+            <Card className="text-center hover:shadow-lg transition-all duration-300 group glass-card">
               <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo to-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <BookOpen className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Practice Tests</h3>
                 <p className="text-sm text-muted-foreground mb-4">Start with targeted practice exercises</p>
@@ -95,10 +100,10 @@ const Index = () => {
               </CardContent>
             </Card>
             
-            <Card className="text-center hover:shadow-lg transition-all duration-300 group">
+            <Card className="text-center hover:shadow-lg transition-all duration-300 group glass-card">
               <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <MessageSquare className="h-8 w-8 text-green-600 dark:text-green-400" />
+                <div className="w-16 h-16 bg-gradient-to-br from-teal to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <MessageSquare className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Get Help</h3>
                 <p className="text-sm text-muted-foreground mb-4">Chat with teachers and students</p>
@@ -108,10 +113,10 @@ const Index = () => {
               </CardContent>
             </Card>
             
-            <Card className="text-center hover:shadow-lg transition-all duration-300 group">
+            <Card className="text-center hover:shadow-lg transition-all duration-300 group glass-card">
               <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <BarChart3 className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                <div className="w-16 h-16 bg-gradient-to-br from-purple to-magenta rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <BarChart3 className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Track Progress</h3>
                 <p className="text-sm text-muted-foreground mb-4">Monitor your improvement</p>
@@ -121,22 +126,8 @@ const Index = () => {
               </CardContent>
             </Card>
           </div>
-        </div>
-      </section>
 
-      <FeatureSection />
-      
-      <section className="py-16 px-4 md:px-0 bg-gradient-to-b from-white to-purple-50 dark:from-gray-900 dark:to-indigo-950/30">
-        <div className="container mx-auto">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 inline-block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent relative section-title">
-              Choose Your Exam
-            </h2>
-            <p className="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Prepare for your target exam with our specialized practice modules
-            </p>
-          </div>
-          
+          {/* Exam Selection */}
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 max-w-6xl mx-auto">
             {examTypes.slice(0, 6).map((exam) => (
               <Card 
@@ -186,7 +177,7 @@ const Index = () => {
           <div className="mt-12 text-center">
             <Button 
               onClick={handleStartPreparation}
-              className="inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium shadow-lg hover:shadow-xl transition-all hover:opacity-90"
+              className="inline-flex items-center px-6 py-3 rounded-lg btn-primary font-medium shadow-lg hover:shadow-xl transition-all"
             >
               Start Your Preparation
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -194,6 +185,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <FeatureSection />
       
       <StatisticsSection />
       <TestimonialSection />
