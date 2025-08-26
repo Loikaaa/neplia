@@ -16,49 +16,43 @@ const examTypes = [
     name: 'IELTS',
     description: 'International English Language Testing System',
     path: '/practice/ielts',
-    color: 'bg-indigo hover:bg-indigo-600',
-    gradient: 'from-indigo-500 to-indigo-700',
-    icon: <BookOpen size={24} className="text-white" />
+    gradient: 'from-indigo to-primary',
+    icon: <BookOpen size={20} className="text-white" />
   },
   {
     name: 'TOEFL',
     description: 'Test of English as a Foreign Language',
     path: '/practice/toefl',
-    color: 'bg-blue-600 hover:bg-blue-700',
-    gradient: 'from-blue-500 to-blue-700',
-    icon: <Headphones size={24} className="text-white" />
+    gradient: 'from-teal to-cyan-600',
+    icon: <Headphones size={20} className="text-white" />
   },
   {
     name: 'PTE',
     description: 'Pearson Test of English',
     path: '/practice/pte',
-    color: 'bg-teal-700 hover:bg-teal-800',
-    gradient: 'from-teal-600 to-teal-800',
-    icon: <Edit size={24} className="text-white" />
+    gradient: 'from-purple to-magenta',
+    icon: <Edit size={20} className="text-white" />
   },
   {
     name: 'GRE',
     description: 'Graduate Record Examination',
     path: '/practice/gre',
-    color: 'bg-purple-700 hover:bg-purple-800',
-    gradient: 'from-purple-600 to-purple-800',
-    icon: <BookOpen size={24} className="text-white" />
+    gradient: 'from-orange to-coral',
+    icon: <BookOpen size={20} className="text-white" />
   },
   {
     name: 'GMAT',
     description: 'Graduate Management Admission Test',
     path: '/practice/gmat',
-    color: 'bg-blue-800 hover:bg-blue-900',
-    gradient: 'from-blue-700 to-blue-900',
-    icon: <BookOpen size={24} className="text-white" />
+    gradient: 'from-pink to-accent',
+    icon: <BookOpen size={20} className="text-white" />
   },
   {
     name: 'SAT',
     description: 'Scholastic Assessment Test',
     path: '/practice/sat',
-    color: 'bg-red-700 hover:bg-red-800',
-    gradient: 'from-red-600 to-red-800',
-    icon: <Edit size={24} className="text-white" />
+    gradient: 'from-coral to-orange',
+    icon: <Edit size={20} className="text-white" />
   }
 ];
 
@@ -143,39 +137,43 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 max-w-6xl mx-auto">
             {examTypes.slice(0, 6).map((exam) => (
               <Card 
                 key={exam.name} 
-                className="exam-card group overflow-hidden border border-gray-200 dark:border-gray-800 shadow-md hover:shadow-xl transition-all duration-300"
+                className="exam-card group overflow-hidden glass-card shadow-glass hover:shadow-xl transition-all duration-300 animate-scale-in"
               >
-                <CardHeader className={`bg-gradient-to-r ${exam.gradient} p-5`}>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                <CardHeader className={`bg-gradient-to-br ${exam.gradient} p-3 sm:p-4 lg:p-5`}>
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                       {exam.icon}
                     </div>
-                    <div className="bg-white/20 rounded-full text-xs text-white px-3 py-1">
-                      Popular
+                    <div className="bg-white/20 backdrop-blur-sm rounded-full text-xs text-white px-2 py-1 sm:px-3 hidden sm:block">
+                      Top
                     </div>
                   </div>
-                  <CardTitle className="text-xl md:text-2xl font-bold text-white">{exam.name}</CardTitle>
-                  <CardDescription className="text-white/90 text-sm md:text-base">{exam.description}</CardDescription>
+                  <CardTitle className="text-sm sm:text-lg lg:text-xl font-bold text-white leading-tight">{exam.name}</CardTitle>
+                  <CardDescription className="text-white/90 text-xs sm:text-sm lg:text-base leading-tight hidden sm:block">{exam.description}</CardDescription>
                 </CardHeader>
-                <CardContent className="p-5">
-                  <div className="space-y-4">
-                    <div className="flex flex-wrap gap-2">
+                <CardContent className="p-3 sm:p-4 lg:p-5">
+                  <div className="space-y-2 sm:space-y-3 lg:space-y-4">
+                    <div className="flex flex-wrap gap-1 sm:gap-2">
                       {['Reading', 'Writing', 'Speaking', 'Listening'].map((skill) => (
-                        <span key={skill} className="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">
+                        <span key={skill} className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">
                           {skill}
                         </span>
                       ))}
                     </div>
                     
-                    <div className="pt-3">
+                    <div className="pt-2 sm:pt-3">
                       <Link to={exam.path} className="block w-full">
-                        <Button className={`w-full ${exam.color} text-white group-hover:translate-y-0 transform transition-transform duration-300 flex justify-between items-center`}>
-                          Start Practice
-                          <ChevronRight className="h-5 w-5 transform group-hover:translate-x-1 transition-transform" />
+                        <Button 
+                          className="w-full btn-primary text-xs sm:text-sm font-medium group-hover:shadow-lg transform transition-all duration-300 flex justify-between items-center"
+                          size={isMobile ? "sm" : "default"}
+                        >
+                          <span className="hidden sm:inline">Start Practice</span>
+                          <span className="sm:hidden">Practice</span>
+                          <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 transform group-hover:translate-x-1 transition-transform" />
                         </Button>
                       </Link>
                     </div>
