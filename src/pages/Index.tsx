@@ -68,7 +68,6 @@ const Index = () => {
 
   useEffect(() => {
     document.title = 'Neplia | Language Learning Platform';
-    console.log('Index.tsx mounted: test banner should be visible');
   }, []);
 
   const handleStartPreparation = () => {
@@ -78,12 +77,6 @@ const Index = () => {
 
   return (
     <Layout>
-      {/* Test banner to verify rendering */}
-      <section role="status" aria-live="polite" className="bg-primary/10 border border-primary/20 text-foreground py-2">
-        <div className="container mx-auto text-center text-sm">
-          Test notice: Home page is rendering. If you can read this, edits are working.
-        </div>
-      </section>
       <HeroSection />
       
       {/* Quick Start Section */}
