@@ -74,53 +74,53 @@ const Index = () => {
       <HeroSection />
       
       {/* Start Your Journey Section */}
-      <section className="py-12 px-4 md:px-0 bg-gradient-to-b from-white to-purple-50 dark:from-gray-900 dark:to-indigo-950/30">
-        <div className="container mx-auto">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 inline-block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent relative section-title">
+      <section className="py-16 px-4 bg-gradient-to-b from-white to-purple-50 dark:from-gray-900 dark:to-indigo-950/30">
+        <div className="container mx-auto max-w-7xl">
+          <div className="mb-16 text-center">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 inline-block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent relative section-title">
               Start Your Journey
             </h2>
-            <p className="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-center text-gray-600 dark:text-gray-300 text-lg max-w-3xl mx-auto">
               Choose your exam and begin practicing with our specialized modules
             </p>
           </div>
           
           {/* Quick Action Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-16">
             <Card className="text-center hover:shadow-lg transition-all duration-300 group glass-card">
-              <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-indigo to-primary rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <BookOpen className="h-8 w-8 text-white" />
+              <CardContent className="pt-8 pb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-indigo to-primary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                  <BookOpen className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Practice Tests</h3>
-                <p className="text-sm text-muted-foreground mb-4">Start with targeted practice exercises</p>
-                <Button asChild variant="outline" className="w-full">
+                <h3 className="text-xl font-semibold mb-3">Practice Tests</h3>
+                <p className="text-muted-foreground mb-6 text-base">Start with targeted practice exercises</p>
+                <Button asChild variant="outline" className="w-full h-12 text-base">
                   <Link to="/practice">Start Practice</Link>
                 </Button>
               </CardContent>
             </Card>
             
             <Card className="text-center hover:shadow-lg transition-all duration-300 group glass-card">
-              <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-teal to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <MessageSquare className="h-8 w-8 text-white" />
+              <CardContent className="pt-8 pb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-teal to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                  <MessageSquare className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Get Help</h3>
-                <p className="text-sm text-muted-foreground mb-4">Chat with teachers and students</p>
-                <Button asChild variant="outline" className="w-full">
+                <h3 className="text-xl font-semibold mb-3">Get Help</h3>
+                <p className="text-muted-foreground mb-6 text-base">Chat with teachers and students</p>
+                <Button asChild variant="outline" className="w-full h-12 text-base">
                   <Link to="/chat">Join Chat</Link>
                 </Button>
               </CardContent>
             </Card>
             
             <Card className="text-center hover:shadow-lg transition-all duration-300 group glass-card">
-              <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple to-magenta rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <BarChart3 className="h-8 w-8 text-white" />
+              <CardContent className="pt-8 pb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-purple to-magenta rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                  <BarChart3 className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Track Progress</h3>
-                <p className="text-sm text-muted-foreground mb-4">Monitor your improvement</p>
-                <Button asChild variant="outline" className="w-full">
+                <h3 className="text-xl font-semibold mb-3">Track Progress</h3>
+                <p className="text-muted-foreground mb-6 text-base">Monitor your improvement</p>
+                <Button asChild variant="outline" className="w-full h-12 text-base">
                   <Link to="/dashboard">View Dashboard</Link>
                 </Button>
               </CardContent>
@@ -128,43 +128,41 @@ const Index = () => {
           </div>
 
           {/* Exam Selection */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 lg:gap-6">
             {examTypes.slice(0, 6).map((exam) => (
               <Card 
                 key={exam.name} 
                 className="exam-card group overflow-hidden glass-card shadow-glass hover:shadow-xl transition-all duration-300 animate-scale-in"
               >
-                <CardHeader className={`bg-gradient-to-br ${exam.gradient} p-3 sm:p-4 lg:p-5`}>
-                  <div className="flex items-center justify-between mb-2 sm:mb-3">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <CardHeader className={`bg-gradient-to-br ${exam.gradient} p-4 lg:p-6`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                       {exam.icon}
                     </div>
-                    <div className="bg-white/20 backdrop-blur-sm rounded-full text-xs text-white px-2 py-1 sm:px-3 hidden sm:block">
+                    <div className="bg-white/20 backdrop-blur-sm rounded-full text-xs text-white px-3 py-1">
                       Top
                     </div>
                   </div>
-                  <CardTitle className="text-sm sm:text-lg lg:text-xl font-bold text-white leading-tight">{exam.name}</CardTitle>
-                  <CardDescription className="text-white/90 text-xs sm:text-sm lg:text-base leading-tight hidden sm:block">{exam.description}</CardDescription>
+                  <CardTitle className="text-lg lg:text-xl xl:text-2xl font-bold text-white leading-tight">{exam.name}</CardTitle>
+                  <CardDescription className="text-white/90 text-sm lg:text-base leading-tight">{exam.description}</CardDescription>
                 </CardHeader>
-                <CardContent className="p-3 sm:p-4 lg:p-5">
-                  <div className="space-y-2 sm:space-y-3 lg:space-y-4">
-                    <div className="flex flex-wrap gap-1 sm:gap-2">
-                      {['Reading', 'Writing', 'Speaking', 'Listening'].map((skill) => (
-                        <span key={skill} className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">
+                <CardContent className="p-4 lg:p-6">
+                  <div className="space-y-4">
+                    <div className="flex flex-wrap gap-2">
+                      {['Reading', 'Writing', 'Speaking', 'Listening'].map((skill, index) => (
+                        <span key={skill} className={`text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full ${index >= 2 ? 'hidden xl:inline-block' : ''}`}>
                           {skill}
                         </span>
                       ))}
                     </div>
                     
-                    <div className="pt-2 sm:pt-3">
+                    <div className="pt-2">
                       <Link to={exam.path} className="block w-full">
                         <Button 
-                          className="w-full btn-primary text-xs sm:text-sm font-medium group-hover:shadow-lg transform transition-all duration-300 flex justify-between items-center"
-                          size={isMobile ? "sm" : "default"}
+                          className="w-full btn-primary text-sm lg:text-base font-medium group-hover:shadow-lg transform transition-all duration-300 flex justify-between items-center h-11 lg:h-12"
                         >
-                          <span className="hidden sm:inline">Start Practice</span>
-                          <span className="sm:hidden">Practice</span>
-                          <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 transform group-hover:translate-x-1 transition-transform" />
+                          <span>Start Practice</span>
+                          <ChevronRight className="h-4 w-4 lg:h-5 lg:w-5 transform group-hover:translate-x-1 transition-transform" />
                         </Button>
                       </Link>
                     </div>
@@ -174,13 +172,13 @@ const Index = () => {
             ))}
           </div>
 
-          <div className="mt-12 text-center">
+          <div className="mt-16 text-center">
             <Button 
               onClick={handleStartPreparation}
-              className="inline-flex items-center px-6 py-3 rounded-lg btn-primary font-medium shadow-lg hover:shadow-xl transition-all"
+              className="inline-flex items-center px-8 py-4 rounded-lg btn-primary font-medium shadow-lg hover:shadow-xl transition-all text-lg h-14"
             >
               Start Your Preparation
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-3 h-6 w-6" />
             </Button>
           </div>
         </div>
