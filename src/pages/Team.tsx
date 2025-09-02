@@ -1,18 +1,48 @@
 import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
+import jamesLeeImage from '@/assets/team-james-lee.jpg';
+import mariaGarciaImage from '@/assets/team-maria-garcia.jpg';
+import davidKimImage from '@/assets/team-david-kim.jpg';
+import aishaPatelImage from '@/assets/team-aisha-patel.jpg';
+import thomasWilsonImage from '@/assets/team-thomas-wilson.jpg';
 
 const teamMembers = [
   {
     name: 'Govinda Bohara',
     role: 'Founder & CEO',
     bio: 'Visionary leader in edTech, on a mission to democratize exam preparation.',
-    image: '/placeholder.svg',
+    image: '/lovable-uploads/6573ef2f-c3d2-44a5-a547-494e9565f55d.png',
   },
-  { name: 'James Lee', role: 'Head of Content', bio: 'Linguistics PhD specializing in test preparation and content strategy.', image: '/placeholder.svg' },
-  { name: 'Maria Garcia', role: 'Technology Director', bio: 'Building intuitive learning experiences at scale.', image: '/placeholder.svg' },
-  { name: 'David Kim', role: 'Speaking & Writing Coach', bio: 'Certified TEFL instructor focused on practical outcomes.', image: '/placeholder.svg' },
-  { name: 'Aisha Patel', role: 'User Experience Lead', bio: 'Designing delightful, accessible education products.', image: '/placeholder.svg' },
-  { name: 'Thomas Wilson', role: 'Student Success Manager', bio: 'Helping learners achieve their goals worldwide.', image: '/placeholder.svg' },
+  { 
+    name: 'James Lee', 
+    role: 'Head of Content', 
+    bio: 'Linguistics PhD specializing in test preparation and content strategy.', 
+    image: jamesLeeImage 
+  },
+  { 
+    name: 'Maria Garcia', 
+    role: 'Technology Director', 
+    bio: 'Building intuitive learning experiences at scale.', 
+    image: mariaGarciaImage 
+  },
+  { 
+    name: 'David Kim', 
+    role: 'Speaking & Writing Coach', 
+    bio: 'Certified TEFL instructor focused on practical outcomes.', 
+    image: davidKimImage 
+  },
+  { 
+    name: 'Aisha Patel', 
+    role: 'User Experience Lead', 
+    bio: 'Designing delightful, accessible education products.', 
+    image: aishaPatelImage 
+  },
+  { 
+    name: 'Thomas Wilson', 
+    role: 'Student Success Manager', 
+    bio: 'Helping learners achieve their goals worldwide.', 
+    image: thomasWilsonImage 
+  },
 ];
 
 const Team = () => {
