@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
-import { BookOpen, Code, Mic, Palette, Trophy } from 'lucide-react';
+import jamesCartoon from '@/assets/team-james-cartoon.jpg';
+import mariaCartoon from '@/assets/team-maria-cartoon.jpg';
+import davidCartoon from '@/assets/team-david-cartoon.jpg';
+import aishaCartoon from '@/assets/team-aisha-cartoon.jpg';
+import thomasCartoon from '@/assets/team-thomas-cartoon.jpg';
 
 const teamMembers = [
   {
@@ -8,42 +12,36 @@ const teamMembers = [
     role: 'Founder & CEO',
     bio: 'Visionary leader in edTech, on a mission to democratize exam preparation.',
     image: '/lovable-uploads/6573ef2f-c3d2-44a5-a547-494e9565f55d.png',
-    type: 'photo'
   },
   { 
     name: 'James Lee', 
     role: 'Head of Content', 
     bio: 'Linguistics PhD specializing in test preparation and content strategy.', 
-    icon: BookOpen,
-    type: 'icon'
+    image: jamesCartoon
   },
   { 
     name: 'Maria Garcia', 
     role: 'Technology Director', 
     bio: 'Building intuitive learning experiences at scale.', 
-    icon: Code,
-    type: 'icon'
+    image: mariaCartoon
   },
   { 
     name: 'David Kim', 
     role: 'Speaking & Writing Coach', 
     bio: 'Certified TEFL instructor focused on practical outcomes.', 
-    icon: Mic,
-    type: 'icon'
+    image: davidCartoon
   },
   { 
     name: 'Aisha Patel', 
     role: 'User Experience Lead', 
     bio: 'Designing delightful, accessible education products.', 
-    icon: Palette,
-    type: 'icon'
+    image: aishaCartoon
   },
   { 
     name: 'Thomas Wilson', 
     role: 'Student Success Manager', 
     bio: 'Helping learners achieve their goals worldwide.', 
-    icon: Trophy,
-    type: 'icon'
+    image: thomasCartoon
   },
 ];
 
@@ -109,18 +107,12 @@ const Team = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {teamMembers.map((m) => (
                 <article key={m.name} className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-                  <div className="w-full h-40 flex items-center justify-center rounded-t-xl bg-gradient-to-br from-primary/10 to-primary/20">
-                    {m.type === 'photo' ? (
-                      <img
-                        src={m.image}
-                        alt={`${m.name} - ${m.role} at Neplia`}
-                        loading="lazy"
-                        className="w-full h-40 object-cover rounded-t-xl"
-                      />
-                    ) : (
-                      <m.icon size={48} className="text-primary" />
-                    )}
-                  </div>
+                  <img
+                    src={m.image}
+                    alt={`${m.name} - ${m.role} at Neplia`}
+                    loading="lazy"
+                    className="w-full h-40 object-cover rounded-t-xl"
+                  />
                   <div className="p-6">
                     <h2 className="text-xl font-semibold">{m.name}</h2>
                     <p className="text-primary font-medium mt-0.5">{m.role}</p>
