@@ -41,6 +41,7 @@ import ListeningTaskCMS from '@/pages/admin/ListeningTaskCMS';
 import Marketing from '@/pages/admin/Marketing';
 import Settings from '@/pages/admin/Settings';
 import IeltsTaskManager from '@/pages/admin/IeltsTaskManager';
+import MasterPanel from '@/pages/admin/MasterPanel';
 
 // Exam Pages
 import IeltsPage from '@/pages/exams/IeltsPage';
@@ -178,6 +179,7 @@ function App() {
         <Route path="/admin" element={<AdminRedirect />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/users" element={<UsersCMS />} />
+        <Route path="/admin/master" element={<MasterPanel />} />
         <Route path="/admin/blog-posts" element={<BlogPostCMS />} />
         <Route path="/admin/resources" element={<ResourceManagement />} />
         <Route path="/admin/exam-sections" element={<ExamSectionPage />} />

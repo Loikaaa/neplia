@@ -24,6 +24,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const navItems: AdminNavItem[] = [
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, roles: ['super_admin', 'admin', 'manager', 'teacher', 'instructor', 'marketing'] },
     { href: '/admin/users', label: 'Users', icon: Users, roles: ['super_admin', 'admin', 'manager'] },
+    { href: '/admin/master', label: 'Master', icon: Brain, roles: ['super_admin', 'admin', 'teacher'] },
     { href: '/admin/resources', label: 'Resources', icon: FileImage, roles: ['super_admin', 'admin', 'teacher'] },
     { 
       href: '/admin/exam-sections', 
