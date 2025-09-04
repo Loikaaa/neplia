@@ -137,7 +137,7 @@ const AdminDashboard = () => {
     <AdminLayout>
       <div className="container p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">Admin Dashboard</h1>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">Admin Panel</h1>
           <Button onClick={() => {}}>
             <Plus className="mr-2 h-4 w-4" /> New Resource
           </Button>

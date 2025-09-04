@@ -9,7 +9,7 @@ import { AdminNavItem } from '@/types/adminNavigation';
 import { 
   LayoutDashboard, Users, FileText, BookOpen, Settings,
   BarChart3, MessageSquare, FileImage, PenTool, Brain, Megaphone,
-  GraduationCap, BookOpen as BookIcon
+  GraduationCap, BookOpen as BookIcon, Headphones
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -24,25 +24,34 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const navItems: AdminNavItem[] = [
     { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, roles: ['super_admin', 'admin', 'manager', 'teacher', 'instructor', 'marketing'] },
     { href: '/admin/users', label: 'Users', icon: Users, roles: ['super_admin', 'admin', 'manager'] },
+    { href: '/admin/team', label: 'Team Management', icon: Users, roles: ['super_admin', 'admin'] },
     { href: '/admin/master', label: 'Master', icon: Brain, roles: ['super_admin', 'admin', 'teacher'] },
     { href: '/admin/resources', label: 'Resources', icon: FileImage, roles: ['super_admin', 'admin', 'teacher'] },
     { 
-      href: '/admin/exam-sections', 
-      label: 'Exam Management', 
+      href: '/admin/exams', 
+      label: 'Exams', 
       icon: GraduationCap, 
       roles: ['super_admin', 'admin', 'teacher'],
       subItems: [
-        { href: '/admin/ielts-overview', label: 'IELTS Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
-        { href: '/admin/toefl-overview', label: 'TOEFL Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
-        { href: '/admin/gre-overview', label: 'GRE Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
-        { href: '/admin/gmat-overview', label: 'GMAT Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
-        { href: '/admin/sat-overview', label: 'SAT Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
-        { href: '/admin/pte-overview', label: 'PTE Tasks', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { 
+          href: '/admin/exams/ielts', 
+          label: 'IELTS', 
+          icon: BookIcon, 
+          roles: ['super_admin', 'admin', 'teacher'],
+          subItems: [
+            { href: '/admin/reading-tasks', label: 'Reading Tasks', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/writing-tasks', label: 'Writing Tasks', icon: PenTool, roles: ['super_admin', 'admin', 'teacher', 'instructor'] },
+            { href: '/admin/listening-tasks', label: 'Listening Tasks', icon: Headphones, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/speaking-review', label: 'Speaking Review', icon: MessageSquare, roles: ['super_admin', 'admin', 'instructor'], notifications: 5 },
+          ]
+        },
+        { href: '/admin/exams/toefl', label: 'TOEFL', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { href: '/admin/exams/gre', label: 'GRE', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { href: '/admin/exams/gmat', label: 'GMAT', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { href: '/admin/exams/sat', label: 'SAT', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { href: '/admin/exams/pte', label: 'PTE', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
       ] 
     },
-    { href: '/admin/reading-tasks', label: 'Reading Tasks', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
-    { href: '/admin/writing-tasks', label: 'Writing Tasks', icon: PenTool, roles: ['super_admin', 'admin', 'teacher', 'instructor'] },
-    { href: '/admin/speaking-review', label: 'Speaking Review', icon: MessageSquare, roles: ['super_admin', 'admin', 'instructor'], notifications: 5 },
     { href: '/admin/blog-posts', label: 'Blog Posts', icon: FileText, roles: ['super_admin', 'admin', 'marketing'] },
     { href: '/admin/marketing', label: 'Marketing', icon: Megaphone, roles: ['super_admin', 'admin', 'marketing'] },
     { href: '/admin/settings', label: 'Settings', icon: Settings, roles: ['super_admin', 'admin'] },

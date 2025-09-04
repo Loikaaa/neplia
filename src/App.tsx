@@ -1,5 +1,7 @@
 
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Toaster } from '@/components/ui/toaster';
 import './App.css';
 
 // Pages
@@ -42,6 +44,7 @@ import Marketing from '@/pages/admin/Marketing';
 import Settings from '@/pages/admin/Settings';
 import IeltsTaskManager from '@/pages/admin/IeltsTaskManager';
 import MasterPanel from '@/pages/admin/MasterPanel';
+import TeamManagement from '@/pages/admin/TeamManagement';
 
 // Exam Pages
 import IeltsPage from '@/pages/exams/IeltsPage';
@@ -81,9 +84,21 @@ const CategoryRedirect = () => {
   return <Navigate to={`/resources/categories/${slug}`} replace />;
 };
 
+// Scroll restoration component
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/about" element={<About />} />
@@ -180,6 +195,7 @@ function App() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/users" element={<UsersCMS />} />
         <Route path="/admin/master" element={<MasterPanel />} />
+        <Route path="/admin/team" element={<TeamManagement />} />
         <Route path="/admin/blog-posts" element={<BlogPostCMS />} />
         <Route path="/admin/resources" element={<ResourceManagement />} />
         <Route path="/admin/exam-sections" element={<ExamSectionPage />} />
@@ -205,6 +221,7 @@ function App() {
         {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Toaster />
     </Router>
   );
 }
