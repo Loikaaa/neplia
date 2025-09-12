@@ -5,6 +5,11 @@ import HeroSection from '@/components/HeroSection';
 import FeatureSection from '@/components/FeatureSection';
 import TestimonialSection from '@/components/TestimonialSection';
 import StatisticsSection from '@/components/StatisticsSection';
+import SuccessStories from '@/components/SuccessStories';
+import StudyJourney from '@/components/StudyJourney';
+import PricingPreview from '@/components/PricingPreview';
+import FAQ from '@/components/FAQ';
+import CTASection from '@/components/CTASection';
 import PerformanceTracker from '@/components/performance/PerformanceTracker';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -186,8 +191,19 @@ const Index = () => {
 
       <FeatureSection />
       
+      <SuccessStories />
+      
+      <StudyJourney />
+      
       <StatisticsSection />
+      
+      <PricingPreview />
+      
       <TestimonialSection />
+      
+      <FAQ />
+      
+      <CTASection />
     </Layout>
   );
 };
