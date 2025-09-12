@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { ListeningTest, TestType, DifficultyLevel } from '@/components/practice/listening/ListeningTest';
@@ -50,6 +50,11 @@ const ListeningPractice = () => {
   const [selectedTestType, setSelectedTestType] = useState<TestType>('academic');
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('intermediate');
   const { toast } = useToast();
+  
+  useEffect(() => {
+    // Scroll to top when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
   
   const handleStartTest = () => {
     setTestStarted(true);

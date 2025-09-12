@@ -50,7 +50,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   };
 
   return (
-    <aside className="hidden lg:flex w-64 flex-col border-r bg-white dark:bg-gray-950">
+    <aside className="hidden lg:flex lg:w-64 w-full flex-col border-r bg-white dark:bg-gray-950">
       <div className="p-6">
         <Link to="/admin" className="flex items-center gap-2">
           <div className="rounded-md bg-indigo-600 p-1">
@@ -96,18 +96,71 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                   {expandedItems[item.label] && item.subItems && (
                     <div className="mt-1 pl-4 space-y-1">
                       {item.subItems.map((subItem) => (
-                        <Link
-                          key={subItem.href}
-                          to={subItem.href}
-                          className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                            isLinkActive(subItem.href)
-                              ? "bg-indigo-600 text-white"
-                              : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100"
-                          }`}
-                        >
-                          <subItem.icon className="h-4 w-4" />
-                          <span>{subItem.label}</span>
-                        </Link>
+                        <div key={subItem.href}>
+                          {subItem.subItems ? (
+                            <div className="mb-1">
+                              <button
+                                onClick={() => toggleSubItems(subItem.label)}
+                                className={`flex items-center justify-between w-full rounded-md px-3 py-2 text-sm font-medium 
+                                  ${location.pathname.startsWith(subItem.href)
+                                    ? "bg-indigo-500 text-white"
+                                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                                  }`}
+                              >
+                                <span className="flex items-center gap-2">
+                                  <subItem.icon className="h-4 w-4" />
+                                  <span>{subItem.label}</span>
+                                </span>
+                                {expandedItems[subItem.label] ? (
+                                  <ChevronDown className="h-3 w-3" />
+                                ) : (
+                                  <ChevronRight className="h-3 w-3" />
+                                )}
+                              </button>
+                              
+                              {expandedItems[subItem.label] && subItem.subItems && (
+                                <div className="mt-1 pl-4 space-y-1">
+                                  {subItem.subItems.map((nestedItem) => (
+                                    <Link
+                                      key={nestedItem.href}
+                                      to={nestedItem.href}
+                                      className={`flex items-center gap-2 rounded-md px-3 py-2 text-xs font-medium ${
+                                        isLinkActive(nestedItem.href)
+                                          ? "bg-indigo-600 text-white"
+                                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                                      }`}
+                                    >
+                                      <nestedItem.icon className="h-3 w-3" />
+                                      <span>{nestedItem.label}</span>
+                                      {nestedItem.notifications && (
+                                        <span className="ml-auto inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
+                                          {nestedItem.notifications}
+                                        </span>
+                                      )}
+                                    </Link>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <Link
+                              to={subItem.href}
+                              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
+                                isLinkActive(subItem.href)
+                                  ? "bg-indigo-600 text-white"
+                                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+                              }`}
+                            >
+                              <subItem.icon className="h-4 w-4" />
+                              <span>{subItem.label}</span>
+                              {subItem.notifications && (
+                                <span className="ml-auto inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-medium text-white">
+                                  {subItem.notifications}
+                                </span>
+                              )}
+                            </Link>
+                          )}
+                        </div>
                       ))}
                     </div>
                   )}

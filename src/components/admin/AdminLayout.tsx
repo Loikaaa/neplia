@@ -45,11 +45,64 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             { href: '/admin/speaking-review', label: 'Speaking Review', icon: MessageSquare, roles: ['super_admin', 'admin', 'instructor'], notifications: 5 },
           ]
         },
-        { href: '/admin/exams/toefl', label: 'TOEFL', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
-        { href: '/admin/exams/gre', label: 'GRE', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
-        { href: '/admin/exams/gmat', label: 'GMAT', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
-        { href: '/admin/exams/sat', label: 'SAT', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
-        { href: '/admin/exams/pte', label: 'PTE', icon: BookIcon, roles: ['super_admin', 'admin', 'teacher'] },
+        { 
+          href: '/admin/exams/toefl', 
+          label: 'TOEFL', 
+          icon: BookIcon, 
+          roles: ['super_admin', 'admin', 'teacher'],
+          subItems: [
+            { href: '/admin/exams/toefl/reading', label: 'Reading Tasks', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/toefl/writing', label: 'Writing Tasks', icon: PenTool, roles: ['super_admin', 'admin', 'teacher', 'instructor'] },
+            { href: '/admin/exams/toefl/listening', label: 'Listening Tasks', icon: Headphones, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/toefl/speaking', label: 'Speaking Review', icon: MessageSquare, roles: ['super_admin', 'admin', 'instructor'] },
+          ]
+        },
+        { 
+          href: '/admin/exams/gre', 
+          label: 'GRE', 
+          icon: BookIcon, 
+          roles: ['super_admin', 'admin', 'teacher'],
+          subItems: [
+            { href: '/admin/exams/gre/verbal', label: 'Verbal Reasoning', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/gre/quantitative', label: 'Quantitative Reasoning', icon: PenTool, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/gre/analytical', label: 'Analytical Writing', icon: MessageSquare, roles: ['super_admin', 'admin', 'teacher'] },
+          ]
+        },
+        { 
+          href: '/admin/exams/gmat', 
+          label: 'GMAT', 
+          icon: BookIcon, 
+          roles: ['super_admin', 'admin', 'teacher'],
+          subItems: [
+            { href: '/admin/exams/gmat/verbal', label: 'Verbal', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/gmat/quantitative', label: 'Quantitative', icon: PenTool, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/gmat/integrated', label: 'Integrated Reasoning', icon: MessageSquare, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/gmat/analytical', label: 'Analytical Writing', icon: Headphones, roles: ['super_admin', 'admin', 'teacher'] },
+          ]
+        },
+        { 
+          href: '/admin/exams/sat', 
+          label: 'SAT', 
+          icon: BookIcon, 
+          roles: ['super_admin', 'admin', 'teacher'],
+          subItems: [
+            { href: '/admin/exams/sat/reading', label: 'Reading', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/sat/writing', label: 'Writing & Language', icon: PenTool, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/sat/math', label: 'Math', icon: MessageSquare, roles: ['super_admin', 'admin', 'teacher'] },
+          ]
+        },
+        { 
+          href: '/admin/exams/pte', 
+          label: 'PTE', 
+          icon: BookIcon, 
+          roles: ['super_admin', 'admin', 'teacher'],
+          subItems: [
+            { href: '/admin/exams/pte/reading', label: 'Reading', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/pte/writing', label: 'Writing', icon: PenTool, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/pte/listening', label: 'Listening', icon: Headphones, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/pte/speaking', label: 'Speaking', icon: MessageSquare, roles: ['super_admin', 'admin', 'teacher'] },
+          ]
+        },
       ] 
     },
     { href: '/admin/blog-posts', label: 'Blog Posts', icon: FileText, roles: ['super_admin', 'admin', 'marketing'] },
@@ -63,7 +116,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   );
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background overflow-x-hidden">
       {/* Desktop Navigation */}
       <AdminSidebar 
         navItems={filteredNavItems} 
@@ -79,12 +132,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       />
 
       {/* Main Content with top bar */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Top Navigation Bar */}
         <AdminHeader />
         
         {/* Main content area */}
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 lg:p-8">
           {children}
         </main>
       </div>

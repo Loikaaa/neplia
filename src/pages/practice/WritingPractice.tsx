@@ -31,6 +31,11 @@ const WritingPractice: React.FC = () => {
     aiSuggestions: string[];
   } | null>(null);
 
+  useEffect(() => {
+    // Scroll to top when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
+
   const countWords = useCallback((text: string): number => {
     if (!text || text.trim() === '') {
       return 0;
