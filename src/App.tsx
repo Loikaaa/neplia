@@ -10,6 +10,7 @@ import About from '@/pages/About';
 import Blog from '@/pages/Blog';
 import BlogPost from '@/pages/BlogPost';
 import Contact from '@/pages/Contact';
+import Chat from '@/pages/Chat';
 import NotFound from '@/pages/NotFound';
 import SignUp from '@/pages/SignUp';
 import Login from '@/pages/Login';
@@ -106,6 +107,7 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<UserDashboard />} />

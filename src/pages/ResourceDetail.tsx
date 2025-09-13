@@ -182,19 +182,88 @@ const ResourceDetail = () => {
   };
 
   const handleDownload = () => {
-    // In a real app, you would initiate a file download
+    if (!resource) return;
+    
+    // Create actual downloadable content
+    let content = '';
+    let filename = '';
+    let mimeType = '';
+    
+    switch (resource.type.toLowerCase()) {
+      case 'pdf':
+      case 'study guide':
+      case 'speaking guide':
+      case 'practice test':
+        content = generatePDFContent(resource);
+        filename = `${resource.title.replace(/[^a-zA-Z0-9]/g, '_')}.txt`;
+        mimeType = 'text/plain';
+        break;
+      case 'audio':
+        // For demo purposes, create a text file with audio instructions
+        content = `Audio Resource: ${resource.title}\n\nThis would normally be an audio file.\n\nInstructions:\n${resource.content || resource.description}`;
+        filename = `${resource.title.replace(/[^a-zA-Z0-9]/g, '_')}_instructions.txt`;
+        mimeType = 'text/plain';
+        break;
+      case 'video':
+        // For demo purposes, create a text file with video instructions
+        content = `Video Resource: ${resource.title}\n\nThis would normally be a video file.\n\nDescription:\n${resource.content || resource.description}`;
+        filename = `${resource.title.replace(/[^a-zA-Z0-9]/g, '_')}_guide.txt`;
+        mimeType = 'text/plain';
+        break;
+      default:
+        content = generatePDFContent(resource);
+        filename = `${resource.title.replace(/[^a-zA-Z0-9]/g, '_')}.txt`;
+        mimeType = 'text/plain';
+    }
+    
+    // Create and download the file
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
     toast({
       title: "Download started",
-      description: `${resource?.title} is being downloaded to your device.`,
+      description: `${resource.title} is being downloaded to your device.`,
     });
     
-    // Simulate download
+    // Update download count (in a real app, this would be sent to a server)
     setTimeout(() => {
       toast({
         title: "Download complete",
         description: "Your resource is ready to use!",
       });
-    }, 2000);
+    }, 1000);
+  };
+  
+  const generatePDFContent = (resource: ResourceData) => {
+    return `${resource.title}
+${'='.repeat(resource.title.length)}
+
+Description:
+${resource.description}
+
+Level: ${resource.level}
+Type: ${resource.type}
+Category: ${resource.category}
+
+Content:
+${resource.content || 'This is a comprehensive resource for exam preparation.'}
+
+${resource.requirements ? `Requirements:
+${resource.requirements.map(req => `• ${req}`).join('\n')}` : ''}
+
+---
+Downloaded from Neplia.com
+© ${new Date().getFullYear()} Neplia. All rights reserved.
+
+For more resources, visit: https://neplia.com/resources
+`;
   };
 
   const getResourceIcon = (type: string) => {

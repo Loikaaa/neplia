@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { BookOpen, Headphones, Edit, MessageSquare, ArrowRight, ChevronRight, BarChart3 } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 const examTypes = [
   {
@@ -72,6 +73,27 @@ const Index = () => {
   const handleStartPreparation = () => {
     console.log('Start Preparation clicked, navigating to /practice');
     navigate('/practice');
+    
+    toast({
+      title: "Welcome to Practice Mode!",
+      description: "Choose your exam type and start practicing.",
+    });
+  };
+  
+  const handleQuickAction = (action: string, path: string) => {
+    console.log(`${action} clicked, navigating to ${path}`);
+    navigate(path);
+    
+    const messages = {
+      'practice': 'Starting your practice session...',
+      'chat': 'Connecting you with our community...',
+      'dashboard': 'Loading your progress dashboard...'
+    };
+    
+    toast({
+      title: `${action} Started`,
+      description: messages[action as keyof typeof messages] || 'Loading...',
+    });
   };
 
   return (
@@ -99,7 +121,12 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Practice Tests</h3>
                 <p className="text-muted-foreground mb-6 text-base">Start with targeted practice exercises</p>
-                <Button asChild variant="outline" className="w-full h-12 text-base">
+                <Button 
+                  asChild 
+                  variant="outline" 
+                  className="w-full h-12 text-base"
+                  onClick={() => handleQuickAction('practice', '/practice')}
+                >
                   <Link to="/practice">Start Practice</Link>
                 </Button>
               </CardContent>
@@ -112,7 +139,12 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Get Help</h3>
                 <p className="text-muted-foreground mb-6 text-base">Chat with teachers and students</p>
-                <Button asChild variant="outline" className="w-full h-12 text-base">
+                <Button 
+                  asChild 
+                  variant="outline" 
+                  className="w-full h-12 text-base"
+                  onClick={() => handleQuickAction('chat', '/chat')}
+                >
                   <Link to="/chat">Join Chat</Link>
                 </Button>
               </CardContent>
@@ -125,7 +157,12 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Track Progress</h3>
                 <p className="text-muted-foreground mb-6 text-base">Monitor your improvement</p>
-                <Button asChild variant="outline" className="w-full h-12 text-base">
+                <Button 
+                  asChild 
+                  variant="outline" 
+                  className="w-full h-12 text-base"
+                  onClick={() => handleQuickAction('dashboard', '/dashboard')}
+                >
                   <Link to="/dashboard">View Dashboard</Link>
                 </Button>
               </CardContent>

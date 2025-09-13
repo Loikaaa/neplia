@@ -110,12 +110,34 @@ const Resources = () => {
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                         {resource.description}
                       </p>
-                      <Button 
-                        className="w-full"
-                        onClick={() => handleGetResource(resource.id)}
-                      >
-                        Get Resource
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          className="flex-1"
+                          onClick={() => handleGetResource(resource.id)}
+                        >
+                          View Details
+                        </Button>
+                        <Button 
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            // Quick download functionality
+                            const content = `${resource.title}\n\n${resource.description}\n\nType: ${resource.type}\nRating: ${resource.rating}\nDownloads: ${resource.downloads}`;
+                            const blob = new Blob([content], { type: 'text/plain' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `${resource.title.replace(/[^a-zA-Z0-9]/g, '_')}.txt`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                          }}
+                          className="flex items-center gap-1"
+                        >
+                          <Download size={14} />
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
