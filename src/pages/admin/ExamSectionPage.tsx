@@ -1011,12 +1011,46 @@ const ExamSectionPage = () => {
     }
   };
 
+  const getSectionIcon = (section: string) => {
+    switch(section) {
+      case 'reading': return <BookOpen className="h-6 w-6" />;
+      case 'writing': return <Pencil className="h-6 w-6" />;
+      case 'listening': return <Headphones className="h-6 w-6" />;
+      case 'speaking': return <Mic className="h-6 w-6" />;
+      case 'verbal': return <BookOpen className="h-6 w-6" />;
+      case 'quantitative': return <Calculator className="h-6 w-6" />;
+      case 'analytical': return <Brain className="h-6 w-6" />;
+      case 'integrated': return <BarChart3 className="h-6 w-6" />;
+      case 'math': return <Calculator className="h-6 w-6" />;
+      case 'english': return <BookOpen className="h-6 w-6" />;
+      default: return <FileText className="h-6 w-6" />;
+    }
+  };
+
+  const getExamSections = (exam: string) => {
+    switch(exam?.toLowerCase()) {
+      case 'ielts':
+      case 'toefl':
+      case 'pte':
+        return ['reading', 'writing', 'listening', 'speaking'];
+      case 'gre':
+        return ['verbal', 'quantitative', 'analytical'];
+      case 'gmat':
+        return ['verbal', 'quantitative', 'integrated', 'analytical'];
+      case 'sat':
+        return ['math', 'english'];
+      default:
+        return ['reading', 'writing', 'listening', 'speaking'];
+    }
+  };
+
   const renderContent = () => {
     if (examType && !sectionType) {
+      const sections = getExamSections(examType);
       return (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-            {['reading', 'writing', 'listening', 'speaking'].map((section) => (
+            {sections.map((section) => (
               <Card 
                 key={section}
                 className="hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 border-l-indigo-500"

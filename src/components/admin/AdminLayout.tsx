@@ -39,10 +39,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           icon: BookIcon, 
           roles: ['super_admin', 'admin', 'teacher'],
           subItems: [
-            { href: '/admin/reading-tasks', label: 'Reading Tasks', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
-            { href: '/admin/writing-tasks', label: 'Writing Tasks', icon: PenTool, roles: ['super_admin', 'admin', 'teacher', 'instructor'] },
-            { href: '/admin/listening-tasks', label: 'Listening Tasks', icon: Headphones, roles: ['super_admin', 'admin', 'teacher'] },
-            { href: '/admin/speaking-review', label: 'Speaking Review', icon: MessageSquare, roles: ['super_admin', 'admin', 'instructor'], notifications: 5 },
+            { href: '/admin/exams/ielts/reading', label: 'Reading Tasks', icon: BookOpen, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/ielts/writing', label: 'Writing Tasks', icon: PenTool, roles: ['super_admin', 'admin', 'teacher', 'instructor'] },
+            { href: '/admin/exams/ielts/listening', label: 'Listening Tasks', icon: Headphones, roles: ['super_admin', 'admin', 'teacher'] },
+            { href: '/admin/exams/ielts/speaking', label: 'Speaking Review', icon: MessageSquare, roles: ['super_admin', 'admin', 'instructor'], notifications: 5 },
           ]
         },
         { 

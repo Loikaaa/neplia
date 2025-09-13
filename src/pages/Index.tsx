@@ -217,11 +217,14 @@ const Index = () => {
           <div className="mt-16 text-center">
             <Button 
               onClick={handleStartPreparation}
-              className="inline-flex items-center px-8 py-4 rounded-lg btn-primary font-medium shadow-lg hover:shadow-xl transition-all text-lg h-14"
+              className="inline-flex items-center px-8 py-4 rounded-lg btn-primary font-medium shadow-lg hover:shadow-xl transition-all text-lg h-14 transform hover:scale-105"
             >
-              Start Your Preparation
+              Start Your Preparation Journey
               <ArrowRight className="ml-3 h-6 w-6" />
             </Button>
+            <p className="text-sm text-muted-foreground mt-3">
+              Choose from 6 major exams and start practicing immediately
+            </p>
           </div>
         </div>
       </section>
