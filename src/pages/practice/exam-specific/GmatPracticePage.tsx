@@ -74,7 +74,7 @@ const GmatPracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/reading?exam=gmat" className="w-full">
+                    <Link to="/practice/gmat/verbal" className="w-full">
                       <Button className="w-full" variant="outline">Start Verbal Practice</Button>
                     </Link>
                   </CardFooter>
@@ -108,7 +108,7 @@ const GmatPracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/reading?exam=gmat&section=quantitative" className="w-full">
+                    <Link to="/practice/gmat/quantitative" className="w-full">
                       <Button className="w-full" variant="outline">Start Quantitative Practice</Button>
                     </Link>
                   </CardFooter>
@@ -142,7 +142,7 @@ const GmatPracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/reading?exam=gmat&section=integrated" className="w-full">
+                    <Link to="/practice/gmat/integrated" className="w-full">
                       <Button className="w-full" variant="outline">Start Integrated Reasoning</Button>
                     </Link>
                   </CardFooter>
@@ -176,7 +176,7 @@ const GmatPracticePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="p-6 pt-0">
-                    <Link to="/practice/writing?exam=gmat" className="w-full">
+                    <Link to="/practice/gmat/analytical" className="w-full">
                       <Button className="w-full" variant="outline">Start Writing Practice</Button>
                     </Link>
                   </CardFooter>

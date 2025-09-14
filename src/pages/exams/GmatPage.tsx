@@ -83,28 +83,28 @@ const GmatPage = () => {
                 description: "Master problem-solving and data sufficiency questions",
                 icon: Calculator,
                 color: "bg-teal-600",
-                link: "/admin/exams/gmat/quantitative"
+                link: "/practice/gmat/quantitative"
               },
               {
                 title: "Verbal Reasoning",
                 description: "Improve reading comprehension, critical reasoning, and sentence correction",
                 icon: BookOpen,
                 color: "bg-indigo-800",
-                link: "/admin/exams/gmat/verbal"
+                link: "/practice/gmat/verbal"
               },
               {
                 title: "Integrated Reasoning",
                 description: "Learn to analyze and evaluate information from multiple sources",
                 icon: PieChart,
                 color: "bg-purple-600",
-                link: "/admin/exams/gmat/integrated"
+                link: "/practice/gmat/integrated"
               },
               {
                 title: "Analytical Writing",
                 description: "Develop skills to analyze arguments and articulate critiques",
                 icon: Lightbulb,
                 color: "bg-coral",
-                link: "/admin/exams/gmat/analytical"
+                link: "/practice/gmat/analytical"
               }
             ].map((module, index) => (
               <Link key={index} to={module.link} className="block">
